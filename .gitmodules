@@ -1,0 +1,3 @@
+[submodule "themes/hexo-theme-yaris"]
+	path = themes/hexo-theme-yaris
+	url = git@github.com:debugly/hexo-theme-yaris.git

@@ -1,0 +1,277 @@
+---
+layout: post
+title: "使用 Rake 重写打包脚本"
+date: 2017-06-04 14:04:59 +0800
+comments: true
+tags: Script
+keywords: Rake 入门,Ruby 简介
+---
+
+> 我最初的博客系统使用的是 Octopress，创建博客或者预览博客都是使用的 `rake` 命令，感觉很是方便，现在虽然直接使用了 Jekyll，但是这套命令还是被我移植过来继续使用着。之前我用 Shell 编写过一套打包的脚本，现在接触了 Ruby 脚本，对比之下感觉 Shell 这门语言太不友好了，编程效率很低，于是前天晚上开始学习 `rake`，边写边学边查资料，一步步的重写了这套打包脚本，故趁热打铁写下这篇博客记录用到的知识点。
+
+
+Ruby 语言的图标:
+
+![](/images/201706/ruby.png)
+
+## 名词解释
+
+学习 Ruby 之前先捋顺下相关的名词吧
+
+- Ruby: 是一门纯粹的面向对象编程语言，她语法简洁优美，简单易学，兼具函数式编程和命令式编程特色，由日本的松本行弘创建，松本行弘被称为 Matz 。这是 Ruby 中文官网: [http://www.ruby-lang.org/zh_cn/](http://www.ruby-lang.org/zh_cn/)
+
+- RVM: 用来管理 Ruby 版本及相关插件，方便切换版本环境。
+
+- Ruby on Rails: 开发 web 应用的框架。
+
+- Gem: 组织 Ruby 程序或者代码类库的包，每个 Ruby 应用程序就是一个 gem 包。
+
+- RubyGems: 方便而强大的 Ruby 程序包管理器，用来管理 gem 的，类似 RedHat 的 RPM；Ruby环境里已经包含了 RubyGems 了，无需额外安装。
+	- Ruby 社区的 Gem 托管服务: [RubyGems.org](https://rubygems.org/)
+	- RubyGems 镜像 [gems.ruby-china.org](https://gems.ruby-china.org/)
+	- RubyGems 镜像 [ruby.taobao.org](https://ruby.taobao.org/)
+	- 使用 `gem list` 可查看已经安装的 gem 包
+
+- Rake: 如果你已经查看了所有安装的 gem 包的话，你会发现其中一个就是 `rake (10.5.0, 10.4.2)`，这个是很重要的一个 gem。跟 Make 类似，是一个 DSL 构建语言，Rails 有很多任务常用 rake 来完成。
+
+- Rakefile: 使用 Ruby 语言按照 DSL 格式编写的文件，定义了 Rake 的执行过程。
+
+## Ruby 基础知识
+
+编写 Rakefile 必须知道 Ruby 的语法才行，简单学习下吧：
+
+- 特殊变量的命名规则
+	- 常量: 以大写字母开头的变量，如: Jekyll，为方便起见常量全部大写
+	- 全局变量: 以"$"开头的变量，如: $jekyll
+	- 实例变量: 以"@"开头的变量，如: @jekyll
+	- 类变量: 以"@@"开头的变量，如: @@jekyll
+
+	我最初不知道大写字母开头的是常量，原本想的是使用全局变量的，结果改变了常量的值，执行时发现了警告：
+	`warning: already initialized constant JEKYLL`
+	所以最好不要修改常量的值！
+
+	- \_\_FILE\_\_: 当前源文件的名称(含路径)
+	- \_\_LINE\_\_: 当前行在源代码中的编号
+- 注释
+	- 单行注释: '#单行注释'
+	- 多行注释:
+
+	  ```ruby
+	  =begin
+	  多行注释
+	  多行注释
+	  多行注释
+	  =end
+	  ```
+- 输出日志: puts "log something"，跟 printf 类似
+
+- 数组
+
+	```ruby
+	ary = ["abc",19,3.14,"This is my pubby"]
+	# 等同于
+	arr = Array.new
+	arr[0] = "abc"
+	arr[1] = 19
+	arr[2] = 3.14
+	arr[3] = "This is my pubby"
+	# 遍历数组
+	ary.each do |i|
+	   puts i
+	end
+	```
+- Hash，OC 里叫字典
+
+	```ruby
+	colors = {"red" => 0xff0000, "green" => 0x00ff00,"blue" => 0x0000ff}
+	# 遍历 Hash
+	colors.each do |key,value|
+	  print key," is ",value, "\n"
+	end
+	```
+- Sequence 序列
+
+	```ruby
+	seq = (10..15)
+	seq.each do |n|
+      print n,' '
+	end
+	```
+- 字符串: "Hello World"
+- 特殊语句块
+
+	```ruby
+	BEGIN{
+	   puts "【执行其他代码前，先执行BEGIN块里的语句！】"
+	}
+
+	END{
+	   puts "【执行完其他所有代码后，再执行END块里的语句！】"
+	}
+	```
+- 方法
+
+	```ruby
+	def test(content)
+	   puts "### " + content
+	end
+	```
+
+## Rake 入门
+
+- Rakefile
+
+   先创建名为 Rakefile 的文件，然后就可以按照格式写了:
+
+	```ruby
+	desc "task 说明"
+	task :test do
+	  puts "I'm a task"
+	end
+	```
+	在 Rakefile 目录打开终端并执行: `rake test`，你会发现测试语句输出了；这就是 Rake 的模板，可以通过 `rake -T` 查看定义的所有 task，desc 会作为文档显示出来:
+
+	```ruby
+	xuqianlong$ rake test
+	I'm a task
+	xuqianlong$ rake -T
+	rake test  # task 说明
+	```
+
+- namespace
+
+   你可能会定义多个 task，这样一来可能会不好命名或者冲突，辛好可以通过 `namespace` 来解决，如果有命名空间的话，执行的时候带上才行，比如：
+
+	```ruby
+	# 添加到 Rakefile 里
+	namespace :TestNamespace do
+	  desc "test namespace 说明"
+	  task :test do
+	    puts "I have a namespace."
+	   end
+	end
+	# 命令行继续执行
+	xuqianlong$ rake -T
+	rake TestNamespace:test  # test namespace 说明
+	rake test                # task 说明
+	xuqianlong$ rake TestNamespace:test
+	I have a namespace.
+	```
+
+- default task
+
+   可以在 Rakefile 里指定默认的 task，然后执行时就不用带上 task 名字了
+
+	```ruby
+  # 添加到 Rakefile 里
+  task :default => [:test]
+  # 调用
+  xuqianlong$ rake
+  I'm a task
+	```
+
+- import
+
+	为了减轻 Rakefile 的压力，可以把代码分散到不同的 rake 文件里，然后使用 import 导入即可，可以包含 task 任务，也可以包含 ruby 代码哦；
+	buildConfig.rake 里放了打包的先关配置信息，放在config目录下，这样导入就行了：
+
+	```ruby
+  import("config/buildConfig.rake")
+	```
+
+- invoke
+
+  一个 task 可以调用别的 task，代码如下:
+
+  ```ruby
+  # PackageSDK 是命名空间, prepareBuildFolder 是 task 的名字
+  Rake::Task["PackageSDK:prepareBuildFolder"].invoke
+  ```
+
+## Call Shell
+
+打包的命令是 Shell 命令，所以要想办法让 ruby 去调用才行，查到了一下方法:
+
+- 反引号 (Backticks) : \`cmd\`
+
+	```ruby
+	# 可以获取到命令的返回值
+	xcversion = `xcodebuild -version`
+	puts xcversion
+	```
+
+- system "cmd"
+
+	```ruby
+	# Hi 会被直接输出到命令行
+	system "echo Hi"
+	# 可以通过 $? 获取子进程 pid 和执行结果
+	pid 48526 exit 0
+	# 可以 $?.to_i 获取执行结果，如果是 0 这说明正常执行
+	```
+
+## YAML
+
+在 Ruby 的世界里，他使用很广泛，可读性很好，用来取代 XML 标记语言，比 XML 更有优势；一般用作配置文件，因此之前用 shell 写的配置文件就改为 .yml 文件了:
+
+```ruby
+DESC: "SohuLiveSDK for Video"
+SCHEME_NAME_ARR: ["SohuCoreFoundation","SohuOneSDK","SohuGameSDK","SohuLiveSDK-Video"]
+PLIST_INFO: "SohuLiveSDK/SohuLiveSDK/video-info.plist"
+CATEGORY_NAME: "千帆SDK-Video"
+```
+
+读取配置文件内容:
+
+```ruby
+# 读出来后是 HASH 类型，很方便使用
+config = YAML::load(File.read(cfgdir, cfgname)))
+```
+
+使用前需要导入库哦:
+
+```ruby
+require 'yaml'
+```
+
+## STDIN
+
+所有的打包渠道都放在 PLACE_CONF_ARR 数组中，使用者需要选择打哪个渠道，因此须要求输入 1 ~ N 之间的数字，其中 N = PLACE_CONF_ARR.size，代表打包渠道数组长度，代码如下
+
+```ruby
+input = 0
+until (input > 0) && (input <= PLACE_CONF_ARR.size)
+	puts "请输入1~" + PLACE_CONF_ARR.size.to_s + "之间的数字:"
+	input = $stdin.gets.chomp().to_i
+end
+```
+
+## Installed xx Gem ?
+
+我使用了 xcpretty 将 xcodebuild 的输出信息格式化，但是同事的电脑可能没装 xcpretty，因此要判断出来是否安装了，如果没安装就不使用，这样程序才算健壮，逻辑为：
+
+```ruby
+#定义一个全局变量
+$g_xcpretty = false
+# 判断下是否安装了 xcpretty
+isInstalled = `gem list -i xcpretty`
+# 去掉末尾的换行符
+isInstalled = isInstalled.chomp();
+# 如果是 "true" 则表明安装了
+if isInstalled == "true"
+   $g_xcpretty = true
+end
+
+# ...
+
+# 剩下的逻辑通过 $g_xcpretty 全局变量判断即可
+def build_sdk_scheme(sdk,scheme)
+   puts "========== Build #{scheme} On #{sdk} Platform =========="
+   if $g_xcpretty
+      system "/usr/bin/xcodebuild -workspace #{wksp} -scheme #{scheme} -configuration #{CONFIGURATION} -sdk #{sdk} BUILD_DIR=#{build_dir}" | xcpretty
+   else
+      system "/usr/bin/xcodebuild -workspace #{wksp} -scheme #{scheme} -configuration #{CONFIGURATION} -sdk #{sdk} BUILD_DIR=#{build_dir}"
+   end
+end
+
+```

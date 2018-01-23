@@ -1,0 +1,24 @@
+---
+layout: post
+date: 2017-09-15 19:17:23 +0800
+comments: true
+tags: issues
+author: 吴尚
+title: "TableViewCell 点击后背景蒙层变透明的解决方案"
+keywords: TableViewCell,背景透明
+---
+
+> 做OpenSdk下载列表时， 点击cell ,封面图上会有暂停蒙层（黑色半透明，加在了contentView上），但是点击其它cell时， 系统会把这个蒙层的背景颜色改为透明。 
+
+解决方案： 需要重写系统的 **setSelected:(BOOL)selected animated:(BOOL)animated**  方法， 在这个方法中将背景色重新设置回来。
+
+```objc
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+    self.progressView.backgroundColor = SVFUIColor9;
+    if(self.stateView){
+        self.stateView.backgroundColor = __SCUIColorWithHexAndAplha(@"0x000000", 0.5);
+    }
+}
+```
