@@ -7,6 +7,10 @@ tags: test
 
 > 仅用于技术测试，严禁用于其他用途！
 
+# 0、 金币场
+
+- [URL Scheme](game56hall://) 
+
 # 1、斗地主
 
 - Universal Link
