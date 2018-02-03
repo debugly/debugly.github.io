@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content=",许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      使用 Jekyll 搭建博客 | Matt Reach
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>使用 Jekyll 搭建博客</h2>
+  <p class="post-date">2016-11-27</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+
+      
+    <section class="markdown-content"><h1 id="博客大改版"><a href="#博客大改版" class="headerlink" title="博客大改版"></a>博客大改版</h1><p>在此之前使用的是 <a href="http://octopress.org/" target="_blank" rel="noopener">Octopress</a> 博客系统，或许是厌倦了吧，因此改为直接使用 <a href="http://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a> 来搭建,花了几个晚上的时间，一步步摸索着做了个 Jekyll 的主题出来，毕竟 Jekyll 的主题不是一个 Geek 想要的，我前端能力有限，所以目前这个主题只是能用而已，so 就没不做主题包（丢人现眼）了，如果有需要的请联系我，我（厚着脸皮）做一个。</p>
+<h1 id="亲身感受"><a href="#亲身感受" class="headerlink" title="亲身感受"></a>亲身感受</h1><p>如果你看到了我的博客，那么我的建议是去折腾一下自己吧，不要直接使用这些已经做好的系统，如果你有时间和兴趣的话，因为你会从中学到很多东西，你可能要学习这些：</p>
+<ul>
+<li>DIV + CSS （<a href="http://sass-lang.com/" target="_blank" rel="noopener">SASS</a>）</li>
+<li><a href="http://pygments.org/" target="_blank" rel="noopener">Pygments</a></li>
+<li><a href="http://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a></li>
+<li><a href="https://shopify.github.io/liquid/" target="_blank" rel="noopener">Liquid</a></li>
+<li>Ruby ‘s Task</li>
+</ul>
+<p><code>DIV + CSS</code>: 排版很大程度上是个体力活，我更多的是在纠结何时应该使用 id 还是 class !还有一些我们需要知道的小技巧，比如我们知道一个 class 类型的样式，可供多个 HTML 元素使用，但有的时候你想对某一种使用了改class的元素额外加样式应该怎么写？这个其实很简单，但对于非前端工程师而言，你不得不去 Google 度娘了吧：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">///只有使用 highlight 样式的 pre 标签背景设置为 #dedede.</span><br><span class="line"><span class="selector-tag">pre</span><span class="selector-class">.highlight</span>&#123;</span><br><span class="line">	<span class="attribute">background</span>:<span class="number">#dedede</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Pygments</code> : 是用来做代码高亮使用的，你需要做的很简单，就是选个模板而已，你可以在线选择，这是我创建的一个 OC demo: <a href="http://pygments.org/demo/6324467/" target="_blank" rel="noopener">oc method</a>，使用如下命令生成一个样式，然后你放进你的网站里，在HTML里引入就可以了：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pygmentize -S xcode -f html &gt; pygments.css</span><br></pre></td></tr></table></figure>
+<p><code>Jekyll</code> : 即使你什么都不去了解，这个博客系统也是完整的，可以生成一个网站哦！自有像我一样，想自己写主题，你才需要学习这么多，比如需要了解内置变量，因为你肯定需要获取博客的日期、标题、内容等，这些是有对应的内置变量的去查文档就好了；还有一些命令，我的自动化部署其实也是封装的这些命令和 Git 操作的命令而已。</p>
+<p><code>Liquid</code> : 他的作用是帮助你实现动态化，你就只管写布局好了，生成的时候，会把你写的博客内容替换为对应的模板标签；作为一个模板引擎，我觉得很赞的是他内置的很多 Filters，以及这种编程范式，比如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line">&#123;&#123; article.published_at | date: "%Y" &#125;&#125;</span><br><span class="line">//2016</span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Ruby</code>: 这门语言我并没有系统的学习过，都是用到哪去查哪，所以不敢多说，觉得他的 block 也是很赞的， Liquid 的 Filter 跟这个类似，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(Dir[&quot;#&#123;deploy_dir&#125;/*&quot;]).each &#123; |f| rm_rf(f) &#125;</span><br><span class="line">//each后面的括号就是block体</span><br></pre></td></tr></table></figure>
+<p>一般我们写 Task 都是用于完成一些流程化的工作，从而节省时间和体力，今天下午借鉴了 Octopress 的 Rakefile，借鉴的前提是要理解，所以经过这么一折腾，对于 Octopress 的理解也加深了不少，然后我自己也为我的博客系统写了一个，保持相同的命名，毕竟我已经习惯了使用 <code>rake deploy</code>，<code>rake preview</code> 等命令。下面是一个最简单的 Rake Task ：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">desc <span class="string">"Task description"</span></span><br><span class="line">task <span class="symbol">:printit</span>, [<span class="symbol">:msg</span>] <span class="keyword">do</span> <span class="params">|t, args|</span></span><br><span class="line">  puts args[<span class="symbol">:msg</span>]</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">/<span class="regexp">/execute</span></span><br><span class="line"><span class="regexp">rake printit['Hello.']</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/result</span></span><br><span class="line"><span class="regexp">Hello.</span></span><br></pre></td></tr></table></figure>
+<p>怎么样？基本了解了自建主题需要的知识后，对你而言有困难吗？是让你更加畏惧了，还是立马有兴趣要开搞了？</p>
+<blockquote>
+<p>这些网站也许对你有些帮助：</p>
+</blockquote>
+<ul>
+<li><a href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2012/06/sass.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2012/06/sass.html</a></li>
+<li><a href="http://havee.me/internet/2013-08/support-pygments-in-jekyll.html" target="_blank" rel="noopener">http://havee.me/internet/2013-08/support-pygments-in-jekyll.html</a></li>
+<li><a href="http://9leg.com/other/2015/01/11/create-jekyll-markdown-by-java.html" target="_blank" rel="noopener">http://9leg.com/other/2015/01/11/create-jekyll-markdown-by-java.html</a></li>
+<li><a href="http://www.sassmeister.com/" target="_blank" rel="noopener">http://www.sassmeister.com/</a></li>
+<li><a href="http://xh.5156edu.com/page/z1015m9220j18754.html" target="_blank" rel="noopener">http://xh.5156edu.com/page/z1015m9220j18754.html</a></li>
+<li><a href="http://cobwwweb.com/4-ways-to-pass-arguments-to-a-rake-task" target="_blank" rel="noopener">http://cobwwweb.com/4-ways-to-pass-arguments-to-a-rake-task</a></li>
+<li><a href="https://docs.ruby-lang.org/en/2.1.0/Rake/FileList.html" target="_blank" rel="noopener">https://docs.ruby-lang.org/en/2.1.0/Rake/FileList.html</a></li>
+<li><a href="http://suanfazu.com/t/copy-a-file-creating-directories-as-necessary-in-ruby/12396" target="_blank" rel="noopener">http://suanfazu.com/t/copy-a-file-creating-directories-as-necessary-in-ruby/12396</a></li>
+<li><a href="http://zhaoyuxiang.cn/bohu-jekyll-theme/index" target="_blank" rel="noopener">http://zhaoyuxiang.cn/bohu-jekyll-theme/index</a></li>
+<li><a href="http://yongyuan.name/blog/collect-jekyll-theme.html" target="_blank" rel="noopener">http://yongyuan.name/blog/collect-jekyll-theme.html</a></li>
+<li><a href="https://liungkejin.github.io/about.html" target="_blank" rel="noopener">https://liungkejin.github.io/about.html</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#Script" >
+    <span class="tag-code">Script</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+    <!-- Post Nav START -->
+    
+    <div class="postnav">
+        
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2016/06/19/2016-06-19-SLReachability.html">统一管理网络变化</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2016/11/28/2016-11-28-qf-sdk-introduction.html">什么是千帆直播 SDK</a>
+    </div>
+   
+    </div>
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://debugly.cn/2016/11/27/2016-11-27-blog-use-jekyll.html';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "使用 Jekyll 搭建博客",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

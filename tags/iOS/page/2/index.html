@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content=",许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      Matt Reach
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2016/05/29/2016-05-29-bezier-demo.html">使用 UIBezierPath 绘制圆角六边形</a>
+      </h2>
+      <p class="article-date">May 29, 2016</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <p>UIBezierPath 能绘制各种图形，项目里总是用到，这里写个 demo 吧：</p>
+<ul>
+<li>圆角，六边形</li>
+</ul>
+<p>实现效果：</p>
+<p><img src="/images/201605/29/2016052917201.png" width="629" height="652"></p>
+<p><img src="/images/201605/29/2016052917202.png" width="629" height="652"></p>
+<p><img src="/images/201605/29/2016052917203.png" width="629" height="652"></p>
+<p><img src="/images/201605/29/2016052917204.png" width="629" height="652"></p>
+<p>分析过程：</p>
+<p><img src="/images/201605/29/六边形圆角头像实现.png" width="629" height="652"></p>
+<ul>
+<li>圆弧</li>
+</ul>
+        
+      </div>
+      <a class="more" href="/2016/05/29/2016-05-29-bezier-demo.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2016/03/28/2016-03-28-calayerinvalidgeometry.html">解决 CALayerInvalidGeometry 问题</a>
+      </h2>
+      <p class="article-date">March 28, 2016</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <p>今天遇到了很多 calyer 设置坐标的崩溃，原因如下：</p>
+<blockquote>
+<p>Fatal Exception: <strong>CALayerInvalidGeometry</strong><br>CALayer position <strong>contains NaN</strong>: [nan 8]</p>
+</blockquote>
+<p>坐标竟然是 NaN (非数字)！这还得了，马上排查！！！<br>下面是具体崩溃信息：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Thread : Fatal Exception: <span class="built_in">CALayerInvalidGeometry</span></span><br><span class="line"><span class="number">0</span>  CoreFoundation                 <span class="number">0x23a2a5f7</span> __exceptionPreprocess</span><br><span class="line"><span class="number">1</span>  libobjc.A.dylib                <span class="number">0x3129cc77</span> objc_exception_throw</span><br><span class="line"><span class="number">2</span>  CoreFoundation                 <span class="number">0x23a2a53d</span> -[<span class="built_in">NSException</span> initWithCoder:]</span><br><span class="line"><span class="number">3</span>  QuartzCore                     <span class="number">0x268f01cf</span> CA::Layer::set_position(CA::Vec2&lt;<span class="keyword">double</span>&gt; <span class="keyword">const</span>&amp;, <span class="keyword">bool</span>)</span><br><span class="line"><span class="number">4</span>  QuartzCore                     <span class="number">0x268f00d3</span> -[<span class="built_in">CALayer</span> setPosition:]</span><br><span class="line"><span class="number">5</span>  QuartzCore                     <span class="number">0x268f0065</span> -[<span class="built_in">CALayer</span> setFrame:]</span><br><span class="line"><span class="number">6</span>  <span class="built_in">UIKit</span>                          <span class="number">0x26ec8fe3</span> -[<span class="built_in">UIView</span>(Geometry) setFrame:]</span><br><span class="line"><span class="number">7</span>  SOHUVideo                      <span class="number">0xa937d</span> -[DiskStatusView updateDiskStatus] (DiskStatusView.m:<span class="number">65</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+        
+      </div>
+      <a class="more" href="/2016/03/28/2016-03-28-calayerinvalidgeometry.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2016/03/06/2016-03-06-Objc-Associations-Advanced.html">深入理解关联引用</a>
+      </h2>
+      <p class="article-date">March 6, 2016</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+今日吃饱了，确实撑得慌，找了我的邻居-阿杰一起散步，走了好大一圈，最后在小区下聊起了技术，从YYKit，SDWebImage 等第三方库，扯到了关联引用，因为他们都用到了这个技术，然而我又想到了单例，单例和关联引用在实现上有一个相同点—都需要一个静态变量；那么疑问就来了：同样都需要一个静态 ...
+        
+      </div>
+      <a class="more" href="/2016/03/06/2016-03-06-Objc-Associations-Advanced.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2016/03/05/2016-03-05-Objc-Associations-Useage.html">关联引用的使用方法</a>
+      </h2>
+      <p class="article-date">March 5, 2016</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+实际开发中，关联引用的使用是很广泛并且实用的，比如我们熟知的 SDWebImage,下拉刷新控件，YYKit等库里均有使用；我 14 年看 EGO 下拉刷新实现的时候发现了这种用法，那是我第一次接触，这里简单的介绍下使用方法…
+
+假如现有工程里已经有个类 SingletonObject，我 ...
+        
+      </div>
+      <a class="more" href="/2016/03/05/2016-03-05-Objc-Associations-Useage.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2015/12/27/2015-12-27-online debug.html">通过浏览器调试视图和沙河</a>
+      </h2>
+      <p class="article-date">December 27, 2015</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>最近在 GitHub 上看到了 Damian 写的一个在浏览器调试视图的工程 <a href="https://github.com/glock45/iOS-Hierarchy-Viewer" target="_blank" rel="noopener">iOS Hierarchy Viewer</a> ，跟 xCode 自带的类似，不过几乎没什么版本限制，我在他的基础上增加了查看沙河文件的功能，增加了一个首页，和返回首页…</p>
+<h2 id="At-a-glance"><a href="#At-a-glance" class="headerlink" title="At a glance"></a>At a glance</h2><ul>
+<li>首页：</li>
+</ul>
+<p><img src="/images/201512/img201512272145-1.png" width="1040" height="393"></p>
+        
+      </div>
+      <a class="more" href="/2015/12/27/2015-12-27-online debug.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2015/12/04/2015-12-04-ql-commom-alert.html">iOS 通用 Alert、ActionSheet</a>
+      </h2>
+      <p class="article-date">December 4, 2015</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>在 14 年 iOS 8 发布之后就想着统一一下 AlertView 和 iOS 8 开始使用的 AletViewController，最近终于把这事给办了；虽然最近也很忙，但还是准备了不少东西，除了这个通用封装之外，紧接着将还有一篇，先剧透下—是有关通过浏览器线上调试的…</p>
+<h2 id="封装思路"><a href="#封装思路" class="headerlink" title="封装思路"></a>封装思路</h2><p>iOS 8 有了很大的变化，每个按钮对应了一个 UIAlertAction 对像，相关的索引和标题都在这里存放；block 回掉点击事件；因此，想办法处理一下 iOS 7 的AlertView，使之支持添加 Action，block 回掉点击事件；然后搞个manager，来管理 iOS 8 前后调用的类，从而达到通用的效果! ActionSheet 也是同样的道理，我觉得分开处理比较好，因此最终我讲封装出来两个控制器出来。</p>
+<p>iOS 7并没有 Action 类，因此自己写个命名为 QLBlockAlertAction ;<br>并且定义相关的枚举值，这个很好做，直接 copy iOS 8 系统定义的改个名字就行了;</p>
+<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><p>按照上面描述的思路开始 code：</p>
+<h5 id="处理-iOS-7-的-AlertView"><a href="#处理-iOS-7-的-AlertView" class="headerlink" title="处理 iOS 7 的 AlertView"></a>处理 iOS 7 的 AlertView</h5><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">QLBlockAlertAction</span> : <span class="title">NSObject</span></span></span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">instancetype</span>)actionWithTitle:(<span class="built_in">NSString</span> *)title style:(QLAlertActionStyle)style handler:(<span class="keyword">void</span> (^)(QLBlockAlertAction *action))handler;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">readonly</span>) <span class="built_in">NSString</span> *title;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>,<span class="keyword">readonly</span>) QLAlertActionStyle style;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">readonly</span>) <span class="keyword">void</span> (^AlertHandler)(QLBlockAlertAction *);</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+        
+      </div>
+      <a class="more" href="/2015/12/04/2015-12-04-ql-commom-alert.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2015/11/11/2015-11-11-xcode7-transition.html">Xcode7 Transition Guide</a>
+      </h2>
+      <p class="article-date">November 11, 2015</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          Introduction使用 Xcode 7 开发已经有一段时间了，记录下使用时遇见的问题；有些东西记不住，所以当做笔记，需要的时候打开博客复制下就好了。
+
+Bitcode  一般好多第三方库不支持这个特性，毕竟是苹果刚推出的，需要一段时间，这个等日后第三方库都支持之后可以开启，暂时需要关闭 ...
+        
+      </div>
+      <a class="more" href="/2015/11/11/2015-11-11-xcode7-transition.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2015/11/06/2015-11-06-Use-ssh-key.html">Mac 上使用 SSH key</a>
+      </h2>
+      <p class="article-date">November 6, 2015</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          Introduction
+SSH key 用来标识某台计算机被信任！一旦被信任，以后在这台计算机上进行的操作就不需要输入你账户的密码，可以理解为令牌，拿着令牌就可以做事，当然权限是可控制的！SSH key 是部分平台的，也就说今天举例的 MAC 系统可以用，经常使用的 Windows 也可以 ...
+        
+      </div>
+      <a class="more" href="/2015/11/06/2015-11-06-Use-ssh-key.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2015/11/05/2015-11-05-swift-study-1.html">Swift 学习（一）</a>
+      </h2>
+      <p class="article-date">November 5, 2015</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>Swift 最新已经是 2.1 了，更优美了，日趋成熟了，加上公司项目以后可能支持到 iOS7，就可以使用 Swift 写项目了，所以必须学习下了，先看看官方的文档:<br> <a href="https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/index.html#//apple_ref/doc/uid/TP40014216-CH2-ID0" target="_blank" rel="noopener">Using Swift with Cocoa and Objective-C (Swift 2.1)</a></p>
+<h3 id="Interoperablility-互动性"><a href="#Interoperablility-互动性" class="headerlink" title="Interoperablility : 互动性"></a>Interoperablility : 互动性</h3><ul>
+<li>Initialization</li>
+</ul>
+<p><code>oc 初始化方法，在swift里省去了with，with后面的变成了参数名：</code></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (instancetype)initWithFrame:(<span class="type">CGRect</span>)frame</span><br><span class="line">style:(<span class="type">UITableViewStyle</span>)style;</span><br><span class="line"></span><br><span class="line"><span class="keyword">init</span>(frame: <span class="type">CGRect</span>, style: <span class="type">UITableViewStyle</span>) &#123; <span class="comment">/* ... */</span> &#125;</span><br></pre></td></tr></table></figure>
+<p><code>oc alloc swift不需要调用，alloc和init一气呵成：</code></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">UITableView</span> *myTableView = [[<span class="type">UITableView</span> alloc] initWithFrame:<span class="type">CGRectZero</span> style:<span class="type">UITableViewStyleGrouped</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myTableView: <span class="type">UITableView</span> = <span class="type">UITableView</span>(frame: <span class="type">CGRectZero</span>, style: .<span class="type">Grouped</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Class Factory Methods and Convenience Initializers</li>
+</ul>
+<p><code>oc 工厂方法保留，提供便利性</code></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">UIColor</span> *color = [<span class="type">UIColor</span> colorWithRed:<span class="number">0.5</span> green:<span class="number">0.0</span> blue:<span class="number">0.5</span> alpha:<span class="number">1.0</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> color = <span class="type">UIColor</span>(red: <span class="number">0.5</span>, green: <span class="number">0.0</span>, blue: <span class="number">0.5</span>, alpha: <span class="number">1.0</span>)</span><br></pre></td></tr></table></figure>
+        
+      </div>
+      <a class="more" href="/2015/11/05/2015-11-05-swift-study-1.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2015/10/30/2015-10-30-unsigned-type-use.html">小心 unsigned 数据类型埋下坑</a>
+      </h2>
+      <p class="article-date">October 30, 2015</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          Introduction
+今天来说下使用 unsigned 数据类型时遇到的坑，也许这个很不起眼，但是有的时候她会坑了你的，如果你不信就来试试下面这道题，如果做对了那么说明你很细心，足够优秀，也不用继续看我的博客了，当然这也不排除是由于我提前说明了注意点使你细心…
+
+小试牛刀习惯性的说下故事 ...
+        
+      </div>
+      <a class="more" href="/2015/10/30/2015-10-30-unsigned-type-use.html">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/tags/iOS/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/tags/iOS/page/3/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

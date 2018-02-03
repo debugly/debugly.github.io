@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content="shell,Linux shell,许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      常用的 Shell 内置变量与命令 | Matt Reach
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>常用的 Shell 内置变量与命令</h2>
+  <p class="post-date">2017-05-26</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+
+      
+    <section class="markdown-content"><blockquote>
+<p>日常工作中，特别是我搭建远程打包环境的过程中用到了不少 Shell 命令，这里记录下，省得以后再去查询，浪费时间。</p>
+</blockquote>
+<h2 id="内置变量"><a href="#内置变量" class="headerlink" title="内置变量"></a>内置变量</h2><p>以下结果来自 Mac OS 10.12，提示：这些内置变量是以美元符号开头的哈,因为这些都是变量，在 Shell 脚本里面取变量的值需要以美元符号开头；</p>
+<ul>
+<li>$SHELL : 查看终端使用是哪种 shell，shell 也不止一种哦: <code>/bin/bash</code></li>
+<li>$HOME : 登陆用户主目录: <code>/Users/xuqianlong</code></li>
+<li>$PATH : 截取一小段来看下: <code>/opt/local/bin:/opt/local/sbin</code>,分号是分隔符;在终端输入命令就能执行的原理其实是，遍历设置的PATH路径，直到找到该命令如果找不到就输出：<code>-bash: ee: command not found</code> 学习过 Java 的同学肯定都知道 Path 的概念。</li>
+<li>$USER  : 当前登陆用户名称: <code>xuqianlong</code></li>
+<li>$OSTYPE :  操作系统类型: <code>darwin16</code></li>
+<li>$MACHTYPE :  CPU架构及系统类型: <code>x86_64-apple-darwin16</code></li>
+<li>$LANG : 语言类型: <code>zh_CN.UTF-8</code></li>
+</ul>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><ul>
+<li>env 查看所有的环境变量，这个命令太厉害了，上面提到的好多内置变量的值都包括了：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">MANPATH=/Users/xuqianlong/.nvm/versions/node/v4.0.0/share/man:/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/man:/usr/local/share/man:/usr/share/man:/opt/X11/share/man:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/share/man:/Applications/Xcode.app/Contents/Developer/usr/share/man:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/share/man</span><br><span class="line">NVM_IOJS_ORG_VERSION_LISTING=https://iojs.org/dist/index.tab</span><br><span class="line">rvm_bin_path=/Users/xuqianlong/.rvm/bin</span><br><span class="line">TERM_PROGRAM=Apple_Terminal</span><br><span class="line">SHELL=/bin/bash</span><br><span class="line">TERM=xterm-256color</span><br><span class="line">TMPDIR=/var/folders/d2/bt0v98895vd53lcx9w_spzdw0000gn/T/</span><br><span class="line">NVM_PATH=/Users/xuqianlong/.nvm/versions/node/v4.0.0/lib/node</span><br><span class="line">Apple_PubSub_Socket_Render=/private/tmp/com.apple.launchd.f7R2BOD9jj/Render</span><br><span class="line">TERM_PROGRAM_VERSION=377</span><br><span class="line">TERM_SESSION_ID=75991873-8124-4503-8BA0-F10EB73C0D84</span><br><span class="line">NVM_DIR=/Users/xuqianlong/.nvm</span><br><span class="line">USER=xuqianlong</span><br><span class="line">_system_type=Darwin</span><br><span class="line">rvm_path=/Users/xuqianlong/.rvm</span><br><span class="line">SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.SZQYe5MXKe/Listeners</span><br><span class="line">__CF_USER_TEXT_ENCODING=0x1F5:0x19:0x34</span><br><span class="line">rvm_prefix=/Users/xuqianlong</span><br><span class="line">PATH=/Library/Frameworks/Python.framework/Versions/3.5/bin:/opt/local/bin:/opt/local/sbin:/Users/xuqianlong/.nvm/versions/node/v4.0.0/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Users/xuqianlong/libwebp-0.5.1-mac-10.9/bin:/Users/xuqianlong/bin:/Users/xuqianlong/.rvm/bin</span><br><span class="line">NVM_NODEJS_ORG_MIRROR=https://nodejs.org/dist</span><br><span class="line">PWD=/Users/xuqianlong</span><br><span class="line">JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home</span><br><span class="line">LANG=zh_CN.UTF-8</span><br><span class="line">_system_arch=x86_64</span><br><span class="line">XPC_FLAGS=0x0</span><br><span class="line">_system_version=10.12</span><br><span class="line">XPC_SERVICE_NAME=0</span><br><span class="line">rvm_version=1.27.0 (latest)</span><br><span class="line">SHLVL=1</span><br><span class="line">HOME=/Users/xuqianlong</span><br><span class="line">LOGNAME=xuqianlong</span><br><span class="line">NVM_BIN=/Users/xuqianlong/.nvm/versions/node/v4.0.0/bin</span><br><span class="line">NVM_IOJS_ORG_MIRROR=https://iojs.org/dist</span><br><span class="line">DISPLAY=/private/tmp/com.apple.launchd.0jBYczqYJG/org.macosforge.xquartz:0</span><br><span class="line">SECURITYSESSIONID=186a6</span><br><span class="line">_system_name=OSX</span><br><span class="line">_=/usr/bin/env</span><br></pre></td></tr></table></figure>
+<ul>
+<li>cat 查看文本内容，比如查看下机器上安装了几种 shell：cat /etc/shells</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> List of acceptable shells for chpass(1).</span><br><span class="line"><span class="meta">#</span> Ftpd will not allow users to connect who are not using</span><br><span class="line"><span class="meta">#</span> one of these shells.</span><br><span class="line"></span><br><span class="line">/bin/bash</span><br><span class="line">/bin/csh</span><br><span class="line">/bin/ksh</span><br><span class="line">/bin/sh</span><br><span class="line">/bin/tcsh</span><br><span class="line">/bin/zsh</span><br></pre></td></tr></table></figure>
+<ul>
+<li>ls /bin/*sh ，结果跟上面是一样的</li>
+<li>hostname -s 主机名称: <code>debugly</code></li>
+<li>tar -czf sdk.tar.gz *.framework : 先将目录里所有后缀名为 framework 的文件打包成 sdk.tar，然后用 gzip 压缩，生成 sdk.tar.gz 压缩的压缩包</li>
+</ul>
+<h2 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h2><p>用 ps 命令可以查看进程相关信息，哪些进程正在运行和运行状态、进程是否结束、进程有没有僵死、哪些进程占用了过多地资源等等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">qianlongxu:~ qianlongxu$ ps</span><br><span class="line">  PID TTY           TIME CMD</span><br><span class="line"> 2771 ttys000    0:00.07 -bash</span><br><span class="line"> 2836 ttys001    0:00.06 -bash</span><br><span class="line"> 1398 ttys004    0:00.10 -bash</span><br><span class="line"></span><br><span class="line">qianlongxu:~ qianlongxu$ echo $$</span><br><span class="line">2771</span><br><span class="line"></span><br><span class="line">qianlongxu:~ qianlongxu$ ps -f</span><br><span class="line">  UID   PID  PPID   C STIME   TTY           TIME CMD</span><br><span class="line">  501  2771  2770   0  8:45上午 ttys000    0:00.07 -bash</span><br><span class="line">  501  2836  2835   0  8:45上午 ttys001    0:00.06 -bash</span><br><span class="line">  501  1398  1397   0  3:55下午 ttys004    0:00.10 -bash</span><br><span class="line"></span><br><span class="line">qianlongxu:~ qianlongxu$ ps -e</span><br><span class="line">  PID TTY           TIME CMD</span><br><span class="line">    1 ??         0:51.90 /sbin/launchd</span><br><span class="line">   51 ??         0:04.78 /usr/libexec/UserEventAgent (System)</span><br><span class="line"> ///此处省略好多行</span><br><span class="line"> 2770 ttys000    0:00.04 login -pf qianlongxu</span><br><span class="line"> 2771 ttys000    0:00.07 -bash</span><br><span class="line"> 2900 ttys000    0:00.00 ps -e</span><br><span class="line"> 2835 ttys001    0:00.01 login -pf qianlongxu</span><br><span class="line"> 2836 ttys001    0:00.06 -bash</span><br><span class="line"> 1397 ttys004    0:00.02 login -pf qianlongxu</span><br><span class="line"> 1398 ttys004    0:00.10 -bash</span><br><span class="line"></span><br><span class="line">///查看进程关系</span><br><span class="line">qianlongxu:~ qianlongxu$ ps -f</span><br><span class="line">  UID   PID  PPID   C STIME   TTY           TIME CMD</span><br><span class="line">  501  2987  2986   0  9:00上午 ttys000    0:00.06 -bash</span><br><span class="line">qianlongxu:~ qianlongxu$ zsh</span><br><span class="line">qianlongxu%  </span><br><span class="line">qianlongxu% ps -f</span><br><span class="line">  UID   PID  PPID   C STIME   TTY           TIME CMD</span><br><span class="line">  501  2987  2986   0  9:00上午 ttys000    0:00.07 -bash</span><br><span class="line">  501  3102  2987   0  9:04上午 ttys000    0:00.03 zsh</span><br></pre></td></tr></table></figure>
+<h2 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h2><p>使用重定向，可以轻松的提供输入，改变输出；</p>
+<ul>
+<li><p>输出重定向：</p>
+<ul>
+<li><p>“&gt;” 覆盖文本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">echo "abc" &gt; "aa.txt"</span><br><span class="line">echo "abc" &gt; "aa.txt"</span><br><span class="line">echo "abc" &gt; "aa.txt"</span><br><span class="line">//查看 aa.txt 文件，内容是：</span><br><span class="line">abc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>“&gt;&gt;” 追加文本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">echo "abc" &gt;&gt; "aa.txt"</span><br><span class="line">echo "abc" &gt;&gt; "aa.txt"</span><br><span class="line">echo "abc" &gt;&gt; "aa.txt"</span><br><span class="line">//查看 aa.txt 文件，内容是：</span><br><span class="line">abc</span><br><span class="line">abc</span><br><span class="line">abc</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>输入重定向：</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">///读取 aa.txt 文件的第一行，然后打印</span><br><span class="line">read line &lt; aa.txt;echo $line</span><br><span class="line">///结果是：</span><br><span class="line">abc</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><p>这是一个强大的 shell 命令，可将输出结果作为另一个程序的输入，符号 : “|“ ，比如查看当前目录，并且按字母顺序排列：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ls | sort</span><br><span class="line"></span><br><span class="line">Applications</span><br><span class="line">Desktop</span><br><span class="line">Documents</span><br><span class="line">Downloads</span><br><span class="line">GitBook</span><br><span class="line">Library</span><br><span class="line">Movies</span><br><span class="line">Music</span><br><span class="line">Pictures</span><br><span class="line">Public</span><br><span class="line">apache-tomcat-7.0.64</span><br><span class="line">bin</span><br><span class="line">cstudy</span><br><span class="line">cworkspace</span><br></pre></td></tr></table></figure>
+<p>可以看出先排大写字母，后排小写字母，原因是大写字母的 ASCLL 比小写的小了 32，即：A + 32 = a ,A = 65.</p>
+<h2 id="scp"><a href="#scp" class="headerlink" title="scp"></a>scp</h2><p>本机传输文件到远程服务器:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp /Users/qianlongxu/Downloads/id_rsa.pub crown@10.7.40.176:~/id_rsa.pub</span><br></pre></td></tr></table></figure>
+<h2 id="ssh"><a href="#ssh" class="headerlink" title="ssh"></a>ssh</h2><ul>
+<li>登陆远程服务器:</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh crown@10.7.40.176</span><br><span class="line">///输入密码</span><br></pre></td></tr></table></figure>
+<ul>
+<li>免密码登录</li>
+</ul>
+<blockquote>
+<p>可以把客户机的公钥放到远程服务器上，实现自动验证，无需泄露服务器密码</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">///将公钥追加到这个文件末尾</span><br><span class="line">cat id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+<h2 id="kill-jekyll-server"><a href="#kill-jekyll-server" class="headerlink" title="kill jekyll server"></a>kill jekyll server</h2><p>我修改 Rakefile 的时候，修改不当导致没能处理INT，后果就是我们按下 <code>ctrl + c</code> 的时候没有将该子线程杀死，然后再次启动服务时就会报错:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jekyll 3.3.0 | Error:  Address already in use - bind(2) for 127.0.0.1:4000</span><br></pre></td></tr></table></figure>
+<p>为了解决这个问题就需要找到当前占用 4000 端口的进程，然后将其杀死；步骤是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 先查下占用 4000 端口的进程 id</span><br><span class="line"><span class="meta">xuqianlong$</span> lsof -i tcp:4000</span><br><span class="line">COMMAND   PID       USER   FD   TYPE            DEVICE SIZE/OFF NODE NAME</span><br><span class="line">ruby    49753 xuqianlong   10u  IPv4 0xebc4350e453a6ff      0t0  TCP localhost:terabase (LISTEN)</span><br><span class="line"><span class="meta">#</span> 然后杀死该进程</span><br><span class="line"><span class="meta">xuqianlong$</span> kill 49753</span><br></pre></td></tr></table></figure>
+<h2 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h2><p>功能强大的网络工具，支持的协议众多，包括：<code>DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, POP3, POP3S, RTMP, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET, TFTP</code>。最简单的是 GET 请求：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://debugly.cn/dist/json/test.json</span><br></pre></td></tr></table></figure>
+<p>使用 HEADER 请求，仅返回 http 头部信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">curl -I http://debugly.cn/dist/json/test.json</span><br><span class="line"></span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Server: GitHub.com</span><br><span class="line">Content-Type: application/json; charset=utf-8</span><br><span class="line">Last-Modified: Thu, 03 Aug 2017 15:36:20 GMT</span><br><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Expires: Sat, 05 Aug 2017 08:58:43 GMT</span><br><span class="line">Cache-Control: max-age=600</span><br><span class="line">X-GitHub-Request-Id: C99E:118EE:5EABC0:656C5C:5985866B</span><br><span class="line">Content-Length: 6257</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">Date: Sat, 05 Aug 2017 08:51:00 GMT</span><br><span class="line">Via: 1.1 varnish</span><br><span class="line">Age: 136</span><br><span class="line">Connection: keep-alive</span><br><span class="line">X-Served-By: cache-nrt6126-NRT</span><br><span class="line">X-Cache: HIT</span><br><span class="line">X-Cache-Hits: 1</span><br><span class="line">X-Timer: S1501923060.014934,VS0,VE1</span><br><span class="line">Vary: Accept-Encoding</span><br><span class="line">X-Fastly-Request-ID: 0dc32470ef01fa9b0672d3d38edc904b9836debc</span><br></pre></td></tr></table></figure>
+<p>这个文档有详细的介绍：<a href="https://curl.haxx.se/download.html" target="_blank" rel="noopener">https://curl.haxx.se/download.html</a></p>
+<h1 id="chown"><a href="#chown" class="headerlink" title="chown"></a>chown</h1><p>更新软件包的时候可能没有权限，需要修改权限，可使用 chown 给用户添加 ownership 权限；</p>
+<p><code>sudo chown -R $(whoami) /usr/local</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">qianlongxu:myblog qianlongxu$ brew update</span><br><span class="line">Error: /usr/local is not writable. You should change the ownership</span><br><span class="line">and permissions of /usr/local back to your user account:</span><br><span class="line">	sudo chown -R $(whoami) /usr/local</span><br></pre></td></tr></table></figure></section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#Script" >
+    <span class="tag-code">Script</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+    <!-- Post Nav START -->
+    
+    <div class="postnav">
+        
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2017/05/21/2017-05-21-liquid.html">初识 Liquid 模板语言</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2017/06/01/2017-06-01-reduce-framework-weight.html">Framework 瘦身实战</a>
+    </div>
+   
+    </div>
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://debugly.cn/2017/05/26/2017-05-26-my-shell.html';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "常用的 Shell 内置变量与命令",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

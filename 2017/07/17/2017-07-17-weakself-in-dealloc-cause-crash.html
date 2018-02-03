@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content="dealloc,weak self,crash,许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      在 dealloc 里使用 weak self 引起崩溃？ | Matt Reach
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>在 dealloc 里使用 weak self 引起崩溃？</h2>
+  <p class="post-date">2017-07-17</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+
+      
+    <section class="markdown-content"><blockquote>
+<p>我们都知道 weak 修饰的变量，在对象释放后，会自动置为 nil，这一机制减少了大量的野指针崩溃；可是如果你在对象的 dealloc 里使用 weak 修饰 self 会如何呢 ？答案是崩溃 ~_~ 最近我们 SDK 在集成到某个 App 之后，就遇到了这样的问题，一起看下吧！</p>
+</blockquote>
+<p>先看下解析后的崩溃日志吧：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Thread <span class="number">0</span> Crashed:</span><br><span class="line"><span class="number">0</span>   libsystem_kernel.dylib        	<span class="number">0x0000000182c1987c</span> __terminate_with_payload + <span class="number">8</span></span><br><span class="line"><span class="number">1</span>   libsystem_kernel.dylib        	<span class="number">0x0000000182c144f0</span> abort_with_payload + <span class="number">0</span></span><br><span class="line"><span class="number">2</span>   libsystem_kernel.dylib        	<span class="number">0x0000000182c1446c</span> abort_with_payload_wrapper_internal + <span class="number">0</span></span><br><span class="line"><span class="number">3</span>   libobjc.A.dylib               	<span class="number">0x000000018267fea4</span> _objc_fatalv(<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span>, <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span>, <span class="keyword">char</span> <span class="keyword">const</span>*, <span class="keyword">char</span>*) + <span class="number">112</span></span><br><span class="line"><span class="number">4</span>   libobjc.A.dylib               	<span class="number">0x000000018267fdfc</span> __objc_error + <span class="number">0</span></span><br><span class="line"><span class="number">5</span>   libobjc.A.dylib               	<span class="number">0x0000000182693edc</span> weak_entry_insert(weak_table_t*, weak_entry_t*) + <span class="number">0</span></span><br><span class="line"><span class="number">6</span>   libobjc.A.dylib               	<span class="number">0x000000018269c3ac</span> objc_storeWeak + <span class="number">332</span></span><br><span class="line"><span class="number">7</span>   SOHUVideo                     	<span class="number">0x00000001004b5ba0</span> -[SharePopView setDelegate:] (SharePopView.h:<span class="number">31</span>)</span><br><span class="line"><span class="number">8</span>   SOHUVideo                     	<span class="number">0x00000001003ce7c8</span> -[ShareViewController shareView] (ShareViewController.m:<span class="number">70</span>)</span><br><span class="line"><span class="number">9</span>   SOHUVideo                     	<span class="number">0x00000001003ce2a0</span> -[ShareViewController dealloc] (ShareViewController.m:<span class="number">43</span>)</span><br><span class="line"><span class="number">10</span>  <span class="built_in">UIKit</span>                         	<span class="number">0x000000018a0a5960</span> -[<span class="built_in">UIPresentationController</span> .cxx_destruct] + <span class="number">312</span></span><br><span class="line"><span class="number">11</span>  libobjc.A.dylib               	<span class="number">0x000000018267ef00</span> object_cxxDestructFromClass(objc_object*, objc_class*) + <span class="number">148</span></span><br><span class="line"><span class="number">12</span>  libobjc.A.dylib               	<span class="number">0x000000018268c334</span> objc_destructInstance + <span class="number">92</span></span><br><span class="line"><span class="number">13</span>  libobjc.A.dylib               	<span class="number">0x000000018268c398</span> object_dispose + <span class="number">28</span></span><br><span class="line"><span class="number">14</span>  <span class="built_in">UIKit</span>                         	<span class="number">0x000000018a0a1348</span> -[<span class="built_in">UIPresentationController</span> dealloc] + <span class="number">64</span></span><br></pre></td></tr></table></figure>
+<p>如果连着线直接 debug 的话，可能控制台只输出了这样一句话，并且代码定位到使用 weak self 那一行，此时可以使用 <code>bt</code> 打印堆栈信息，打出来跟上面是一样:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objc[78013]: Cannot form weak reference to instance (0x7fbc9287e840) of class ShareViewController. It is possible that this object was over-released, or is in the process of deallocation.</span><br></pre></td></tr></table></figure>
+<p>接下来我们一行一行的分析崩溃日志，然后确定问题，这是函数调用栈，因此先走的方法在下面，最上面的是最后走的方法，因此我们倒着来看，从第 9 行看就好了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">9 : ShareViewController 的 dealloc 走了</span><br><span class="line">8 : 访问了 ShareViewController 对象的属性 shareView</span><br><span class="line">7 : 给 shareView 设置了代理对象</span><br><span class="line">6 : 看库名知道这是走到了 objc 底层了，看方法名知道这个操作应该是要存储一个 weak 修饰的对象</span><br><span class="line">5 : 将 weak entry 插入到 table 里</span><br><span class="line">4 : 遇到了错误</span><br><span class="line">3 : 处理致命错误</span><br><span class="line">2 : 代码继续往下走，objc 交给了 system 处理</span><br><span class="line">1 : 系统终结了你的程序</span><br></pre></td></tr></table></figure>
+<p>底层的错误肯定是上层调用错误引起的，因此我们只看 App 层最后一个方法调用，那就是 <code>[SharePopView setDelegate:]</code>，源码是这样写的:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">- (void)dealloc &#123;</span><br><span class="line">    self.shareView.delegate = nil;</span><br><span class="line">    self.shareView = nil;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (SharePopView *)shareView &#123;</span><br><span class="line">    if (!_shareView) &#123;</span><br><span class="line">        CGFloat height = titleHeight + ShareIconViewHeightForSL * 2 + bottomTitleHeight + cancelButtonHeight;</span><br><span class="line">        _shareView = [[SharePopView alloc] initWithFrame:CGRectMake(0, DeviceHeight - height, DeviceWidth, height)];</span><br><span class="line">        _shareView.delegate = self;///连着线调试时，崩溃后定位到了这一行！！！</span><br><span class="line">    &#125;</span><br><span class="line">    return _shareView;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@interface SharePopView : UIView</span><br><span class="line"></span><br><span class="line">////这里使用的是 weak 修饰的</span><br><span class="line">@property (nonatomic, weak) id&lt;SharePopupViewDelegate&gt; delegate;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>我看到这个代码的第一反应是，<strong>dealloc 不应该使用 self 打点访问懒加载的属性</strong>，我也经常重写 get 方法来懒加载，因此我对于这个很敏感，因为对象正在释放，没有创建相关属性的必要了，这里之所以崩溃，是因为创建对象之后，立马指定了 self 为代理，并且是 weak 的，从崩溃堆栈信息也能看出，设置了weak修饰的代理后，objc 底层对 self 进行了处理，在处理的时候，发现不对劲，然后就 abort 了！！</p>
+<p>ps : 不管是使用 weak 修饰的属性，还是使用 __weak 修饰的变量，objc 都会对这个变量处理，也只有这样才能让修饰对象在释放之后，自动置空！</p>
+<p>看到源码问题就好解决了，加个判断就行了，不要懒加载去创建，而是判断下，如果创建过就将代理置空，这样就避免了在 dealloc 里使用 weak 修饰 self 对象！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (void)dealloc &#123;</span><br><span class="line">	if(_shareView)&#123;</span><br><span class="line">	 	_shareView.delegate = nil;</span><br><span class="line">    	_shareView = nil;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>问题是解决了，可是还没搞明白底层 objc 的处理流程呢，有兴趣的话接着往下看吧：<a href="/ios/2017/07/17/objc-weak-obj-imp.html">源码分析 weak 对象置空原理</a>.</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+    <!-- Post Nav START -->
+    
+    <div class="postnav">
+        
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2017/06/21/2017-06-21-install-jekyll-macos.html">macOS 上安装 Jekyll</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2017/07/18/2017-07-17-objc-weak-obj-imp.html">源码分析 weak 对象自动置空原理</a>
+    </div>
+   
+    </div>
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://debugly.cn/2017/07/17/2017-07-17-weakself-in-dealloc-cause-crash.html';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "在 dealloc 里使用 weak self 引起崩溃？",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

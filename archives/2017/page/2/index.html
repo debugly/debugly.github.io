@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content=",许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      Matt Reach
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/14/2017-09-14-use-semaphore.html">使用信号量解决多线程同步问题</a>
+      </h2>
+      <p class="article-date">September 14, 2017</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+临时帮忙去做了一期千帆小视频的SDK，大致的流程是这样的 : 录制小视频公开了两个串行队列，一个是处理摄像头回调的，一个是处理麦克风数据回调的，当用户按下录制按钮时开始采集音视频，通过代理方法拿到一帧帧的数据，当检测到音频^1时就创建一个编码器，开始编码，用户松手后停止编码。
+
+IMP看代 ...
+        
+      </div>
+      <a class="more" href="/2017/09/14/2017-09-14-use-semaphore.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/13/2017-09-13-c-malloc.html">C语言malloc、free、memmove</a>
+      </h2>
+      <p class="article-date">September 13, 2017</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          在开发斗地主的语音房时，显示当前音量用的C语言实现，会分配buffer地址，最后释放buffer，使用了malloc、free和memmove等方法。三个方法的具体使用如下：
+mallocvoid *malloc(long NumBytes);
+该函数分配了NumBytes个字节，并返回了指 ...
+        
+      </div>
+      <a class="more" href="/2017/09/13/2017-09-13-c-malloc.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/13/2017-09-13-scrollsToTop.html">UIScrollView 的 scrollsToTop 失效问题</a>
+      </h2>
+      <p class="article-date">September 13, 2017</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+一般情况下，当前页面有滚动视图(UIScrollView或者UIScrollView的子类)时，触摸状态栏，视图会自动滚动的最顶端。如果页面有多个滚动视图，且是iOS10.0以下的系统，你会发现触摸状态栏没有反应了，回到顶部功能失效了。目前iOS10.0或以上系统没发现存在这个问题。
+
+解 ...
+        
+      </div>
+      <a class="more" href="/2017/09/13/2017-09-13-scrollsToTop.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/13/2017-09-13-ws1.html">UIButton 设置图片的 contentMode</a>
+      </h2>
+      <p class="article-date">September 13, 2017</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          在开发彩蛋红包时，有两个发送红包的按钮 “+”和 “-”。这两个按钮是两张图片。在设置图片时，发现其不能很好的适配6 plus机型，如下图所示。于是我尝试了设置图片的contentMode:
+1[minus.imageView setContentMode:UIViewContentMode ...
+        
+      </div>
+      <a class="more" href="/2017/09/13/2017-09-13-ws1.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/12/2017-09-12-anchorPoint_position.html">CALayer 的 anchorPoint 与 position</a>
+      </h2>
+      <p class="article-date">September 12, 2017</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+在项目中要实现一个动画，想让view从底部展开，经过搜索，知道了CALayer的anchorPoint可以控制动画的固定点，遂直接写了如下代码：
+
+123456self.redView.layer.anchorPoint = CGPointMake(0.5, 1.0);self.redVi ...
+        
+      </div>
+      <a class="more" href="/2017/09/12/2017-09-12-anchorPoint_position.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/12/2017-09-12-main-thread-checker.html">Main Thread Checker</a>
+      </h2>
+      <p class="article-date">September 12, 2017</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+我的测试机升级到 iOS11 beta10 之后，发现了严重的问题，我的手机直接卡死了，只有强制关机！这是我使用 Xcode 调试抓到的日志:
+
+123456789101112131415161718192021222324252627282930313233343536373839404 ...
+        
+      </div>
+      <a class="more" href="/2017/09/12/2017-09-12-main-thread-checker.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/11/2017-09-11-sdk-issues.html">SDK-issues 简介</a>
+      </h2>
+      <p class="article-date">September 11, 2017</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+该分类由千帆 SDK 团队共同维护，主要用来记录 SDK 开发过程中遇到的各种问题以及解决方案。写成博客记录是为了供组内其他成员学习参考，这样知识才能像血液一样在整个团队里不停循环，为我们注入更多的新鲜血液！
+
+提升团队整体战斗力，拉低技术差距。我为人人，人人为我。Hello,SDK is ...
+        
+      </div>
+      <a class="more" href="/2017/09/11/2017-09-11-sdk-issues.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/08/2017-09-08-install-iOS11-beta10.html">安装 iOS 11</a>
+      </h2>
+      <p class="article-date">September 8, 2017</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+9月12号苹果会发布新一代设备 — iPhone8，搭载 iOS 11 是肯定的，现在测试已经提了一些 iOS11上的问题了，因此我决定把我的设备也升级到 iOS 11，用来解 bug，适配等工作。
+
+安装途径以下两种方式都可行，各有优缺，自行选择吧：
+
+OTA升级
+ 到开发者中心，去下载 ...
+        
+      </div>
+      <a class="more" href="/2017/09/08/2017-09-08-install-iOS11-beta10.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/05/2017-09-05-unix-crontab.html">Unix 定时任务</a>
+      </h2>
+      <p class="article-date">September 5, 2017</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#Script" >
+    <span class="tag-code">Script</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          截止目前，SDK的打包，已经代码审查都是通过脚本完成的，利用脚本可以轻松的帮我们搞定那些重复的枯燥工作，可以节省宝贵的时间又能避免修改配置环境引发的错误。虽然有了这些这些脚本了，不过还是得人工去执行，不够省心啊，作为一个追求极致又很懒的人，是不能忍的，于是就搞了个定时任务，每天下班后我们只需 ...
+        
+      </div>
+      <a class="more" href="/2017/09/05/2017-09-05-unix-crontab.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/08/31/2017-08-31-iPhone-types.html">iOS 获取设备、应用相关信息</a>
+      </h2>
+      <p class="article-date">August 31, 2017</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+有的时候我们需要针对特定的机型或者系统版本做一些特殊的处理，使得我们的程序能够正常的运行，这时就要去判断设备型号、系统版本了，获取这些信息本身并没有什么技术含量，只是比较零碎，因此为了查阅方便，整理了一份代码出来，用的时候直接copy即可。
+
+设备信息使用 uname 方法可以获取设备的硬 ...
+        
+      </div>
+      <a class="more" href="/2017/08/31/2017-08-31-iPhone-types.html">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/archives/2017/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/archives/2017/page/3/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

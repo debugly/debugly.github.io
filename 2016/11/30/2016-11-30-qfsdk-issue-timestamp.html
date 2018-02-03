@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content=",许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      千帆 SDK Issue: TimeStamp | Matt Reach
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>千帆 SDK Issue: TimeStamp</h2>
+  <p class="post-date">2016-11-30</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+
+      
+    <section class="markdown-content"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>去年我写过这么一篇文章 <a href="/ios/2015/10/30/unsigned-type-use.html#1">《小心 unsigned 数据类型埋下坑》</a> 主要说明了一个问题，一定要小心不能将一个小于 0 的值赋给 unsigned 类型！今天要说的我们经常会给服务传个时间戳，客户端最好不要使用 int 类型来接受，因为很可能程序只能正常运行到 2038 年。</p>
+<h2 id="时间戳"><a href="#时间戳" class="headerlink" title="时间戳"></a>时间戳</h2><p>服务器端需要一个以毫秒为单位的时间戳，同事是这么写的：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSInteger</span> time = [[<span class="built_in">NSDate</span> date] timeIntervalSince1970] * <span class="number">1000</span>;</span><br></pre></td></tr></table></figure>
+<p>结果测试就报了一个bug:</p>
+<blockquote>
+<p>❌ iPhone 5 出现上接口返回参数校验错误…</p>
+</blockquote>
+<p>你如果足够细心你会有个疑问，为何 iPhone5 躺枪了？5s、6s 怎么没事，是性能问题吧? 🙄<br>我们来具体分析一下吧，这个 timeIntervalSince1970 方法获取的时间戳是 double 类型的，我写博客的时候是 1,480,511,599.854223;这是系统的方法，一般不会有问题，那么问题应该是 NSInteger 引起的，它不是一个新类型，是 typedef 出来的，我们查看它的定义：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#if __LP64__ || (TARGET_OS_EMBEDDED &amp;&amp; !TARGET_OS_IPHONE) || TARGET_OS_WIN32 || NS_BUILD_32_LIKE_64</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="built_in">NSInteger</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="built_in">NSUInteger</span>;</span><br><span class="line"><span class="meta">#else</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> <span class="built_in">NSInteger</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="built_in">NSUInteger</span>;</span><br><span class="line"><span class="meta">#endif</span></span><br></pre></td></tr></table></figure>
+<p>简单的说就是跟你的设备有关系，设备的 CPU 字长是 64 位的话那么 NSInteger 是 long ,否则就是 int ; iOS 设备从 5s 开始以后都是 64 位的，所以测试用的 iPhone5 是32位的机器，NSInteger 其实就是 int ！我想问你天天用的 int 能够表示的最大范围是多少你知道吗？这个可以计算出来，不需要记忆的：</p>
+<blockquote>
+<p>int 在 iOS 里内存空间是 4 个字节，每个字节是 8 个二进制位，因此 int 类型的范围就是 2 的 32(4x8) 次幂减 1，能表示的最大值是: 4,294,967,295</p>
+</blockquote>
+<p>所以问题就找到了，32 位机器上时间戳早就超出了 int 能够表示的最大值了，因为一直都是最大值 2147483648 ，即使使用 unsigned int 也不能放下！ 在 5s 等 64 位的机器上 NSInteger 是 long ，long 的最大范围比较大，因此不会出问题!</p>
+<p>因此我们为毫秒级的时间戳找个合适的数据类型就行了，时间戳没有负值，因此使用 unsigned 比较合适，使用4个字节的类型不够用，需要使用8个字节的，所以我选择了 UInt64 ，它也是 typedef 出来的，不过不论什么机器，这个类型永远都是占 64 个二进制位!</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UInt64</span> ts = [[<span class="built_in">NSDate</span> date] timeIntervalSince1970] * <span class="number">1000</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>以<strong>秒</strong>为单位的时间戳如果使用 int 类型可以用到 <strong>2038</strong> 年，使用 unsigned int 类型可以用到 <strong>2106</strong> 年;</li>
+<li>以<strong>毫秒</strong>为单位的时间戳不能使用 int 类型，必须使用 64 位的类型！<ul>
+<li>long 类型不同字长的机器上不同，因此选择 long long 或者 UInt64 最为妥当！64 位类型的范围很大，存储时间戳足够了，不使用 unsigned 类型也可以！</li>
+</ul>
+</li>
+</ul>
+<p>下面是这个表是不同 CPU 字长各数据类型占用的长度：</p>
+<table>
+<thead>
+<tr>
+<th>类 型</th>
+<th>（32位机器）长度</th>
+<th>（64位机器）长度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Byte</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>char</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>short</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>int</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>long</td>
+<td><strong>4</strong></td>
+<td><strong>8</strong></td>
+</tr>
+<tr>
+<td>long long</td>
+<td>8</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+<p>其实只有 long 这个数据类型有变化而已！</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+    <!-- Post Nav START -->
+    
+    <div class="postnav">
+        
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2016/11/28/2016-11-28-qfsdk-refactor-network.html">千帆 SDK Refactor: NetWork</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2016/12/02/2016-12-02-network-support-chain.html">SLNetwork 支持链式编程</a>
+    </div>
+   
+    </div>
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://debugly.cn/2016/11/30/2016-11-30-qfsdk-issue-timestamp.html';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "千帆 SDK Issue: TimeStamp",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

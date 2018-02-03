@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content=",许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      ViewController 子控制器 view 的大小问题 | Matt Reach
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>ViewController 子控制器 view 的大小问题</h2>
+  <p class="post-date">2015-09-05</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+
+      
+    <section class="markdown-content"><blockquote>
+<ul>
+<li>ViewContrller 管理的 view 的大小是如何确定的？</li>
+<li>不同的系统版本 View 的大小一样吗？</li>
+<li>用 ViewContrller 管理的 view 的大小如何<strong>优雅</strong>的控制？</li>
+</ul>
+</blockquote>
+<p>这些问题是我在写项目的时候遇到的，比较有感受；我写的是一个只支持横屏的 iPad 项目，view 比较多，因此按区域划分为好几个控制器分别管理，为了确保使用期间对象的安全存在，所以要把控制器保留住，如果不保留控制器，MRC 就会内存泄露，ARC下控制器就会释放，剩下他的 view 孤军奋战，这肯定不是你想要的结果，所以常规做法是保留控制器，然后把view添加上去，改变frame；这也可能是你现在正在使用的方法吧？！这里隐含了一个条件，在这个控制器里添加子控件的时候，是按一定的大小来写的，比如，A 控制器是一个详情展示，view 大小是(500,768),那么子视图的参考平面就是{(0,0),(500,768)}了,当然也可以超出边界，但这不是讨论的范围。</p>
+<iframe width="656" height="400" src="https://www.youtube.com/embed/hfXZ6ydgZyo" frameborder="0"></iframe>
+
+<h3 id="这种方法有什么问题？"><a href="#这种方法有什么问题？" class="headerlink" title="这种方法有什么问题？"></a>这种方法有什么问题？</h3><p>其实这种方法可以，不过我在写某个模块时遇到了这样一个情形：</p>
+<p>图 1 点击标签显示为图2</p>
+<p><img src="/images/201509/23.18.21.jpg" width="483" height="369"></p>
+<p>图 2</p>
+<p><img src="/images/201509/23.18.42.jpg" width="483" height="369"></p>
+<p>先看第一张图，很简单的九宫格布局；点击标签会出来一个浮层，样式大致是一样的，就是少了一个标签而已，所以立马想到的应该是重用了！（我可不想写两套布局）先别写哦，想下改怎么写？</p>
+<p>按照引言部分的分析，大小已经确定了，不能重用！对于一个固执的人，没办法，就是要重用！因此考虑下怎么把这个 view 的大小变得可操控，然后子视图参考父视图而自动改变不就行了！</p>
+<ul>
+<li><p>查看view创建时的大小吧，因为这个很关键，子视图要参考的：</p>
+  <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在 viewDidLoad 里打印时，不论你模拟器的是什么方向，它默认总是竖屏(Portrait) size，也就是说在横屏模式下 width 和 height 是相反的，不是你想要的；本来猜测着vc的view的宽高会跟window的有关，通过测试把window 的宽高翻转也不行，反而会带来别的问题！经过测试，在viewDidAppear时，已经修改好了，变成横屏的大小了！又测试了下系统版本，发现：</span><br><span class="line">!!!iOS <span class="number">8</span> 已经没这个问题了，也就是说iOS <span class="number">8</span> 之后view的大小就是你的屏幕大小，而且与方向对应，比如横屏就是(<span class="number">1024</span>,<span class="number">768</span>)；</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>问题来了，我们布局子视图的代码都写在 viewDidLoad 里，当我们在外部修改 view 的大小时 viewDidLoad 已经调用过了，因此这个外部指定的大小对于子视图来说然并卵啊！参照个毛线啊！有没有一举两得的办法，外部可以指定 子控制器 view 的大小，并且子控制器 viewDidLoad 里可以获取到指定的大小，而不是没有卵用的屏幕大小？</p>
+<ul>
+<li><p>由果索因 — view 从哪里来？</p>
+<p>   当控制器的 view 被访问时就会调用 loadView 方法创建，然后紧接着调用 viewDidLoad ，<br>   我们创建添加子视图的代码一般也都写在这里面，因此如果 loadView 的时候 size 能正确的指定，<br>   我们就可以在 viewDidLoad 参照 view 的大小，布局子视图了！先打印看看结果吧，<br>   结果和 viewDidLoad 里打印的一样；所以可以从这里下手，<br>   在 loadVeiw 的时候指定一个 view 的 size，<br>   那么不可避免的就要加一个属性 viewSize 了！然后处理：</p>
+</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"> - (<span class="keyword">instancetype</span>)initWithViewSize:(<span class="built_in">CGSize</span>)aSize</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">self</span> = [<span class="keyword">super</span> init];</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.viewSize = aSize;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)loadView</span><br><span class="line">&#123;</span><br><span class="line">    [<span class="keyword">super</span> loadView];</span><br><span class="line"><span class="comment">//    这里用了frame；用bound可能会导致origin不是0,0;导致 view 在其父视图上的位置有偏移；</span></span><br><span class="line">    <span class="built_in">CGRect</span> rect = <span class="keyword">self</span>.view.frame;</span><br><span class="line">    rect.size = <span class="keyword">self</span>.viewSize;</span><br><span class="line">    <span class="keyword">self</span>.view.frame = rect;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)setViewSize:(<span class="built_in">CGSize</span>)viewSize</span><br><span class="line">&#123;</span><br><span class="line">    _viewSize = viewSize;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>.isViewLoaded) &#123;</span><br><span class="line">        <span class="built_in">CGRect</span> rect = <span class="keyword">self</span>.view.frame;</span><br><span class="line">        rect.size = <span class="keyword">self</span>.viewSize;</span><br><span class="line">        <span class="keyword">self</span>.view.frame = rect;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>有了上面的处理我们就可以在 viewDidLoad 以 view 的大小为参照布局子视图了！只需在外部调用的时候赋值就行了，不过需要注意，最好在外部使用到 view 之前给 viewSize 赋值，尽管已经实现了 setViewSize 方法！</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这个 fetch 方法是根据索因找出对应控制器的，如果是刚创建的就需要添加为子控制器</span></span><br><span class="line">- (<span class="built_in">UIViewController</span> *)fetchAControllerwidthIndex:(<span class="built_in">NSUInteger</span>)idx</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">if</span> (idx &gt;= <span class="keyword">self</span>.btnArr.count) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  BLBaseViewController *vc = <span class="keyword">self</span>.controllers[idx];</span><br><span class="line">  <span class="keyword">if</span> ([vc isKindOfClass:[<span class="built_in">UIViewController</span> <span class="keyword">class</span>]]) &#123;</span><br><span class="line">      <span class="keyword">return</span> vc;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  	<span class="comment">//!!!创建控制器</span></span><br><span class="line">      vc = (BLBaseViewController *)[<span class="keyword">self</span> createViewControllerwidthIndex:idx];</span><br><span class="line">      <span class="keyword">if</span> (vc) &#123;</span><br><span class="line">      	<span class="comment">//!!! 访问 view 属性之前指定 view 的大小</span></span><br><span class="line">          vc.viewSize = _contentView.bounds.size;</span><br><span class="line">          <span class="comment">//!!! 添加控制器和 view</span></span><br><span class="line">          [<span class="keyword">self</span> addChildViewController:vc];</span><br><span class="line">          [<span class="keyword">self</span>.contentView addSubview:vc.view];</span><br><span class="line">          <span class="comment">//!!! 这个显然就没什么用了；vc.view.frame = _contentView.bounds;</span></span><br><span class="line">          [<span class="keyword">self</span>.controllers replaceObjectAtIndex:idx withObject:vc];</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> vc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这样一来我就可以参考父视图写我的子控制器了，由于页面几乎一样，所以抽取了父类，页面布局都是在父类完成的，逻辑统一处理，两个子类就剩下寥寥数行而已！</li>
+</ul>
+<p><strong>加了一个属性，使用方法一样，还是在外部指定大小，最重要的是内部可以参考了！这达到了我预期的要求了！经过在项目中的使用，感觉比较理想！</strong></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+    <!-- Post Nav START -->
+    
+    <div class="postnav">
+        
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2015/08/12/2015-08-12-acm-guo-he-wen-ti.html">ACM-过河问题</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2015/09/26/2015-09-26-gang-ban-ping-guo-chong-dian-qi-diyquan-guo-cheng.html">港版苹果充电器 DIY 全过程</a>
+    </div>
+   
+    </div>
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://debugly.cn/2015/09/05/2015-09-05-viewcontroller-tian-jia-zi-kong-zhi-qi-shi.html';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "ViewController 子控制器 view 的大小问题",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
