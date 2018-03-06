@@ -3,7 +3,7 @@ layout: post
 title: "使用 Mac 开发必备神器"
 date: 2016-05-06 23:31:00 +0800
 comments: true
-tags: Other
+tags: macOS
 ---
 
 背景

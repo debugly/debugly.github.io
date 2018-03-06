@@ -3,7 +3,7 @@ layout: post
 title: "ImageOptim – 无损图片压缩工具"
 date: 2015-09-27 08:50:27 +0800
 comments: true
-tags: Other
+tags: macOS
 ---
 
 ## 背景
