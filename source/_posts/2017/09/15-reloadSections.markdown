@@ -2,7 +2,7 @@
 layout: post
 date: 2017-09-15 14:50:44 +0800
 comments: true
-tags: issues
+tags: [issues,iOS]
 author: 朱泽光
 title: "IOS 刷新 UITableView 的 section 时崩溃"
 keywords: UITableView,reloadSections

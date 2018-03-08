@@ -2,7 +2,7 @@
 layout: post
 date: 2017-09-20 18:27:03 +0800
 comments: true
-tags: issues
+tags: [issues,iOS]
 author: 吴尚
 title: "UIButton选中状态下点击触发高亮的问题"
 keywords: UIButton,Highlighted,Selected

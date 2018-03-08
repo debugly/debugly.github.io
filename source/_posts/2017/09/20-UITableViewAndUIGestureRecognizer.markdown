@@ -2,7 +2,7 @@
 layout: post
 date: 2017-09-20 13:40:38 +0800
 comments: true
-tags: issues
+tags: [issues,iOS]
 author: 朱泽光
 title: "在UITableViewCell上添加手势的问题"
 keywords: UITableView,UIGestureRecognizer,cell重用

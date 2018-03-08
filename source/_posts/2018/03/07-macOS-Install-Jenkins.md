@@ -16,7 +16,7 @@ tags: macOS
 
 官网的 download 不好使，点击后没能开始下，估计是被墙了，所以找了个镜像:
 
-[http://mirrors.jenkins-ci.org/osx/](http://mirrors.jenkins-ci.org/osx/)
+[http://mirrors.jenkins-ci.org/osx/](http://mirrors.jenkins-ci.org/osx/?C=N;O=D)
 
 也由 war 包的镜像:
 

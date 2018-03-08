@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "Unix 定时任务"
+title: "macOS 之 Unix 定时任务"
 date: 2017-09-05 13:10:32 +0800
 comments: true
-tags: Script
-keywords: Linux Unix 定时任务
+tags: [Script,macOS]
+keywords: Linux,Unix,macOS,crontab,定时任务
 ---
 
 截止目前，SDK的打包，已经代码审查都是通过脚本完成的，利用脚本可以轻松的帮我们搞定那些重复的枯燥工作，可以节省宝贵的时间又能避免修改配置环境引发的错误。虽然有了这些这些脚本了，不过还是得人工去执行，不够省心啊，作为一个追求极致又很懒的人，是不能忍的，于是就搞了个定时任务，每天下班后我们只需要提交下代码，到规定的时间后，打包机器（不关机）就自动去执行打包脚本，为我们打包，代码审查！

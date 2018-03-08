@@ -2,7 +2,7 @@
 layout: post
 date: 2017-09-14 9:10:42 +0800
 comments: true
-tags: issues
+tags: [issues,iOS]
 title: "使用信号量解决多线程同步问题"
 keywords: gcd semaphore,多线程同步
 ---

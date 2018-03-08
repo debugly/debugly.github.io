@@ -2,7 +2,7 @@
 layout: post
 date: 2017-10-20 09:40:21 +0800
 comments: true
-tags: issues
+tags: [issues,iOS]
 author: 姬艳
 title: "使用 CAGradientLayer 实现渐变遮罩"
 keywords: locations,CAGradientLayer

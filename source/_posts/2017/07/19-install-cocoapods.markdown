@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "安装 CocoaPods"
+title: "macOS 上安装 CocoaPods"
 date: 2017-07-19 10:32:12 +0800
 comments: true
-tags: [iOS,CocoaPods]
+tags: [iOS,CocoaPods,macOS]
 keywords: gem install cocoapods,安装 cocoapods
 ---
 

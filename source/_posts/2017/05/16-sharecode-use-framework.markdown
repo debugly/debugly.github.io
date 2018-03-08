@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "使用 Framewrok 共享代码"
+title: "使用 Framewrok 管理共享代码"
 date: 2017-05-16 19:43:28 +0800
 comments: true
 tags: 千帆SDK

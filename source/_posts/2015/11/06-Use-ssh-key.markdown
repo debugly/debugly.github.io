@@ -3,7 +3,7 @@ layout: post
 title: "Mac 上使用 SSH key"
 date: 2015-11-06 21:35:37 +0800
 comments: true
-tags: iOS
+tags: macOS
 ---
 
 Introduction

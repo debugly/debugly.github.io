@@ -2,7 +2,7 @@
 layout: post
 date: 2017-09-12 18:33:42 +0800
 comments: true
-tags: issues
+tags: [issues,iOS]
 author: 田顺建
 title: "CALayer 的 anchorPoint 与 position"
 keywords: iOS,anchorPoint,position
