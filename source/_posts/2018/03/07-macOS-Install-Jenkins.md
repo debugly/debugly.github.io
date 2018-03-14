@@ -34,6 +34,5 @@ java -jar /Applications/Jenkins/jenkins.war
 
 默认端口是 8080，所以直接浏览器里输入 [localhost:8080](localhost:8080) 进行一次 admin 账户初始化就OK了！
 
-![](/images/201803/8.jpeg)
 
 有时间了再说下利用 Jenkins 自动化打包。
