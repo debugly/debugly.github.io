@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content="install jekyll on mac os X,许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      macOS 上安装 Jekyll | Matt Reach
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>macOS 上安装 Jekyll</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#Script" >
+    <span class="tag-code">Script</span>
+  </a>
+
+  <a href="/tags#macOS" >
+    <span class="tag-code">macOS</span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2017-06-21</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+
+    
+
+      
+    <section class="markdown-content"><blockquote>
+<p>我的 MBP 重装回 macOS Sierra 之后，博客系统也就需要重新搭建了，因此趁这个机会，顺便整理下在 macOS 上安装 Jekyll 的详细过程。</p>
+</blockquote>
+<h1 id="检查-Ruby-版本"><a href="#检查-Ruby-版本" class="headerlink" title="检查 Ruby 版本"></a>检查 Ruby 版本</h1><p>因为 Jekyll 是使用 Rake 编写的，所以最 Ruby 版本是有要求的，最新 3.5 则需要 Ruby 2.1.0 以上版本才行！</p>
+<p><code>ruby -v</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">///我刚升级的2.2.6</span><br><span class="line">ruby 2.2.6p396 (2016-11-15 revision 56800) [x86_64-darwin16]</span><br></pre></td></tr></table></figure>
+<p>如果你的版本是 2.1.0 之前的，可参看我的这篇博客《<a href="/script/2017/06/20/update-ruby-use-rvm.html">使用 RVM 更新 Ruby 版本</a>》，先升级下 Ruby，再来往下看。</p>
+<h1 id="检查-Command-Line-Tools"><a href="#检查-Command-Line-Tools" class="headerlink" title="检查 Command Line Tools"></a>检查 Command Line Tools</h1><p>可以说要想在 Mac 使用终端，搞开发相关的东西，不装 Command Line Tools 是不可能的，使用命令 <code>xcode-select -p</code> 检查：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/Applications/Xcode.app/Contents/Developer</span><br><span class="line">或者</span><br><span class="line">/Library/Developer/CommandLineTools</span><br></pre></td></tr></table></figure>
+<p>如果看到这两个其中一个就表示已经安装了，无需再装；如果不安装 <code>Command Line Tools</code>，就直接装 Jekyll 的话，会报如下错误：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">gem install jekyll bundler</span><br><span class="line">Password:</span><br><span class="line">Fetching: public_suffix-2.0.5.gem (100%)</span><br><span class="line">Successfully installed public_suffix-2.0.5</span><br><span class="line">Fetching: addressable-2.5.1.gem (100%)</span><br><span class="line">Successfully installed addressable-2.5.1</span><br><span class="line">Fetching: colorator-1.1.0.gem (100%)</span><br><span class="line">Successfully installed colorator-1.1.0</span><br><span class="line">Fetching: sass-3.4.24.gem (100%)</span><br><span class="line">Successfully installed sass-3.4.24</span><br><span class="line">Fetching: jekyll-sass-converter-1.5.0.gem (100%)</span><br><span class="line">Successfully installed jekyll-sass-converter-1.5.0</span><br><span class="line">Fetching: rb-fsevent-0.9.8.gem (100%)</span><br><span class="line">Successfully installed rb-fsevent-0.9.8</span><br><span class="line">Fetching: ffi-1.9.18.gem (100%)</span><br><span class="line">Building native extensions.  This could take a while...</span><br><span class="line">ERROR:  Error installing jekyll:</span><br><span class="line">	ERROR: Failed to build gem native extension.</span><br><span class="line"></span><br><span class="line">    /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby extconf.rb</span><br><span class="line">mkmf.rb can't find header files for ruby at /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/include/ruby.h</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Gem files will remain installed in /Library/Ruby/Gems/2.0.0/gems/ffi-1.9.18 for inspection.</span><br><span class="line">Results logged to /Library/Ruby/Gems/2.0.0/gems/ffi-1.9.18/ext/ffi_c/gem_make.out</span><br><span class="line">Fetching: bundler-1.15.1.gem (100%)</span><br><span class="line">Successfully installed bundler-1.15.1</span><br><span class="line">Parsing documentation for bundler-1.15.1</span><br><span class="line">Installing ri documentation for bundler-1.15.1</span><br><span class="line">1 gem installed</span><br></pre></td></tr></table></figure>
+<p>在 OS X 10.9 之后有两种方法可选，一种是安装 Xcode，一种是单独安装 Command Line Tools，这个玩意之前是捆绑在 Xcode 里的！由于我日后需要使用 Xcode 开发，因此我选择安装 Xcode，让我纳闷的是，我移动硬盘里有 Xcode 7.3.1 的安装文件，直接安装后，仍旧报错：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">Building native extensions.  This could take a while...</span><br><span class="line">ERROR:  Error installing jekyll:</span><br><span class="line">	ERROR: Failed to build gem native extension.</span><br><span class="line"></span><br><span class="line">    /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby extconf.rb</span><br><span class="line">checking for ffi.h... *** extconf.rb failed ***</span><br><span class="line">Could not create Makefile due to some reason, probably lack of necessary</span><br><span class="line">libraries and/or headers.  Check the mkmf.log file for more details.  You may</span><br><span class="line">need configuration options.</span><br><span class="line"></span><br><span class="line">Provided configuration options:</span><br><span class="line">	--with-opt-dir</span><br><span class="line">	--without-opt-dir</span><br><span class="line">	--with-opt-include</span><br><span class="line">	--without-opt-include=$&#123;opt-dir&#125;/include</span><br><span class="line">	--with-opt-lib</span><br><span class="line">	--without-opt-lib=$&#123;opt-dir&#125;/lib</span><br><span class="line">	--with-make-prog</span><br><span class="line">	--without-make-prog</span><br><span class="line">	--srcdir=.</span><br><span class="line">	--curdir</span><br><span class="line">	--ruby=/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby</span><br><span class="line">	--with-ffi_c-dir</span><br><span class="line">	--without-ffi_c-dir</span><br><span class="line">	--with-ffi_c-include</span><br><span class="line">	--without-ffi_c-include=$&#123;ffi_c-dir&#125;/include</span><br><span class="line">	--with-ffi_c-lib</span><br><span class="line">	--without-ffi_c-lib=$&#123;ffi_c-dir&#125;/</span><br><span class="line">	--with-libffi-config</span><br><span class="line">	--without-libffi-config</span><br><span class="line">	--with-pkg-config</span><br><span class="line">	--without-pkg-config</span><br><span class="line">/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:434:in `try_do': The compiler failed to generate an executable file. (RuntimeError)</span><br><span class="line">You have to install development tools first.</span><br><span class="line">	from /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:549:in `block in try_compile'</span><br><span class="line">	from /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:502:in `with_werror'</span><br><span class="line">	from /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:549:in `try_compile'</span><br><span class="line">	from /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:1038:in `block in have_header'</span><br><span class="line">	from /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:889:in `block in checking_for'</span><br><span class="line">	from /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:340:in `block (2 levels) in postpone'</span><br><span class="line">	from /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:310:in `open'</span><br><span class="line">	from /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:340:in `block in postpone'</span><br><span class="line">	from /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:310:in `open'</span><br><span class="line">	from /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:336:in `postpone'</span><br><span class="line">	from /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:888:in `checking_for'</span><br><span class="line">	from /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/mkmf.rb:1037:in `have_header'</span><br><span class="line">	from extconf.rb:16:in `&lt;main&gt;'</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Gem files will remain installed in /Library/Ruby/Gems/2.0.0/gems/ffi-1.9.18 for inspection.</span><br><span class="line">Results logged to /Library/Ruby/Gems/2.0.0/gems/ffi-1.9.18/ext/ffi_c/gem_make.out</span><br><span class="line">Successfully installed bundler-1.15.1</span><br><span class="line">Parsing documentation for bundler-1.15.1</span><br><span class="line">1 gem installed</span><br></pre></td></tr></table></figure>
+<p>不过这次报错，可以明确找到原因：<strong>(RuntimeError) You have to install development tools first.</strong> 所以接下来老老实实地去安装 Command Line Tools 吧！</p>
+<h1 id="安装-Command-Line-Tools"><a href="#安装-Command-Line-Tools" class="headerlink" title="安装 Command Line Tools"></a>安装 Command Line Tools</h1><p>在终端执行 <code>xcode-select --install</code> 后会弹出界面：</p>
+<p><img src="/images/201706/Snip20170620_2.png" alt=""></p>
+<p>我选择了获取 Xcode，然后就自动打开了 AppStore ，然后点击下载安装就行了，只不过需要等上二十分钟了就 OK 了，Xcode安装成功后，记得启动下，因为启动后还会加载一些东西，确保万无一失，最好启动下，然后到 <code>Xcdoe -&gt; Perferences -&gt; Locations</code> 查看下 …</p>
+<p>我查了下网上也有人遇到过类似的错误：</p>
+<ul>
+<li><p><a href="https://stackoverflow.com/questions/27768420/gem-installation-error-you-have-to-install-development-tools-first" target="_blank" rel="noopener">https://stackoverflow.com/questions/27768420/gem-installation-error-you-have-to-install-development-tools-first</a></p>
+</li>
+<li><p><a href="https://github.com/ffi/ffi/issues/286" target="_blank" rel="noopener">https://github.com/ffi/ffi/issues/286</a></p>
+</li>
+<li><p><a href="https://kevinpotgieter.wordpress.com/2012/12/06/ruby-gem-install-mkmf-rb-cant-find-header-files-for-ruby-problem/" target="_blank" rel="noopener">https://kevinpotgieter.wordpress.com/2012/12/06/ruby-gem-install-mkmf-rb-cant-find-header-files-for-ruby-problem/</a></p>
+</li>
+</ul>
+<h2 id="安装-Jekyll"><a href="#安装-Jekyll" class="headerlink" title="安装 Jekyll"></a>安装 Jekyll</h2><p>如果你的 Ruby 版本小于 2.1.0 的话，就会报如下错误了：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">bogon:~ xuqianlong$ sudo gem install jekyll bundler</span><br><span class="line">Password:</span><br><span class="line">Building native extensions.  This could take a while...</span><br><span class="line">Successfully installed ffi-1.9.18</span><br><span class="line">Fetching: rb-inotify-0.9.10.gem (100%)</span><br><span class="line">Successfully installed rb-inotify-0.9.10</span><br><span class="line">Fetching: listen-3.0.8.gem (100%)</span><br><span class="line">Successfully installed listen-3.0.8</span><br><span class="line">Fetching: jekyll-watch-1.5.0.gem (100%)</span><br><span class="line">Successfully installed jekyll-watch-1.5.0</span><br><span class="line">Fetching: kramdown-1.13.2.gem (100%)</span><br><span class="line">Successfully installed kramdown-1.13.2</span><br><span class="line">Fetching: liquid-4.0.0.gem (100%)</span><br><span class="line">ERROR:  Error installing jekyll:</span><br><span class="line">	liquid requires Ruby version &gt;= 2.1.0.</span><br><span class="line">Successfully installed bundler-1.15.1</span><br><span class="line">Parsing documentation for bundler-1.15.1</span><br><span class="line">1 gem installed</span><br></pre></td></tr></table></figure>
+<p>如果是按照上述步骤来的，那么你应该能够正常的安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">Last login: Tue Jun 20 22:21:06 on ttys000</span><br><span class="line">bogon:~ xuqianlong$ gem install jekyll bundler</span><br><span class="line">Fetching: public_suffix-2.0.5.gem (100%)</span><br><span class="line">Successfully installed public_suffix-2.0.5</span><br><span class="line">Fetching: addressable-2.5.1.gem (100%)</span><br><span class="line">Successfully installed addressable-2.5.1</span><br><span class="line">Fetching: colorator-1.1.0.gem (100%)</span><br><span class="line">Successfully installed colorator-1.1.0</span><br><span class="line">Fetching: sass-3.4.24.gem (100%)</span><br><span class="line">Successfully installed sass-3.4.24</span><br><span class="line">Fetching: jekyll-sass-converter-1.5.0.gem (100%)</span><br><span class="line">Successfully installed jekyll-sass-converter-1.5.0</span><br><span class="line">Fetching: rb-fsevent-0.9.8.gem (100%)</span><br><span class="line">Successfully installed rb-fsevent-0.9.8</span><br><span class="line">Fetching: ffi-1.9.18.gem (100%)</span><br><span class="line">Building native extensions.  This could take a while...</span><br><span class="line">Successfully installed ffi-1.9.18</span><br><span class="line">Fetching: rb-inotify-0.9.10.gem (100%)</span><br><span class="line">Successfully installed rb-inotify-0.9.10</span><br><span class="line">Fetching: listen-3.0.8.gem (100%)</span><br><span class="line">Successfully installed listen-3.0.8</span><br><span class="line">Fetching: jekyll-watch-1.5.0.gem (100%)</span><br><span class="line">Successfully installed jekyll-watch-1.5.0</span><br><span class="line">Fetching: kramdown-1.13.2.gem (100%)</span><br><span class="line">Successfully installed kramdown-1.13.2</span><br><span class="line">Fetching: liquid-4.0.0.gem (100%)</span><br><span class="line">Successfully installed liquid-4.0.0</span><br><span class="line">Fetching: mercenary-0.3.6.gem (100%)</span><br><span class="line">Successfully installed mercenary-0.3.6</span><br><span class="line">Fetching: forwardable-extended-2.6.0.gem (100%)</span><br><span class="line">Successfully installed forwardable-extended-2.6.0</span><br><span class="line">Fetching: pathutil-0.14.0.gem (100%)</span><br><span class="line">Successfully installed pathutil-0.14.0</span><br><span class="line">Fetching: rouge-1.11.1.gem (100%)</span><br><span class="line">Successfully installed rouge-1.11.1</span><br><span class="line">Fetching: safe_yaml-1.0.4.gem (100%)</span><br><span class="line">Successfully installed safe_yaml-1.0.4</span><br><span class="line">Fetching: jekyll-3.5.0.gem (100%)</span><br><span class="line">Successfully installed jekyll-3.5.0</span><br><span class="line">Parsing documentation for public_suffix-2.0.5</span><br><span class="line">Installing ri documentation for public_suffix-2.0.5</span><br><span class="line">Parsing documentation for addressable-2.5.1</span><br><span class="line">Installing ri documentation for addressable-2.5.1</span><br><span class="line">Parsing documentation for colorator-1.1.0</span><br><span class="line">Installing ri documentation for colorator-1.1.0</span><br><span class="line">Parsing documentation for sass-3.4.24</span><br><span class="line">Installing ri documentation for sass-3.4.24</span><br><span class="line">Parsing documentation for jekyll-sass-converter-1.5.0</span><br><span class="line">Installing ri documentation for jekyll-sass-converter-1.5.0</span><br><span class="line">Parsing documentation for rb-fsevent-0.9.8</span><br><span class="line">Installing ri documentation for rb-fsevent-0.9.8</span><br><span class="line">Parsing documentation for ffi-1.9.18</span><br><span class="line">Installing ri documentation for ffi-1.9.18</span><br><span class="line">Parsing documentation for rb-inotify-0.9.10</span><br><span class="line">Installing ri documentation for rb-inotify-0.9.10</span><br><span class="line">Parsing documentation for listen-3.0.8</span><br><span class="line">Installing ri documentation for listen-3.0.8</span><br><span class="line">Parsing documentation for jekyll-watch-1.5.0</span><br><span class="line">Installing ri documentation for jekyll-watch-1.5.0</span><br><span class="line">Parsing documentation for kramdown-1.13.2</span><br><span class="line">Installing ri documentation for kramdown-1.13.2</span><br><span class="line">Parsing documentation for liquid-4.0.0</span><br><span class="line">Installing ri documentation for liquid-4.0.0</span><br><span class="line">Parsing documentation for mercenary-0.3.6</span><br><span class="line">Installing ri documentation for mercenary-0.3.6</span><br><span class="line">Parsing documentation for forwardable-extended-2.6.0</span><br><span class="line">Installing ri documentation for forwardable-extended-2.6.0</span><br><span class="line">Parsing documentation for pathutil-0.14.0</span><br><span class="line">Installing ri documentation for pathutil-0.14.0</span><br><span class="line">Parsing documentation for rouge-1.11.1</span><br><span class="line">Installing ri documentation for rouge-1.11.1</span><br><span class="line">Parsing documentation for safe_yaml-1.0.4</span><br><span class="line">Installing ri documentation for safe_yaml-1.0.4</span><br><span class="line">Parsing documentation for jekyll-3.5.0</span><br><span class="line">Installing ri documentation for jekyll-3.5.0</span><br><span class="line">Done installing documentation for public_suffix, addressable, colorator, sass, jekyll-sass-converter, rb-fsevent, ffi, rb-inotify, listen, jekyll-watch, kramdown, liquid, mercenary, forwardable-extended, pathutil, rouge, safe_yaml, jekyll after 30 seconds</span><br><span class="line">Fetching: bundler-1.15.1.gem (100%)</span><br><span class="line">Successfully installed bundler-1.15.1</span><br><span class="line">Parsing documentation for bundler-1.15.1</span><br><span class="line">Installing ri documentation for bundler-1.15.1</span><br><span class="line">Done installing documentation for bundler after 5 seconds</span><br><span class="line">19 gems installed</span><br></pre></td></tr></table></figure>
+<h2 id="检查-Jekyll-是否安装成功"><a href="#检查-Jekyll-是否安装成功" class="headerlink" title="检查 Jekyll 是否安装成功"></a>检查 Jekyll 是否安装成功</h2><p><code>jekyll -v</code></p>
+<p>终端会输出版本号：jekyll 3.5.0，接下来就可以创建自己的博客站点了！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jekyll new my-awesome-site</span><br><span class="line">~ $ cd my-awesome-site</span><br><span class="line">~/my-awesome-site $ bundle exec jekyll serve</span><br></pre></td></tr></table></figure>
+<p>这些操作我开了 VPN，如果不开的话，可能会出现不能安装某些gem的问题，这个需要换下 RubyGems 源，具体可查看淘宝的源 <a href="https://ruby.taobao.org/" target="_blank" rel="noopener">https://ruby.taobao.org/</a></p>
+<h2 id="Good-Luck-…"><a href="#Good-Luck-…" class="headerlink" title="Good Luck …"></a>Good Luck …</h2></section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2017/06/20/2017/06/20-update-ruby-use-rvm.html">使用 RVM 更新 Ruby 版本</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2017/07/17/2017/07/17-weakself-in-dealloc-cause-crash.html">在 dealloc 里使用 weak self 引起崩溃？</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://debugly.cn/2017/06/21/2017/06/21-install-jekyll-macos.html';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "macOS 上安装 Jekyll",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

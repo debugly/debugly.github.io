@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content="歌词解析,歌词随时间滚动,许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      实现随音乐播放滚动歌词的音乐提词器 | Matt Reach
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>实现随音乐播放滚动歌词的音乐提词器</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues</span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2017-10-12</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+
+    
+
+      
+        <div class="author">
+        作者 : 姬艳 。
+        </div>
+      
+    <section class="markdown-content"><blockquote>
+<p>由于开发需要实现一个随音乐播放滚动歌词的音乐提词器，通过网上查找资料，实现了效果，将代码贴出来，方便大家使用，主要步骤如下：</p>
+</blockquote>
+<h2 id="1、歌词解析"><a href="#1、歌词解析" class="headerlink" title="1、歌词解析"></a>1、歌词解析</h2><p>TEMusicLrcParser.h</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">LrcParser</span> : <span class="title">NSObject</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//时间</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) <span class="built_in">NSMutableArray</span> *timerArray;</span><br><span class="line"><span class="comment">//歌词</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) <span class="built_in">NSMutableArray</span> *wordArray;</span><br><span class="line"></span><br><span class="line"><span class="comment">//解析歌词</span></span><br><span class="line">-(<span class="keyword">void</span>) parseLrc:(<span class="built_in">NSString</span>*)lrc;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>TEMusicLrcParser.m</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;TEMusicLrcParser.h&quot;</span><br><span class="line"></span><br><span class="line">@interface LrcParser ()</span><br><span class="line"></span><br><span class="line">-(void) parseLrc:(NSString *)word;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation LrcParser</span><br><span class="line"></span><br><span class="line">-(instancetype) init&#123;</span><br><span class="line">    self=[super init];</span><br><span class="line">    if(self!=nil)&#123;</span><br><span class="line">        self.timerArray=[[NSMutableArray alloc] init];</span><br><span class="line">        self.wordArray=[[NSMutableArray alloc] init];</span><br><span class="line">    &#125;</span><br><span class="line">    return  self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-(void)parseLrc:(NSString *)lrc&#123;</span><br><span class="line">    NSLog(@&quot;%@&quot;,lrc);</span><br><span class="line">    </span><br><span class="line">    if(![lrc isEqual:nil])&#123;</span><br><span class="line">        NSArray *sepArray=[lrc componentsSeparatedByString:@&quot;[&quot;];</span><br><span class="line">        NSArray *lineArray=[[NSArray alloc] init];</span><br><span class="line">        [self.wordArray removeAllObjects];</span><br><span class="line">        [self.timerArray removeAllObjects];</span><br><span class="line">        for(int i=0;i&lt;sepArray.count;i++)&#123;</span><br><span class="line">            if([sepArray[i] length]&gt;0)&#123;</span><br><span class="line">                lineArray=[sepArray[i] componentsSeparatedByString:@&quot;]&quot;];</span><br><span class="line">                if(![lineArray[0] isEqualToString:@&quot;\n&quot;])&#123;</span><br><span class="line">                    [self.timerArray addObject:lineArray[0]];</span><br><span class="line">                    </span><br><span class="line">                    [self.wordArray addObject:lineArray.count&gt;1?lineArray[1]:@&quot;&quot;];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>歌词解析部分主要是将歌词格式的字符串切分开，wordArray里面是歌词，timerArray里面是每句时间点</p>
+<h2 id="2、实现歌词的滚动"><a href="#2、实现歌词的滚动" class="headerlink" title="2、实现歌词的滚动"></a>2、实现歌词的滚动</h2><p>使用tableview来显示歌词</p>
+<p>TEMusicLrcView.h</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;UIKit/UIKit.h&gt;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">&lt;AVFoundation/AVFoundation.h&gt;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">"TEMusicLrcParser.h"</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@protocol</span> <span class="title">TEMusicLrcViewDelegate</span> &lt;<span class="title">NSObject</span>&gt;</span></span><br><span class="line"><span class="keyword">@optional</span></span><br><span class="line">-(<span class="keyword">void</span>) updateTime;<span class="comment">//根据音乐播放器的时间更新时间，代理中实现</span></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">TEMusicLrcView</span> : <span class="title">UITableView</span> &lt;<span class="title">UITableViewDataSource</span>,<span class="title">UITableViewDelegate</span>&gt;</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">strong</span>,<span class="keyword">nonatomic</span>) LrcParser* lrcContent;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">assign</span>) <span class="built_in">NSInteger</span> currentRow;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) <span class="keyword">id</span>&lt;TEMusicLrcViewDelegate&gt; musicLrcViewDelegate;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) <span class="built_in">AVAudioPlayer</span> *player;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) <span class="built_in">NSString</span> *musicTotalLrc;<span class="comment">//整首歌的歌词解析前的字符串</span></span><br><span class="line">-(<span class="keyword">instancetype</span>)initWithFrame:(<span class="built_in">CGRect</span>)frame musicTotalLrc:(<span class="built_in">NSString</span> *)musicTotalLrc;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>TEMusicLrcView.m</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#import &quot;TEMusicLrcView.h&quot;</span><br><span class="line"></span><br><span class="line">#import &quot;TECaptureViewController.h&quot;</span><br><span class="line"></span><br><span class="line">@interface TEMusicLrcView ()</span><br><span class="line">@property (nonatomic,strong) NSTimer *timer;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@implementation TEMusicLrcView</span><br><span class="line"></span><br><span class="line">-(instancetype)initWithFrame:(CGRect)frame musicTotalLrc:(NSString *)musicTotalLrc&#123;</span><br><span class="line">    self = [super initWithFrame:frame];</span><br><span class="line">    if(self)</span><br><span class="line">    &#123;</span><br><span class="line">        self.delegate=self;</span><br><span class="line">        self.dataSource=self;</span><br><span class="line">        self.lrcContent=[[LrcParser alloc] init];</span><br><span class="line">        self.separatorStyle = UITableViewCellSeparatorStyleNone;</span><br><span class="line">        self.allowsSelection = NO;</span><br><span class="line">        </span><br><span class="line">        [self.lrcContent parseLrc:musicTotalLrc];</span><br><span class="line">        [self reloadData];</span><br><span class="line">        [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(update) userInfo:nil repeats:YES];</span><br><span class="line">        </span><br><span class="line">        UIImageView *bgView=[[UIImageView alloc] init];</span><br><span class="line">        bgView.backgroundColor = [UIColor clearColor];</span><br><span class="line">        //bgView.alpha=0.8;</span><br><span class="line">        self.backgroundView=bgView;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-(void)update&#123;</span><br><span class="line">    [self.musicLrcViewDelegate updateTime];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section&#123;</span><br><span class="line">    return self.lrcContent.wordArray.count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath</span><br><span class="line">&#123;</span><br><span class="line">    if(indexPath.row==_currentRow)&#123;</span><br><span class="line">        return 60.0/kVisualFactor;</span><br><span class="line">    &#125;</span><br><span class="line">    else&#123;</span><br><span class="line">        return 54.0/kVisualFactor;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath&#123;</span><br><span class="line">    [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@&quot;TEMusicLrcCell&quot;];</span><br><span class="line">    UITableViewCell *cell=[self dequeueReusableCellWithIdentifier:@&quot;TEMusicLrcCell&quot; forIndexPath:indexPath];</span><br><span class="line">    </span><br><span class="line">    cell.textLabel.text=self.lrcContent.wordArray[indexPath.row];</span><br><span class="line"></span><br><span class="line">    if(indexPath.row==_currentRow)&#123;</span><br><span class="line">        cell.textLabel.textColor = [UIColor colorFromHex:@&quot;ffda44&quot;];</span><br><span class="line">        cell.textLabel.font = [UIFont systemFontOfSize:34.0/kVisualFactor];</span><br><span class="line">        cell.textLabel.layer.shadowColor = [UIColor clearColor].CGColor;</span><br><span class="line">        cell.textLabel.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);</span><br><span class="line">    &#125;</span><br><span class="line">    else&#123;</span><br><span class="line">        cell.textLabel.textColor = [UIColor colorWithWhite:1 alpha:0.7];</span><br><span class="line">        cell.textLabel.font = [UIFont systemFontOfSize:28.0/kVisualFactor];</span><br><span class="line">        cell.textLabel.layer.shadowOpacity = 1.0;</span><br><span class="line">        cell.textLabel.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.4].CGColor;</span><br><span class="line">        cell.textLabel.layer.shadowOffset = CGSizeMake(0.0f, 1.0f);</span><br><span class="line">        cell.textLabel.layer.shadowRadius = 2;</span><br><span class="line">    &#125;</span><br><span class="line">    cell.textLabel.textAlignment = NSTextAlignmentCenter;</span><br><span class="line">    cell.backgroundColor=[UIColor clearColor];</span><br><span class="line">   </span><br><span class="line">    return cell;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>其中更新提词器的时间的实现方法是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#pragma mark - 更新提词器时间</span><br><span class="line">-(void) updateTime&#123;</span><br><span class="line">    CGFloat currentTime=self.musicPlayer.currentlocation;</span><br><span class="line">//    NSLog(@&quot;%d:%d&quot;,(int)currentTime / 60, (int)currentTime % 60);</span><br><span class="line">    for (int i=0; i&lt;self.musicLrcView.lrcContent.timerArray.count; i++) &#123;</span><br><span class="line">        NSArray *timeArray=[self.musicLrcView.lrcContent.timerArray[i] componentsSeparatedByString:@&quot;:&quot;];</span><br><span class="line">        float lrcTime=[timeArray[0] intValue]*60+[timeArray[1] floatValue];</span><br><span class="line">        if(currentTime&gt;lrcTime)&#123;//过了这句歌词的起始时间后，刷新当前歌词</span><br><span class="line">            self.musicLrcView.currentRow=i;</span><br><span class="line">        &#125;else</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    [self.musicLrcView reloadData];</span><br><span class="line">    [self.musicLrcView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.musicLrcView.currentRow inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>currentTime为当前播放器的时间，lrcTime为当前歌词的开始时间，过了这句歌词的起始时间后，刷新当前歌词</p>
+</section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2017/09/21/2017/09/21-reactnative native invoke.html">React Native和iOS原生方法交互</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2017/10/20/2017/10/20-CAGradientLayer.html">使用 CAGradientLayer 实现渐变遮罩</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://debugly.cn/2017/10/12/2017/10/12-lrc.html';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "实现随音乐播放滚动歌词的音乐提词器",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

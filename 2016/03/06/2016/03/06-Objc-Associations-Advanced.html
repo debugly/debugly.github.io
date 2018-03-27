@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content=",许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      深入理解关联引用 | Matt Reach
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>深入理解关联引用</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2016-03-06</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+
+    
+
+      
+    <section class="markdown-content"><blockquote>
+<p>今日吃饱了，确实撑得慌，找了我的邻居-阿杰一起散步，走了好大一圈，最后在小区下聊起了技术，从YYKit，SDWebImage 等第三方库，扯到了关联引用，因为他们都用到了这个技术，然而我又想到了单例，单例和关联引用在实现上有一个相同点—都需要一个静态变量；那么疑问就来了：同样都需要一个静态变量，为什么结果不一样呢？或许你还没明白我的疑问是什么，请继续阅读吧！</p>
+</blockquote>
+<h3 id="一、回顾单例"><a href="#一、回顾单例" class="headerlink" title="一、回顾单例"></a>一、回顾单例</h3><p>我简单的写了个单例类 <strong>SingletonObject</strong> ，把静态变量 instance 放在 sharedInstance 类方法里看起来可能更好一些，放在外面也是可以的，二者的区别是作用域不同，生命周期也差不多，我个人比较喜欢放在方法内部，因为外部一般不需要直接获取，这里放在外部是为了和我们今天的角儿进行对比，提出我的疑问做铺垫。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">SingletonObject</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">id</span> instance;</span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">instancetype</span>)sharedInstance</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</span><br><span class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</span><br><span class="line">        instance = [[<span class="keyword">self</span> alloc]init];</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>请问你有没有思考过，为什么这里可以实现单例，instance 变量不是每个对象都有一份吗？当然不是的！这个 instance 静态变量的地址是和类 <strong>SingletonObject</strong> 是对应的，也就说 instance 静态变量的地址是确定的，只要这个类的地址确定了，他也就是确定的了，因此可以简单的理解为 instance 静态变量是属于类的，姑且称之为 “<strong>类变量</strong>”，与<strong>实例变量</strong>相对应。</p>
+<blockquote>
+<p>实际上这里所谓的 “类变量” 与 Java 之类的面向对象语言里的类变量不是一个意思，Objective C 是没有类变量，这里只是通过静态变量达到这种效果罢了，因此这里我将她称之为 “<strong>类变量</strong>”。</p>
+</blockquote>
+<h3 id="二、提出疑问"><a href="#二、提出疑问" class="headerlink" title="二、提出疑问"></a>二、提出疑问</h3><p>我们已经知道了静态变量是个“<strong>类变量</strong>”，我们也都用过 SDWebImage，其内部实现正是使用了关联引用，才使得我们使用起来是那么的方便，图片可以准确无误的下载显示出来，也就是说每个 imageView 对应图片都是自己想要的，一一对应的，我的问题来了，既然关联引用也使用了“<strong>类变量</strong>”，那么不应该是 imageView 最终都要显示为同一张图片才对嘛？！虽然你创建了 N 个 imageView ，但是 imageView 的 “<strong>类变量</strong>”（关联引用的 key） 是唯一的啊，这明显是个一对多的关系！可为什么使用 SDWebImage 的时候一切都那么正常，最终图片都一一对应上了，你怎么看呢？我觉得此事必有蹊跷！</p>
+<h3 id="三、大胆推测"><a href="#三、大胆推测" class="headerlink" title="三、大胆推测"></a>三、大胆推测</h3><p>我最后给阿杰做了一个这样的推测：问题肯定在关联引用的处理上，要不然我们就没必要在使用的时候传个 key 进去了，或许正是根据这个 key 做了一个地址偏移什么的，每个对象都能获取元类信息，然后给自身加个偏移存储下这个关联的对象，我们可以从打印静态变量地址，打印堆栈信息，runtime源码入手…</p>
+<p>然后就各回各家，各找各妈了…</p>
+<h3 id="四、揭开神秘面纱"><a href="#四、揭开神秘面纱" class="headerlink" title="四、揭开神秘面纱"></a>四、揭开神秘面纱</h3><p>这么大的疑问放心里，肯定睡不着的，回家就开始找源码了，找到了内部实现代码，现在拿出来仔细分析下内部实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这是我们调用的方法</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">objc_setAssociatedObject</span><span class="params">(id object, <span class="keyword">const</span> <span class="keyword">void</span> *key, id value, objc_AssociationPolicy policy)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    objc_setAssociatedObject_non_gc(object, key, value, policy);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//这是内部的私有方法；</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">objc_setAssociatedObject_non_gc</span><span class="params">(id object, <span class="keyword">const</span> <span class="keyword">void</span> *key, id value, objc_AssociationPolicy policy)</span> </span>&#123;</span><br><span class="line">    _object_set_associative_reference(object, (<span class="keyword">void</span> *)key, value, policy);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//设置关联引用对象，最终将调用这个方法</span></span><br><span class="line"><span class="keyword">void</span> _object_set_associative_reference(id object, <span class="keyword">void</span> *key, id value, <span class="keyword">uintptr_t</span> policy) &#123;</span><br><span class="line">    <span class="comment">// 这段代码有点像重写 setter 方法的感觉；old就是赋值之前的老值，要被释放掉的；ObjcAssociation 下面会介绍；</span></span><br><span class="line">    <span class="function">ObjcAssociation <span class="title">old_association</span><span class="params">(<span class="number">0</span>, nil)</span></span>;</span><br><span class="line">    <span class="comment">// acquireValue：对传入的 value 做 reatain,copy 等策略</span></span><br><span class="line">    id new_value = value ? acquireValue(value, policy) : nil;</span><br><span class="line">    &#123;</span><br><span class="line">        AssociationsManager manager;<span class="comment">//这是重点，每个类都可以创建一个 manager 管理关联的对象，不过 manager 管理的 HashMap 一直都是一个，并且是线程安全的！</span></span><br><span class="line">        AssociationsHashMap &amp; (manager.associations());<span class="comment">//获取唯一的 map 引用；</span></span><br><span class="line">        <span class="keyword">disguised_ptr_t</span> disguised_object = DISGUISE(object);<span class="comment">//把对象伪装下，说得直白些就是将对象的地址转化为一个 unsigned long 的整型；</span></span><br><span class="line">        <span class="keyword">if</span> (new_value) &#123; <span class="comment">//如果新值不是空的</span></span><br><span class="line">            <span class="comment">// 这里是 c++ 语法，按照 key 查找 map 里的键值对，返回的是一个 iterator；</span></span><br><span class="line">            AssociationsHashMap::iterator i = associations.find(disguised_object);</span><br><span class="line">            <span class="keyword">if</span> (i != associations.end()) &#123; <span class="comment">//说明找到了对象对应的 map 了；</span></span><br><span class="line">                ObjectAssociationMap *refs = i-&gt;second; <span class="comment">//取 value，first 是取 key http://www.cplusplus.com/reference/unordered_map/unordered_map/</span></span><br><span class="line">                ObjectAssociationMap::iterator j = refs-&gt;find(key);</span><br><span class="line">                <span class="keyword">if</span> (j != refs-&gt;end()) &#123;  <span class="comment">//说明在对象对应的 map 里找到了 key 对应的 map ；</span></span><br><span class="line">                    old_association = j-&gt;second; <span class="comment">//取值赋给 old，后面会释放；</span></span><br><span class="line">                    j-&gt;second = ObjcAssociation(policy, new_value); <span class="comment">//赋上新值；这里包装了下，不是直接赋值，可思考下为什么？</span></span><br><span class="line">                &#125; <span class="keyword">else</span> &#123; <span class="comment">//说明在对象对应的 map 里没能找到 key 对应的 map ！</span></span><br><span class="line">                    (*refs)[key] = ObjcAssociation(policy, new_value);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">//找不到对象对应的 map ；第一次肯定都找不到，需要创建；</span></span><br><span class="line">                <span class="comment">// create the new association (first time).</span></span><br><span class="line">                ObjectAssociationMap *refs = <span class="keyword">new</span> ObjectAssociationMap;</span><br><span class="line">                associations[disguised_object] = refs; <span class="comment">//创建一个 map ，对象是 key;</span></span><br><span class="line">                (*refs)[key] = ObjcAssociation(policy, new_value); <span class="comment">//然后把关联对象放到对象对应的空 map 里；key就是关联引用使用的那个静态变量；</span></span><br><span class="line">                object-&gt;setHasAssociatedObjects(); <span class="comment">//做个标记；下次就能够找到了；</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">//如果新值是空的，相当于 set 了 nil ；</span></span><br><span class="line">            <span class="comment">// setting the association to nil breaks the association.</span></span><br><span class="line">            AssociationsHashMap::iterator i = associations.find(disguised_object);</span><br><span class="line">            <span class="keyword">if</span> (i !=  associations.end()) &#123; <span class="comment">//找到了对象对应的 map 了；</span></span><br><span class="line">                ObjectAssociationMap *refs = i-&gt;second; <span class="comment">//取出对象对应的 map</span></span><br><span class="line">                ObjectAssociationMap::iterator j = refs-&gt;find(key); <span class="comment">//查找 key 对应的 ObjcAssociation</span></span><br><span class="line">                <span class="keyword">if</span> (j != refs-&gt;end()) &#123;</span><br><span class="line">                    old_association = j-&gt;second; <span class="comment">//取值赋给 old，后面会释放；</span></span><br><span class="line">                    refs-&gt;erase(j); <span class="comment">//从 map 里擦除；</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 释放 old</span></span><br><span class="line">    <span class="keyword">if</span> (old_association.hasValue()) ReleaseValue()(old_association);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>仔细阅读完源码后，疑问马上没了，也挺好理解的，只不过需要一点 c++ 的知识，基本每一行都加了注释，这里就不详细说了，做个简单的总结：</p>
+<p>1.使用<strong>AssociationsManager</strong>类管理所有类关联的对象，其内部用静态的（也就是唯一的） <strong>AssociationsHashMap</strong> 存储，map 存的是键值对，这里的键就是这个类的对象（需要处理下），值是 <strong>ObjectAssociationMap</strong>。（这两个 map 有着不同的父类）简单看下AssociationsManager：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AssociationsManager</span> &#123;</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">spinlock_t</span> _lock; <span class="comment">//还用到了自旋锁</span></span><br><span class="line">    <span class="keyword">static</span> AssociationsHashMap *_map; <span class="comment">// associative references:  object pointer -&gt; PtrPtrHashMap.</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    AssociationsManager()   &#123; spinlock_lock(&amp;_lock); &#125;</span><br><span class="line">    ~AssociationsManager()  &#123; spinlock_unlock(&amp;_lock); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">AssociationsHashMap &amp;<span class="title">associations</span><span class="params">()</span> </span>&#123; <span class="comment">//c++ 的引用，好难理解清楚引用和指针</span></span><br><span class="line">        <span class="keyword">if</span> (_map == <span class="literal">NULL</span>)</span><br><span class="line">            _map = <span class="keyword">new</span> AssociationsHashMap();</span><br><span class="line">        <span class="keyword">return</span> *_map;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>2.每个对象的<strong>ObjectAssociationMap</strong>里存的当然也是键值对，这里的键就是你定义的关联对象的 key，值是 <strong>ObjcAssociation</strong> ，这里做了一次包装，看下他的源码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ObjcAssociation</span> &#123;</span></span><br><span class="line">        <span class="keyword">uintptr_t</span> _policy; <span class="comment">//存储策略，这个在销毁对象的时候需要用到；</span></span><br><span class="line">        id _value;<span class="comment">//被包装的对象</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        ObjcAssociation(<span class="keyword">uintptr_t</span> policy, id value) : _policy(policy), _value(value) &#123;&#125;</span><br><span class="line">        ObjcAssociation() : _policy(<span class="number">0</span>), _value(nil) &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">uintptr_t</span> policy() <span class="keyword">const</span> &#123; <span class="keyword">return</span> _policy; &#125;</span><br><span class="line">        <span class="function">id <span class="title">value</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> _value; &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">bool</span> <span class="title">hasValue</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> _value != nil; &#125;<span class="comment">//还记得上面用到这个方法了吗？</span></span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure>
+<p>3.明白了<strong>setter</strong>方法之后，很容易理解<strong>getter</strong>方法，简单看下<strong>objc_getAssociatedObject</strong>内部的细节：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这是我们调用的方法</span></span><br><span class="line"><span class="function">id <span class="title">objc_getAssociatedObject</span><span class="params">(id object, <span class="keyword">const</span> <span class="keyword">void</span> *key)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> objc_getAssociatedObject_non_gc(object, key);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//这是内部的私有方法；</span></span><br><span class="line"><span class="function">id <span class="title">objc_getAssociatedObject_non_gc</span><span class="params">(id object, <span class="keyword">const</span> <span class="keyword">void</span> *key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> _object_get_associative_reference(object, (<span class="keyword">void</span> *)key);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取关联引用对象，最终将调用这个方法</span></span><br><span class="line">id _object_get_associative_reference(id object, <span class="keyword">void</span> *key) &#123;</span><br><span class="line">    id value = nil;</span><br><span class="line">    <span class="keyword">uintptr_t</span> policy = OBJC_ASSOCIATION_ASSIGN;</span><br><span class="line">    &#123;</span><br><span class="line">        AssociationsManager manager;</span><br><span class="line">        AssociationsHashMap &amp;associations(manager.associations());</span><br><span class="line">        <span class="keyword">disguised_ptr_t</span> disguised_object = DISGUISE(object);</span><br><span class="line">        AssociationsHashMap::iterator i = associations.find(disguised_object);</span><br><span class="line">        <span class="keyword">if</span> (i != associations.end()) &#123;</span><br><span class="line">            ObjectAssociationMap *refs = i-&gt;second;</span><br><span class="line">            ObjectAssociationMap::iterator j = refs-&gt;find(key);</span><br><span class="line">            <span class="keyword">if</span> (j != refs-&gt;end()) &#123;</span><br><span class="line">                ObjcAssociation &amp;entry = j-&gt;second;</span><br><span class="line">                value = entry.value();</span><br><span class="line">                policy = entry.policy();</span><br><span class="line">                <span class="comment">//上面的还是那两步，最后根据key找到对应的关联对象；这里冒出来一个 getter policy，倒是很少遇见！或许在 copy 对象的时候才会遇见吧...</span></span><br><span class="line">                <span class="keyword">if</span> (policy &amp; OBJC_ASSOCIATION_GETTER_RETAIN) ((id(*)(id, SEL))objc_msgSend)(value, SEL_retain);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (value &amp;&amp; (policy &amp; OBJC_ASSOCIATION_GETTER_AUTORELEASE)) &#123;</span><br><span class="line">        ((id(*)(id, SEL))objc_msgSend)(value, SEL_autorelease);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="五、内存如何管理"><a href="#五、内存如何管理" class="headerlink" title="五、内存如何管理"></a>五、内存如何管理</h3><p>关联引用对象是<strong>不需要管理内存</strong>的，这里看下源码就知道怎么回事了；<br>销毁对象的时候，内部调用了这个方法：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***********************************************************************</span></span><br><span class="line"><span class="comment">* objc_destructInstance</span></span><br><span class="line"><span class="comment">* Destroys an instance without freeing memory.</span></span><br><span class="line"><span class="comment">* Calls C++ destructors.</span></span><br><span class="line"><span class="comment">* Calls ARR ivar cleanup.</span></span><br><span class="line"><span class="comment">* Removes associative references.</span></span><br><span class="line"><span class="comment">* Returns `obj`. Does nothing if `obj` is nil.</span></span><br><span class="line"><span class="comment">* Be warned that GC DOES NOT CALL THIS. If you edit this, also edit finalize.</span></span><br><span class="line"><span class="comment">* CoreFoundation and other clients do call this under GC.</span></span><br><span class="line"><span class="comment">**********************************************************************/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">objc_destructInstance</span><span class="params">(id obj)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (obj) &#123;</span><br><span class="line">        <span class="comment">// Read all of the flags at once for performance.</span></span><br><span class="line">        <span class="keyword">bool</span> cxx = obj-&gt;hasCxxDtor();</span><br><span class="line">        <span class="keyword">bool</span> assoc = !UseGC &amp;&amp; obj-&gt;hasAssociatedObjects();</span><br><span class="line">        <span class="keyword">bool</span> dealloc = !UseGC;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// This order is important.</span></span><br><span class="line">        <span class="keyword">if</span> (cxx) object_cxxDestruct(obj);</span><br><span class="line">        <span class="keyword">if</span> (assoc) _object_remove_assocations(obj);<span class="comment">//移除关联的对象</span></span><br><span class="line">        <span class="keyword">if</span> (dealloc) obj-&gt;clearDeallocating();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>下面看下 <strong>_object_remove_assocations(obj)</strong> 方法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> _object_remove_assocations(id object) &#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt; ObjcAssociation,ObjcAllocator&lt;ObjcAssociation&gt; &gt; elements;</span><br><span class="line">    &#123;</span><br><span class="line">        AssociationsManager manager;</span><br><span class="line">        AssociationsHashMap &amp;associations(manager.associations());</span><br><span class="line">        <span class="keyword">if</span> (associations.size() == <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">disguised_ptr_t</span> disguised_object = DISGUISE(object);</span><br><span class="line">        AssociationsHashMap::iterator i = associations.find(disguised_object);</span><br><span class="line">        <span class="keyword">if</span> (i != associations.end()) &#123;</span><br><span class="line">            <span class="comment">// copy all of the associations that need to be removed.</span></span><br><span class="line">            ObjectAssociationMap *refs = i-&gt;second;</span><br><span class="line">            <span class="keyword">for</span> (ObjectAssociationMap::iterator j = refs-&gt;begin(), end = refs-&gt;end(); j != end; ++j) &#123;</span><br><span class="line">                elements.push_back(j-&gt;second);<span class="comment">//Add element at the end //http://www.cplusplus.com/reference/vector/vector/            &#125;</span></span><br><span class="line">            <span class="comment">// remove the secondary table.</span></span><br><span class="line">            <span class="keyword">delete</span> refs;</span><br><span class="line">            associations.erase(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// the calls to releaseValue() happen outside of the lock.</span></span><br><span class="line">    for_each(elements.begin(), elements.end(), ReleaseValue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从 manager 里取出类对应的 AssociationsHashMap，然后查找当前对象对应的AssociationsHashMap ；如果找到了，说明这个对象确实使用了关联引用，然后取出对应的 ObjectAssociationMap ；</p>
+<p>接着枚举 ObjectAssociationMap ，取出关联的对象，然后放到 vector 的末尾；</p>
+<p>最后通过 for_each 操作 vector 里的每一个元素，都去调用 ReleaseValue（）方法；</p>
+<p>前面已经见过<strong>ReleaseValue()</strong>这个方法了，这里看下源码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">releaseValue</span><span class="params">(id value, <span class="keyword">uintptr_t</span> policy)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (policy &amp; OBJC_ASSOCIATION_SETTER_RETAIN) &#123;<span class="comment">//这就是为何要把关联的对象包装一下的原因！</span></span><br><span class="line">        ((id(*)(id, SEL))objc_msgSend)(value, SEL_release);<span class="comment">//发送release消息；</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ReleaseValue</span> &#123;</span></span><br><span class="line">	<span class="comment">//应该是重载运算符了，我的c++知识忘光了耶；</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span> <span class="params">(ObjcAssociation &amp;association)</span> </span>&#123;</span><br><span class="line">        releaseValue(association.value(), association.policy());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>由此看来，我们无需关系关联对象的内存管理，当一个对象释放的时候，会自动去释放被关联的对象！这也正好符合内存管理的法则：谁使用谁管理！</p>
+<h3 id="六、验证类变量"><a href="#六、验证类变量" class="headerlink" title="六、验证类变量"></a>六、验证类变量</h3><p>我觉得我的猜测应该是靠谱的，因此我打印了类的起始地址和结束地址，各种类变量地址，全局变量地址，以及对象地址，结果如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2016</span><span class="number">-03</span><span class="number">-06</span> <span class="number">14</span>:<span class="number">17</span>:<span class="number">42.056</span> StudyAssociationSourceCode[<span class="number">27561</span>:<span class="number">2531350</span>]</span><br><span class="line">-------------</span><br><span class="line">类方法的地址:<span class="number">0x100001770</span></span><br><span class="line">起始地址:<span class="number">0x100002320</span></span><br><span class="line">结束地址:<span class="number">0x100002328</span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span>之内，方法之外全局变量地址:0<span class="title">x100002348</span></span></span><br><span class="line"></span><br><span class="line">实例方法内的静态变量地址:<span class="number">0x100002360</span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span>之外，静态变量地址:0<span class="title">x100002361</span></span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span>之内，方法之外静态变量地址:0<span class="title">x100002362</span></span></span><br><span class="line"></span><br><span class="line">对象的起始地址:<span class="number">0x1002005e0</span></span><br><span class="line">对象的结束地址:<span class="number">0x1002005e8</span></span><br><span class="line">-------------</span><br><span class="line"></span><br><span class="line">-------------</span><br><span class="line"><span class="number">2016</span><span class="number">-03</span><span class="number">-06</span> <span class="number">14</span>:<span class="number">17</span>:<span class="number">42.056</span> StudyAssociationSourceCode[<span class="number">27561</span>:<span class="number">2531350</span>] association key:<span class="number">0x100002363</span></span><br></pre></td></tr></table></figure>
+<p>1.可以看出这几个的地址是连续的：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x100002360</span> :实例方法内的静态变量地址</span><br><span class="line"><span class="number">0x100002361</span> :<span class="class"><span class="keyword">@implementation</span>之外，静态变量地址</span></span><br><span class="line"><span class="number">0x100002362</span> :<span class="class"><span class="keyword">@implementation</span>之内，方法之外静态变量地址</span></span><br><span class="line"><span class="number">0x100002363</span> :<span class="class"><span class="keyword">@implementation</span>之外的 <span class="title">association</span> <span class="title">key</span> 静态变量地址【不同的文件】</span></span><br></pre></td></tr></table></figure>
+<p>这说明类变量不管写到哪里都是放到了一起的，都在一个区域内；</p>
+<p>2.这几个的内存空间是相近的：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x100001770</span> :类方法的地址</span><br><span class="line"><span class="number">0x100002320</span> :类起始地址</span><br><span class="line"><span class="number">0x100002328</span> :类结束地址</span><br><span class="line"><span class="number">0x100002348</span> :全局变量地址</span><br><span class="line"><span class="number">0x100002360</span> :静态变量变量地址</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这里看起来很是怪异，类方法的地址竟然在类的地址空间之前！！要想解释这个现象就需要知道 OC 对象的继承体系、元类、Class结构体等，这里先卖个关子，后续博客介绍。</p>
+<p>大体上看，凡是跟类相关的变量，无论是全局的还是静态的变量或方法的内存都是在一块逻辑区域内分配的；</p>
+<p>3.对比类地址和对象地址：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x100002320</span> :类起始地址</span><br><span class="line"><span class="number">0x100600450</span> :对象的起始地址</span><br></pre></td></tr></table></figure>
+<p>可以看出他们的内存空间差的很多，这说明了在内存分配上类和对象是分开的！更加具体的细节以后验证吧，我现在也不能把他们说明白。</p>
+<p>这是我测试工程的地址：<a href="https://github.com/debugly/StudyAssociationSourceCode" target="_blank" rel="noopener">https://github.com/debugly/StudyAssociationSourceCode</a></p>
+<h3 id="七、总结"><a href="#七、总结" class="headerlink" title="七、总结"></a>七、总结</h3><p>一切都清楚了，对于 <strong>“类变量” </strong> 的理解也是没错的，简单的说：类变量是属于类的，实例变量是属于对象的，清楚这一点有利于我们在编码过程中正确的使用使用类变量，迅速找到使用类变量埋下坑，类变量属于类这一特性有时候真的可能会给你带来问题，比如你写一个局部静态变量，页面每次进来都修改下这个值，可是你会发现第二次进来的时候他仍旧是上次修改过的，或许这不是你想看到的！</p>
+<p>关联引用的实现如此巧妙，元类如此的迷人，这些都需要继续深入学习才能体会得到！苹果把 Runtime 开源了，那么我们就有必要去看看源码，即使我们不能为之作出什么贡献，但至少可以提升自身，对于知识体系的形成都有很大帮助！</p>
+<p>不足之处请多多指正！</p>
+</section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2016/03/05/2016/03/05-Objc-Associations-Useage.html">关联引用的使用方法</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2016/03/28/2016/03/28-calayerinvalidgeometry.html">解决 CALayerInvalidGeometry 问题</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://debugly.cn/2016/03/06/2016/03/06-Objc-Associations-Advanced.html';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "深入理解关联引用",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
