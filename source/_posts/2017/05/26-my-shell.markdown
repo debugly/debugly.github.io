@@ -25,60 +25,60 @@ keywords: shell,Linux shell
 
 - env 查看所有的环境变量，这个命令太厉害了，上面提到的好多内置变量的值都包括了：
 
-```shell
-MANPATH=/Users/xuqianlong/.nvm/versions/node/v4.0.0/share/man:/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/man:/usr/local/share/man:/usr/share/man:/opt/X11/share/man:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/share/man:/Applications/Xcode.app/Contents/Developer/usr/share/man:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/share/man
-NVM_IOJS_ORG_VERSION_LISTING=https://iojs.org/dist/index.tab
-rvm_bin_path=/Users/xuqianlong/.rvm/bin
-TERM_PROGRAM=Apple_Terminal
-SHELL=/bin/bash
-TERM=xterm-256color
-TMPDIR=/var/folders/d2/bt0v98895vd53lcx9w_spzdw0000gn/T/
-NVM_PATH=/Users/xuqianlong/.nvm/versions/node/v4.0.0/lib/node
-Apple_PubSub_Socket_Render=/private/tmp/com.apple.launchd.f7R2BOD9jj/Render
-TERM_PROGRAM_VERSION=377
-TERM_SESSION_ID=75991873-8124-4503-8BA0-F10EB73C0D84
-NVM_DIR=/Users/xuqianlong/.nvm
-USER=xuqianlong
-_system_type=Darwin
-rvm_path=/Users/xuqianlong/.rvm
-SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.SZQYe5MXKe/Listeners
-__CF_USER_TEXT_ENCODING=0x1F5:0x19:0x34
-rvm_prefix=/Users/xuqianlong
-PATH=/Library/Frameworks/Python.framework/Versions/3.5/bin:/opt/local/bin:/opt/local/sbin:/Users/xuqianlong/.nvm/versions/node/v4.0.0/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Users/xuqianlong/libwebp-0.5.1-mac-10.9/bin:/Users/xuqianlong/bin:/Users/xuqianlong/.rvm/bin
-NVM_NODEJS_ORG_MIRROR=https://nodejs.org/dist
-PWD=/Users/xuqianlong
-JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home
-LANG=zh_CN.UTF-8
-_system_arch=x86_64
-XPC_FLAGS=0x0
-_system_version=10.12
-XPC_SERVICE_NAME=0
-rvm_version=1.27.0 (latest)
-SHLVL=1
-HOME=/Users/xuqianlong
-LOGNAME=xuqianlong
-NVM_BIN=/Users/xuqianlong/.nvm/versions/node/v4.0.0/bin
-NVM_IOJS_ORG_MIRROR=https://iojs.org/dist
-DISPLAY=/private/tmp/com.apple.launchd.0jBYczqYJG/org.macosforge.xquartz:0
-SECURITYSESSIONID=186a6
-_system_name=OSX
-_=/usr/bin/env
-```
+	```shell
+	MANPATH=/Users/xuqianlong/.nvm/versions/node/v4.0.0/share/man:/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/man:/usr/local/share/man:/usr/share/man:/opt/X11/share/man:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/share/man:/Applications/Xcode.app/Contents/Developer/usr/share/man:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/share/man
+	NVM_IOJS_ORG_VERSION_LISTING=https://iojs.org/dist/index.tab
+	rvm_bin_path=/Users/xuqianlong/.rvm/bin
+	TERM_PROGRAM=Apple_Terminal
+	SHELL=/bin/bash
+	TERM=xterm-256color
+	TMPDIR=/var/folders/d2/bt0v98895vd53lcx9w_spzdw0000gn/T/
+	NVM_PATH=/Users/xuqianlong/.nvm/versions/node/v4.0.0/lib/node
+	Apple_PubSub_Socket_Render=/private/tmp/com.apple.launchd.f7R2BOD9jj/Render
+	TERM_PROGRAM_VERSION=377
+	TERM_SESSION_ID=75991873-8124-4503-8BA0-F10EB73C0D84
+	NVM_DIR=/Users/xuqianlong/.nvm
+	USER=xuqianlong
+	_system_type=Darwin
+	rvm_path=/Users/xuqianlong/.rvm
+	SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.SZQYe5MXKe/Listeners
+	__CF_USER_TEXT_ENCODING=0x1F5:0x19:0x34
+	rvm_prefix=/Users/xuqianlong
+	PATH=/Library/Frameworks/Python.framework/Versions/3.5/bin:/opt/local/bin:/opt/local/sbin:/Users/xuqianlong/.nvm/versions/node/v4.0.0/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Users/xuqianlong/libwebp-0.5.1-mac-10.9/bin:/Users/xuqianlong/bin:/Users/xuqianlong/.rvm/bin
+	NVM_NODEJS_ORG_MIRROR=https://nodejs.org/dist
+	PWD=/Users/xuqianlong
+	JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home
+	LANG=zh_CN.UTF-8
+	_system_arch=x86_64
+	XPC_FLAGS=0x0
+	_system_version=10.12
+	XPC_SERVICE_NAME=0
+	rvm_version=1.27.0 (latest)
+	SHLVL=1
+	HOME=/Users/xuqianlong
+	LOGNAME=xuqianlong
+	NVM_BIN=/Users/xuqianlong/.nvm/versions/node/v4.0.0/bin
+	NVM_IOJS_ORG_MIRROR=https://iojs.org/dist
+	DISPLAY=/private/tmp/com.apple.launchd.0jBYczqYJG/org.macosforge.xquartz:0
+	SECURITYSESSIONID=186a6
+	_system_name=OSX
+	_=/usr/bin/env
+	```
 
 - cat 查看文本内容，比如查看下机器上安装了几种 shell：cat /etc/shells
 
-```shell
-# List of acceptable shells for chpass(1).
-# Ftpd will not allow users to connect who are not using
-# one of these shells.
-
-/bin/bash
-/bin/csh
-/bin/ksh
-/bin/sh
-/bin/tcsh
-/bin/zsh
-```
+	```shell
+	# List of acceptable shells for chpass(1).
+	# Ftpd will not allow users to connect who are not using
+	# one of these shells.
+	
+	/bin/bash
+	/bin/csh
+	/bin/ksh
+	/bin/sh
+	/bin/tcsh
+	/bin/zsh
+	```
 
 - ls /bin/*sh ，结果跟上面是一样的
 - hostname -s 主机名称: `debugly`
@@ -193,28 +193,57 @@ cworkspace
 
 ## scp
 
-本机传输文件到远程服务器:
+- 本机复制到远程服务器
 
-```shell
-scp /Users/qianlongxu/Downloads/id_rsa.pub crown@10.7.40.176:~/id_rsa.pub  
-```
+	- **文件**
+	
+	```shell
+	scp /Users/qianlongxu/Downloads/id_rsa.pub crown@10.7.40.176:~/id_rsa.pub  
+	```
+	- **文件夹**
+	
+	```shell
+	//在远程服务器game下创建qr-code，copy qr-code 下的所有文件
+	scp -r /Users/Shared/Jenkins/Home/xql/qr-code root@10.10.194.16:/opt/www/html/game
+	```
+- 从远程服务器下载到本地
+
+	```shell
+	scp jenkins@10.7.40.195:/Users/Shared/Jenkins/Home/workspace/hall-ios/builds/20180317/game56hall-inhouse.ipa ~/Desktop/
+	game56hall-inhouse.ipa 
+	
+	scp jenkins@10.7.40.195:/Users/Shared/Jenkins/Home/workspace/hall-android/build/jsb-default/frameworks/runtime-src/proj.android-studio/app/build/outputs/apk/release/app-release.apk ~/Desktop/
+	app-release.apk   
+	```
+	下载文件夹加上 -r 即可；可以看出 scp 的第一个参数其实就是源文件，第二个参数是目的地，这样比较好记些。
 
 ## ssh
 
 - 登陆远程服务器:
 
-```shell
-ssh crown@10.7.40.176
-///输入密码
-```
+	```shell
+	ssh crown@10.7.40.176
+	///输入密码
+	sohuxxx
+	```
 - 免密码登录
 
-> 可以把客户机的公钥放到远程服务器上，实现自动验证，无需泄露服务器密码
+	可以把客户机的公钥填充到远程打包机器上的authorized_keys文件中，实现自动验证，无需泄露服务器密码
 
-```
-///将公钥追加到这个文件末尾
-cat id_rsa.pub >> ~/.ssh/authorized_keys
-```
+	```shell
+	///将公钥追加到这个服务器~/.ssh/authorized_keys文件末尾 
+	ssh-copy-id -i jenkins@10.7.40.195
+	///输入密码
+	sohuxxx
+	```
+- 执行命令
+
+	删除掉远程服务器桌面上的 xx 目录：
+
+	```shell
+	Remote_dir='~/Desktop/xx'
+	ssh root@12.11.193.18 "rm -rf ${Remote_dir}"
+	```
 
 ## kill jekyll server
 
@@ -283,3 +312,187 @@ Error: /usr/local is not writable. You should change the ownership
 and permissions of /usr/local back to your user account:
 	sudo chown -R $(whoami) /usr/local
 ```
+
+# git
+
+- git log
+	
+	```shell
+	qianlongxu$ git log -3
+	commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -> source, origin/source)
+	Author: qianlongxu <qianlongxu@sohu-inc.com>
+	Date:   Sat Mar 24 09:49:51 2018 +0800
+	
+	    add post
+	
+	commit eb3e9419a4a6cc736808ac40b7cf2908b7998c56
+	Merge: e851655 6755480
+	Author: qianlongxu <qianlongxu@sohu-inc.com>
+	Date:   Sat Mar 24 09:49:08 2018 +0800
+	
+	    Merge branch 'source' of https://github.com/debugly/debugly.github.io into source
+	
+	commit 67554800909e91430231da8c34887933a4160649
+	Author: qianlongxu <qianglongxu@home.mbp>
+	Date:   Thu Mar 22 22:17:08 2018 +0800
+	
+	    add tag
+	```
+
+- git log --date=format
+
+	```shell
+	qianlongxu$ git log --date=format:'%Y-%m-%d %H:%M:%S' -3
+	commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -> source, origin/source)
+	Author: qianlongxu <qianlongxu@sohu-inc.com>
+	Date:   2018-03-24 09:49:51
+	
+	    add post
+	
+	commit eb3e9419a4a6cc736808ac40b7cf2908b7998c56
+	Merge: e851655 6755480
+	Author: qianlongxu <qianlongxu@sohu-inc.com>
+	Date:   2018-03-24 09:49:08
+	
+	    Merge branch 'source' of https://github.com/debugly/debugly.github.io into source
+	
+	commit 67554800909e91430231da8c34887933a4160649
+	Author: qianlongxu <qianglongxu@home.mbp>
+	Date:   2018-03-22 22:17:08
+	
+	    add tag
+	```
+
+- git log --date=format
+
+	```shell
+	qianlongxu$ git log --date=format:'%a|%A|%b|%B|%c|%d|%H|%I|%j|%m|%M|%p|%S|%U|%w|%W|%x|%X|%y|%Y|%z' --pretty=format:'%cd' -3
+	Sat|Saturday|Mar|March|Sat Mar 24 09:49:51 2018|24|09|09|083|03|49|AM|51|11|6|12|03/24/18|09:49:51|18|2018|+0800
+	Sat|Saturday|Mar|March|Sat Mar 24 09:49:08 2018|24|09|09|083|03|49|AM|08|11|6|12|03/24/18|09:49:08|18|2018|+0800
+	Thu|Thursday|Mar|March|Thu Mar 22 22:17:08 2018|22|22|10|081|03|17|PM|08|11|4|12|03/22/18|22:17:08|18|2018|+0800
+	```
+- git log --after
+
+	```shell
+  qianlongxu$ git log --date=format:'%Y-%m-%d %H:%M:%S' --after='2018-03-23 20:44:06'
+	commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -> source, origin/source)
+	Author: qianlongxu <qianlongxu@sohu-inc.com>
+	Date:   2018-03-24 09:49:51
+	
+	    add post
+	
+	commit eb3e9419a4a6cc736808ac40b7cf2908b7998c56
+	Merge: e851655 6755480
+	Author: qianlongxu <qianlongxu@sohu-inc.com>
+	Date:   2018-03-24 09:49:08
+	
+	    Merge branch 'source' of https://github.com/debugly/debugly.github.io into source
+	```
+
+- 获取最后一次提交时间秒数，然后加1
+
+	```shell
+	last_commit_sec=$(git log --date=format:'%S' --pretty=format:'%cd' -1)
+	last_commit_sec=`expr $last_commit_sec + 1`
+	```
+- 查看此次拉取远程之后，都有哪些提交记录
+
+	```shell
+	last_commit_datestamp=$(git log --date=raw --pretty=format:'%cd' -1)
+	last_commit_date=${last_commit_datestamp% *}
+	last_commit_date=`expr $last_commit_date + 1`
+	git pull
+	git log --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'<tr><td>%an</td><td>%s</td><td>%cd</td></tr>'  --after "'$last_commit_date'" -n 200
+	```
+
+[Git-基础-查看提交历史](https://git-scm.com/book/zh/v1/Git-基础-查看提交历史)
+
+- git修改user.name和user.email
+
+	```shell
+	///查看
+	git config --list
+	///修改
+	git config --global user.name "name"
+	git config --global user.email "email"
+	```
+
+- git clone
+
+	```shell
+	git clone -b $branch $repos $WORKSPACE
+	git branch --set-upstream-to=origin/$branch $branch
+	git submodule update --init --recursive
+	```
+
+# du
+
+- 获取文件大小 : 
+	`IPA_Size=$(du -sm $IPA_Path | awk '{print $1}')`
+
+# 文件（夹）是否存在
+
+- 文件是否存在
+
+	```shell
+	if [ -f $last_commit_date_txt ];then
+		  last_commit_datestamp=$(cat $last_commit_date_txt)
+			echo 'xql last_commit_datestamp:'$last_commit_datestamp
+		  last_commit_date=${last_commit_datestamp% *}
+			last_commit_date=`expr $last_commit_date + 1`
+	fi
+	```
+
+- 文件夹是否存在
+
+	```shell
+	if [ -d $last_commit_folder ];then
+	
+	fi
+	```
+
+- 文件内容是否为空
+
+	```shell
+	if [ `cat $commit_info_txt |wc -m` -eq 0 ];then
+		echo 'file is empty.'
+	else
+		echo 'file is not empty!'
+	fi
+	```
+
+# iOS build 号自增
+
+```
+# info.plist路径
+project_infoplist_path="/proj.ios_mac/ios/game-inhouse.plist"
+#取版本号
+appVersion=$(/usr/libexec/PlistBuddy -c "print CFBundleShortVersionString" "${project_infoplist_path}")
+#取build号
+#buildNO=$(/usr/libexec/PlistBuddy -c "print CFBundleVersion" "${project_infoplist_path}")
+#加1
+buildNO=$(($buildNO+1))
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$project_infoplist_path"
+```
+# Shell 参数含有空格
+
+```shell
+ps="xxx zzz"
+./build.sh "'$ps'"
+```
+# Shell 算术运算
+
+```shell
+///使用 expr 外部程式
+a=12;
+b=19;
+result=`expr $a + $b`
+```
+# Shell 字符串截取
+
+```shell
+str="1234444 +8000"
+///str1="1234444"
+str1=${str% *}
+```
+[https://www.cnblogs.com/zwgblog/p/6031256.html](https://www.cnblogs.com/zwgblog/p/6031256.html)
