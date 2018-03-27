@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "常用的 Shell 内置变量与命令"
+title: "常用 Shell 命令汇总"
 date: 2017-05-26 21:03:36 +0800
 comments: true
 tags: Script
