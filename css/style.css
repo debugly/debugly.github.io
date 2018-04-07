@@ -725,63 +725,6 @@ h2.article-head {
   cursor: pointer;
   margin: 10px 0;
 }
-#archives:before {
-  position: absolute;
-  top: 2em;
-  bottom: 1em;
-  left: 30px;
-  height: auto;
-  content: '';
-  background-color: #42b983;
-  width: 4px;
-}
-.time-section {
-  padding-left: 30px;
-  position: relative;
-}
-.time-section .section-year {
-  font-size: 1.8em;
-  margin-left: 10px;
-}
-.time-section .section-year:before {
-  position: absolute;
-  left: 8px;
-  top: 11px;
-  content: '';
-  background-color: #fff;
-  width: 12px;
-  height: 12px;
-  border: 2px solid #42b983;
-  border-radius: 50%;
-}
-.time-section .section-list .section-list-item {
-  margin: 20px 0 20px 10px;
-  position: relative;
-}
-.time-section .section-list .section-list-item:before {
-  position: absolute;
-  left: -29px;
-  top: 7px;
-  content: '';
-  background-color: #42b983;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-.time-section .section-list .section-list-item .archive-title {
-  color: #34495e;
-  transition: all 0.3s ease;
-  font-size: 1.1em;
-}
-.time-section .section-list .section-list-item .archive-title:hover {
-  color: #42b983;
-  padding-left: 10px;
-}
-.time-section .section-list .section-list-item .archive-date {
-  color: #7f8c8d;
-  font-size: 0.9em;
-  margin: 5px 0;
-}
 #about-banner {
   width: 100%;
   position: relative;
