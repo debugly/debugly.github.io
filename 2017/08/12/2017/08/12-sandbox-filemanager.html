@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>正常情况下，我们的文档只能存储到沙盒里，在写业务逻辑时经常需要判断沙盒里某个文件是否存在，或者文件夹不存在创建文件夹等操作，因此写篇文章记录下如何获取沙盒路径，如何使用文件管理类创建目录等常用操作。</p>
@@ -256,20 +253,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2017/08/12/2017/08/12-sandbox-filemanager.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2017/08/12/2017/08/12-sandbox-filemanager.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -278,7 +275,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

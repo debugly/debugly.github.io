@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>重构，不是说说而已，也不是不想看别人的<code>烂代码</code>自己重写一遍，而是真的遇到了会破坏当前架构的实际问题了，或者之前就没想那么多，继续往下写只会将业务逻辑搞得支离破碎，毫无条理而言，日后维护负担大，相同的逻辑写了多遍之时，才需要重构;我将会结合实际分享几篇SDK内关于重构的文章。</p>
@@ -295,20 +292,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2016/11/28/2016/11/28-qfsdk-refactor-network.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2016/11/28/2016/11/28-qfsdk-refactor-network.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -317,7 +314,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

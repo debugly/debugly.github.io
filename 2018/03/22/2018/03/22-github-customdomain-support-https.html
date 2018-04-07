@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>自从有了自己的域名后，我的博客就失去了那把小绿锁，就在刚刚我还在搜索：Github 自定义域名怎么支持https，当我看到这个 <a href="https://neue.v2ex.com/t/434553" target="_blank" rel="noopener">帖子</a> 之后，事情就有了翻转，没想到 Github 支持了，皆大欢喜了！也不用去折腾 Cloudflare 了….</p>
@@ -207,20 +204,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2018/03/22/2018/03/22-github-customdomain-support-https.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2018/03/22/2018/03/22-github-customdomain-support-https.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -229,7 +226,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

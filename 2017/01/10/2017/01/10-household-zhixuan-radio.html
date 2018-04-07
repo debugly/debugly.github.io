@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>最近买了辆小车—丰田-致炫，不是高配的，所以没有导航，雷达，倒车影像等，只有一个收音机，CD 都不带…</p>
@@ -262,20 +259,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2017/01/10/2017/01/10-household-zhixuan-radio.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2017/01/10/2017/01/10-household-zhixuan-radio.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -284,7 +281,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

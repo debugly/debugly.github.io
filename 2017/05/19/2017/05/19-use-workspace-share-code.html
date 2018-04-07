@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><p>在上篇博客中提到可以把通用代码打成静态库，然后多个项目可使用多个 Framework 包裹这些静态库的方式共享通用代码，详见最后的思维导图！这个方案的确是可行的，但是只用了两天就被干掉了！原因是太不方便了！程序刚好崩溃到打到静态库中的方法了，没法搞断点去一步步 debug ，降低了开发的效率！这种方案也不是完全没有用武之地，比如现在有几和后台商议好的加密算法，一般不需要人人都知道，省得泄漏出去，这时就可以把加密算法打成库，然后需要用的时候把库加到自己的 Framework 里就行了！</p>
 <p>因此需要继续摸索共享代码的方式，既要满足需求，又要方便调试！方便调试的话没办法，只能开放源码了，所以我想到了 Workspace ，其实我早该想到的，不知道为何我先想到的是使用 Framework 包裹 静态库的方式，按道理我应该先想到使用 Workspace 共享才对，因为从一开始我就是使用 Workspace 管理的工程！</p>
@@ -232,20 +229,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2017/05/19/2017/05/19-use-workspace-share-code.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2017/05/19/2017/05/19-use-workspace-share-code.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -254,7 +251,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

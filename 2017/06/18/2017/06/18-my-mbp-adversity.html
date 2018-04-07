@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>今天擦桌子的时候顺便擦了下我的 MBP，为了不在擦的时候按下键盘误操作，所以在擦之前我把 Mac 关机了。等到下午没事开机时却遇到了个大大的问题：进度条走到百分之八十左右的时候卡住，卡一会之后就关机了！接着又试了好几次，还是不行，我有点慌了，此本追随我快三年了，可不能有个三长两短啊，于是赶忙开始在网上查找解决方法。</p>
@@ -283,20 +280,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2017/06/18/2017/06/18-my-mbp-adversity.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2017/06/18/2017/06/18-my-mbp-adversity.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -305,7 +302,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

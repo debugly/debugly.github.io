@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>在 14 年 iOS 8 发布之后就想着统一一下 AlertView 和 iOS 8 开始使用的 AletViewController，最近终于把这事给办了；虽然最近也很忙，但还是准备了不少东西，除了这个通用封装之外，紧接着将还有一篇，先剧透下—是有关通过浏览器线上调试的…</p>
 <h2 id="封装思路"><a href="#封装思路" class="headerlink" title="封装思路"></a>封装思路</h2><p>iOS 8 有了很大的变化，每个按钮对应了一个 UIAlertAction 对像，相关的索引和标题都在这里存放；block 回掉点击事件；因此，想办法处理一下 iOS 7 的AlertView，使之支持添加 Action，block 回掉点击事件；然后搞个manager，来管理 iOS 8 前后调用的类，从而达到通用的效果! ActionSheet 也是同样的道理，我觉得分开处理比较好，因此最终我讲封装出来两个控制器出来。</p>
@@ -230,20 +227,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2015/12/04/2015/12/04-ql-commom-alert.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2015/12/04/2015/12/04-ql-commom-alert.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -252,7 +249,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

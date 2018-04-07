@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>我最初的博客系统使用的是 Octopress，创建博客或者预览博客都是使用的 <code>rake</code> 命令，感觉很是方便，现在虽然直接使用了 Jekyll，但是这套命令还是被我移植过来继续使用着。之前我用 Shell 编写过一套打包的脚本，现在接触了 Ruby 脚本，对比之下感觉 Shell 这门语言太不友好了，编程效率很低，于是前天晚上开始学习 <code>rake</code>，边写边学边查资料，一步步的重写了这套打包脚本，故趁热打铁写下这篇博客记录用到的知识点。</p>
@@ -317,20 +314,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2017/06/04/2017/06/04-use-rake.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2017/06/04/2017/06/04-use-rake.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -339,7 +336,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

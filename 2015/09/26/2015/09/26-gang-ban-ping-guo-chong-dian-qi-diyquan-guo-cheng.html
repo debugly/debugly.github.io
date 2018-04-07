@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>中秋节到了，先说声：“中秋接快乐” ！<br>昨天晚上手机没电了，怎么办？这还用问！？脑瘫么？哦，不是啦；木有充电器啊，那就用电脑充吧，土豪么，吊！之前是用我的pro充，这次用公司发的电脑吧，两年不用忘记了windows睡眠了，结果第二天手机还是不到百分之三十的电量！这就是没有充电器的不便啊！我有港版的充电器啊，可是大陆的插排不能用啊，我有个插排，可以插上，可是不通电啊，仔细观察了下是因为港版的只有金属头是导电的，这个待会看图就明白啦！作为一个geek当然不甘寂寞！</p>
@@ -337,20 +334,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2015/09/26/2015/09/26-gang-ban-ping-guo-chong-dian-qi-diyquan-guo-cheng.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2015/09/26/2015/09/26-gang-ban-ping-guo-chong-dian-qi-diyquan-guo-cheng.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -359,7 +356,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>Objective-C 语言一直以来由苹果公司维护着，为其增加了不少更加现代化的语法，其中 block （其他语言一般都称闭包）语法就是在 iOS 4 发布的，与此同时还提供了抽象程度极高的GCD 技术，用于简化线程的操作！所以今天说的 block 并不是新的技术，但它恐怕是最难记忆的的语法了，并且使用形式很是灵活，因此总结一下我平时使用的几种类型，供大家参考。</p>
@@ -230,20 +227,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2017/02/12/2017/02/12-fuckblocksyntaxtoo.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2017/02/12/2017/02/12-fuckblocksyntaxtoo.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -252,7 +249,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

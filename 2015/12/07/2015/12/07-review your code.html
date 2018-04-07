@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><p>今天科目二顺利过关，很高兴，可是紧接着就再也高兴不起来了，因为由于我的失误造成公司的项目上线延期了一天，失误了，原因很简单，没有看清楚类别是加了 DEBUG 判断了，我的方法当然也被这个宏包裹了，所以 release 下必崩无疑！</p>
 </section>
@@ -204,20 +201,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2015/12/07/2015/12/07-review your code.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2015/12/07/2015/12/07-review your code.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -226,7 +223,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>最近在 GitHub 上看到了 Damian 写的一个在浏览器调试视图的工程 <a href="https://github.com/glock45/iOS-Hierarchy-Viewer" target="_blank" rel="noopener">iOS Hierarchy Viewer</a> ，跟 xCode 自带的类似，不过几乎没什么版本限制，我在他的基础上增加了查看沙河文件的功能，增加了一个首页，和返回首页…</p>
 <h2 id="At-a-glance"><a href="#At-a-glance" class="headerlink" title="At a glance"></a>At a glance</h2><ul>
@@ -227,20 +224,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2015/12/27/2015/12/27-online debug.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2015/12/27/2015/12/27-online debug.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -249,7 +246,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>今日吃饱了，确实撑得慌，找了我的邻居-阿杰一起散步，走了好大一圈，最后在小区下聊起了技术，从YYKit，SDWebImage 等第三方库，扯到了关联引用，因为他们都用到了这个技术，然而我又想到了单例，单例和关联引用在实现上有一个相同点—都需要一个静态变量；那么疑问就来了：同样都需要一个静态变量，为什么结果不一样呢？或许你还没明白我的疑问是什么，请继续阅读吧！</p>
@@ -248,20 +245,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2016/03/06/2016/03/06-Objc-Associations-Advanced.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2016/03/06/2016/03/06-Objc-Associations-Advanced.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -270,7 +267,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

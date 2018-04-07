@@ -140,9 +140,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>上篇博客介绍了如何创建 pods 库，让 pods 库帮我们管理源码、依赖、编译成库、配置search path等工作；但有时候你可能不想或者不能把源码提供出去，还想要使用 pods 管理版本的话，就可以让 pods 直接管理 frameworks 而不是源码！</p>
@@ -243,20 +240,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2017/07/21/2017/07/21-use-cocoapods-manager-frameworks.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2017/07/21/2017/07/21-use-cocoapods-manager-frameworks.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -265,7 +262,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

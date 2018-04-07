@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><h1 id="故事背景"><a href="#故事背景" class="headerlink" title="故事背景"></a>故事背景</h1><p>Reachability 只能检测网络的变化，包括 WiFi ，WWAN 和 NoReachable 三种状态；她不能细分 WWAN 网络，不能参与用户的设置（某些App在设置里设有允许使用3G的开关），但是实际业务中我们会遇见这些情景，为了更加方便的获取、管理网络的各种状态，<strong>SLReachability</strong> 就运应而生了，现在她已经在两个项目里投入使用了，感觉还是挺方便的，现在拿来分享下。</p>
 <h1 id="SLReachability-与-Reachability-的区别"><a href="#SLReachability-与-Reachability-的区别" class="headerlink" title="SLReachability 与 Reachability 的区别"></a>SLReachability 与 Reachability 的区别</h1><p>SLReachability 完全兼容 Reachability ，因为内部关于网络变化的实现是和 Reachability 一样的，老实说就是完全 copy 过来的；在 Reachability 的基础之上，增加了检测 WWAN 变化的功能，并且考虑到了用户可能会增加允许使用 WWAN 的开关；SLReachability 就是把以上几种网络情况最终作了个大统一，更加方便开发者获取网络的状态！</p>
@@ -269,20 +266,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2016/06/19/2016/06/19-SLReachability.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2016/06/19/2016/06/19-SLReachability.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -291,7 +288,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>有的时候我们需要针对特定的机型或者系统版本做一些特殊的处理，使得我们的程序能够正常的运行，这时就要去判断设备型号、系统版本了，获取这些信息本身并没有什么技术含量，只是比较零碎，因此为了查阅方便，整理了一份代码出来，用的时候直接copy即可。</p>
@@ -235,20 +232,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2017/08/31/2017/08/31-iPhone-types.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2017/08/31/2017/08/31-iPhone-types.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -257,7 +254,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

@@ -140,9 +140,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><p>截止目前，SDK的打包，已经代码审查都是通过脚本完成的，利用脚本可以轻松的帮我们搞定那些重复的枯燥工作，可以节省宝贵的时间又能避免修改配置环境引发的错误。虽然有了这些这些脚本了，不过还是得人工去执行，不够省心啊，作为一个追求极致又很懒的人，是不能忍的，于是就搞了个定时任务，每天下班后我们只需要提交下代码，到规定的时间后，打包机器（不关机）就自动去执行打包脚本，为我们打包，代码审查！</p>
 <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>在 Linux、Unix、MacOS(类Unix)系统下，crontab 命令可以用来设置周期性执行的任务。系统为每个用户分配一个 “table” 存储这些任务，这些任务通常称为 “cron job”。这些任务是在 cron 守护进程里执行的，因此执行时的环境跟用户登录的环境是不一样的，这也导致了很多新手都会遇到一个问题：直接执行脚本没一点问题，加入到 crontab 之后，就不能正常执行。</p>
@@ -259,20 +256,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2017/09/05/2017/09/05-unix-crontab.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2017/09/05/2017/09/05-unix-crontab.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -281,7 +278,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

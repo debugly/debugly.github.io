@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>项目中大量使用了 Block，今天无意间有了新的用法，不同往常的一般使用方法，使得编程又有了新的乐趣！想了一下，第一次写 Block 应该是两年前了，这么长时间并没有总结过，今天顺便总结下使用 Block 的场景 …</p>
 <h3 id="Block的一般使用场景"><a href="#Block的一般使用场景" class="headerlink" title="Block的一般使用场景"></a>Block的一般使用场景</h3><p> 以下场景均是个人理解，词汇也是个人命名，理解就好了：</p>
@@ -233,20 +230,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2015/10/29/2015/10/29-Block_Use_Experiences.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2015/10/29/2015/10/29-Block_Use_Experiences.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -255,7 +252,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

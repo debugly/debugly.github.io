@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>以下讨论基于的前提思想是：Cell 和 Model 是绑定的，一一对应的；Cell 是数据源所决定的，Cell 要做的就是展示数据源而已，或者说是先确定的数据源而不是 Cell，因此我们今天以讨论 Model 为主。简单的概括这次重构是为 Cell 建立一个CellModel，他有个实现构建协议的属性，展示前通过协议方法构建 Cell需要的数据并且存储到 CellModel 里，这样的好处是随便一个Model都可以作为数据源使用，只需实现必要的协议，Cell也不必关心数据源到底是谁提供的！</p>
@@ -255,20 +252,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2016/12/03/2016/12/03-qfsdk-refactor-chat.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2016/12/03/2016/12/03-qfsdk-refactor-chat.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -277,7 +274,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>去年我写过这么一篇文章 <a href="/ios/2015/10/30/unsigned-type-use.html#1">《小心 unsigned 数据类型埋下坑》</a> 主要说明了一个问题，一定要小心不能将一个小于 0 的值赋给 unsigned 类型！今天要说的我们经常会给服务传个时间戳，客户端最好不要使用 int 类型来接受，因为很可能程序只能正常运行到 2038 年。</p>
 <h2 id="时间戳"><a href="#时间戳" class="headerlink" title="时间戳"></a>时间戳</h2><p>服务器端需要一个以毫秒为单位的时间戳，同事是这么写的：</p>
@@ -269,20 +266,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2016/11/30/2016/11/30-qfsdk-issue-timestamp.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2016/11/30/2016/11/30-qfsdk-issue-timestamp.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -291,7 +288,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

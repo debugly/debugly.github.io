@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><blockquote>
 <p>该分类由<code>千帆 SDK 团队</code>共同维护，主要用来记录 SDK 开发过程中遇到的各种问题以及解决方案。写成博客记录是为了供组内其他成员学习参考，这样知识才能像血液一样在整个团队里不停循环，为我们注入更多的新鲜血液！</p>
@@ -206,20 +203,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2017/09/11/2017/09/11-sdk-issues.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2017/09/11/2017/09/11-sdk-issues.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -228,7 +225,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         

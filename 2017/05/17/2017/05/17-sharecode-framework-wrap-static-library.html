@@ -136,9 +136,6 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-
-    
-
       
     <section class="markdown-content"><p>正如上篇博客介绍的，提取公共 Framework 确实能够让多个 SDK 共享基础代码 ！这毋庸置疑，我们已经实践了好几个项目了，但是随着业务的发展，发现这个粒度有时还不够细，换句话说 SCF 包含的东西多了些，对于某些项目而言不需要用这么多的功能，SCF 显得有些臃肿了，这要怎么办？</p>
 <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>去年的这个时候，我来到了这个团队之后，开始做千帆直播 SDK ，经过一年的时间已经迭代到了线上 2.4 版本，而现在我又接到任务做开放平台的点播 SDK，且称之为 SohuVideoFoundation。这只是个巧合，但时间上的重合挺有趣的。</p>
@@ -235,20 +232,20 @@
 
 <script>
   (function () {
-    var url = 'http://debugly.cn/2017/05/17/2017/05/17-sharecode-framework-wrap-static-library.html';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
-        'background-image': 'url(' + banner + ')'
+        'background-image': 'url("' + banner + '")'
       })
     } else {
+      var url = 'http://debugly.cn/2017/05/17/2017/05/17-sharecode-framework-wrap-static-library.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
 
      // error image
     $(".markdown-content img").on('error', function() {
-      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).attr('src', '/css/images/404.png')
       $(this).css({
         'cursor': 'default'
       })
@@ -257,7 +254,7 @@
     // zoom image
     $(".markdown-content img").on('click', function() {
       var src = $(this).attr('src')
-      if (src !== 'http://file.muyutech.com/error-img.png') {
+      if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
         
