@@ -5,6 +5,8 @@ date: 2018-03-20 15:05:31
 tags: macOS
 ---
 
+- application/x-www-form-urlencoded形式
+
 ```
 POST /video/v2/getGoodsList.ios?sysver=11.1&product=ios&unid=f1e7ae3c768741053f4a0e5c5e7c7b15&ts=1521518935690&partner=10051&poid=3&signature=4f4f027f188d0fca38f11b5b3e4380f8&sver=6.8.8 HTTP/1.1
 Host: pay.56.com
@@ -20,22 +22,28 @@ Accept-Encoding: gzip, deflate
 ts=1521518926&plat=iPhone&uid=sh-upeadqawgz&signature=3de948ae93767a2382c6a3a4f389ca9b&bundleId=com.sohu.live.demo
 ```
 
+- application/form-data 形式
+- 
 ```
---0xKhTmLbOuNdArY
-Content-Disposition: form-data; name="k2"
+POST /test/pp/trade/iap/receipt HTTP/1.1
+Host: api.store.sohu.com
+Content-Type: multipart/form-data; charset=utf-8; boundary=0xKhTmLbOuNdArY
+Connection: keep-alive
+plat: 3
+Accept: */*
+User-Agent: game56hall/1.0.0 (iPhone; iOS 10.2.1; Scale/3.00)
+Content-Length: 7741
+Accept-Language: zh-cn
+Accept-Encoding: gzip, deflate
 
-v2
 --0xKhTmLbOuNdArY
-Content-Disposition: form-data; name="k1"
+Content-Disposition: form-data; name="trade_sn"
 
-v1
+K118031376VCPAXVRCMSGJ
 --0xKhTmLbOuNdArY
-Content-Disposition: form-data; name=03191927534.log; filename="03191927534.log"
-Content-Type: image/png
-Content-Transfer-Encoding: binary
+Content-Disposition: form-data; name="receipt_data"
 
-abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc
-886
+MIIVBAYJKojdDi1Mg0zjEsb%252B
 
 --0xKhTmLbOuNdArY--
 ```

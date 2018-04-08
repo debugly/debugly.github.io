@@ -55,7 +55,6 @@ crontab -r
 		# 每分钟打印一次当前时间
 		* * * * * /Users/qianlongxu/Desktop/logdate.sh
 		```
-		
 	- 编写一个名为 `job.cron` 的shell脚本作为 crontab 的输入，内容如下：
 	
 		```
