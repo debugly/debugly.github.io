@@ -138,10 +138,10 @@
   <article class="post-article">
       
     <section class="markdown-content"><blockquote>
-<p>Macos 配置 JRE.</p>
+<p>在 macOS 上配置 JRE.</p>
 </blockquote>
-<p>我也记不清楚之前本机的 Java 环境是否是配置好了，昨天更新了 Macos 之后，今天想装个 Jenkins 完下，结果在运行 Jenkins 的时候发现 <strong>No Java runtime present, requesting install.</strong></p>
-<h2 id="分析问题"><a href="#分析问题" class="headerlink" title="分析问题"></a>分析问题</h2><p>点击 系统偏好设置里的 Java 图标</p>
+<p>我也记不清楚之前本机的 Java 环境是否是配置好了，昨天更新了 macOS 之后，今天想装个 Jenkins 完下，结果在运行 Jenkins 的时候发现 <strong>No Java runtime present, requesting install.</strong></p>
+<h2 id="分析问题"><a href="#分析问题" class="headerlink" title="分析问题"></a>分析问题</h2><p>点击 <strong>系统偏好设置</strong> 里的 Java 图标</p>
 <p><img src="/images/201803/1.png" alt=""></p>
 <p>如果没有这个图标或者点击后没有出来 <strong>Java 控制面板</strong></p>
 <p><img src="/images/201803/2.png" alt=""></p>
@@ -149,21 +149,27 @@
 <p><img src="/images/201803/3.png" alt=""></p>
 <p>下载完成，双击一路安装即可！</p>
 <p>本以为这样就行了，其实不行！</p>
-<p>原因如下：</p>
-<p>经查找在 /usr/bin 目录里有个 java 的替身:</p>
+<h2 id="定位问题"><a href="#定位问题" class="headerlink" title="定位问题"></a>定位问题</h2><p>查一查 java 的真实身份吧：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">which java</span><br><span class="line">/usr/bin/java</span><br><span class="line">ls -al /usr/bin/java</span><br><span class="line">lrwxr-xr-x  1 root  wheel  74 11 28 23:06 /usr/bin/java -&gt; /System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java</span><br></pre></td></tr></table></figure>
+<p>这说明了 java 命令搜索路径是 <strong>/usr/bin/java</strong> 并且这只是个替身，原身是 <em>/System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java</em> ！！！</p>
+<p>如下图:</p>
 <p><img src="/images/201803/4.png" alt=""></p>
-<p>经过验证发现该路径已经加入到了PATH里面！</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bogon:~ xuqianlong$ echo $PATH</span><br><span class="line">/Users/xuqianlong/.rvm/gems/ruby-2.2.6/bin:/Users/xuqianlong/.rvm/gems/ruby-2.2.6@global/bin:/Users/xuqianlong/.rvm/rubies/ruby-2.2.6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/xuqianlong/.rvm/bin:/usr/local/ssl</span><br></pre></td></tr></table></figure>
-<p>为什么不行，还不能确定，可以确定的是他的原身是在 JavaVM.framework:</p>
+<p>原身 JavaVM.framework:</p>
 <p><img src="/images/201803/6.png" alt=""></p>
 <p>这个 JavaVM.framework 不是我们安装的，好像是苹果自带的，我们刚才装的那个 JRE 其实是在这里:</p>
-<p><img src="/images/201803/4.png" alt=""></p>
-<p>我们可以将这个替身改为我们这个JRE里的java，可是很遗憾，对于 /usr/bin 目录没有修改权限，想拥有权限有些麻烦，这里不在介绍。</p>
-<p>命令行输入的命令查找顺序是按照设置PATH里设置的路径查找的，因此可以从 PATH 入手，仔细查看发现 <strong>/usr/local/bin</strong> 在 <strong>/usr/bin</strong> 之前搜索，所以我们在 <strong>/usr/local/bin</strong> 里建个 Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java 的替身就行了！</p>
-<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java /usr/local/bin</span><br></pre></td></tr></table></figure>
+<p><img src="/images/201803/5.png" alt=""></p>
+<p>再回过头检查了下，<strong>发现 Desktop 这里的路径跟苹果自带的 JRE 路径不一样</strong>！！</p>
+<p><img src="/images/201803/7.png" alt=""></p>
+<p>因此决定将苹果自带的 JRE 修改为我们自己装的这个，原本想着将这个替身直接改为我们安装的这个JRE里的java，可是很遗憾，对于高版本的 macOS 而言 /usr/bin 目录没有修改权限，想拥有权限有些麻烦，这里不在介绍。所以换个思路去解决。</p>
+<p>我们知道命令行输入的命令查找顺序是按照设置PATH里设置的路径查找的，因此可以从 PATH 入手，先来看下完整的 PATH 搜索路径:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bogon:~ xuqianlong$ echo $PATH</span><br><span class="line">/Users/xuqianlong/.rvm/gems/ruby-2.2.6/bin:/Users/xuqianlong/.rvm/gems/ruby-2.2.6@global/bin:/Users/xuqianlong/.rvm/rubies/ruby-2.2.6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/xuqianlong/.rvm/bin:/usr/local/ssl</span><br></pre></td></tr></table></figure>
+<p>由于是按顺序查找的，所以只要在 <strong>/usr/bin</strong> 之前搜索到就不会使用默认的苹果指定的 JRE 了，经过仔细查看发现 <strong>/usr/local/bin</strong> 在 <strong>/usr/bin</strong> 之前搜索，所以我们可以在 <strong>/usr/local/bin</strong> 里建个 Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java 的替身！</p>
+<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><p>上面讨论了解决方案，下面实施下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java /usr/local/bin</span><br></pre></td></tr></table></figure>
 <p>重启终端再次查看环境：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br><span class="line">java version &quot;9.0.4&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 9.0.4+11)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 9.0.4+11, mixed mode)</span><br></pre></td></tr></table></figure>
-<p>OK 啦！</p>
+<p>这次对啦，正是我们刚装的 9.0.4 版本！</p>
+<p>为什么苹果自带的不行呢，我还不能确定！</p>
 <h2 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h2><ul>
 <li><a href="https://anas.pk/2015/09/02/solution-no-java-runtime-present-mac-yosemite/" target="_blank" rel="noopener">https://anas.pk/2015/09/02/solution-no-java-runtime-present-mac-yosemite/</a></li>
 </ul>
