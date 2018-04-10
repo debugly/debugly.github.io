@@ -272,6 +272,20 @@
 <h1 id="Shell-算术运算"><a href="#Shell-算术运算" class="headerlink" title="Shell 算术运算"></a>Shell 算术运算</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">///使用 expr 外部程式</span><br><span class="line">a=12;</span><br><span class="line">b=19;</span><br><span class="line">result=`expr $a + $b`</span><br></pre></td></tr></table></figure>
 <h1 id="Shell-字符串截取"><a href="#Shell-字符串截取" class="headerlink" title="Shell 字符串截取"></a>Shell 字符串截取</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">str="1234444 +8000"</span><br><span class="line">///str1="1234444"</span><br><span class="line">str1=$&#123;str% *&#125;</span><br></pre></td></tr></table></figure>
 <p><a href="https://www.cnblogs.com/zwgblog/p/6031256.html" target="_blank" rel="noopener">https://www.cnblogs.com/zwgblog/p/6031256.html</a></p>
+<h1 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h1><ul>
+<li>安装依赖库</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo d -g</span><br><span class="line">ERROR Deployer not found: git</span><br><span class="line">///解决方法：</span><br><span class="line">npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
+<ul>
+<li>更新依赖库</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">bogon:debugly xuqianlong$ npm update</span><br><span class="line">+ hexo@3.7.1</span><br><span class="line">added 12 packages, removed 79 packages and updated 13 packages in 9.089s</span><br><span class="line">   ╭─────────────────────────────────────╮</span><br><span class="line">   │                                     │</span><br><span class="line">   │   Update available 5.5.1 → 5.8.0    │</span><br><span class="line">   │     Run npm i -g npm to update      │</span><br><span class="line">   │                                     │</span><br><span class="line">   ╰─────────────────────────────────────╯</span><br></pre></td></tr></table></figure>
+<h1 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h1><ul>
+<li>预览 : <code>hexo server</code>，简写 <code>hexo s</code></li>
+<li>生成 : <code>hexo generate</code>，简写 <code>hexo g</code></li>
+<li>发布 : <code>hexo deploy</code>，简写 <code>hexo d</code></li>
+<li>清理 : <code>hexo clean</code></li>
+</ul>
 </section>
     <!-- Post Nav START -->
     
