@@ -6,21 +6,18 @@ comments: true
 tags: iOS
 ---
 
-故事背景
-=======
+# 故事背景
+
 Reachability 只能检测网络的变化，包括 WiFi ，WWAN 和 NoReachable 三种状态；她不能细分 WWAN 网络，不能参与用户的设置（某些App在设置里设有允许使用3G的开关），但是实际业务中我们会遇见这些情景，为了更加方便的获取、管理网络的各种状态，**SLReachability** 就运应而生了，现在她已经在两个项目里投入使用了，感觉还是挺方便的，现在拿来分享下。
 
-SLReachability 与 Reachability 的区别
-====================================
-
-
+# SLReachability 与 Reachability 的区别
 
 SLReachability 完全兼容 Reachability ，因为内部关于网络变化的实现是和 Reachability 一样的，老实说就是完全 copy 过来的；在 Reachability 的基础之上，增加了检测 WWAN 变化的功能，并且考虑到了用户可能会增加允许使用 WWAN 的开关；SLReachability 就是把以上几种网络情况最终作了个大统一，更加方便开发者获取网络的状态！
 
 这是陪伴我好久的 [Reachability](https://developer.apple.com/library/prerelease/content/samplecode/Reachability/Listings/Reachability_Reachability_h.html) 源码地址.
 
-设计思路
-=======
+# 设计思路
+
 清楚了需求后，就是一步步实现了，首要需要的是完全兼容 Reachability ，具备 Reachability 的所有功能，其次还要拥有上面提到的检测 WWAN 变化的需求和允许用户增加开关；先看下如何兼容：
 
 - 完全兼容（copy） Reachability 实现 
@@ -82,8 +79,7 @@ typedef NS_ENUM(NSUInteger, SLNetWorkStatusMask) {
 |SLNetWorkStatusMaskNotReachable|当前没有网络 或者 当前是WWAN网络 (用户不允许)|
 |SLNetWorkStatusMaskReachable|当前是WiFi网络 或者 当前是WWAN网络（用户允许）|
 
-实现原理
-=======
+# 实现原理
 
 使用 Reachability 检测网络的变化， 使用 iOS7 新增的 API 检测 WWAN 的变化，也正因为如此，所以 SLReachability 从 iOS7 开始支持；每当检测到变化之后就就去更新网络状态 mask ，如果前后不一致就更新，并且发送通知，反之则忽略；这里对于不一致的判断是重写了 setter 方法来实现的，下面简单看下代码：
 
@@ -196,8 +192,7 @@ updateNetworkStatusMask 方法根据当前的网络和WWAN情况和用户设置�
 ```
 以上就是实现的原理，关于 allowUseWWAN 这个属性，你可以写个 SLReachability 的子类，子类检测到开关变化后去更改这个属性；不同的业务也许会有多个开关，这是一一创建子类就行了！
 
-便利方法：
-=======
+# 便利方法：
 
 判断当前网络是不是 WiFi，当然你也可以扩展更多：
 
@@ -215,8 +210,8 @@ NS_INLINE BOOL isWiFiWithStatus(SLReachStatus status)
 ```
 
 
-使用方法1
-========
+# 使用方法1
+
 ```objc
  _reach = [SLReachability reachabilityForInternetConnection];
     //添加 observer
@@ -235,8 +230,8 @@ NS_INLINE BOOL isWiFiWithStatus(SLReachStatus status)
 }
 ```
 
-使用方法2
-========
+# 使用方法2
+
 除了可以 Observe 属性之外，当然也可以注册通知：
 
 ```objc
@@ -251,11 +246,11 @@ FOUNDATION_EXTERN NSString *const kSLReachabilityMaskChanged;
 根据你的需要去注册，你可能要注意下他们 3 个之间的关系！
 
 
-IPv6 Support
-============
+# IPv6 Support
+
 SLReachability 完全支持 IPv6 ，具体可参照 Reachability 的解释或者查看源码。
 
 
-Demo 工程
-=========
-这是 Github 地址: [https://github.com/debugly/SLReachabilityDemo](https://github.com/debugly/SLReachabilityDemo)
+# Demo 工程
+
+这是 Github 地址: [https://github.com/debugly/SLReachabilityDemo](https://github.com/debugly/
