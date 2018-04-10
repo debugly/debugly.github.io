@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content="iOS11,Xcode9,Main Thread Checker,许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      Main Thread Checker | Matt Reach
+    
+  </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Main Thread Checker</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues</span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2017-09-12</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+      
+    <section class="markdown-content"><blockquote>
+<p>我的测试机升级到 iOS11 beta10 之后，发现了严重的问题，我的手机直接卡死了，只有强制关机！这是我使用 Xcode 调试抓到的日志:</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">Main Thread Checker: UI API called on a background thread: -[UIApplication applicationState]</span><br><span class="line">PID: 2015, TID: 196235, Thread name: (none), Queue name: com.apple.avfoundation.videodataoutput.bufferqueue, QoS: 0</span><br><span class="line">Backtrace:</span><br><span class="line">4   LittleVideoDemo                     0x0000000104ca9630 -[TECaptureViewController didOutputVideoSampleBuffer:] + 92</span><br><span class="line">5   LittleVideoDemo                     0x0000000104c77fcc -[FUCamera captureOutput:didOutputSampleBuffer:fromConnection:] + 416</span><br><span class="line">6   AVFoundation                        0x000000018bf57f0c &lt;redacted&gt; + 344</span><br><span class="line">7   AVFoundation                        0x000000018bf57d24 &lt;redacted&gt; + 100</span><br><span class="line">8   CoreMedia                           0x000000018983d598 &lt;redacted&gt; + 260</span><br><span class="line">9   CoreMedia                           0x0000000189859b70 &lt;redacted&gt; + 224</span><br><span class="line">10  libdispatch.dylib                   0x000000010750d45c _dispatch_client_callout + 16</span><br><span class="line">11  libdispatch.dylib                   0x000000010751a800 _dispatch_continuation_pop + 592</span><br><span class="line">12  libdispatch.dylib                   0x000000010750f24c _dispatch_source_invoke + 1592</span><br><span class="line">13  libdispatch.dylib                   0x000000010751bf30 _dispatch_queue_serial_drain + 212</span><br><span class="line">14  libdispatch.dylib                   0x00000001075109a4 _dispatch_queue_invoke + 332</span><br><span class="line">15  libdispatch.dylib                   0x000000010751bf30 _dispatch_queue_serial_drain + 212</span><br><span class="line">16  libdispatch.dylib                   0x00000001075109a4 _dispatch_queue_invoke + 332</span><br><span class="line">17  libdispatch.dylib                   0x000000010751d104 _dispatch_root_queue_drain_deferred_wlh + 424</span><br><span class="line">18  libdispatch.dylib                   0x0000000107524100 _dispatch_workloop_worker_thread + 652</span><br><span class="line">19  libsystem_pthread.dylib             0x000000018631efe0 _pthread_wqthread + 932</span><br><span class="line">20  libsystem_pthread.dylib             0x000000018631ec30 start_wqthread + 4</span><br><span class="line">2017-09-12 10:43:02.790898+0800 LittleVideoDemo[2015:196235] [reports] Main Thread Checker: UI API called on a background thread: -[UIApplication applicationState]</span><br><span class="line">PID: 2015, TID: 196235, Thread name: (none), Queue name: com.apple.avfoundation.videodataoutput.bufferqueue, QoS: 0</span><br><span class="line">Backtrace:</span><br><span class="line">4   LittleVideoDemo                     0x0000000104ca9630 -[TECaptureViewController didOutputVideoSampleBuffer:] + 92</span><br><span class="line">5   LittleVideoDemo                     0x0000000104c77fcc -[FUCamera captureOutput:didOutputSampleBuffer:fromConnection:] + 416</span><br><span class="line">6   AVFoundation                        0x000000018bf57f0c &lt;redacted&gt; + 344</span><br><span class="line">7   AVFoundation                        0x000000018bf57d24 &lt;redacted&gt; + 100</span><br><span class="line">8   CoreMedia                           0x000000018983d598 &lt;redacted&gt; + 260</span><br><span class="line">9   CoreMedia                           0x0000000189859b70 &lt;redacted&gt; + 224</span><br><span class="line">10  libdispatch.dylib                   0x000000010750d45c _dispatch_client_callout + 16</span><br><span class="line">11  libdispatch.dylib                   0x000000010751a800 _dispatch_continuation_pop + 592</span><br><span class="line">12  libdispatch.dylib                   0x000000010750f24c _dispatch_source_invoke + 1592</span><br><span class="line">13  libdispatch.dylib                   0x000000010751bf30 _dispatch_queue_serial_drain + 212</span><br><span class="line">14  libdispatch.dylib                   0x00000001075109a4 _dispatch_queue_invoke + 332</span><br><span class="line">15  libdispatch.dylib                   0x000000010751bf30 _dispatch_queue_serial_drain + 212</span><br><span class="line">16  libdispatch.dylib                   0x00000001075109a4 _dispatch_queue_invoke + 332</span><br><span class="line">17  libdispatch.dylib                   0x000000010751d104 _dispatch_root_queue_drain_deferred_wlh + 424</span><br><span class="line">18  libdispatch.dylib                   0x0000000107524100 _dispatch_workloop_worker_thread + 652</span><br><span class="line">19  libsystem_pthread.dylib             0x000000018631efe0 _pthread_wqthread + 932</span><br><span class="line">20  libsystem_pthread.dylib             0x000000018631ec30 start_wqthread + 4</span><br><span class="line">2017-09-12 10:43:03.145023+0800 LittleVideoDemo[2015:196235] current bundle is nil</span><br><span class="line">2017-09-12 10:43:05.278417+0800 LittleVideoDemo[2015:195860] key = 109004    attach =</span><br></pre></td></tr></table></figure>
+<p>可以很直观的看到，问题是在子线程更新了UI导致的，修改很简单，找到对应的代码，在主线程里调用即可。查了下之后才知道，他是继 <a href="https://developer.apple.com/documentation/code_diagnostics/thread_sanitizer" target="_blank" rel="noopener">Thread Sanitizer</a> 之后新出的一种新的代码诊断，用来发现在子线程更新UI的问题。</p>
+<h1 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h1><p>在 App 启动后，这个 Checker 就利用 runtime 将只能在主线程执行的方法给替换掉（这不正是那些年被我们玩坏了的AOP嘛）然后帮你检查调用是否合法，对于本身就是线程安全的方法，则不会替换，不会帮你再次审查。因为是AOP所以不用重新编译代码，持续集成工具注入这个动态库 <code>/Applications/Xcode.app/Contents/Developer/usr/lib/libMainThreadChecker.dylib</code> 就能帮你检查了[^Note]。</p>
+<h1 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h1><p>会额外增加大约 0.1s 的启动时候，和 1–2% 的 CPU 开销。这 0.1s 肯定是利用 runtime 是 swizzle 方法了呗。[^footnote]因为这个开销比较小，所以当连着线，直接使用 xcode 调试时，这货会自动启动，帮你检查，听起来挺省心的[^debugger]。</p>
+<p>参考文章：<a href="https://developer.apple.com/documentation/code_diagnostics/main_thread_checker" target="_blank" rel="noopener">https://developer.apple.com/documentation/code_diagnostics/main_thread_checker </a></p>
+<p>[^Note]:<br>    &gt; Unlike other code diagnostic tools, the Main Thread Checker doesn’t require recompilation, and can be used with existing binaries. You can run it on a macOS app without the Xcode debugger, such as on a continuous integration system, by injecting the dynamic library file located at /Applications/Xcode.app/Contents/Developer/usr/lib/libMainThreadChecker.dylib.</p>
+<p>[^debugger]:<br>    &gt; The Main Thread Checker is automatically enabled when you’re running your app with the Xcode debugger.</p>
+</section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2017/09/11-sdk-issues.html">SDK-issues 简介</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2017/09/12-anchorPoint_position.html">CALayer 的 anchorPoint 与 position</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url("' + banner + '")'
+      })
+    } else {
+      var url = 'http://debugly.cn/2017/09/12-main-thread-checker.html';
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/404.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/404.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Main Thread Checker",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

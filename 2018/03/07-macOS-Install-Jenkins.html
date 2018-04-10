@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content=",许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      macOS Install Jenkins | Matt Reach
+    
+  </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>macOS Install Jenkins</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#macOS" >
+    <span class="tag-code">macOS</span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2018-03-07</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+      
+    <section class="markdown-content"><p><img src="/images/201803/7.jpeg" alt=""></p>
+<h2 id="官网"><a href="#官网" class="headerlink" title="官网"></a>官网</h2><p><a href="https://jenkins.io/download/" target="_blank" rel="noopener">https://jenkins.io/download/</a></p>
+<h2 id="下载-Jenkins"><a href="#下载-Jenkins" class="headerlink" title="下载 Jenkins"></a>下载 Jenkins</h2><p>官网的 download 不好使，点击后没能开始下，估计是被墙了，所以找了个镜像:</p>
+<p><a href="http://mirrors.jenkins-ci.org/osx/?C=N;O=D" target="_blank" rel="noopener">http://mirrors.jenkins-ci.org/osx/</a></p>
+<p>也由 war 包的镜像:</p>
+<p><a href="http://updates.jenkins-ci.org/download/war/" target="_blank" rel="noopener">http://updates.jenkins-ci.org/download/war/</a></p>
+<h2 id="启动-Jenkins-服务"><a href="#启动-Jenkins-服务" class="headerlink" title="启动 Jenkins 服务"></a>启动 Jenkins 服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar /Applications/Jenkins/jenkins.war</span><br></pre></td></tr></table></figure>
+<p>需要 Java 环境，环境有问题的话，可以参考我的这篇<a href="/2018/03/06/Macos-JavaRuntime.html">文章</a></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>默认端口是 8080，所以直接浏览器里输入 <a href="localhost:8080" target="_blank" rel="noopener">localhost:8080</a> 进行一次 admin 账户初始化就OK了！</p>
+<h2 id="内置变量"><a href="#内置变量" class="headerlink" title="内置变量"></a>内置变量</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">The following variables are available to shell scripts</span><br><span class="line"></span><br><span class="line">BRANCH_NAME</span><br><span class="line">For a multibranch project, this will be set to the name of the branch being built, for example in case you wish to deploy to production from master but not from feature branches; if corresponding to some kind of change request, the name is generally arbitrary (refer to CHANGE_ID and CHANGE_TARGET).</span><br><span class="line">CHANGE_ID</span><br><span class="line">For a multibranch project corresponding to some kind of change request, this will be set to the change ID, such as a pull request number, if supported; else unset.</span><br><span class="line">CHANGE_URL</span><br><span class="line">For a multibranch project corresponding to some kind of change request, this will be set to the change URL, if supported; else unset.</span><br><span class="line">CHANGE_TITLE</span><br><span class="line">For a multibranch project corresponding to some kind of change request, this will be set to the title of the change, if supported; else unset.</span><br><span class="line">CHANGE_AUTHOR</span><br><span class="line">For a multibranch project corresponding to some kind of change request, this will be set to the username of the author of the proposed change, if supported; else unset.</span><br><span class="line">CHANGE_AUTHOR_DISPLAY_NAME</span><br><span class="line">For a multibranch project corresponding to some kind of change request, this will be set to the human name of the author, if supported; else unset.</span><br><span class="line">CHANGE_AUTHOR_EMAIL</span><br><span class="line">For a multibranch project corresponding to some kind of change request, this will be set to the email address of the author, if supported; else unset.</span><br><span class="line">CHANGE_TARGET</span><br><span class="line">For a multibranch project corresponding to some kind of change request, this will be set to the target or base branch to which the change could be merged, if supported; else unset.</span><br><span class="line">BUILD_NUMBER</span><br><span class="line">The current build number, such as &quot;153&quot;</span><br><span class="line">BUILD_ID</span><br><span class="line">The current build ID, identical to BUILD_NUMBER for builds created in 1.597+, but a YYYY-MM-DD_hh-mm-ss timestamp for older builds</span><br><span class="line">BUILD_DISPLAY_NAME</span><br><span class="line">The display name of the current build, which is something like &quot;#153&quot; by default.</span><br><span class="line">JOB_NAME</span><br><span class="line">Name of the project of this build, such as &quot;foo&quot; or &quot;foo/bar&quot;.</span><br><span class="line">JOB_BASE_NAME</span><br><span class="line">Short Name of the project of this build stripping off folder paths, such as &quot;foo&quot; for &quot;bar/foo&quot;.</span><br><span class="line">BUILD_TAG</span><br><span class="line">String of &quot;jenkins-$&#123;JOB_NAME&#125;-$&#123;BUILD_NUMBER&#125;&quot;. All forward slashes (/) in the JOB_NAME are replaced with dashes (-). Convenient to put into a resource file, a jar file, etc for easier identification.</span><br><span class="line">EXECUTOR_NUMBER</span><br><span class="line">The unique number that identifies the current executor (among executors of the same machine) that’s carrying out this build. This is the number you see in the &quot;build executor status&quot;, except that the number starts from 0, not 1.</span><br><span class="line">NODE_NAME</span><br><span class="line">Name of the agent if the build is on an agent, or &quot;master&quot; if run on master</span><br><span class="line">NODE_LABELS</span><br><span class="line">Whitespace-separated list of labels that the node is assigned.</span><br><span class="line">WORKSPACE</span><br><span class="line">The absolute path of the directory assigned to the build as a workspace.</span><br><span class="line">JENKINS_HOME</span><br><span class="line">The absolute path of the directory assigned on the master node for Jenkins to store data.</span><br><span class="line">JENKINS_URL</span><br><span class="line">Full URL of Jenkins, like http://server:port/jenkins/ (note: only available if Jenkins URL set in system configuration)</span><br><span class="line">BUILD_URL</span><br><span class="line">Full URL of this build, like http://server:port/jenkins/job/foo/15/ (Jenkins URL must be set)</span><br><span class="line">JOB_URL</span><br><span class="line">Full URL of this job, like http://server:port/jenkins/job/foo/ (Jenkins URL must be set)</span><br><span class="line">SVN_REVISION</span><br><span class="line">Subversion revision number that&apos;s currently checked out to the workspace, such as &quot;12345&quot;</span><br><span class="line">SVN_URL</span><br><span class="line">Subversion URL that&apos;s currently checked out to the workspace.</span><br></pre></td></tr></table></figure>
+<p>中文对照：<a href="https://www.cnblogs.com/EasonJim/p/6758382.html" target="_blank" rel="noopener">https://www.cnblogs.com/EasonJim/p/6758382.html</a></p>
+<h1 id="邮件配置"><a href="#邮件配置" class="headerlink" title="邮件配置"></a>邮件配置</h1><ul>
+<li><a href="https://blog.csdn.net/fullbug/article/details/53024562" target="_blank" rel="noopener">https://blog.csdn.net/fullbug/article/details/53024562</a></li>
+<li><a href="https://blog.csdn.net/u013066244/article/details/78665075" target="_blank" rel="noopener">https://blog.csdn.net/u013066244/article/details/78665075</a></li>
+<li><a href="https://blog.csdn.net/chengtong_java/article/details/49815311" target="_blank" rel="noopener">https://blog.csdn.net/chengtong_java/article/details/49815311</a></li>
+<li><a href="https://stackoverflow.com/questions/13650860/jenkins-extended-e-mail-wont-print-git-branch-or-git-commit" target="_blank" rel="noopener">https://stackoverflow.com/questions/13650860/jenkins-extended-e-mail-wont-print-git-branch-or-git-commit</a></li>
+</ul>
+</section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2018/03/06-macOS-JavaRuntime.html">macOS-JavaRuntime</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2018/03/22-github-customdomain-support-https.html">Github Pages 自定义域名支持 HTTPS</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url("' + banner + '")'
+      })
+    } else {
+      var url = 'http://debugly.cn/2018/03/07-macOS-Install-Jenkins.html';
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/404.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/404.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "macOS Install Jenkins",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content=",许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      使用 Block 的一些技巧和心得 | Matt Reach
+    
+  </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>使用 Block 的一些技巧和心得</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2015-10-29</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+      
+    <section class="markdown-content"><h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>项目中大量使用了 Block，今天无意间有了新的用法，不同往常的一般使用方法，使得编程又有了新的乐趣！想了一下，第一次写 Block 应该是两年前了，这么长时间并没有总结过，今天顺便总结下使用 Block 的场景 …</p>
+<h3 id="Block的一般使用场景"><a href="#Block的一般使用场景" class="headerlink" title="Block的一般使用场景"></a>Block的一般使用场景</h3><p> 以下场景均是个人理解，词汇也是个人命名，理解就好了：</p>
+<ul>
+<li>完成事情的回掉；方法一般可以附加一个 completion handler 参数作为完成的回掉，AFNetworking 里网络请求好多都是这种场景了，比如这个方法，GET 请求成功后就会回调 success ，失败则回调 failure，并且可以带有 <strong>参数</strong> （ps：这个以后会有大用处）！</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">NSURLSessionDataTask</span> *)GET:(<span class="built_in">NSString</span> *)URLString</span><br><span class="line">                   parameters:(<span class="keyword">id</span>)parameters</span><br><span class="line">                      success:(<span class="keyword">void</span> (^)(<span class="built_in">NSURLSessionDataTask</span> *task, <span class="keyword">id</span> responseObject))success</span><br><span class="line">                      failure:(<span class="keyword">void</span> (^)(<span class="built_in">NSURLSessionDataTask</span> *task, <span class="built_in">NSError</span> *error))failure;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>下发任务的区块；方法附带一个获取任务的 block,我们把需要处理的任务放到里面即可，利用 GCD 派发任务，做动画等等都是这样做的，由于是单纯的任务，所以一般不需要参数：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="built_in">dispatch_async</span>(<span class="built_in">dispatch_queue_t</span> queue, dispatch_block_t block);</span><br><span class="line"></span><br><span class="line">[<span class="built_in">UIView</span> animateWithDuration:<span class="number">0.25</span> animations:^&#123;</span><br><span class="line">   <span class="comment">//do your animates</span></span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">[<span class="built_in">NSBlockOperation</span> blockOperationWithBlock:^&#123;</span><br><span class="line"> <span class="comment">//your task       </span></span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>权利下放；如果做一件事情的时候，我们不知道该如何拍板，抉择的时候，就可以把这个权利下放给调用者，这样的代码就显得很灵活；</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[needSortArray sortedArrayUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">NSOrderedAscending</span>;<span class="comment">//your power!</span></span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>封装代码块；如果你的逻辑比较复杂，需要判断很多种情况，各种 if else 嵌套；很多个 else 的地方都调用同样的代码块，则可以考虑使用 block 块；我觉得你应该也遇见过这种情况！至少我见过别人这么写过，结果就是同样的代码块几十行，在一个方法里写了两次，其实不用 block 也行的，抽取一个方法或许也行，使用 block 的好处，大概就是可以捕获了！如果代码块是一个方法，那么可能就没必要使用 block 来封装了，不过如果是好多行的逻辑，使用 block 封装下很是比较好的！</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span>* (^callback)(<span class="built_in">NSArray</span> *needSortArray) = ^(<span class="built_in">NSArray</span> *needSortArray)&#123;</span><br><span class="line">        [needSortArray sortedArrayUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">NSOrderedAscending</span>;<span class="comment">//your power!</span></span><br><span class="line">        &#125;];</span><br><span class="line">        <span class="keyword">return</span> [needSortArray componentsJoinedByString:<span class="string">@"|"</span>];</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="built_in">BOOL</span> A,B,C;</span><br><span class="line">  <span class="built_in">NSArray</span> *needArr = @[<span class="string">@"A"</span>,<span class="string">@"C"</span>,<span class="string">@"D"</span>,<span class="string">@"F"</span>,];</span><br><span class="line">  <span class="keyword">if</span> (A) &#123;</span><br><span class="line">      <span class="keyword">if</span> (B) &#123;</span><br><span class="line">          <span class="keyword">if</span> (C) &#123;</span><br><span class="line">              [<span class="keyword">self</span> handleArr:needArr];</span><br><span class="line">          &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">              callback(needArr);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">          [<span class="keyword">self</span> handleArr2:needArr];</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      callback(needArr);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>从技术层面上看，基本上这些使用代理也可以完成，但是绝对没有使用 block 来的优雅！我是一个喜欢使用的 block 的 coder，因为觉得编写代理很麻烦，代码不是那么的直观；这里只是简单总结了下平时我经常用到的场景，当然还有别的很多场景；希望你能发邮件给我，补充这里来；</p>
+<a id="more"></a>
+<h3 id="Blokc-高级用法"><a href="#Blokc-高级用法" class="headerlink" title="Blokc 高级用法"></a>Blokc 高级用法</h3><p>说高级用法可能会有些夸张，不过这确实不是很常用，因为常用的场景上面已经说过了，所以这里为了区分就是用了高级这个词汇！下面就来见识下我所谓的 “高级” 吧，我看问题喜欢有上下文，因此先看下场景：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///添加一个下载任务</span></span><br><span class="line">- (<span class="keyword">void</span>)addDownloadTask:(<span class="keyword">id</span>)task</span><br><span class="line">            handleError:(<span class="built_in">BOOL</span>(^)(<span class="built_in">NSInteger</span> errCode))errHandle</span><br><span class="line">             completion:(<span class="keyword">void</span>(^)(<span class="keyword">id</span> task , <span class="built_in">NSInteger</span> errCode))comBlock&#123;</span><br><span class="line"><span class="comment">//    1.generate err code;</span></span><br><span class="line">    <span class="built_in">NSInteger</span> errCode = <span class="number">12432</span>;</span><br><span class="line"><span class="comment">//    2.check error;</span></span><br><span class="line">    <span class="keyword">if</span> (errHandle) &#123;</span><br><span class="line">        <span class="keyword">if</span>(errHandle(errCode))&#123;</span><br><span class="line">            <span class="comment">//下放权利，调用者灵活判断后 add</span></span><br><span class="line">            [<span class="keyword">self</span> doAdd:task];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">// 默认的判断条件   3.add</span></span><br><span class="line">        [<span class="keyword">self</span> doAdd:task];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)doAdd:(<span class="keyword">id</span>)task</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//处理错误，可能是单独的类(QLErroHandel)；</span></span><br><span class="line">+ (<span class="built_in">BOOL</span>)handleError:(<span class="built_in">NSInteger</span>)errCode</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">BOOL</span> someCons;</span><br><span class="line">    <span class="keyword">if</span>(someCons)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NO</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了上面的方法后就可以封装一个通用的自动处理错误的方法了，因为我是那么的懒，当然这也是面向切面编程的体验，面向错误处理这个切面编程，不让错误处理流落到每个添加调用处，避免日后维护的工作！</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///封装一个通用的自动处理错误的方法</span></span><br><span class="line">- (<span class="keyword">void</span>)addDownloadTaskAutoHandleError:(<span class="keyword">id</span>)task</span><br><span class="line">             NoErrorCompletion:(<span class="keyword">void</span>(^)(<span class="keyword">id</span> task))comBlock</span><br><span class="line">&#123;</span><br><span class="line">    [<span class="keyword">self</span> addDownloadTask:task handleError:^<span class="built_in">BOOL</span>(<span class="built_in">NSInteger</span> errCode) &#123;</span><br><span class="line">       <span class="keyword">return</span> [[QLErroHandel <span class="keyword">class</span>]handleError:errCode];</span><br><span class="line">    &#125; completion:^(<span class="keyword">id</span> task, <span class="built_in">NSInteger</span> errCode) &#123;</span><br><span class="line">        <span class="keyword">if</span> (comBlock) &#123;</span><br><span class="line">            comBlock(task);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果只是这些的话，看着还不错，一劳永逸，错误处理自动处理了，没错误后就添加任务！ But，有了新的需求了，要加入会员特权，可以免流量下载！并且流程和之前也有所不同了，有些情况是不能添加的！什么？这怎么办！淡定么，代码是我写怕啥！那么就在 handleError 里处理不行吗？</p>
+<p>不行！因为会员的判断是异步的，同时伴有 Alert 等提示！异步是最麻烦的，因为没办法直接返回 bool 值了！因此必须重构 handleError 方法，等待异步出结果，是不是能够添加任务！考虑了一阵子，决定从 block 上入手，想到的办法是传递一个权利下放的 callBackblock 到 handleError 方法；当 handleError 获取到会员信息后回调 callBackblock；如何传递呢？没有更好的办法，因此就尝试把 callBackblock 作为参数传递下去，改造后是这样的:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)asynVIP:(<span class="keyword">void</span>(^)(<span class="keyword">bool</span>))compBlock</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//异步请求VIP信息</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//处理错误，可能是单独的类；</span></span><br><span class="line">+ (<span class="keyword">void</span>)handleError:(<span class="built_in">NSInteger</span>)errCode withCallback:(<span class="keyword">void</span>(^)(<span class="built_in">NSInteger</span> flag))calback</span><br><span class="line">&#123;</span><br><span class="line">    [<span class="keyword">self</span> asynVIP:^(<span class="keyword">bool</span> isVIP)&#123;</span><br><span class="line">    <span class="comment">//使用 callback 告诉上层 api 是不是要开始添加任务</span></span><br><span class="line">        <span class="keyword">if</span> (calback) &#123;</span><br><span class="line">            calback(isVIP);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">///添加一个下载任务</span></span><br><span class="line">- (<span class="keyword">void</span>)addDownloadTask:(<span class="keyword">id</span>)task</span><br><span class="line">            handleError:(<span class="keyword">void</span>(^)(<span class="built_in">NSInteger</span> errCode,<span class="keyword">void</span>(^calback)(<span class="built_in">NSInteger</span> flag)))errHandle</span><br><span class="line">             completion:(<span class="keyword">void</span>(^)(<span class="keyword">id</span> task , <span class="built_in">NSInteger</span> errCode))comBlock&#123;</span><br><span class="line"><span class="comment">//    1.generate err code;</span></span><br><span class="line">    <span class="built_in">NSInteger</span> errCode = <span class="number">12432</span>;</span><br><span class="line"><span class="comment">//    2.check error;</span></span><br><span class="line">    <span class="keyword">if</span> (errHandle) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">void</span>(^calback)(<span class="built_in">NSInteger</span> flag) = ^(<span class="built_in">NSInteger</span> flag)&#123;</span><br><span class="line">            <span class="keyword">if</span> (flag) &#123;</span><br><span class="line"><span class="comment">//                3.add</span></span><br><span class="line">                [<span class="keyword">self</span> doAdd:task];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">//下放权利，调用者灵活判断</span></span><br><span class="line">        errHandle(errCode,calback);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">///封装一个通用的自动处理错误的方法</span></span><br><span class="line">- (<span class="keyword">void</span>)addDownloadTaskAutoHandleError:(<span class="keyword">id</span>)task</span><br><span class="line">             NoErrorCompletion:(<span class="keyword">void</span>(^)(<span class="keyword">id</span> task))comBlock</span><br><span class="line">&#123;</span><br><span class="line">    [<span class="keyword">self</span> addDownloadTask:task handleError:^(<span class="built_in">NSInteger</span> errCode, <span class="keyword">void</span>(^callback)(<span class="built_in">NSInteger</span> flag)) &#123;</span><br><span class="line">    <span class="comment">//把 callback 传递下去，等待时机成熟，回掉回来，决定任务是不是添加</span></span><br><span class="line">        [[QLErroHandel <span class="keyword">class</span>] handleError:errCode withCallback:callback];</span><br><span class="line">    &#125; completion:^(<span class="keyword">id</span> task, <span class="built_in">NSInteger</span> errCode) &#123;</span><br><span class="line">        <span class="keyword">if</span> (comBlock) &#123;</span><br><span class="line">            comBlock(task);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样 VIP 的需求就搞定啦，总结下就是： block 的参数可以是 block；这个可以作为 B 调用 A 的时候，B 在适当的时机回掉给 A 一些信息，而不是 B 仅仅从听从 A 安排的时间被调用！相当于握手，相互传递了信息，而不是单方向被动调用，这就相当于 A 在某个时候让 B 做一些任务，B 完成了任务之后根据完成的情况拿着 A 传给他的callback 回掉到 A 决定 A的下一步任务！这个也许需要你静静的思考品位几分钟…</p>
+<p>再回过头来看看之前的权利下放方式：通过返回值去决定 A 的下一步任务，这个在 B 没有异步任务的情况下很实用，不过 B 有了异步任务后就不行了，特别是 B 的任务又是通过 block 派发的情形，就更不适合这个返回值模式了！</p>
+<p>时间比较仓促，写的不对的地方或者疑惑之处可以评论等其他方式联系我…</p>
+</section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2015/10/26-UITableViewCell-Edit.html">UITableViewCell 编辑模式</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2015/10/30-unsigned-type-use.html">小心 unsigned 数据类型埋下坑</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url("' + banner + '")'
+      })
+    } else {
+      var url = 'http://debugly.cn/2015/10/29-Block_Use_Experiences.html';
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/404.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/404.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "使用 Block 的一些技巧和心得",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

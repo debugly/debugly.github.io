@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content="gem install cocoapods,安装 cocoapods,许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      macOS 上安装 CocoaPods | Matt Reach
+    
+  </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>macOS 上安装 CocoaPods</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+  <a href="/tags#macOS" >
+    <span class="tag-code">macOS</span>
+  </a>
+
+  <a href="/tags#CocoaPods" >
+    <span class="tag-code">CocoaPods</span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2017-07-19</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+      
+    <section class="markdown-content"><blockquote>
+<p>前面的博客里简单的介绍过 Ruby，我们也知道了如何安装 Ruby 写的程序库，今天要安装的是大名鼎鼎的 <strong>CocoaPods</strong> ，他也是使用 Ruby 写的！</p>
+</blockquote>
+<h1 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h1><p>如果没接触过 ruby 的话，最好是先来看下这篇博客里的名词解释 : <a href="/script/2017/06/04/use-rake.html#1">使用 Rake 重写打包脚本</a></p>
+<p>使用 gem 命令安装即可 ： <code>sudo gem install cocoapods</code> ；安装过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line">Password:</span><br><span class="line">Fetching: i18n-0.8.6.gem (100%)</span><br><span class="line">Successfully installed i18n-0.8.6</span><br><span class="line">Fetching: thread_safe-0.3.6.gem (100%)</span><br><span class="line">Successfully installed thread_safe-0.3.6</span><br><span class="line">Fetching: tzinfo-1.2.3.gem (100%)</span><br><span class="line">Successfully installed tzinfo-1.2.3</span><br><span class="line">Fetching: activesupport-4.2.9.gem (100%)</span><br><span class="line">Successfully installed activesupport-4.2.9</span><br><span class="line">Fetching: nap-1.1.0.gem (100%)</span><br><span class="line">Successfully installed nap-1.1.0</span><br><span class="line">Fetching: fuzzy_match-2.0.4.gem (100%)</span><br><span class="line">Successfully installed fuzzy_match-2.0.4</span><br><span class="line">Fetching: cocoapods-core-1.2.1.gem (100%)</span><br><span class="line">Successfully installed cocoapods-core-1.2.1</span><br><span class="line">Fetching: claide-1.0.2.gem (100%)</span><br><span class="line">Successfully installed claide-1.0.2</span><br><span class="line">Fetching: cocoapods-deintegrate-1.0.1.gem (100%)</span><br><span class="line">Successfully installed cocoapods-deintegrate-1.0.1</span><br><span class="line">Fetching: cocoapods-downloader-1.1.3.gem (100%)</span><br><span class="line">Successfully installed cocoapods-downloader-1.1.3</span><br><span class="line">Fetching: cocoapods-plugins-1.0.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-plugins-1.0.0</span><br><span class="line">Fetching: cocoapods-search-1.0.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-search-1.0.0</span><br><span class="line">Fetching: cocoapods-stats-1.0.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-stats-1.0.0</span><br><span class="line">Fetching: netrc-0.7.8.gem (100%)</span><br><span class="line">Successfully installed netrc-0.7.8</span><br><span class="line">Fetching: cocoapods-trunk-1.2.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-trunk-1.2.0</span><br><span class="line">Fetching: cocoapods-try-1.1.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-try-1.1.0</span><br><span class="line">Fetching: molinillo-0.5.7.gem (100%)</span><br><span class="line">Successfully installed molinillo-0.5.7</span><br><span class="line">Fetching: CFPropertyList-2.3.5.gem (100%)</span><br><span class="line">Successfully installed CFPropertyList-2.3.5</span><br><span class="line">Fetching: colored2-3.1.2.gem (100%)</span><br><span class="line">Successfully installed colored2-3.1.2</span><br><span class="line">Fetching: nanaimo-0.2.3.gem (100%)</span><br><span class="line">Successfully installed nanaimo-0.2.3</span><br><span class="line">Fetching: xcodeproj-1.5.1.gem (100%)</span><br><span class="line">Successfully installed xcodeproj-1.5.1</span><br><span class="line">Fetching: escape-0.0.4.gem (100%)</span><br><span class="line">Successfully installed escape-0.0.4</span><br><span class="line">Fetching: fourflusher-2.0.1.gem (100%)</span><br><span class="line">Successfully installed fourflusher-2.0.1</span><br><span class="line">Fetching: gh_inspector-1.0.3.gem (100%)</span><br><span class="line">Successfully installed gh_inspector-1.0.3</span><br><span class="line">Fetching: ruby-macho-1.1.0.gem (100%)</span><br><span class="line">Successfully installed ruby-macho-1.1.0</span><br><span class="line">Fetching: cocoapods-1.2.1.gem (100%)</span><br><span class="line">Successfully installed cocoapods-1.2.1</span><br><span class="line">Parsing documentation for i18n-0.8.6</span><br><span class="line">Installing ri documentation for i18n-0.8.6</span><br><span class="line">Parsing documentation for thread_safe-0.3.6</span><br><span class="line">Installing ri documentation for thread_safe-0.3.6</span><br><span class="line">Parsing documentation for tzinfo-1.2.3</span><br><span class="line">Installing ri documentation for tzinfo-1.2.3</span><br><span class="line">Parsing documentation for activesupport-4.2.9</span><br><span class="line">Installing ri documentation for activesupport-4.2.9</span><br><span class="line">Parsing documentation for nap-1.1.0</span><br><span class="line">Installing ri documentation for nap-1.1.0</span><br><span class="line">Parsing documentation for fuzzy_match-2.0.4</span><br><span class="line">Installing ri documentation for fuzzy_match-2.0.4</span><br><span class="line">Parsing documentation for cocoapods-core-1.2.1</span><br><span class="line">Installing ri documentation for cocoapods-core-1.2.1</span><br><span class="line">Parsing documentation for claide-1.0.2</span><br><span class="line">Installing ri documentation for claide-1.0.2</span><br><span class="line">Parsing documentation for cocoapods-deintegrate-1.0.1</span><br><span class="line">Installing ri documentation for cocoapods-deintegrate-1.0.1</span><br><span class="line">Parsing documentation for cocoapods-downloader-1.1.3</span><br><span class="line">Installing ri documentation for cocoapods-downloader-1.1.3</span><br><span class="line">Parsing documentation for cocoapods-plugins-1.0.0</span><br><span class="line">Installing ri documentation for cocoapods-plugins-1.0.0</span><br><span class="line">Parsing documentation for cocoapods-search-1.0.0</span><br><span class="line">Installing ri documentation for cocoapods-search-1.0.0</span><br><span class="line">Parsing documentation for cocoapods-stats-1.0.0</span><br><span class="line">Installing ri documentation for cocoapods-stats-1.0.0</span><br><span class="line">Parsing documentation for netrc-0.7.8</span><br><span class="line">Installing ri documentation for netrc-0.7.8</span><br><span class="line">Parsing documentation for cocoapods-trunk-1.2.0</span><br><span class="line">Installing ri documentation for cocoapods-trunk-1.2.0</span><br><span class="line">Parsing documentation for cocoapods-try-1.1.0</span><br><span class="line">Installing ri documentation for cocoapods-try-1.1.0</span><br><span class="line">Parsing documentation for molinillo-0.5.7</span><br><span class="line">Installing ri documentation for molinillo-0.5.7</span><br><span class="line">Parsing documentation for CFPropertyList-2.3.5</span><br><span class="line">Installing ri documentation for CFPropertyList-2.3.5</span><br><span class="line">Parsing documentation for colored2-3.1.2</span><br><span class="line">Installing ri documentation for colored2-3.1.2</span><br><span class="line">Parsing documentation for nanaimo-0.2.3</span><br><span class="line">Installing ri documentation for nanaimo-0.2.3</span><br><span class="line">Parsing documentation for xcodeproj-1.5.1</span><br><span class="line">Installing ri documentation for xcodeproj-1.5.1</span><br><span class="line">Parsing documentation for escape-0.0.4</span><br><span class="line">Installing ri documentation for escape-0.0.4</span><br><span class="line">Parsing documentation for fourflusher-2.0.1</span><br><span class="line">Installing ri documentation for fourflusher-2.0.1</span><br><span class="line">Parsing documentation for gh_inspector-1.0.3</span><br><span class="line">Installing ri documentation for gh_inspector-1.0.3</span><br><span class="line">Parsing documentation for ruby-macho-1.1.0</span><br><span class="line">Installing ri documentation for ruby-macho-1.1.0</span><br><span class="line">Parsing documentation for cocoapods-1.2.1</span><br><span class="line">Installing ri documentation for cocoapods-1.2.1</span><br><span class="line">Done installing documentation for i18n, thread_safe, tzinfo, activesupport, nap, fuzzy_match, cocoapods-core, claide, cocoapods-deintegrate, cocoapods-downloader, cocoapods-plugins, cocoapods-search, cocoapods-stats, netrc, cocoapods-trunk, cocoapods-try, molinillo, CFPropertyList, colored2, nanaimo, xcodeproj, escape, fourflusher, gh_inspector, ruby-macho, cocoapods after 16 seconds</span><br><span class="line">26 gems installed</span><br></pre></td></tr></table></figure>
+<p>如遇到问题，很能是源的问题，可以开启 VPN ，或者替换为下面的源地址：</p>
+<ul>
+<li>Ruby 社区的 Gem 托管服务: RubyGems.org</li>
+<li>RubyGems 镜像 gems.ruby-china.org</li>
+<li>RubyGems 镜像 ruby.taobao.org</li>
+</ul>
+<p>查看当前源 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gem sources -l</span><br><span class="line">*** CURRENT SOURCES ***</span><br><span class="line">https://rubygems.org/</span><br></pre></td></tr></table></figure>
+<p>将官方 rubygems.org 修改为国内的 gems.ruby-china.org 源地址 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/</span><br></pre></td></tr></table></figure>
+<p>安装完毕后最好是 <strong>pod setup</strong> 下，作用是把 <a href="https://github.com/CocoaPods/Specs.git" target="_blank" rel="noopener">CocoaPods 仓库</a> clone 到本地。</p>
+<h1 id="Try"><a href="#Try" class="headerlink" title="Try"></a>Try</h1><p>可以尝试玩下：</p>
+<ul>
+<li>版本 ： pod –version</li>
+<li>搜索 ： pod search SCNetworkKit</li>
+<li>尝试demo ： pod try SCNetworkKit</li>
+</ul>
+<p>更多命令 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">+ cache         Manipulate the CocoaPods cache</span><br><span class="line">+ deintegrate   Deintegrate CocoaPods from your project</span><br><span class="line">+ env           Display pod environment</span><br><span class="line">+ init          Generate a Podfile for the current directory</span><br><span class="line">+ install       Install project dependencies according to versions from a</span><br><span class="line">                Podfile.lock</span><br><span class="line">+ ipc           Inter-process communication</span><br><span class="line">+ lib           Develop pods</span><br><span class="line">+ list          List pods</span><br><span class="line">+ outdated      Show outdated project dependencies</span><br><span class="line">+ plugins       Show available CocoaPods plugins</span><br><span class="line">+ repo          Manage spec-repositories</span><br><span class="line">+ search        Search for pods</span><br><span class="line">+ setup         Setup the CocoaPods environment</span><br><span class="line">+ spec          Manage pod specs</span><br><span class="line">+ trunk         Interact with the CocoaPods API (e.g. publishing new specs)</span><br><span class="line">+ try           Try a Pod!</span><br><span class="line">+ update        Update outdated project dependencies and create new</span><br><span class="line">                Podfile.lock</span><br></pre></td></tr></table></figure>
+<p>可选参数 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--silent        Show nothing</span><br><span class="line">--version       Show the version of the tool</span><br><span class="line">--verbose       Show more debugging information</span><br><span class="line">--no-ansi       Show output without ANSI codes</span><br><span class="line">--help          Show help banner of specified command</span><br></pre></td></tr></table></figure></section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2017/07/17-objc-weak-obj-imp.html">源码分析 weak 对象自动置空原理</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2017/07/20-create-pod-library.html">创建自己的 CocoaPods 库</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url("' + banner + '")'
+      })
+    } else {
+      var url = 'http://debugly.cn/2017/07/19-install-cocoapods.html';
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/404.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/404.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "macOS 上安装 CocoaPods",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

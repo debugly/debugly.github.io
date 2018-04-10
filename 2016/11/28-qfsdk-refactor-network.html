@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content=",许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      千帆 SDK Refactor: NetWork | Matt Reach
+    
+  </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>千帆 SDK Refactor: NetWork</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK</span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2016-11-28</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+      
+    <section class="markdown-content"><blockquote>
+<p>重构，不是说说而已，也不是不想看别人的<code>烂代码</code>自己重写一遍，而是真的遇到了会破坏当前架构的实际问题了，或者之前就没想那么多，继续往下写只会将业务逻辑搞得支离破碎，毫无条理而言，日后维护负担大，相同的逻辑写了多遍之时，才需要重构;我将会结合实际分享几篇SDK内关于重构的文章。</p>
+</blockquote>
+<h2 id="网络请求的现状"><a href="#网络请求的现状" class="headerlink" title="网络请求的现状"></a>网络请求的现状</h2><p>重构要有合适的动机，不能出师无名，所以我们先来看看我为何决定要重构网络请求；目前SDK的所有（接口，除图片下载外的）请求均是由上层 Service 发起，底层调用 SLNetWork 完成，表现稳定，但 SLNetWork 为 Service 层提供的调用接口太多，将响应数据解析为 Model的处理逻辑糅合在 Service 层和底层，图片下载没有使用 SLNetWork 而是另外一套逻辑。</p>
+<h4 id="SLNetWork-库简介"><a href="#SLNetWork-库简介" class="headerlink" title="SLNetWork 库简介"></a>SLNetWork 库简介</h4><p>这个网络库是我今年 4 月份写的，用于搜狐视频的上传模块，那时候还没有千帆 SDK，我还是视频主线的一个新人，做这块业务的时候，主管说这块要写成一个单独的模块，日后可能会提供给别的部门用，于是就没有使用视频内部现有的网络库，而是重新造的轮子 <code>SVPNetWork</code>；后来我换了部门来做千帆SDK了，做 SDK 的过程中，我尽可能的减少对外部的依赖，减少宿主 App 的工作量，尽管千帆 SDK 目前仅提供给视频和新闻用，但是不依赖外部这个理念是始终萦绕在我的脑海，于是为了快速开发而又不造成依赖的情况下，我就把 SVPNetWork 库直接带了过来，用于担任直播间请求的底层。</p>
+<blockquote>
+<p>这里有一点要说的是，SVPNetWork 库里所有的类都要改下前缀，因为OC没有命名空间！</p>
+</blockquote>
+<p>这样原本在视频里的 SVPNetWork 就成了千帆 SDK 里的 SLNetWork 了。</p>
+<h4 id="SLNetWork-库设计思路"><a href="#SLNetWork-库设计思路" class="headerlink" title="SLNetWork 库设计思路"></a>SLNetWork 库设计思路</h4><p>核心类有两个：</p>
+<ul>
+<li><p>SLNetworkService</p>
+<ul>
+<li>负责发起，管理请求</li>
+<li>内部处理与系统 NSURLSession 的交互（请求的代理处理）</li>
+<li>不同的阶段，把 request 置为不同的状态，request 根据状态回调对应的 callback ；</li>
+</ul>
+</li>
+<li><p>SLNetworkRequest</p>
+<ul>
+<li>网络请求的抽象,包含了请求的相关部分<ul>
+<li>URL: 请求地址</li>
+<li>Method: HTTP请求方式，GET，POST等</li>
+<li>Headers: HTTP请求的Header，包含了Content-Type，Cookie，UA等信息</li>
+<li>Progress: 上传进度，SDK暂时没用到</li>
+<li>State: 请求的状态，比如Start是开始，Completed和Error时触发回调回调给上层等</li>
+<li>Response: 响应数据，提供的便利方法有，获取string，获取JSON等</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>简单的说就是 SLNetworkService 管理 SLNetworkRequest，维持他的状态，SLNetworkRequest 根据状态做出相应的动作。坦白的说这个设计思路是从 MKNetWork 借鉴的。发起一个网络请求：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *url = <span class="string">@"your url"</span></span><br><span class="line">SLNetworkRequest *request = [[SLNetworkRequest alloc]initWithURLString:url params:<span class="literal">nil</span> httpMethod:<span class="string">@"GET"</span>];</span><br><span class="line"><span class="comment">///set cookie    </span></span><br><span class="line"><span class="built_in">NSMutableDictionary</span> *cookieHeader = [<span class="built_in">NSMutableDictionary</span> dictionary];</span><br><span class="line"><span class="keyword">if</span> (cookieStr) &#123;</span><br><span class="line">    [cookieHeader setObject:cookieStr forKey:<span class="string">@"Cookie"</span>];</span><br><span class="line">&#125;</span><br><span class="line">[request addHeaders:cookieHeader];</span><br><span class="line"></span><br><span class="line"><span class="comment">///添加请求完毕的处理，支持添加多个</span></span><br><span class="line">[request addCompletionHandler:^(SLNetworkRequest *request) &#123;</span><br><span class="line">	<span class="built_in">NSDictionary</span> *result = request.respAsJSON;</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line"><span class="comment">///start</span></span><br><span class="line">[[SLNetworkService alloc]startRequest:request];</span><br></pre></td></tr></table></figure>
+<h4 id="SLNetWork-库增加便利方法"><a href="#SLNetWork-库增加便利方法" class="headerlink" title="SLNetWork 库增加便利方法"></a>SLNetWork 库增加便利方法</h4><p>一般请求均是 GET，POST，因此为了发送请求方便，所以在 SLNetworkService+Simple 类别里提供了一些便利的方法：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//可设置自动取消</span></span><br><span class="line">- (SLNetworkRequest *) Post2:(<span class="built_in">NSString</span> *)url params:(<span class="built_in">NSDictionary</span> *)params cancelOwner:(<span class="keyword">id</span>)owner completion:(SLNKHandler)chandler;</span><br><span class="line">- (SLNetworkRequest *) Post2:(<span class="built_in">NSString</span> *)url params:(<span class="built_in">NSDictionary</span> *)params completion:(SLNKHandler)chandler;</span><br><span class="line"></span><br><span class="line"><span class="comment">//可设置自动取消</span></span><br><span class="line">- (SLNetworkRequest *) Get:(<span class="built_in">NSString</span> *)url params:(<span class="built_in">NSDictionary</span> *)params completion:(SLNKHandler)chandler;</span><br><span class="line">- (SLNetworkRequest *) Get:(<span class="built_in">NSString</span> *)url completion:(SLNKHandler)chandler;</span><br><span class="line">- (SLNetworkRequest *) Get:(<span class="built_in">NSString</span> *)url params:(<span class="built_in">NSDictionary</span> *)params cancelOwner:(<span class="keyword">id</span>)owner completion:(SLNKHandler)chandler;</span><br><span class="line">- (SLNetworkRequest *) Get:(<span class="built_in">NSString</span> *)url cancelOwner:(<span class="keyword">id</span>)owner completion:(SLNKHandler)chandler;</span><br></pre></td></tr></table></figure>
+<p>自动取消是指，可以将网络请求绑定到某个对象上，当该对象销毁时，自动取消该请求，在以后的博客里介绍吧。<br>为了方便使用，甚至在 SLNetworkService 类里还提供了单利方法，这样普通的请求都是用这个单利就好了：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///单利的，不过支持多实例！</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)sharedService;</span><br></pre></td></tr></table></figure>
+<p>至此，SLNetWork 库的封装完毕。我们暂不讨论这么设计有什么缺点，因为好的架构不是吹出来的，评判的标准是看是否符合当前项目业务层的使用，业务层是否用着很爽，所以我们看完业务层在来做客观评价吧。</p>
+<h4 id="Service层的调用方式"><a href="#Service层的调用方式" class="headerlink" title="Service层的调用方式"></a>Service层的调用方式</h4><p>SLNetWork 提供了最基础的发起请求的方式，在业务层我们要根据业务和 SLNetWork 底层提供的方法，进行再次封装，由于底层没有提供将 JOSN 解析为 Model 的方法，那么这个工作就留给了业务层了，我是这么处理的：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Created on 16/5/13.</span></span><br><span class="line"><span class="comment">// 网络请求服务层；基于 SLNetworkService 发送请求 和 SLJSONUtil 进行JOSN解析；</span></span><br><span class="line"><span class="comment">// 更加上层，可以直接进行数据验证和JOSN解析为Model；方便业务逻辑调用；</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#import <span class="meta-string">"SLNetworkService.h"</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">"SLNetworkService+Simple.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">void</span>(^SLNetWorkHandler)(SLNetworkRequest *request,<span class="keyword">id</span> result,<span class="built_in">NSError</span> *err);</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">SLNetworkService</span> (<span class="title">JSONParser</span>)</span></span><br><span class="line"></span><br><span class="line">- (SLNetworkRequest *) Post2:(<span class="built_in">NSString</span> *)url params:(<span class="built_in">NSDictionary</span> *)params checkKeyPath:(<span class="built_in">NSString</span> *)kp checkHandler:(<span class="built_in">BOOL</span> (^)(<span class="keyword">id</span> value))checkHandler modelKayPath:(<span class="built_in">NSString</span> *)mkp modelName:(<span class="built_in">NSString</span> *)mName completion:(SLNetWorkHandler)chandler;</span><br><span class="line"></span><br><span class="line">- (SLNetworkRequest *) Get:(<span class="built_in">NSString</span> *)url params:(<span class="built_in">NSDictionary</span> *)params checkKeyPath:(<span class="built_in">NSString</span> *)kp checkHandler:(<span class="built_in">BOOL</span> (^)(<span class="keyword">id</span> value))checkHandler modelKayPath:(<span class="built_in">NSString</span> *)mkp modelName:(<span class="built_in">NSString</span> *)mName completion:(SLNetWorkHandler)chandler;</span><br><span class="line"></span><br><span class="line">- (SLNetworkRequest *) Get:(<span class="built_in">NSString</span> *)url checkKeyPath:(<span class="built_in">NSString</span> *)kp checkHandler:(<span class="built_in">BOOL</span> (^)(<span class="keyword">id</span> value))checkHandler modelKayPath:(<span class="built_in">NSString</span> *)mkp modelName:(<span class="built_in">NSString</span> *)mName completion:(SLNetWorkHandler)chandler;</span><br><span class="line"></span><br><span class="line">- (SLNetworkRequest *) Get:(<span class="built_in">NSString</span> *)url checkKeyPath:(<span class="built_in">NSString</span> *)kp checkHandler:(<span class="built_in">BOOL</span> (^)(<span class="keyword">id</span> value))checkHandler modelKayPath:(<span class="built_in">NSString</span> *)mkp completion:(SLNetWorkHandler)chandler;</span><br></pre></td></tr></table></figure>
+<p>然后随便找一个业务层的接口看下如何使用JSONParser这一层（这里说层不严谨）：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)requestNeighborOnlineAnchorsWithRoomid:(<span class="built_in">NSString</span> *)rid comp:(<span class="keyword">void</span>(^)(<span class="keyword">id</span> result,<span class="built_in">NSError</span> *err))comp</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (rid.length == <span class="number">0</span> ) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">NSDictionary</span> *param = @&#123;<span class="string">@"roomid"</span>:rid&#125;;</span><br><span class="line">    <span class="built_in">NSString</span> *url = <span class="string">@"..."</span>;</span><br><span class="line">    SLNetworkRequest *request = [[SLNetworkService sharedService] Get:url</span><br><span class="line">                                                               params:param</span><br><span class="line">                                                         checkKeyPath:<span class="string">@"status"</span></span><br><span class="line">                                                         checkHandler:^<span class="built_in">BOOL</span>(<span class="keyword">id</span> value) &#123;</span><br><span class="line">        <span class="keyword">return</span> ([value intValue] == <span class="number">200</span>); &#125;</span><br><span class="line">                                                         modelKayPath:<span class="string">@"message"</span></span><br><span class="line">                                                            modelName:<span class="string">@"SLNeighborAnchorModel"</span></span><br><span class="line">                                                           completion:^(SLNetworkRequest *request, <span class="keyword">id</span> result, <span class="built_in">NSError</span> *err) &#123;</span><br><span class="line">                                                             comp(result,err);</span><br><span class="line">                                                           &#125;];</span><br><span class="line">    [<span class="keyword">self</span> addCancleRef:request];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>根据服务器返回的数据，来解释 checkKeyPath、modelKayPath、modelName 这些参数都是干嘛用的：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	status:200,</span><br><span class="line">	message:</span><br><span class="line">		&#123;</span><br><span class="line">			anchor:5006697,</span><br><span class="line">			avator:http://img,</span><br><span class="line">			nickName:么么哒</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>checkKeyPath: 需用该字段做接口检查，支持 keypath，比如:aa/status</li>
+<li>checkHandler: 内部返回通过 checkKeyPath 字段取出来的值，block 回调过来，然后返回是否检验通过；只有通过才能解析为 Model</li>
+<li>modelKayPath: 根据该参数去服务器返回的 json 数据里查找 目标 json，比如这个例子的目标就是message的内容</li>
+<li>modelName: 将通过 modelKayPath 找到的 json 解析为类名为 modelName 的 model实例</li>
+<li>completion: 网络请求的着陆点，判断下err，如果没有err，result 就是你想要的 model 了，这里回调给上层</li>
+</ul>
+<p>至此，SDK 的网络库使用现状已经毫无保留的给大家介绍了。</p>
+<h2 id="网络请求改进方向"><a href="#网络请求改进方向" class="headerlink" title="网络请求改进方向"></a>网络请求改进方向</h2><p>知道了网路请求的现状后，我们才能有针对性的去改进他。我们可以看到主要的问题是：</p>
+<ul>
+<li>SLNetworkService 提供了太多的发送请求的便利方法，特别是支持 JSON 转 Model 之后，可能就是一个参数之差就需要增加一个方法，不方便之处也显而易见，Xcode 自动提示的时候，都他妈不能完全显示了，被省略了，这样反而降低了开发的效率呢！</li>
+</ul>
+<p><img src="/images/201611/Snip20161129_8.png" alt=""></p>
+<ul>
+<li>响应解析处理不够好，糅合在底层的上层之间，没有扩展性，比如我想把图片的请求也统一过来，目前来看很难做到！</li>
+</ul>
+<p><img src="/images/201611/Snip20161129_9.png" alt=""></p>
+<p>因此，接下来主要针对与调用方式和响应解析进行重构！</p>
+<h2 id="重构请求响应处理逻辑"><a href="#重构请求响应处理逻辑" class="headerlink" title="重构请求响应处理逻辑"></a>重构请求响应处理逻辑</h2><p>目前优秀的开源库有可以借鉴的地方吗？有，比如最流行的 AFNetworking 的响应解析处理的很好呢，跟 SLNetwork 库的区别是不支持 JSON 转 Model，对于这个问题我觉得采用继承去解决比较合适，所以建立的下面的几个类：</p>
+<p><code>Model 继承自 JSON，JSON 继承自 HTTP；</code></p>
+<p><img src="/images/201611/Snip20161129_10.png" alt=""></p>
+<p>这块完全模仿自 AFNetworking ，但还是多少有些创建之处，因为目前服务响应里都有个状态码，比如上面我举例接口中的 status 字段，当 status 等于 200 时，就是接口正常返回了数据，才能进行 Model 解析：</p>
+<p><img src="/images/201611/Snip20161129_15.png" alt=""></p>
+<p>这个子类来处理 Model 解析的，为了方便，提供了 keypath 的概念：</p>
+<p><img src="/images/201611/Snip20161129_11.png" alt=""></p>
+<p>这是处理逻辑，这个使用的是我之前写的 JOSN 转 Model 的小框架，使用方式可参考我的<a href="https://github.com/debugly/JSONUtil" target="_blank" rel="noopener">开源项目</a>：</p>
+<p><img src="/images/201611/Snip20161129_12.png" alt=""></p>
+<p>这里选择这个小框架是因为他是我自己写的，非常小众化，加上目前也没什么问题，<code>最大的好处是 SDK 不会造成依赖</code>！假如使用开源的 Mantle 的话就很容易和嵌入的 App造成冲突，不凑巧的是 App 修改了里面的逻辑，这就更糟糕了。</p>
+<p>到此，解析响应数据这块就重构完了，好处是由底层完成，上层不必关系这个过程；还有扩展性比较强，未来注定还会有一次重构：将网络请求和图片请求统一！那时就可以再写个 SLNHTTPResponseParser 的子类处理图片就好了，想想都觉得不错呢！感谢 AFNetworking 作者提供的好思路！</p>
+<h2 id="重构调用方式，减少不必要的方法"><a href="#重构调用方式，减少不必要的方法" class="headerlink" title="重构调用方式，减少不必要的方法"></a>重构调用方式，减少不必要的方法</h2><p>这个问题是耐人寻味的，我的目标是写一个方法，就能够实现发送请求，而不是一个参数的差异就要为之写个方法，如果在加上普通请求的类型（GET，POST），方法数就要乘以 2 了！这简直是灾难，回想下我刚才举例那个请求吧，共有 6 个参数，我不能保证这 6 个必须的有几个，我也不想就提供一个带 6 个参数的方法，那样失去了灵活性!</p>
+<p>解决这个问题的时候我是有灵感的，其实重构之前灵感就有了，否则我也不会去重构了；因为去年我就做过类似的事情，那个时候我还在创业公司做项目，这是使用的方式：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///Make 这个接口需要的参数，内部有签名</span></span><br><span class="line"><span class="built_in">NSDictionary</span> *paramDic = MakeHttpParam(^(<span class="built_in">NSMutableDictionary</span> *<span class="keyword">const</span> make) &#123;</span><br><span class="line">        [make setObject:phone forKey:<span class="string">@"phone"</span>];</span><br><span class="line">        [make setObject:type forKey:<span class="string">@"template"</span>];</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">///传入签过名的参数，发送请求</span></span><br><span class="line">[<span class="keyword">self</span> PostPath:<span class="string">@"/mobile/sendmsg"</span> parems:paramDic SuccBlock:^(<span class="built_in">NSDictionary</span> * json) &#123;</span><br><span class="line">    <span class="keyword">if</span> (succBlock) &#123;</span><br><span class="line">        succBlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125; FailedBlock:^(<span class="built_in">NSError</span> *error, <span class="keyword">id</span> resultJson) &#123;</span><br><span class="line">    <span class="keyword">if</span> (errorBlock) &#123;</span><br><span class="line">        errorBlock(error);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<p>这里的 MakeHttpParam 是方便构建请求参数的，为何这么写？是因为方便，MakeHttpParam 内部会将参数按照规则进行一次签名，然后返回，因此 paramDic 就是处理好的参数字典，可直接用于网络请求！其实这么处理的思路也不是我凭空想象出来的，是我在使用 Masonry 的过程中，学习到的，稍微修改了下而已，这里也要感谢 Masonry 作者提供的好思路！</p>
+<p>我简单总结了下，只要满足这样一个条件就可以使用采用这个思路：</p>
+<blockquote>
+<p>block 里需要提供一个 maker，这个 maker 能够处理原本通过形参传递进来的参数！</p>
+</blockquote>
+<p>因此我们来看下 SLNetworkService 满足这个条件吗？哈哈，满足，因为 SLNetworkService 提供的这些方法的参数最终都传给了 SLNetworkRequest ！所以这个 maker 就找了，就是 SLNetworkRequest ！</p>
+<p>思路有了，剩下的都是体力活了，把之前的 Simple，JOSN 类别都删了，然后创建一个 Maker 的类别，同样为了方便使用额外提供了 GET 和 POST:</p>
+<p><img src="/images/201611/Snip20161129_13.png" alt=""></p>
+<p>因此 Service 层的调用方式就改成了这样：</p>
+<p><img src="/images/201611/Snip20161129_14.png" alt=""></p>
+<p>这样一来，就算是再多的参数，不管哪个参数有或者没有，都可以在这个 block 里完成，使用这中方式写了几个请求之后发现这统统这不都是对网络请求的配置么！不知道你有这个感觉没？</p>
+<p>本次对网络请求的重构就到这里啦，如有问题请留言给我。下次网络重构的内容可能是：</p>
+<blockquote>
+<p><strong>图片请求收入 SLNetwork 麾下，彻底实现网络请求大一统。</strong></p>
+</blockquote>
+</section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2016/11/28-qf-sdk-introduction.html">什么是千帆直播 SDK</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2016/11/30-qfsdk-issue-timestamp.html">千帆 SDK Issue: TimeStamp</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url("' + banner + '")'
+      })
+    } else {
+      var url = 'http://debugly.cn/2016/11/28-qfsdk-refactor-network.html';
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/404.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/404.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "千帆 SDK Refactor: NetWork",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

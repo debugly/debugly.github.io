@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content="U盘安装 macOS,Sierra,Mac PE FireWolf,许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      使用 U 盘安装 macOS Sierra | Matt Reach
+    
+  </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>使用 U 盘安装 macOS Sierra</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#macOS" >
+    <span class="tag-code">macOS</span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2017-06-19</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+      
+    <section class="markdown-content"><p>由于 Mac 无法进入系统，已经分析出了原因 — 磁盘爆满的缘故，因此就想通过进入 PE 的方式，删除掉无用的文件，这样理论上就应该能够顺利进入系统了！</p>
+<h2 id="刻盘进-PE"><a href="#刻盘进-PE" class="headerlink" title="刻盘进 PE"></a>刻盘进 PE</h2><p>在大学时期曾用 PE 装过 Windows，只不过几年不弄过了，于是就去网上下了 <code>大白菜 PE</code>，然后刻成启动盘，然后开始进入 PE 啦！在 Window 上进 PE 要按下 delete，然后选择从 U 盘启动，而 macOS 则是开机时按下 Option 键，然后就会出现选择启动盘 :</p>
+<p>开机前插上 U 盘</p>
+<p><img src="/images/201706/4.JPG" alt=""></p>
+<p>按住 Option 开机</p>
+<p><img src="/images/201706/5.JPG" alt=""></p>
+<p>PE 是 Win8 系统</p>
+<p><img src="/images/201706/6.JPG" alt=""></p>
+<p>可惜进入后无法识别苹果分区</p>
+<p><img src="/images/201706/7.JPG" alt=""></p>
+<p>安装识别苹果分区软件</p>
+<p><img src="/images/201706/8.JPG" alt=""></p>
+<p>然并卵，高版本的系统都是逻辑分区，所以无法识别！！</p>
+<h2 id="Mac-PE"><a href="#Mac-PE" class="headerlink" title="Mac PE"></a>Mac PE</h2><p>网上继续搜寻了一番，发现还有个办法可行，那就是搞个 Mac PE 来识别苹果分区，因为 Mac PE 是使用 macOS 做出来的，所以天然性的就具备识别苹果分区的能力了！啥也不说了，开始装 Mac PE 了:</p>
+<p>首先下载镜像文件，google 才能找到官网，百度根本找不到，唉，不说了，去下载吧:</p>
+<p><a href="https://www.firewolf.science/firewolf-os-x-pe-v7/download-firewolf-os-x-pe-v7/" target="_blank" rel="noopener">FireWolf OS X PE V7.0 Download Center</a></p>
+<p>Mac 上使用磁盘工具恢复到 U 盘就行了！同样的开机按住 Option 选择 FireWolf 盘符就行了，当时没拍照，直接看下进去后的情况吧 :</p>
+<p><img src="/images/201706/9.JPG" alt=""></p>
+<p>启动后我也傻眼了，妈的磁盘是加密的，虽然识别了，但都是加密的文件，备份了也没啥用。新亏我摸索到了方法，找到磁盘实用工具，选择 <code>从 Time Machine 恢复</code></p>
+<p><img src="/images/201706/10.JPG" alt=""></p>
+<p>一步步往下走就行了，走着走着会提示输入密码，因为解密磁盘需要权限，解密后会去搜索备份，结果当然搜不出来了，不过这时文件已经全部解密了！看后面的文件夹名字 : <code>xuqianlong</code></p>
+<p><img src="/images/201706/11.JPG" alt=""></p>
+<p>这下以为总算可以了呢，唉，fuck 了，文件是只读的，不能删除！！！好吧，能解密就谢天谢地了，我用移动硬盘copy下资料吧！资料备份后我就放心了，实现是没别的办法了，我选择了重做系统！</p>
+<h2 id="刻盘装-Mac-系统"><a href="#刻盘装-Mac-系统" class="headerlink" title="刻盘装 Mac 系统"></a>刻盘装 Mac 系统</h2><p>若是刻录一个 Windows 的启动盘很简单，很容易就能下到 ios 镜像文件，可是由于苹果官方现在只提供了 macOS Sierra 的升级程序，而没提供完整的镜像，想要全新安装的话，只能自己去制作一个 macOS Sierra 的 U 盘启动盘/安装盘了。没有别的办法先下载安装器吧，然后再想办法恢复到 U 盘，这是 <a href="https://itunes.apple.com/us/app/macos-sierra/id1127487414?mt=12" target="_blank" rel="noopener">macOS Sierra</a> 下载地址，打开 AppStore 下载即可</p>
+<p><img src="/images/201706/12-0.jpeg" alt=""></p>
+<p>共 4.96GB，网速慢的话，需要等一阵子了，下载完毕后，你会发现 Launchpad 多出一个 <code>安装 macOS Sierra</code>。</p>
+<p><img src="/images/201706/12-1.png" alt=""></p>
+<p>然后插上 U 盘，最好是 3.0 的，这样会快些，打开磁盘工具，将其抹掉，格式化为 Mac OS 扩展 （日志式） ，命名为 <code>Sierra</code>，然后打开终端执行以下命令 :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /Applications/Install\ macOS\ Sierra.app/Contents/Resources/createinstallmedia --volume /Volumes/Sierra --application /Applications/Install\ macOS\ Sierra.app --nointeraction</span><br></pre></td></tr></table></figure>
+<p>前面是安装器执行文件路径，通过 volume 参数指定安装路径，这里指定 U 盘 : <code>/Volumes/Sierra</code>，通过 application 参数指定安装程序，在输入以上命令后，执行过程如下 :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Erasing Disk: 0%... 10%... 20%... 30%...100%...</span><br><span class="line">Copying installer files to disk... //这一步会执行好长时间</span><br><span class="line">Copy complete.</span><br><span class="line">Making disk bootable...</span><br><span class="line">Copying boot files...</span><br><span class="line">Copy complete.</span><br><span class="line">Done.</span><br></pre></td></tr></table></figure>
+<p>看到 Done 之后，就可以了，你会发现 U 盘名称变为了 <code>Install macOS Sierra</code>，种种迹象表明 U 盘刻录成功了，可以去装机了，按住 Option 开机吧 :</p>
+<p>哇咔咔，选择从 <code>Install macOS Sierra</code> 启动！</p>
+<p><img src="/images/201706/12.JPG" alt=""></p>
+<p>等待这个进度条走完</p>
+<p><img src="/images/201706/13.JPG" alt=""></p>
+<p>好不激动么，选择简体中文</p>
+<p><img src="/images/201706/14.JPG" alt=""></p>
+<p>选择安装 macOS</p>
+<p><img src="/images/201706/15.JPG" alt=""></p>
+<p>继续吧</p>
+<p><img src="/images/201706/16.JPG" alt=""></p>
+<p>选择 MBP 的硬盘<br><img src="/images/201706/17.JPG" alt=""></p>
+<p>不行，没空间了，所以返回去，找到磁盘工具，格式化硬盘</p>
+<p><img src="/images/201706/18.JPG" alt=""></p>
+<p>抹掉就行了</p>
+<p><img src="/images/201706/19.JPG" alt=""></p>
+<p>这些可干净了，啥也没了</p>
+<p><img src="/images/201706/20.JPG" alt=""></p>
+<p>继续安装</p>
+<p><img src="/images/201706/21.JPG" alt=""></p>
+<p>说是7分钟，实际要长些，主要是我 U 盘不是 3.0 的，拷贝文件速度慢</p>
+<p><img src="/images/201706/22.JPG" alt=""></p>
+<p>还有 1 分钟</p>
+<p><img src="/images/201706/23.JPG" alt=""></p>
+<p>重启是正常的，看来就快好了</p>
+<p><img src="/images/201706/24.JPG" alt=""></p>
+<p>选择中国</p>
+<p><img src="/images/201706/25.JPG" alt=""></p>
+<p>选择 WiFi</p>
+<p><img src="/images/201706/26.JPG" alt=""></p>
+<p>不用传输了</p>
+<p><img src="/images/201706/27.JPG" alt=""></p>
+<p>设置下 iCloud</p>
+<p><img src="/images/201706/28.JPG" alt=""></p>
+<p>选择时区</p>
+<p><img src="/images/201706/29.JPG" alt=""></p>
+<p>哇咔咔，进来了！！！好熟悉的桌面-内华达山脉</p>
+<p><img src="/images/201706/30.JPG" alt=""></p>
+<p>刚格式化的时候可用空间是 249G，现在是 239G，看来系统占用了 10G。</p>
+<p><img src="/images/201706/31.JPG" alt=""></p>
+<h1 id="完"><a href="#完" class="headerlink" title="完"></a>完</h1><p>使用 U 盘安装系统或者安装 Mac PE 的前提都是要有个 Mac 才行，这样才能做出启动盘来，这对于很多用户而言是不太容易满足的，所以最好别让我们的 Mac 挂掉，省得如此麻烦，特别建议和我一样使用 256 G 磁盘的用户，多给系统预留一些空间，至少 20G 左右，最好是买个移动做下日常硬盘备份，才不会出现我今天的悲剧! 当磁盘空间小时，Mac 经常弹出来一个提示让我清理，我没有去深度清理，我记得我好像剩下 13G 左右，现在想来还挺后悔的，要不然就不用在这折腾了！</p>
+</section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2017/06/18-my-mbp-adversity.html">Fuck，Mac 关机后再也无法启动</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2017/06/20-update-ruby-use-rvm.html">使用 RVM 更新 Ruby 版本</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url("' + banner + '")'
+      })
+    } else {
+      var url = 'http://debugly.cn/2017/06/19-install-sierra.html';
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/404.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/404.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "使用 U 盘安装 macOS Sierra",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
