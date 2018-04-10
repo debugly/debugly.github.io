@@ -496,3 +496,37 @@ str="1234444 +8000"
 str1=${str% *}
 ```
 [https://www.cnblogs.com/zwgblog/p/6031256.html](https://www.cnblogs.com/zwgblog/p/6031256.html)
+
+# Node
+
+- 安装依赖库
+
+```
+hexo d -g
+ERROR Deployer not found: git
+///解决方法：
+npm install --save hexo-deployer-git
+```
+
+- 更新依赖库
+
+```
+bogon:debugly xuqianlong$ npm update
++ hexo@3.7.1
+added 12 packages, removed 79 packages and updated 13 packages in 9.089s
+   ╭─────────────────────────────────────╮
+   │                                     │
+   │   Update available 5.5.1 → 5.8.0    │
+   │     Run npm i -g npm to update      │
+   │                                     │
+   ╰─────────────────────────────────────╯
+```
+
+
+# Hexo
+
+- 预览 : `hexo server`，简写 `hexo s`
+- 生成 : `hexo generate`，简写 `hexo g`
+- 发布 : `hexo deploy`，简写 `hexo d`
+- 清理 : `hexo clean`
+
