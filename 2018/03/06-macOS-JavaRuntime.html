@@ -140,28 +140,33 @@
     <section class="markdown-content"><blockquote>
 <p>在 macOS 上配置 JRE.</p>
 </blockquote>
-<p>我也记不清楚之前本机的 Java 环境是否是配置好了，昨天更新了 macOS 之后，今天想装个 Jenkins 完下，结果在运行 Jenkins 的时候发现 <strong>No Java runtime present, requesting install.</strong></p>
-<h2 id="分析问题"><a href="#分析问题" class="headerlink" title="分析问题"></a>分析问题</h2><p>点击 <strong>系统偏好设置</strong> 里的 Java 图标</p>
+<p>我也记不清楚之前本机的 Java 环境是否是配置好了，昨天更新了 macOS 之后，今天想装个 Jenkins 玩下，结果在运行 Jenkins 的时候发现 <strong>No Java runtime present, requesting install.</strong></p>
+<h2 id="查看-Java-环境"><a href="#查看-Java-环境" class="headerlink" title="查看 Java 环境"></a>查看 Java 环境</h2><p><img src="/images/201803/0.png" alt=""></p>
+<p>如果看到需要安装的话，择说明没有 Java 环境，需要配置 JRE 了。</p>
+<h2 id="安装-JRE"><a href="#安装-JRE" class="headerlink" title="安装 JRE"></a>安装 JRE</h2><p><em>JRE : Jave Runtime Environment，即运行 Java程序的环境。</em></p>
+<ul>
+<li>点击 <strong>系统偏好设置</strong> 里的 Java 图标</li>
+</ul>
 <p><img src="/images/201803/1.png" alt=""></p>
 <p>如果没有这个图标或者点击后没有出来 <strong>Java 控制面板</strong></p>
 <p><img src="/images/201803/2.png" alt=""></p>
 <p>那就需要去 oracle 下载安装 JRE <a href="http://www.oracle.com/technetwork/java/javase/downloads/jre9-downloads-3848532.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/java/javase/downloads/jre9-downloads-3848532.html</a>；下载 dmg 包就行，需要选中 Accept License Agreement !</p>
 <p><img src="/images/201803/3.png" alt=""></p>
 <p>下载完成，双击一路安装即可！</p>
-<p>本以为这样就行了，其实不行！</p>
-<h2 id="定位问题"><a href="#定位问题" class="headerlink" title="定位问题"></a>定位问题</h2><p>查一查 java 的真实身份吧：</p>
+<p>本以为这样就行了，其实不行，安装完成后 <strong>Java 控制面板</strong> 到是有了！</p>
+<h2 id="查找问题"><a href="#查找问题" class="headerlink" title="查找问题"></a>查找问题</h2><p>既然 <strong>Java 控制面板</strong> 里显示了 java 环境了，那么肯定是环境已经有了，只不过命令行里使用的时候没找到而已，这好办，查一查 java 的真实身份吧：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">which java</span><br><span class="line">/usr/bin/java</span><br><span class="line">ls -al /usr/bin/java</span><br><span class="line">lrwxr-xr-x  1 root  wheel  74 11 28 23:06 /usr/bin/java -&gt; /System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java</span><br></pre></td></tr></table></figure>
 <p>这说明了 java 命令搜索路径是 <strong>/usr/bin/java</strong> 并且这只是个替身，原身是 <em>/System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java</em> ！！！</p>
 <p>如下图:</p>
 <p><img src="/images/201803/4.png" alt=""></p>
 <p>原身 JavaVM.framework:</p>
 <p><img src="/images/201803/6.png" alt=""></p>
-<p>这个 JavaVM.framework 不是我们安装的，好像是苹果自带的，我们刚才装的那个 JRE 其实是在这里:</p>
-<p><img src="/images/201803/5.png" alt=""></p>
-<p>再回过头检查了下，<strong>发现 Desktop 这里的路径跟苹果自带的 JRE 路径不一样</strong>！！</p>
+<p>这个 JavaVM.framework 不是我们安装的，好像是苹果自带的！！再回过头检查了下，<strong>发现 Desktop 这里的路径跟苹果自带的 JRE 路径不一样</strong>，这个路径是安装过 Oracle JRE 的路径！！</p>
 <p><img src="/images/201803/7.png" alt=""></p>
-<p>因此决定将苹果自带的 JRE 修改为我们自己装的这个，原本想着将这个替身直接改为我们安装的这个JRE里的java，可是很遗憾，对于高版本的 macOS 而言 /usr/bin 目录没有修改权限，想拥有权限有些麻烦，这里不在介绍。所以换个思路去解决。</p>
-<p>我们知道命令行输入的命令查找顺序是按照设置PATH里设置的路径查找的，因此可以从 PATH 入手，先来看下完整的 PATH 搜索路径:</p>
+<p>目录结构如下图:</p>
+<p><img src="/images/201803/5.png" alt=""></p>
+<p>因此解决方案就是将苹果自带的 JRE 修改为 Oracle 的 JRE，原本想着将这个替身直接改为我们安装的这个JRE里的java，可是很遗憾，对于高版本的 macOS 而言 /usr/bin 目录没有修改权限，想拥有权限有些麻烦，这里不再介绍。所以换个思路去解决。</p>
+<p>我们知道命令行输入的命令查找顺序是按照设定的 PATH 路径查找的，因此可以从 PATH 入手，先来看下完整的 PATH 搜索路径:</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bogon:~ xuqianlong$ echo $PATH</span><br><span class="line">/Users/xuqianlong/.rvm/gems/ruby-2.2.6/bin:/Users/xuqianlong/.rvm/gems/ruby-2.2.6@global/bin:/Users/xuqianlong/.rvm/rubies/ruby-2.2.6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/xuqianlong/.rvm/bin:/usr/local/ssl</span><br></pre></td></tr></table></figure>
 <p>由于是按顺序查找的，所以只要在 <strong>/usr/bin</strong> 之前搜索到就不会使用默认的苹果指定的 JRE 了，经过仔细查看发现 <strong>/usr/local/bin</strong> 在 <strong>/usr/bin</strong> 之前搜索，所以我们可以在 <strong>/usr/local/bin</strong> 里建个 Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java 的替身！</p>
 <h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><p>上面讨论了解决方案，下面实施下：</p>
