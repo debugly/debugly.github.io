@@ -183,6 +183,13 @@
 <h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><p>这是一个强大的 shell 命令，可将输出结果作为另一个程序的输入，符号 : “|“ ，比如查看当前目录，并且按字母顺序排列：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ls | sort</span><br><span class="line"></span><br><span class="line">Applications</span><br><span class="line">Desktop</span><br><span class="line">Documents</span><br><span class="line">Downloads</span><br><span class="line">GitBook</span><br><span class="line">Library</span><br><span class="line">Movies</span><br><span class="line">Music</span><br><span class="line">Pictures</span><br><span class="line">Public</span><br><span class="line">apache-tomcat-7.0.64</span><br><span class="line">bin</span><br><span class="line">cstudy</span><br><span class="line">cworkspace</span><br></pre></td></tr></table></figure>
 <p>可以看出先排大写字母，后排小写字母，原因是大写字母的 ASCLL 比小写的小了 32，即：A + 32 = a ,A = 65.</p>
+<h2 id="cp"><a href="#cp" class="headerlink" title="cp"></a>cp</h2><ul>
+<li>复制文件，如果目标存在则会覆盖; 将 debugly 目录下的 init.sh 文件拷贝到 d2 目录下，debugly、d2 都在当前执行目录下; d2 文件夹必须存在！否则 cp 之后会生成一个 d2 的可执行文件！其内容是 init.sh 文件的内容。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp debugly/init.sh d2</span><br></pre></td></tr></table></figure>
+<p>复制文件夹，如果目标存在则会覆盖; 将 debugly 目录下的所有文件都拷贝到 d2 目录下；d2 文件夹必须存在！否则 cp 执行失败。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -r debugly/init.sh d2</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>cp 命令不会复制 .开头的文件或者文件夹，除了 “.” 和 “..” 和 “.DS_Store” 这三个之外！一般情况下这是我们想要的结果。</p>
 <h2 id="scp"><a href="#scp" class="headerlink" title="scp"></a>scp</h2><ul>
 <li><p>本机复制到远程服务器</p>
 <ul>
@@ -221,6 +228,11 @@
 <p>使用 HEADER 请求，仅返回 http 头部信息：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">curl -I http://debugly.cn/dist/json/test.json</span><br><span class="line"></span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Server: GitHub.com</span><br><span class="line">Content-Type: application/json; charset=utf-8</span><br><span class="line">Last-Modified: Thu, 03 Aug 2017 15:36:20 GMT</span><br><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Expires: Sat, 05 Aug 2017 08:58:43 GMT</span><br><span class="line">Cache-Control: max-age=600</span><br><span class="line">X-GitHub-Request-Id: C99E:118EE:5EABC0:656C5C:5985866B</span><br><span class="line">Content-Length: 6257</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">Date: Sat, 05 Aug 2017 08:51:00 GMT</span><br><span class="line">Via: 1.1 varnish</span><br><span class="line">Age: 136</span><br><span class="line">Connection: keep-alive</span><br><span class="line">X-Served-By: cache-nrt6126-NRT</span><br><span class="line">X-Cache: HIT</span><br><span class="line">X-Cache-Hits: 1</span><br><span class="line">X-Timer: S1501923060.014934,VS0,VE1</span><br><span class="line">Vary: Accept-Encoding</span><br><span class="line">X-Fastly-Request-ID: 0dc32470ef01fa9b0672d3d38edc904b9836debc</span><br></pre></td></tr></table></figure>
 <p>这个文档有详细的介绍：<a href="https://curl.haxx.se/download.html" target="_blank" rel="noopener">https://curl.haxx.se/download.html</a></p>
+<ul>
+<li>下载文件</li>
+</ul>
+<p>在当前目录下递归创建 themes/hexo-theme-yaris 目录，然后下载zip包，解压到指定文件夹后重命名</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p "./themes/hexo-theme-yaris" &amp;&amp; curl -L https://codeload.github.com/debugly/hexo-theme-yaris/zip/master | tar xj -C "./themes/hexo-theme-yaris" --strip-components 1</span><br></pre></td></tr></table></figure>
 <h1 id="chown"><a href="#chown" class="headerlink" title="chown"></a>chown</h1><p>更新软件包的时候可能没有权限，需要修改权限，可使用 chown 给用户添加 ownership 权限；</p>
 <p><code>sudo chown -R $(whoami) /usr/local</code></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">qianlongxu:myblog qianlongxu$ brew update</span><br><span class="line">Error: /usr/local is not writable. You should change the ownership</span><br><span class="line">and permissions of /usr/local back to your user account:</span><br><span class="line">	sudo chown -R $(whoami) /usr/local</span><br></pre></td></tr></table></figure>
@@ -252,7 +264,12 @@
 <li><p>git clone</p>
   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone -b $branch $repos $WORKSPACE</span><br><span class="line">git branch --set-upstream-to=origin/$branch $branch</span><br><span class="line">git submodule update --init --recursive</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>git -C $path</p>
+<p>  当执行命令的目录和 git 仓库目录不是同一个的话，可以使用 <strong>-C</strong> 指定仓库目录</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">localPath="../.hexo-theme-yaris"</span><br><span class="line">alias gitC='git -C $localPath'</span><br><span class="line"></span><br><span class="line">gitC add *</span><br><span class="line">gitC commit -m "your msg"</span><br><span class="line">gitC push origin master</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
+<h1 id="date"><a href="#date" class="headerlink" title="date"></a>date</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span>(date +'Theme updated:%Y-%m-%d %H:%M:%S')</span><br><span class="line">Theme updated:2018-04-16 17:52:24</span><br></pre></td></tr></table></figure>
 <h1 id="du"><a href="#du" class="headerlink" title="du"></a>du</h1><ul>
 <li>获取文件大小 :<br>  <code>IPA_Size=$(du -sm $IPA_Path | awk &#39;{print $1}&#39;)</code></li>
 </ul>
