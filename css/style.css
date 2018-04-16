@@ -783,7 +783,6 @@ h2.article-head {
   background: #f8f8f8;
   padding: 1.5em;
   height: 100%;
-  max-width: 980px;
   box-sizing: border-box;
 }
 .author-content .head {
@@ -821,6 +820,8 @@ h2.article-head {
   transform: translateY(-40px);
   transition: all 1s;
   transition-delay: 0.15s;
+  max-width: 980px;
+  margin: 0 auto;
 }
 .author-content .detail p {
   line-height: 2em;
