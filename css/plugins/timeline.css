@@ -218,9 +218,12 @@ body {
   box-shadow: 0 3px 0 #f0ca45;
 }
 
-.cd-timeline-content p, .cd-timeline-content .cd-read-more, .cd-timeline-content .cd-date {
-  font-size: 13px;
-  font-size: 0.8125rem;
+.cd-timeline-content p, .cd-timeline-content .cd-date {
+  font-size: 1rem;
+}
+
+.cd-timeline-content .cd-read-more{
+  font-size: 0.8rem;
 }
 .cd-timeline-content .cd-read-more, .cd-timeline-content .cd-date {
   display: inline-block;
@@ -228,10 +231,11 @@ body {
 .cd-timeline-content p {
   margin: 1em 0;
   line-height: 1.6;
+  word-break: break-all;
 }
 .cd-timeline-content .cd-read-more {
   float: right;
-  padding: .8em 1em;
+  padding: .6em 0.8em;
   background: #acb7c0;
   color: #ffffff;
   border-radius: 0.25em;
