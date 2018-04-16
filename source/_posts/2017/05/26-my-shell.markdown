@@ -191,6 +191,22 @@ cworkspace
 
 可以看出先排大写字母，后排小写字母，原因是大写字母的 ASCLL 比小写的小了 32，即：A + 32 = a ,A = 65.
 
+## cp
+
+- 复制文件，如果目标存在则会覆盖; 将 debugly 目录下的 init.sh 文件拷贝到 d2 目录下，debugly、d2 都在当前执行目录下; d2 文件夹必须存在！否则 cp 之后会生成一个 d2 的可执行文件！其内容是 init.sh 文件的内容。
+
+```shell
+cp debugly/init.sh d2
+```
+
+复制文件夹，如果目标存在则会覆盖; 将 debugly 目录下的所有文件都拷贝到 d2 目录下；d2 文件夹必须存在！否则 cp 执行失败。
+
+```shell
+cp -r debugly/init.sh d2
+```
+
+**注：**cp 命令不会复制 .开头的文件或者文件夹，除了 "." 和 ".." 和 ".DS_Store" 这三个之外！一般情况下这是我们想要的结果。
+
 ## scp
 
 - 本机复制到远程服务器
@@ -299,6 +315,14 @@ Vary: Accept-Encoding
 X-Fastly-Request-ID: 0dc32470ef01fa9b0672d3d38edc904b9836debc
 ```
 这个文档有详细的介绍：[https://curl.haxx.se/download.html](https://curl.haxx.se/download.html)
+
+- 下载文件
+
+在当前目录下递归创建 themes/hexo-theme-yaris 目录，然后下载zip包，解压到指定文件夹后重命名
+
+```shell
+mkdir -p "./themes/hexo-theme-yaris" && curl -L https://codeload.github.com/debugly/hexo-theme-yaris/zip/master | tar xj -C "./themes/hexo-theme-yaris" --strip-components 1
+```
 
 # chown
 
@@ -424,6 +448,24 @@ and permissions of /usr/local back to your user account:
 	git branch --set-upstream-to=origin/$branch $branch
 	git submodule update --init --recursive
 	```
+- git -C $path
+    
+    当执行命令的目录和 git 仓库目录不是同一个的话，可以使用 **-C** 指定仓库目录
+    
+    ```shell
+    localPath="../.hexo-theme-yaris"
+    alias gitC='git -C $localPath'
+    
+    gitC add *
+    gitC commit -m "your msg"
+    gitC push origin master
+    ```
+# date
+
+```shell
+$(date +'Theme updated:%Y-%m-%d %H:%M:%S')
+Theme updated:2018-04-16 17:52:24
+```
 
 # du
 
