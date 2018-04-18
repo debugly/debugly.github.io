@@ -7,11 +7,19 @@ tags: macOS
 
 > 在 macOS 上配置 JRE.
 
-我也记不清楚之前本机的 Java 环境是否是配置好了，昨天更新了 macOS 之后，今天想装个 Jenkins 完下，结果在运行 Jenkins 的时候发现 **No Java runtime present, requesting install.**
+我也记不清楚之前本机的 Java 环境是否是配置好了，昨天更新了 macOS 之后，今天想装个 Jenkins 玩下，结果在运行 Jenkins 的时候发现 **No Java runtime present, requesting install.**
 
-## 分析问题
+## 查看 Java 环境
 
-点击 **系统偏好设置** 里的 Java 图标
+![](/images/201803/0.png)
+
+如果看到需要安装的话，择说明没有 Java 环境，需要配置 JRE 了。
+
+## 安装 JRE
+
+*JRE : Jave Runtime Environment，即运行 Java程序的环境。*
+
+- 点击 **系统偏好设置** 里的 Java 图标
 
 ![](/images/201803/1.png)
 
@@ -25,11 +33,11 @@ tags: macOS
 
 下载完成，双击一路安装即可！
 
-本以为这样就行了，其实不行！
+本以为这样就行了，其实不行，安装完成后 **Java 控制面板** 到是有了！
 
-## 定位问题
+## 查找问题
 
-查一查 java 的真实身份吧：
+既然 **Java 控制面板** 里显示了 java 环境了，那么肯定是环境已经有了，只不过命令行里使用的时候没找到而已，这好办，查一查 java 的真实身份吧：
 
 ```shell
 which java
@@ -48,17 +56,17 @@ lrwxr-xr-x  1 root  wheel  74 11 28 23:06 /usr/bin/java -> /System/Library/Frame
 
 ![](/images/201803/6.png)
 
-这个 JavaVM.framework 不是我们安装的，好像是苹果自带的，我们刚才装的那个 JRE 其实是在这里:
-
-![](/images/201803/5.png)
-
-再回过头检查了下，**发现 Desktop 这里的路径跟苹果自带的 JRE 路径不一样**！！
+这个 JavaVM.framework 不是我们安装的，好像是苹果自带的！！再回过头检查了下，**发现 Desktop 这里的路径跟苹果自带的 JRE 路径不一样**，这个路径是安装过 Oracle JRE 的路径！！
 
 ![](/images/201803/7.png)
 
-因此决定将苹果自带的 JRE 修改为我们自己装的这个，原本想着将这个替身直接改为我们安装的这个JRE里的java，可是很遗憾，对于高版本的 macOS 而言 /usr/bin 目录没有修改权限，想拥有权限有些麻烦，这里不在介绍。所以换个思路去解决。
+目录结构如下图:
 
-我们知道命令行输入的命令查找顺序是按照设置PATH里设置的路径查找的，因此可以从 PATH 入手，先来看下完整的 PATH 搜索路径:
+![](/images/201803/5.png)
+
+因此解决方案就是将苹果自带的 JRE 修改为 Oracle 的 JRE，原本想着将这个替身直接改为我们安装的这个JRE里的java，可是很遗憾，对于高版本的 macOS 而言 /usr/bin 目录没有修改权限，想拥有权限有些麻烦，这里不再介绍。所以换个思路去解决。
+
+我们知道命令行输入的命令查找顺序是按照设定的 PATH 路径查找的，因此可以从 PATH 入手，先来看下完整的 PATH 搜索路径:
 
 ```shell
 bogon:~ xuqianlong$ echo $PATH

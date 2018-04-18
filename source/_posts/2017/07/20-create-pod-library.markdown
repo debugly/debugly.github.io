@@ -87,7 +87,7 @@ keywords: CocoaPods,podspec,library
     - NOTE  | [iOS] xcodebuild:  fatal error: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: can't open input file: /var/folders/2z/l7ftfgd54lv0_nvq7pnr_zbw0000gn/T/CocoaPods/Lint/DerivedData/App/Build/Intermediates/App.build/Release-iphonesimulator/App.build/Objects-normal/i386/App (No such file or directory)
 ```
 
-原因是 demo 里有个 SCJSONUtil.h 文件，我不小心把他导入到 SCNetworkKit.h 里了，但是 pods 检查是不会去下载 demo，所以根本找不到这个 SCJSONUtil.h 这个头文件！！！于是我删了这个头文件，接着 push 到了 github，并且修改了 tag 号！ 再次检查后发现还是这个错误，试了几次都是，我觉得不对劲，是不是走了缓存了？沿着这个思路去检查，发现果真不是每次检查都会重新下载代码的，而是读了缓存了！！！因此我删掉了缓存的代码，再次验证就通过了！ 删除之后，发现在 Copy 之前会重新下载！
+原因是 demo 里有个 SCJSONUtil.h 文件，我不小心把他导入到 SCNetworkKit.h 里了，但是 pods 检查是不会去下载 demo，所以根本找不到这个 SCJSONUtil.h 这个头文件！！！于是我删了这个头文件，接着 push 到了 github，并且修改了 tag 号！ 再次检查后发现还是这个错误，试了几次都是，我觉得不对劲，是不是走了缓存了？沿着这个思路去检查，发现果真**不是每次检查都会重新下载代码的，而是读了缓存了**！！！因此我删掉了缓存的代码，再次验证就通过了！ 删除之后，发现在 Copy 之前确实会重新下载！
 
 ```
 Downloading dependencies
@@ -242,40 +242,42 @@ end
 
 # 更新 pods 库版本
 
-你的开源库会越来越稳定，功能也更加的强大，这时就应该考虑升级下 pods 库的版本了，做法很简单：
+你的开源库会越来越稳定，功能也更加的强大，这时就应该考虑升级下 pods 库的版本了，比如要发布 1.0.1 版本了，那么可以这么操作：
 
-- 首先给仓库打个新的标签，标签名就是 pods 库的版本号，比如我的网络库升级到了 1.0.1 了，就打个 1.0.1 的 tag，然后 push 到 github ;
-- 把 podspec 文件里的版本号也更新为 1.0.1，然后推送到 cocoapods 仓库 :
+1、 将代码全部提交；因为更新pod库之前都会校验下，校验是从 github 下载的代码的。
 
-	```
-	pod trunk push SCNetworkKit.podspec 
-	Updating spec repo `master`
+2、 修改 podspec 文件里的版本号为 1.0.1；podspec 文件可以提交到 github 仓库，不提也没有关系，考虑到多个电脑工作，为了方便下次更新，所以提交到仓库里，不需要提交是因为已经 push 到 cocoapods 仓库里了！
+
+3、 基于最新提交记录给仓库打个 1.0.1 的新 tag；tag名要跟刚才修改的 podspec 文件里的版本号一致！
+
+```shell 
+pod trunk push SCNetworkKit.podspec 
+Updating spec repo `master`
 	
-	CocoaPods 1.3.0.beta.3 is available.
-	To update use: `sudo gem install cocoapods --pre`
-	[!] This is a test version we'd love you to try.
+CocoaPods 1.3.0.beta.3 is available.
+To update use: `sudo gem install cocoapods --pre`
+[!] This is a test version we'd love you to try.
 	
-	For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3
+For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3
 	
-	Validating podspec
-	 -> SCNetworkKit (1.0.1)
+Validating podspec
+ -> SCNetworkKit (1.0.1)
 	
-	Updating spec repo `master`
+Updating spec repo `master`
 	
-	CocoaPods 1.3.0.beta.3 is available.
-	To update use: `sudo gem install cocoapods --pre`
-	[!] This is a test version we'd love you to try.
+CocoaPods 1.3.0.beta.3 is available.
+To update use: `sudo gem install cocoapods --pre`
+[!] This is a test version we'd love you to try.
 	
-	For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3
+For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3
 	
 	
-	--------------------------------------------------------------------------------
-	 🎉  Congrats
+--------------------------------------------------------------------------------
+ 🎉  Congrats
 	
-	 🚀  SCNetworkKit (1.0.1) successfully published
-	 📅  July 21st, 00:16
-	 🌎  https://cocoapods.org/pods/SCNetworkKit
-	 👍  Tell your friends!
-	--------------------------------------------------------------------------------
-	```
-- 最后把 podspec 文件的更改提交到 github 仓库，不提也没有关系，只是为了方便下次修改而已，因为已经 push 到 cocoapods 仓库里了！
+ 🚀  SCNetworkKit (1.0.1) successfully published
+ 📅  July 21st, 00:16
+ 🌎  https://cocoapods.org/pods/SCNetworkKit
+ 👍  Tell your friends!
+--------------------------------------------------------------------------------
+```
