@@ -121,6 +121,56 @@
   
     <article class="article-card">
       <h2 class="article-head">
+        <a href="/2015/10/26-UITableViewCell-Edit.html">UITableViewCell 编辑模式</a>
+      </h2>
+      <p class="article-date">October 26, 2015</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>UITableView 提供了很多很方便的方法以至于我们有的时候不能完全记住他的代理方法，这里说下他的编辑模式；项目里用到了编辑，在踩过一些坑之后，对 UITableView 的编辑更加的清晰了，这里简单记录下。</p>
+<h2 id="开启编辑模式"><a href="#开启编辑模式" class="headerlink" title="开启编辑模式"></a>开启编辑模式</h2><ul>
+<li>这个很简单了，设置 UITableView 的编辑属性即可，方法则提供了动画选项：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// default is NO. setting is not animated.</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">getter</span>=isEditing) <span class="built_in">BOOL</span> editing;</span><br><span class="line">- (<span class="keyword">void</span>)setEditing:(<span class="built_in">BOOL</span>)editing animated:(<span class="built_in">BOOL</span>)animated;</span><br></pre></td></tr></table></figure>
+<p>如果控制器是 UITableViewController ,那么可直接使用控制器的方法，而无需写一句代码，iOS 代码就是这么简单，系统为我们做了太多的东西了，点击 item 的方法也已经绑定好了！</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">self</span>.navigationItem.leftBarButtonItem = <span class="keyword">self</span>.editButtonItem;</span><br></pre></td></tr></table></figure>
+<p>editButtonItem 是控制器的属性；你可以重写这个方法，处理一些必要的操作，不过千万要记得调用 super 哦！</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UIViewController</span> (<span class="title">UIViewControllerEditing</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">getter</span>=isEditing) <span class="built_in">BOOL</span> editing;</span><br><span class="line"><span class="comment">// Updates the appearance of the Edit|Done button item as necessary. Clients who override it must call super first.</span></span><br><span class="line">- (<span class="keyword">void</span>)setEditing:(<span class="built_in">BOOL</span>)editing animated:(<span class="built_in">BOOL</span>)animated;</span><br><span class="line"><span class="comment">// Return an Edit|Done button that can be used as a navigation item's custom view. Default action toggles the editing state with animation.</span></span><br><span class="line">- (<span class="built_in">UIBarButtonItem</span> *)editButtonItem;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+        
+      </div>
+      <a class="more" href="/2015/10/26-UITableViewCell-Edit.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2015/10/15-RunLoopStudy1.html">RunLoop Study (一)</a>
+      </h2>
+      <p class="article-date">October 15, 2015</p>
+      
+        <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          前言很久之前就想写一下 RunLoop — iOS里一个很重要的概念；最近一直很忙，一拖再拖，提到拖延 — 有点像下面要说的定时器了，可以无节操的一直拖，无上限了！O(∩_∩)O~~ 终于轮到定时器了，尽管很累，还是要坚持 run 起来！这是 RunLoop 相关文章的第一篇，认真写，开个好 ...
+        
+      </div>
+      <a class="more" href="/2015/10/15-RunLoopStudy1.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
         <a href="/2015/09/27-bo-ke-ti-su-shi-yong-imageiptimya-suo-tu-pian.html">ImageOptim – 无损图片压缩工具</a>
       </h2>
       <p class="article-date">September 27, 2015</p>

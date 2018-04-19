@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content="HTTP,POST,4 种编码方式,许乾隆,Matt Reach">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      常见的 POST 请求体编码方式 | Matt Reach
+    
+  </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        <!-- /about/AAA
+          2018BBB
+          -1 -->
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>常见的 POST 请求体编码方式</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i> Tags:</span>
+
+  <a href="/tags#HTTP" >
+    <span class="tag-code">HTTP</span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2018-04-10</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+      
+    <section class="markdown-content"><blockquote>
+<p>前面介绍过了 HTTP 请求，现在看下 POST 这种请求方式，根据 HTTP 协议的规定，通过 POST 方式提交的数据必须放在请求体中，但协议没有规定数据采用什么编码方式，所以请求体的消息格式其实可以自动决定，但要让服务器能够解析才有意义。</p>
+</blockquote>
+<h1 id="请求体编码方式"><a href="#请求体编码方式" class="headerlink" title="请求体编码方式"></a>请求体编码方式</h1><p>一般情况下主流的有以下 4 种编码方式，编码方式通过 <strong>Content-Type</strong> 告知服务器 :</p>
+<ul>
+<li><p>application/x-www-form-urlencoded</p>
+<p>  如果是 HTML 里的 form 表单的话，在不设置 enctype 时，也是采用这种编码格式，key 和 value 都进行了 URL 转码，然后按照 k=v&amp;k1=v1 的形式拼接。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ts=1521518926&amp;plat=iPhone&amp;uid=sh-upeadqawgz&amp;signature=3de948ae93767a2382c6a3a4f389ca9b&amp;bundleId=com.sohu.live.demo</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>application/json</p>
+<p>  有个别情况，服务器要求我们给他 POST 过去一个 json 格式的参数，这时这种编码格式就排上用场了！还是刚才那些参数，使用这种方式编码结果如下：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;ts&quot;:1521518926,&quot;plat&quot;:&quot;iPhone&quot;,&quot;uid&quot;:&quot;sh-upeadqawgz&quot;,&quot;signature&quot;:&quot;3de948ae93767a2382c6a3a4f389ca9b&quot;,&quot;bundleId&quot;:&quot;com.sohu.live.demo&quot;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>application/x-plist</p>
+<p>这种编码其实就是按xml格式编码，特别少见，工作好几年了一次也没用过。还是刚才那些参数，使用这种方式编码结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">  &lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</span><br><span class="line">  &lt;plist version=&quot;1.0&quot;&gt;</span><br><span class="line">  &lt;dict&gt;</span><br><span class="line">  	&lt;key&gt;bundleId&lt;/key&gt;</span><br><span class="line">  	&lt;string&gt;com.sohu.live.demo&lt;/string&gt;</span><br><span class="line">  	&lt;key&gt;plat&lt;/key&gt;</span><br><span class="line">  	&lt;string&gt;iPhone&lt;/string&gt;</span><br><span class="line">  	&lt;key&gt;signature&lt;/key&gt;</span><br><span class="line">  	&lt;string&gt;3de948ae93767a2382c6a3a4f389ca9b&lt;/string&gt;</span><br><span class="line">  	&lt;key&gt;ts&lt;/key&gt;</span><br><span class="line">  	&lt;integer&gt;1521518926&lt;/integer&gt;</span><br><span class="line">  	&lt;key&gt;uid&lt;/key&gt;</span><br><span class="line">  	&lt;string&gt;sh-upeadqawgz&lt;/string&gt;</span><br><span class="line">  &lt;/dict&gt;</span><br><span class="line">  &lt;/plist&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>application/form-data</p>
+<p>  还是刚才那些参数，使用这种方式编码结果如下：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">POST /upload-file HTTP/1.1</span><br><span class="line">Host: localhost:3000</span><br><span class="line">Content-Type: multipart/form-data; charset=utf-8; boundary=0xKhTmLbOuNdArY</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Accept: */*</span><br><span class="line">User-Agent: SCNDemo/1.0 (iPhone; iOS 11.3; Scale/3.00)</span><br><span class="line">Content-Length: 448</span><br><span class="line">Accept-Language: en-us</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">--0xKhTmLbOuNdArY</span><br><span class="line">Content-Disposition: form-data; name=&quot;ts&quot;</span><br><span class="line"></span><br><span class="line">1521518926</span><br><span class="line">--0xKhTmLbOuNdArY</span><br><span class="line">Content-Disposition: form-data; name=&quot;plat&quot;</span><br><span class="line"></span><br><span class="line">iPhone</span><br><span class="line">--0xKhTmLbOuNdArY</span><br><span class="line">Content-Disposition: form-data; name=&quot;uid&quot;</span><br><span class="line"></span><br><span class="line">sh-upeadqawgz</span><br><span class="line">--0xKhTmLbOuNdArY</span><br><span class="line">Content-Disposition: form-data; name=&quot;signature&quot;</span><br><span class="line"></span><br><span class="line">3de948ae93767a2382c6a3a4f389ca9b</span><br><span class="line">--0xKhTmLbOuNdArY</span><br><span class="line">Content-Disposition: form-data; name=&quot;bundleId&quot;</span><br><span class="line"></span><br><span class="line">com.sohu.live.demo</span><br><span class="line">--0xKhTmLbOuNdArY--</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>需要提下的是 <strong>Content-Type</strong> 的值多了一个 boundary ，这个是边界的意思，用来分割参数用的，服务器端也根据这个去解析数据！</p>
+<p>再看一个上传文件的 POST 请求:</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">POST /upload-file HTTP/1.1</span><br><span class="line">Host: localhost:3000</span><br><span class="line">Content-Type: multipart/form-data; charset=utf-8; boundary=0xKhTmLbOuNdArY</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Accept: */*</span><br><span class="line">User-Agent: SCNDemo/1.0 (iPhone; iOS 11.3; Scale/3.00)</span><br><span class="line">Content-Length: 50311</span><br><span class="line">Accept-Language: en-us</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">--0xKhTmLbOuNdArY</span><br><span class="line">Content-Disposition: form-data; name=&quot;k1&quot;</span><br><span class="line"></span><br><span class="line">v1</span><br><span class="line">--0xKhTmLbOuNdArY</span><br><span class="line">Content-Disposition: form-data; name=&quot;name&quot;</span><br><span class="line"></span><br><span class="line">Matt Reach</span><br><span class="line">--0xKhTmLbOuNdArY</span><br><span class="line">Content-Disposition: form-data; name=&quot;k2&quot;</span><br><span class="line"></span><br><span class="line">v2</span><br><span class="line">--0xKhTmLbOuNdArY</span><br><span class="line">Content-Disposition: form-data; name=&quot;date&quot;</span><br><span class="line"></span><br><span class="line">2018-04-19 15:13:40 +0000</span><br><span class="line">--0xKhTmLbOuNdArY</span><br><span class="line">Content-Disposition: form-data; name=&quot;test.jpg&quot;; filename=&quot;node.jpg&quot;</span><br><span class="line">Content-Type: image/jpeg</span><br><span class="line"></span><br><span class="line">图片内容.....</span><br><span class="line">--0xKhTmLbOuNdArY--</span><br></pre></td></tr></table></figure>
+</code></pre><p>文件那块可以指定 filename 和 Content-Type ！filename 指的是上传文件的原始名称，name 是告诉服务器当做新的文件名。</p>
+</section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2018/04/09-HTTP.html">HTTP/1.1 协议简介</a>
+      </div>
+   
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url("' + banner + '")'
+      })
+    } else {
+      var url = 'http://debugly.cn/2018/04/10-HTTP-Post.html';
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/404.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/404.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "常见的 POST 请求体编码方式",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ce1d755873d77e993024",
+          client_secret: "47471beab9dc3898e0310556a7b239db624fe919"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
