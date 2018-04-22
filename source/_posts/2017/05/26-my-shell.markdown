@@ -541,29 +541,36 @@ str1=${str% *}
 
 # Node
 
-- 安装依赖库
+- 查看版本
 
-```
-hexo d -g
-ERROR Deployer not found: git
-///解决方法：
-npm install --save hexo-deployer-git
-```
-
-- 更新依赖库
-
-```
-bogon:debugly xuqianlong$ npm update
-+ hexo@3.7.1
-added 12 packages, removed 79 packages and updated 13 packages in 9.089s
-   ╭─────────────────────────────────────╮
-   │                                     │
-   │   Update available 5.5.1 → 5.8.0    │
-   │     Run npm i -g npm to update      │
-   │                                     │
-   ╰─────────────────────────────────────╯
+```shell
+bogon:debugly xuqianlong$ node -v 
+v8.9.3
+bogon:debugly xuqianlong$ npm -v
+5.5.1
 ```
 
+NPM (node package manager) 是 Nodejs 的包管理器，用于 Node 插件管理（包括安装、卸载、管理依赖等）
+
+
+- npm init  : 在当前目录下引导创建一个package.json文件，包括名称、版本、作者这些信息等
+- npm start :启动模块
+- npm ls : 查看安装的模块
+- npm uninstall <name> [-g] [--save-dev]  :  卸载插件 
+- npm update <name> [-g] [--save-dev]  : 更新插件
+- npm update [--save-dev] : 更新全部插件
+- npm help : 查看帮助
+- npm list : 查看当前目录已安装插件
+
+
+遇到过的问题:
+
+    ```
+    hexo d -g
+    ERROR Deployer not found: git
+    ///解决方法：
+    npm install --save hexo-deployer-git
+    ```
 
 # Hexo
 
@@ -572,3 +579,18 @@ added 12 packages, removed 79 packages and updated 13 packages in 9.089s
 - 发布 : `hexo deploy`，简写 `hexo d`
 - 清理 : `hexo clean`
 
+# Python
+
+- 临时文件服务器
+    
+    ```shell
+    cd test
+    python -m SimpleHTTPServer
+    Serving HTTP on 0.0.0.0 port 8000 ...
+    ```
+    
+    也可以指定端口号：
+    
+    ```shell
+    python -m SimpleHTTPServer 9090
+    ```
