@@ -19,8 +19,7 @@
   
   <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
-  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/zenburn.min.css" rel="stylesheet">
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
@@ -110,10 +109,11 @@
   <!-- Tags START -->
   
     <div class="tags">
-      <span><i class="fa fa-tags"></i> Tags:</span>
+      <span><i class="fa fa-tags"></i></span>
 
   <a href="/tags#iOS" >
-    <span class="tag-code">iOS</span>
+    <span class="tag-code">iOS
+    </span>
   </a>
 
     </div>
@@ -124,6 +124,8 @@
     <a href="javascript:;"></a>
   </div>
 </div>
+
+<div class="app-content">
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
@@ -202,7 +204,7 @@
     <!-- 二维码 END -->
     
       <!-- Gitment START -->
-      <div id="comments"></div>
+      <div id="gitment"></div>
       <!-- Gitment END -->
     
 
@@ -212,6 +214,7 @@
   
   <!-- Catalog END -->
 </main>
+</div>
 
 <script>
   (function () {
@@ -291,7 +294,7 @@
           }
         }
       })
-      gitment.render(document.getElementById('comments'))
+      gitment.render(document.getElementById('gitment'))
     }
   })();
 </script>

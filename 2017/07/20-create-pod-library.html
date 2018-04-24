@@ -19,8 +19,7 @@
   
   <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
-  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/zenburn.min.css" rel="stylesheet">
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
@@ -110,14 +109,16 @@
   <!-- Tags START -->
   
     <div class="tags">
-      <span><i class="fa fa-tags"></i> Tags:</span>
+      <span><i class="fa fa-tags"></i></span>
 
   <a href="/tags#iOS" >
-    <span class="tag-code">iOS</span>
+    <span class="tag-code">iOS,
+    </span>
   </a>
 
   <a href="/tags#CocoaPods" >
-    <span class="tag-code">CocoaPods</span>
+    <span class="tag-code">CocoaPods
+    </span>
   </a>
 
     </div>
@@ -128,6 +129,8 @@
     <a href="javascript:;"></a>
   </div>
 </div>
+
+<div class="app-content">
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
@@ -204,7 +207,7 @@
 <p>1、 将代码全部提交；因为更新pod库之前都会校验下，校验是从 github 下载的代码的。</p>
 <p>2、 修改 podspec 文件里的版本号为 1.0.1；podspec 文件可以提交到 github 仓库，不提也没有关系，考虑到多个电脑工作，为了方便下次更新，所以提交到仓库里，不需要提交是因为已经 push 到 cocoapods 仓库里了！</p>
 <p>3、 基于最新提交记录给仓库打个 1.0.1 的新 tag；tag名要跟刚才修改的 podspec 文件里的版本号一致！</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">pod trunk push SCNetworkKit.podspec </span><br><span class="line">Updating spec repo `master`</span><br><span class="line">	</span><br><span class="line">CocoaPods 1.3.0.beta.3 is available.</span><br><span class="line">To update use: `sudo gem install cocoapods --pre`</span><br><span class="line">[!] This is a test version we'd love you to try.</span><br><span class="line">	</span><br><span class="line">For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3</span><br><span class="line">	</span><br><span class="line">Validating podspec</span><br><span class="line"><span class="meta"> -&gt;</span> SCNetworkKit (1.0.1)</span><br><span class="line">	</span><br><span class="line">Updating spec repo `master`</span><br><span class="line">	</span><br><span class="line">CocoaPods 1.3.0.beta.3 is available.</span><br><span class="line">To update use: `sudo gem install cocoapods --pre`</span><br><span class="line">[!] This is a test version we'd love you to try.</span><br><span class="line">	</span><br><span class="line">For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line"> 🎉  Congrats</span><br><span class="line">	</span><br><span class="line"> 🚀  SCNetworkKit (1.0.1) successfully published</span><br><span class="line"> 📅  July 21st, 00:16</span><br><span class="line"> 🌎  https://cocoapods.org/pods/SCNetworkKit</span><br><span class="line"> 👍  Tell your friends!</span><br><span class="line">--------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure></section>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">pod trunk push SCNetworkKit.podspec </span><br><span class="line">Updating spec repo `master`</span><br><span class="line">	</span><br><span class="line">CocoaPods 1.3.0.beta.3 is available.</span><br><span class="line">To update use: `sudo gem install cocoapods --pre`</span><br><span class="line">[!] This is a test version we'd love you to try.</span><br><span class="line">	</span><br><span class="line">For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3</span><br><span class="line">	</span><br><span class="line">Validating podspec</span><br><span class="line"><span class="meta"> -&gt;</span><span class="bash"> SCNetworkKit (1.0.1)</span></span><br><span class="line">	</span><br><span class="line">Updating spec repo `master`</span><br><span class="line">	</span><br><span class="line">CocoaPods 1.3.0.beta.3 is available.</span><br><span class="line">To update use: `sudo gem install cocoapods --pre`</span><br><span class="line">[!] This is a test version we'd love you to try.</span><br><span class="line">	</span><br><span class="line">For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line"> 🎉  Congrats</span><br><span class="line">	</span><br><span class="line"> 🚀  SCNetworkKit (1.0.1) successfully published</span><br><span class="line"> 📅  July 21st, 00:16</span><br><span class="line"> 🌎  https://cocoapods.org/pods/SCNetworkKit</span><br><span class="line"> 👍  Tell your friends!</span><br><span class="line">--------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure></section>
     <!-- Post Nav START -->
     
       <div class="postnav">
@@ -254,7 +257,7 @@
     <!-- 二维码 END -->
     
       <!-- Gitment START -->
-      <div id="comments"></div>
+      <div id="gitment"></div>
       <!-- Gitment END -->
     
 
@@ -264,6 +267,7 @@
   
   <!-- Catalog END -->
 </main>
+</div>
 
 <script>
   (function () {
@@ -343,7 +347,7 @@
           }
         }
       })
-      gitment.render(document.getElementById('comments'))
+      gitment.render(document.getElementById('gitment'))
     }
   })();
 </script>
