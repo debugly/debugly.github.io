@@ -328,7 +328,7 @@ h2.article-head {
   transition: all 0.3s ease-in-out;
 }
 .wrap-active {
-  background-color: rgba(255,255,255,0.9);
+  background-color: #3c3f41;
 }
 .scroll-top {
   cursor: pointer;
@@ -562,7 +562,6 @@ h2.article-head {
 }
 .markdown-content p code,
 .article-summary p code {
-  background-color: #3c3f41;
   color: #e96900;
   padding: 3px 5px;
   white-space: nowrap;
@@ -581,22 +580,19 @@ h2.article-head {
   }
 }
 .markdown-content h1,
-.article-summary h1 {
+.article-summary h1,
+.markdown-content h2,
+.article-summary h2 {
   font-size: 1.8em;
   padding-bottom: 7px;
   border-bottom: 1px solid #2c2c2c;
   line-height: 2em;
-}
-.markdown-content h2,
-.article-summary h2 {
-  font-size: 1.5em;
 }
 .markdown-content h3,
 .article-summary h3 {
   margin: 1em 0;
   font-size: 1.3em;
   padding-bottom: 0.3em;
-  border-bottom: 1px solid #2c2c2c;
 }
 .markdown-content h4,
 .article-summary h4 {
