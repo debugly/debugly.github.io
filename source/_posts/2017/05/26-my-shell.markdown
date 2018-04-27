@@ -9,7 +9,7 @@ keywords: shell,Linux shell
 
 > 日常工作中，特别是我搭建远程打包环境的过程中用到了不少 Shell 命令，这里记录下，省得以后再去查询，浪费时间。
 
-## 内置变量
+# 内置变量
 
 以下结果来自 Mac OS 10.12，提示：这些内置变量是以美元符号开头的哈,因为这些都是变量，在 Shell 脚本里面取变量的值需要以美元符号开头；
 
@@ -21,11 +21,11 @@ keywords: shell,Linux shell
 - $MACHTYPE :  CPU架构及系统类型: `x86_64-apple-darwin16`
 - $LANG : 语言类型: `zh_CN.UTF-8`
 
-## 命令
+# 命令
 
 - env 查看所有的环境变量，这个命令太厉害了，上面提到的好多内置变量的值都包括了：
 
-	```shell
+	```bash
 	MANPATH=/Users/xuqianlong/.nvm/versions/node/v4.0.0/share/man:/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/man:/usr/local/share/man:/usr/share/man:/opt/X11/share/man:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/share/man:/Applications/Xcode.app/Contents/Developer/usr/share/man:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/share/man
 	NVM_IOJS_ORG_VERSION_LISTING=https://iojs.org/dist/index.tab
 	rvm_bin_path=/Users/xuqianlong/.rvm/bin
@@ -67,7 +67,7 @@ keywords: shell,Linux shell
 
 - cat 查看文本内容，比如查看下机器上安装了几种 shell：cat /etc/shells
 
-	```shell
+	```bash
 	# List of acceptable shells for chpass(1).
 	# Ftpd will not allow users to connect who are not using
 	# one of these shells.
@@ -84,11 +84,11 @@ keywords: shell,Linux shell
 - hostname -s 主机名称: `debugly`
 - tar -czf sdk.tar.gz *.framework : 先将目录里所有后缀名为 framework 的文件打包成 sdk.tar，然后用 gzip 压缩，生成 sdk.tar.gz 压缩的压缩包
 
-## ps
+# ps
 
 用 ps 命令可以查看进程相关信息，哪些进程正在运行和运行状态、进程是否结束、进程有没有僵死、哪些进程占用了过多地资源等等。
 
-```
+```bash
 qianlongxu:~ qianlongxu$ ps
   PID TTY           TIME CMD
  2771 ttys000    0:00.07 -bash
@@ -129,7 +129,7 @@ qianlongxu% ps -f
   501  3102  2987   0  9:04上午 ttys000    0:00.03 zsh
 ```
 
-## 重定向
+# 重定向
 
 使用重定向，可以轻松的提供输入，改变输出；
 
@@ -137,7 +137,7 @@ qianlongxu% ps -f
 
 	- ">" 覆盖文本
 
-	```shell
+	```bash
 	echo "abc" > "aa.txt"
 	echo "abc" > "aa.txt"
 	echo "abc" > "aa.txt"
@@ -147,7 +147,7 @@ qianlongxu% ps -f
 
 	-  ">>" 追加文本
 
-	```shell
+	```bash
 	echo "abc" >> "aa.txt"
 	echo "abc" >> "aa.txt"
 	echo "abc" >> "aa.txt"
@@ -159,18 +159,18 @@ qianlongxu% ps -f
 
 - 输入重定向：
 
-	```shell
+	```bash
 	///读取 aa.txt 文件的第一行，然后打印
 	read line < aa.txt;echo $line
 	///结果是：
 	abc
 	```
 
-## 管道
+# 管道
 
 这是一个强大的 shell 命令，可将输出结果作为另一个程序的输入，符号 : "\|" ，比如查看当前目录，并且按字母顺序排列：
 
-```shell
+```bash
 ls | sort
 
 Applications
@@ -191,40 +191,40 @@ cworkspace
 
 可以看出先排大写字母，后排小写字母，原因是大写字母的 ASCLL 比小写的小了 32，即：A + 32 = a ,A = 65.
 
-## cp
+# cp
 
 - 复制文件，如果目标存在则会覆盖; 将 debugly 目录下的 init.sh 文件拷贝到 d2 目录下，debugly、d2 都在当前执行目录下; d2 文件夹必须存在！否则 cp 之后会生成一个 d2 的可执行文件！其内容是 init.sh 文件的内容。
 
-```shell
+```bash
 cp debugly/init.sh d2
 ```
 
 复制文件夹，如果目标存在则会覆盖; 将 debugly 目录下的所有文件都拷贝到 d2 目录下；d2 文件夹必须存在！否则 cp 执行失败。
 
-```shell
+```bash
 cp -r debugly/init.sh d2
 ```
 
 **注：**cp 命令不会复制 .开头的文件或者文件夹，除了 "." 和 ".." 和 ".DS_Store" 这三个之外！一般情况下这是我们想要的结果。
 
-## scp
+# scp
 
 - 本机复制到远程服务器
 
 	- **文件**
 	
-	```shell
+	```bash
 	scp /Users/qianlongxu/Downloads/id_rsa.pub crown@10.7.40.176:~/id_rsa.pub  
 	```
 	- **文件夹**
 	
-	```shell
+	```bash
 	//在远程服务器game下创建qr-code，copy qr-code 下的所有文件
 	scp -r /Users/Shared/Jenkins/Home/xql/qr-code root@10.10.194.16:/opt/www/html/game
 	```
 - 从远程服务器下载到本地
 
-	```shell
+	```bash
 	scp jenkins@10.7.40.195:/Users/Shared/Jenkins/Home/workspace/hall-ios/builds/20180317/game56hall-inhouse.ipa ~/Desktop/
 	game56hall-inhouse.ipa 
 	
@@ -233,11 +233,11 @@ cp -r debugly/init.sh d2
 	```
 	下载文件夹加上 -r 即可；可以看出 scp 的第一个参数其实就是源文件，第二个参数是目的地，这样比较好记些。
 
-## ssh
+# ssh
 
 - 登陆远程服务器:
 
-	```shell
+	```bash
 	ssh crown@10.7.40.176
 	///输入密码
 	sohuxxx
@@ -246,7 +246,7 @@ cp -r debugly/init.sh d2
 
 	可以把客户机的公钥填充到远程打包机器上的authorized_keys文件中，实现自动验证，无需泄露服务器密码
 
-	```shell
+	```bash
 	///将公钥追加到这个服务器~/.ssh/authorized_keys文件末尾 
 	ssh-copy-id -i jenkins@10.7.40.195
 	///输入密码
@@ -256,22 +256,22 @@ cp -r debugly/init.sh d2
 
 	删除掉远程服务器桌面上的 xx 目录：
 
-	```shell
+	```bash
 	Remote_dir='~/Desktop/xx'
 	ssh root@12.11.193.18 "rm -rf ${Remote_dir}"
 	```
 
-## kill jekyll server
+# kill jekyll server
 
 我修改 Rakefile 的时候，修改不当导致没能处理INT，后果就是我们按下 `ctrl + c` 的时候没有将该子线程杀死，然后再次启动服务时就会报错:
 
-```shell
+```bash
 jekyll 3.3.0 | Error:  Address already in use - bind(2) for 127.0.0.1:4000
 ```
 
 为了解决这个问题就需要找到当前占用 4000 端口的进程，然后将其杀死；步骤是：
 
-```shell
+```bash
 # 先查下占用 4000 端口的进程 id
 xuqianlong$ lsof -i tcp:4000
 COMMAND   PID       USER   FD   TYPE            DEVICE SIZE/OFF NODE NAME
@@ -280,17 +280,17 @@ ruby    49753 xuqianlong   10u  IPv4 0xebc4350e453a6ff      0t0  TCP localhost:t
 xuqianlong$ kill 49753
 ```
 
-## curl
+# curl
 
 功能强大的网络工具，支持的协议众多，包括：`DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, POP3, POP3S, RTMP, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET, TFTP`。最简单的是 GET 请求：
 
-```shell
+```bash
 curl http://debugly.cn/dist/json/test.json
 ```
 
 使用 HEADER 请求，仅返回 http 头部信息：
 
-```shell
+```bash
 curl -I http://debugly.cn/dist/json/test.json
 
 HTTP/1.1 200 OK
@@ -320,7 +320,7 @@ X-Fastly-Request-ID: 0dc32470ef01fa9b0672d3d38edc904b9836debc
 
 在当前目录下递归创建 themes/hexo-theme-yaris 目录，然后下载zip包，解压到指定文件夹后重命名
 
-```shell
+```bash
 mkdir -p "./themes/hexo-theme-yaris" && curl -L https://codeload.github.com/debugly/hexo-theme-yaris/zip/master | tar xj -C "./themes/hexo-theme-yaris" --strip-components 1
 ```
 
@@ -330,7 +330,7 @@ mkdir -p "./themes/hexo-theme-yaris" && curl -L https://codeload.github.com/debu
 
 `sudo chown -R $(whoami) /usr/local`
 
-```shell
+```bash
 qianlongxu:myblog qianlongxu$ brew update
 Error: /usr/local is not writable. You should change the ownership
 and permissions of /usr/local back to your user account:
@@ -341,7 +341,7 @@ and permissions of /usr/local back to your user account:
 
 - git log
 	
-	```shell
+	```bash
 	qianlongxu$ git log -3
 	commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -> source, origin/source)
 	Author: qianlongxu <qianlongxu@sohu-inc.com>
@@ -365,7 +365,7 @@ and permissions of /usr/local back to your user account:
 
 - git log --date=format
 
-	```shell
+	```bash
 	qianlongxu$ git log --date=format:'%Y-%m-%d %H:%M:%S' -3
 	commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -> source, origin/source)
 	Author: qianlongxu <qianlongxu@sohu-inc.com>
@@ -389,7 +389,7 @@ and permissions of /usr/local back to your user account:
 
 - git log --date=format
 
-	```shell
+	```bash
 	qianlongxu$ git log --date=format:'%a|%A|%b|%B|%c|%d|%H|%I|%j|%m|%M|%p|%S|%U|%w|%W|%x|%X|%y|%Y|%z' --pretty=format:'%cd' -3
 	Sat|Saturday|Mar|March|Sat Mar 24 09:49:51 2018|24|09|09|083|03|49|AM|51|11|6|12|03/24/18|09:49:51|18|2018|+0800
 	Sat|Saturday|Mar|March|Sat Mar 24 09:49:08 2018|24|09|09|083|03|49|AM|08|11|6|12|03/24/18|09:49:08|18|2018|+0800
@@ -397,7 +397,7 @@ and permissions of /usr/local back to your user account:
 	```
 - git log --after
 
-	```shell
+	```bash
   qianlongxu$ git log --date=format:'%Y-%m-%d %H:%M:%S' --after='2018-03-23 20:44:06'
 	commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -> source, origin/source)
 	Author: qianlongxu <qianlongxu@sohu-inc.com>
@@ -415,13 +415,13 @@ and permissions of /usr/local back to your user account:
 
 - 获取最后一次提交时间秒数，然后加1
 
-	```shell
+	```bash
 	last_commit_sec=$(git log --date=format:'%S' --pretty=format:'%cd' -1)
 	last_commit_sec=`expr $last_commit_sec + 1`
 	```
 - 查看此次拉取远程之后，都有哪些提交记录
 
-	```shell
+	```bash
 	last_commit_datestamp=$(git log --date=raw --pretty=format:'%cd' -1)
 	last_commit_date=${last_commit_datestamp% *}
 	last_commit_date=`expr $last_commit_date + 1`
@@ -433,7 +433,7 @@ and permissions of /usr/local back to your user account:
 
 - git修改user.name和user.email
 
-	```shell
+	```bash
 	///查看
 	git config --list
 	///修改
@@ -443,7 +443,7 @@ and permissions of /usr/local back to your user account:
 
 - git clone
 
-	```shell
+	```bash
 	git clone -b $branch $repos $WORKSPACE
 	git branch --set-upstream-to=origin/$branch $branch
 	git submodule update --init --recursive
@@ -452,7 +452,7 @@ and permissions of /usr/local back to your user account:
     
     当执行命令的目录和 git 仓库目录不是同一个的话，可以使用 **-C** 指定仓库目录
     
-    ```shell
+    ```bash
     localPath="../.hexo-theme-yaris"
     alias gitC='git -C $localPath'
     
@@ -462,7 +462,7 @@ and permissions of /usr/local back to your user account:
     ```
 # date
 
-```shell
+```bash
 $(date +'Theme updated:%Y-%m-%d %H:%M:%S')
 Theme updated:2018-04-16 17:52:24
 ```
@@ -476,7 +476,7 @@ Theme updated:2018-04-16 17:52:24
 
 - 文件是否存在
 
-	```shell
+	```bash
 	if [ -f $last_commit_date_txt ];then
 		  last_commit_datestamp=$(cat $last_commit_date_txt)
 			echo 'xql last_commit_datestamp:'$last_commit_datestamp
@@ -487,7 +487,7 @@ Theme updated:2018-04-16 17:52:24
 
 - 文件夹是否存在
 
-	```shell
+	```bash
 	if [ -d $last_commit_folder ];then
 	
 	fi
@@ -495,7 +495,7 @@ Theme updated:2018-04-16 17:52:24
 
 - 文件内容是否为空
 
-	```shell
+	```bash
 	if [ `cat $commit_info_txt |wc -m` -eq 0 ];then
 		echo 'file is empty.'
 	else
@@ -505,7 +505,7 @@ Theme updated:2018-04-16 17:52:24
 
 # iOS build 号自增
 
-```
+```bash
 # info.plist路径
 project_infoplist_path="/proj.ios_mac/ios/game-inhouse.plist"
 #取版本号
@@ -518,13 +518,13 @@ buildNO=$(($buildNO+1))
 ```
 # Shell 参数含有空格
 
-```shell
+```bash
 ps="xxx zzz"
 ./build.sh "'$ps'"
 ```
 # Shell 算术运算
 
-```shell
+```bash
 ///使用 expr 外部程式
 a=12;
 b=19;
@@ -532,18 +532,19 @@ result=`expr $a + $b`
 ```
 # Shell 字符串截取
 
-```shell
+```bash
 str="1234444 +8000"
 ///str1="1234444"
 str1=${str% *}
 ```
+
 [https://www.cnblogs.com/zwgblog/p/6031256.html](https://www.cnblogs.com/zwgblog/p/6031256.html)
 
 # Node
 
 - 查看版本
 
-```shell
+```bash
 bogon:debugly xuqianlong$ node -v 
 v8.9.3
 bogon:debugly xuqianlong$ npm -v
@@ -565,11 +566,18 @@ NPM (node package manager) 是 Nodejs 的包管理器，用于 Node 插件管理
 
 遇到过的问题:
 
-    ```
+    ```bash
     hexo d -g
     ERROR Deployer not found: git
     ///解决方法：
     npm install --save hexo-deployer-git
+    ```
+express 框架
+    
+    ```bash
+    #http://www.expressjs.com.cn/starter/generator.html
+    npm install express-generator -g
+    express myapp
     ```
 
 # Hexo
@@ -583,7 +591,7 @@ NPM (node package manager) 是 Nodejs 的包管理器，用于 Node 插件管理
 
 - 临时文件服务器
     
-    ```shell
+    ```bash
     cd test
     python -m SimpleHTTPServer
     Serving HTTP on 0.0.0.0 port 8000 ...
@@ -591,6 +599,6 @@ NPM (node package manager) 是 Nodejs 的包管理器，用于 Node 插件管理
     
     也可以指定端口号：
     
-    ```shell
+    ```bash
     python -m SimpleHTTPServer 9090
     ```

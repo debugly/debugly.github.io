@@ -8,7 +8,7 @@ title: "IOS 刷新 UITableView 的 section 时崩溃"
 keywords: UITableView,reloadSections
 ---
 
-### 问题描述
+## 问题描述
 
 在调用UITableView的如下方法时崩溃
 
@@ -49,7 +49,7 @@ NSIndexSet *indexSet=[[NSIndexSet alloc]initWithIndex:1];
 libc++abi.dylib: terminating with uncaught exception of type NSException
 ```
 
-### 问题分析
+## 问题分析
 
 崩溃信息描述大概是这个意思，这个刷新无效，具体指section 3的行数无效。下面给出了具体的原因，section 3刷新前是1行，刷新后变成了0行，而在reloadSections的set里边又没有包含要刷新的section 3，故表在刷新的时候就报错了。这个问题该如何解决呢？
 

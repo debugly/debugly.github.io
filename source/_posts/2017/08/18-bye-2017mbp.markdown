@@ -7,6 +7,13 @@ tags: macOS
 keywords: MacBook Pro 2017,Touch Bar
 ---
 
+# Bye, 2017 MacBook Pro
+
+先看下 2017 新款 MacBook Pro 长啥样吧：
+
+![](/images/201708/2017.JPG)
+
+
 两个月前，我司第二季度申请的电脑到了，我组有几台 2017 款的 MacBook Pro，带 Multi-Touch Bar 的，跟现在使用的 2015 款比起来纤薄了许多，也更加轻盈，性能不用说，更加强大。于是心里痒痒，忍不住换了下。
 
 拿到手之后，感觉挺别扭的，因为我无法连接手机调试，充电；只好先买了一个 type-c 转 USB 的转接头；
@@ -37,10 +44,7 @@ keywords: MacBook Pro 2017,Touch Bar
 
 新亏组里还有台 2015 款的 MBP，经过周转，我又换了回去；兜兜转转，一阵新鲜感过后，还是我去年申请的 MBP 用着最顺手！新款的 MBP，至于没有给我带来更多的欢乐，反而是更多的不便利，因此我觉得一味的最求轻薄，牺牲实际使用体验，反而不好，至少用在写代码的体验很是糟糕。
 
-Bye 2017 MacBook Pro
 
-![](/images/201708/2017.JPG)
-
-My loved 2015 MacBook Pro
+# Hello, My loved 2015 MacBook Pro
 
 ![](/images/201708/2015.JPG)

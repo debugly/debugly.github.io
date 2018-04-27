@@ -8,7 +8,7 @@ title: "在UITableViewCell上添加手势的问题"
 keywords: UITableView,UIGestureRecognizer,cell重用
 ---
 
-### 问题描述
+## 问题描述
 
 在某一些UITableViewCell上添加长按手势。
 
@@ -31,7 +31,7 @@ keywords: UITableView,UIGestureRecognizer,cell重用
 
 现在，列表里某些cell添加了长按手势，这时做如下操作：多次滑动列表，然后去长按那些没有添加长按手势的cell，竟然也响应了长按手势。经分析，原来是cell重用导致的这个问题，滑动列表的过程中，那些添加了长按手势的cell被重用了，所以导致某些原本没有添加长按手势的cell也被附着了长按手势。另外，这种写法也会导致在一个cell上多次添加长按手势。
 
-### 解决方案
+## 解决方案
 
 如果我们只需要在UITableView的某些符合条件的cell上添加手势，我们可以直接在UITableView上添加手势：
 

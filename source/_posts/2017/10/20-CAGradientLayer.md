@@ -14,7 +14,7 @@ keywords: locations,CAGradientLayer
 
 ![](/images/201710/10202.png)
 
-## 1、实现代码
+## 实现代码
   
 
 ```objc
@@ -33,7 +33,7 @@ keywords: locations,CAGradientLayer
 }
 ```
 
-## 2、CAGradientLayer属性设置
+## CAGradientLayer属性设置
 
 上面代码主要涉及CAGradientLayer的四个属性colors locations startPoint endPoint，colors是颜色分配，locations是颜色分割线，startPoint为起始点，endPoint为终止点。
 
