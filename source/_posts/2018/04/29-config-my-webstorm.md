@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 提升开发效率之 Webstorm 篇
+title: 提升 Webstorm 开发效率
 date: 2018-04-29 21:10:58
 tags: macOS
 ---

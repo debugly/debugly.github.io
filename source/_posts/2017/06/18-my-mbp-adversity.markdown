@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Fuck，Mac 关机后再也无法启动"
+title: "Fuck，Mac 无法进入系统了"
 date: 2017-06-18 21:46:27 +0800
 comments: true
 tags: macOS

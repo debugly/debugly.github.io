@@ -1,6 +1,6 @@
 ---
 layout: post
-title: macOS Install Jenkins
+title: macOS 上安装 Jenkins
 date: 2018-03-07 00:05:31
 tags: macOS
 ---

@@ -1,11 +1,11 @@
 ---
 layout: post
-title: macOS-JavaRuntime
+title: 搞定 macOS JRE
 date: 2018-03-06 23:28:58
 tags: macOS
 ---
 
-> 在 macOS 上配置 JRE.
+> macOS 是自带了 JRE 的，但实际上却没那么好用，今天就来聊下我遇到的问题以及解决方案.
 
 我也记不清楚之前本机的 Java 环境是否是配置好了，昨天更新了 macOS 之后，今天想装个 Jenkins 玩下，结果在运行 Jenkins 的时候发现 **No Java runtime present, requesting install.**
 
