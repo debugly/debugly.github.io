@@ -10,7 +10,7 @@
   
   <title>
     
-      Use Cmdline Open Webstorm | Matt Reach
+      提升开发效率之 Webstorm 篇 | Matt Reach
     
   </title>
   
@@ -105,7 +105,7 @@
 </header>
 
     <div id="article-banner">
-  <h2>Use Cmdline Open Webstorm</h2>
+  <h2>提升开发效率之 Webstorm 篇</h2>
   <!-- Tags START -->
   
     <div class="tags">
@@ -131,25 +131,52 @@
   <article class="post-article">
       
     <section class="markdown-content"><blockquote>
-<p>我并不是一个前端开发者，由于在做小游戏，游戏逻辑甚至框架都用是 Javascript 写的，所以选择了 Webstorm 这编辑器。</p>
+<p>我并不是一个前端开发者，由于今年转到了小游戏开发，游戏逻辑甚至框架都是用 Javascript 写的，因此选择使用 Webstorm 这款编辑器软件。</p>
 </blockquote>
 <ul>
-<li>优点：前端开发支持的相当不错了，变量方法跳转，断点调试都支持，Filewatch，CVS，内置 Termianl，JSLint …</li>
-<li>缺点：暂用内存大；</li>
+<li>优点：前端开发支持的相当不错了，支持变量方法跳转，断点调试，Filewatch，CVS，内置 Termianl，JSLint …</li>
+<li>缺点：占用内存比较大，付费软件；</li>
 </ul>
-<h1 id="命令行支持"><a href="#命令行支持" class="headerlink" title="命令行支持"></a>命令行支持</h1><p>不能右键文件夹使用 Webstorm 打开，这显得很不方便，我家里的电脑在安装 2018.1.2 这个版本时发现一个选项：安装命令行工具，这样可以在命令行使用 webstorm 打开，使用起来挺方便的，我去公司后想把公司电脑也升级到 2018.1.2 ，然后使用命令行打开，可是从 2017 的某个版本升级时却没有这个选项，卸载重装也没有，偏好设置里也没能找到，废了好久时间在包里面找到了一个可执行程序…</p>
+<h1 id="从命令行打开工程"><a href="#从命令行打开工程" class="headerlink" title="从命令行打开工程"></a>从命令行打开工程</h1><p>正常使用流程这里就不多说了，现在聊一聊怎么在命令行里快速打开某个工程（文件夹）？右键然后选择使用 Webstorm 打开 — 可惜并没有这一服务！这显得很不方便，然而就在我家里的电脑安装 2018.1.2 这个版本时我发现一个选项：安装命令行工具，这样就可以在命令行使用 webstorm 打开这个软件或者带上路径打开工程了，使用起来挺方便的，我去公司后想把公司电脑也升级到 2018.1.2 ，然后使用命令行打开，可是从 2017 的某个版本升级时却没有这个选项，卸载重装也没有，偏好设置里也没能找到，废了好久时间在 app包里面有个 MacOS 文件里，里面有一个可执行程序:</p>
 <p><img src="/images/201804/2901.png" alt=""></p>
-<p>但是在命令行里执行的时候，还有别的日志，并且程序也没执行完，好像是开了个进程在这，看着不爽，不能继续执行别的命令了，跟家里的那个命令不是一回事。。。</p>
+<p>但是在命令行里执行的时候，还有别的日志，并且程序也没执行完，好像是开了个进程在这一直运行，看着着实不爽，因为不能继续执行别的命令了，跟家里的那个命令不是一回事。。。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bogon:~ xuqianlong$ /Applications/WebStorm.app/Contents/MacOS/webstorm </span><br><span class="line">2018-04-29 22:00:59.910 webstorm[77272:5636690] allVms required 1.8*,1.8+</span><br><span class="line">2018-04-29 22:00:59.913 webstorm[77272:5636698] Value of WEBSTORM_VM_OPTIONS is (null)</span><br><span class="line">2018-04-29 22:00:59.913 webstorm[77272:5636698] fullFileName is: /Applications/WebStorm.app/Contents/bin/webstorm.vmoptions</span><br><span class="line">2018-04-29 22:00:59.913 webstorm[77272:5636698] fullFileName exists: /Applications/WebStorm.app/Contents/bin/webstorm.vmoptions</span><br><span class="line">2018-04-29 22:00:59.913 webstorm[77272:5636698] Processing VMOptions file at /Applications/WebStorm.app/Contents/bin/webstorm.vmoptions</span><br><span class="line">2018-04-29 22:00:59.913 webstorm[77272:5636698] Done</span><br></pre></td></tr></table></figure>
 <p>于是回到家里后，在 <strong>/usr/local/bin/</strong> 目录下找到了这么一个可执行文件:</p>
 <p><img src="/images/201804/2902.png" alt=""></p>
-<p>别的不说，仅从大小上来看这两个就不一样，这个只有 3KB 而已，可以确定和在 MacOS 下找到的不是一个，其实这个是具有执行权限的 shell 脚本，有兴趣的话下载过后可以读一读源码，MacOS 下那个是真正的二进制可执行文件！</p>
-<p>你可以在这个里下载到这个 <a href="/cmd/webstorm">可执行文件</a>，下载完毕后把它放到 PATH 搜索路径下就行了，比如: <strong>/usr/local/bin/</strong> 目录下。</p>
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bogon:~ xuqianlong$ webstorm /Users/xuqianlong/websites/hexo/debugly</span><br><span class="line">bogon:~ xuqianlong$</span><br></pre></td></tr></table></figure>
-<p>后面需要带上项目路径，我的习惯是在 Finder 里找好路径，然后 <code>cmd+\</code> 在终端里直接进入到这个文件夹，这一行为默认是不支持的，可以在服务里配置:</p>
+<p>别的不说，仅从大小上来看这两个就不一样，这个只有 3KB 而已，可以确定和在 MacOS 下找到的不是一个，其实这个是具有执行权限的 shell 脚本，有兴趣的话下载过后可以读一读源码，MacOS 下那个是真正的二进制可执行文件！你可以在这个里下载到这个 <a href="/cmd/webstorm">可执行文件</a>，下载完毕后把它放到 PATH 搜索路径下就行了，比如: <strong>/usr/local/bin/</strong> 目录下。</p>
+<p>配置好之后，应该就可以这么使用了（版本不兼容问题没有测试）:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bogon:~ xuqianlong$ webstorm /Users/xuqianlong/websites/hexo/debugly</span><br><span class="line">bogon:~ xuqianlong$</span><br></pre></td></tr></table></figure>
+<p>后面可带项目路径或者文件，我觉得还是不够完美，因为我的习惯是在 Finder 里找工程路径，然后右键在终端里直接进入到这个文件夹，这一行为默认是不支持的，可以在服务里配置:</p>
 <p><img src="/images/201804/2903.png" alt=""></p>
-<p>这样一来命名就简单了:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bogon:debugly xuqianlong$ webstorm ./</span><br><span class="line">bogon:debugly xuqianlong$</span><br></pre></td></tr></table></figure>
+<p>并且我配置了快捷键： <strong><code>cmd+\</code></strong> ，这样一来步骤就更加简单了:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//选中工程文件夹，然后 cmd + \</span><br><span class="line">bogon:debugly xuqianlong$ webstorm ./</span><br><span class="line">bogon:debugly xuqianlong$ //可继续在当前文件夹下执行别的命令</span><br></pre></td></tr></table></figure>
+<h1 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h1><p>快捷键能够帮节省我们很多时间，提高开发效率，默认帮我们配置了好多快捷键，下面这几个是我认为很用到的，默认没支持的，需要配置下:</p>
+<ul>
+<li>滚动到文件的顶/底部</li>
+</ul>
+<p><img src="/images/201804/3001.png" alt=""></p>
+<ul>
+<li>切换文件 Tab</li>
+</ul>
+<p><img src="/images/201804/3002.png" alt=""></p>
+<p>默认配置项:</p>
+<ul>
+<li>cmd + shift + o : 查找文件</li>
+<li>cmd + option + o : 查找符号</li>
+<li>cmd + w : 关闭活动tab窗口</li>
+<li>cmd + f : 文件内查找，可以大小写敏感，匹配单词，正则，可以选定全部然后重命名</li>
+<li>cmd + shift + f : 全局查找，可以限定工程，模块，文件夹等范围</li>
+<li>cmd + → : 定位到行末</li>
+<li>cmd + ← : 定位到行首</li>
+<li>cmd + shift + ↑ : 将光标所在行向上移动</li>
+<li>cmd + shift + ↓ : 将光标所在行向下移动</li>
+<li>cmd + [ : 向前跳转到编辑历史，通常很有用</li>
+<li>cmd + ] : 向后跳转到编辑历史</li>
+<li>shift + F6 : 重命名文件名，没反应的话，同时按下 Fn 键。</li>
+</ul>
+<p>快捷键还有很多，不再一一列举，我想掌握了上面提到的应该就足够快捷了！</p>
+<h1 id="支持-ES6-语法"><a href="#支持-ES6-语法" class="headerlink" title="支持 ES6 语法"></a>支持 ES6 语法</h1><p>前面提到了，我使用 Webstorm 的目的是编写 JavaScript 的，当下普遍支持 ES6 语法，所以将 JavaScript 默认的版本改为 ES6，这样就可以顺畅的使用 ES6 的新语法了，否则编写时会不提示并报警告，挺烦人的:</p>
+<p><img src="/images/201804/3003.png" alt=""></p>
 <h1 id="激活"><a href="#激活" class="headerlink" title="激活"></a>激活</h1><ul>
 <li><a href="http://www.activejetbrains.ml" target="_blank" rel="noopener">http://www.activejetbrains.ml</a></li>
 <li><a href="http://hb5.s.osidea.cc:1017" target="_blank" rel="noopener">http://hb5.s.osidea.cc:1017</a></li>
@@ -220,7 +247,7 @@
         'background-image': 'url("' + banner + '")'
       })
     } else {
-      var url = 'http://debugly.cn/2018/04/29-open-webstorm-use-cmd.html';
+      var url = 'http://debugly.cn/2018/04/29-config-my-webstorm.html';
       $('#article-banner').geopattern(url)
     }
     $('.header').removeClass('fixed-header')
@@ -270,7 +297,7 @@
     var gitmentConfig = "debugly";
     if (gitmentConfig !== 'undefined') {
       var gitment = new Gitment({
-        id: "Use Cmdline Open Webstorm",
+        id: "提升开发效率之 Webstorm 篇",
         owner: "debugly",
         repo: "debugly.github.io",
         oauth: {
