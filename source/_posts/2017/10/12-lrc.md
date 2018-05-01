@@ -10,7 +10,7 @@ keywords:  歌词解析,歌词随时间滚动
 
 > 由于开发需要实现一个随音乐播放滚动歌词的音乐提词器，通过网上查找资料，实现了效果，将代码贴出来，方便大家使用，主要步骤如下：
 
-## 1、歌词解析
+## 歌词解析
   
 TEMusicLrcParser.h
 
@@ -77,7 +77,8 @@ TEMusicLrcParser.m
 
 ```
 歌词解析部分主要是将歌词格式的字符串切分开，wordArray里面是歌词，timerArray里面是每句时间点
-## 2、实现歌词的滚动
+
+## 实现歌词的滚动
 使用tableview来显示歌词
 
 TEMusicLrcView.h

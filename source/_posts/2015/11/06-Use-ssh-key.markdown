@@ -6,12 +6,11 @@ comments: true
 tags: macOS
 ---
 
-Introduction
-============
+# Introduction
 
 > SSH key 用来标识某台计算机被信任！一旦被信任，以后在这台计算机上进行的操作就不需要输入你账户的密码，可以理解为令牌，拿着令牌就可以做事，当然权限是可控制的！SSH key 是部分平台的，也就说今天举例的 MAC 系统可以用，经常使用的 Windows 也可以用，Linux等系统均可，因为说白了就是使用了一种加密方法，计算机生成了一对密钥；一个公钥，一个私钥，公钥当然就是公开使用的，一般会用于第三方平台，私钥是保留在计算机里的，因此在操作的时候只需公私钥配对即可，只要配对就认为是信任的计算机所为，就可以继续操作！今天以 SSH key 方式访问 github 举例...
 
-## 使用场景
+# 使用场景
 
 - 免密码登录远程服务器
 - 免密码推送、拉取 git 远程仓库
@@ -19,7 +18,7 @@ Introduction
 
     - 工作时虽然使用的是内部的 git 托管服务器 git lab，但使用方式跟 github 也没啥不一样的，同样支持配置 ssh key。
 
-## 查看本地 ssh 密钥
+# 查看本地 ssh 密钥
 
 ssh 公钥默认存放在 `~/.ssh` 目录下，因此可以 ls 查看下：
 
@@ -50,7 +49,7 @@ Hi debugly! You've successfully authenticated, but GitHub does not provide shell
 
 如果本地没有可用的 ssh key，或者你不想用之前的，或者想让之前的实效，那么你可以全部删掉，然后重新生成即可。
 
-## 生成新的 SSH Key
+# 生成新的 SSH Key
 
 使用 `ssh-keygen -t rsa -b 4096 -C  "xx@yyyzzz.com" ` 生成，这里的 "xx@yyyzzz.com" 替换成你的邮箱或者随便写都行，没限制的，最好起个能分的清楚的名字，有可能你有多个电脑，配置了多个 key。
 
@@ -95,7 +94,7 @@ The key's randomart image is:
 如果英文不错，那么可以直接去看 github 官网提供的文档： [Generating-ssh-key](https://help.github.com/articles/generating-ssh-keys/) .
 
 
-## Github 账号添加 SSH key
+# Github 账号添加 SSH key
 
 - 将公钥复制到剪切板
 
@@ -143,7 +142,7 @@ Hi debugly! You've successfully authenticated, but GitHub does not provide shell
 
 看到你 Github 的用户名后就表示成功了！
 
-## 体验免密码
+# 体验免密码
 
 - git clone git@github.com:debugly/NeedUpdate.git
 

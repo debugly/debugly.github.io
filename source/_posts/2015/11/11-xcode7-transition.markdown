@@ -4,10 +4,10 @@ title: "Xcode7 Transition Guide"
 date: 2015-11-11 21:41:12 +0800
 comments: true
 tags: iOS
+toc: false
 ---
 
-Introduction
-============
+# Introduction
 
 使用 Xcode 7 开发已经有一段时间了，记录下使用时遇见的问题；有些东西记不住，所以当做笔记，需要的时候打开博客复制下就好了。
 

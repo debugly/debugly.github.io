@@ -11,7 +11,7 @@ Introduction
 
 UITableView 提供了很多很方便的方法以至于我们有的时候不能完全记住他的代理方法，这里说下他的编辑模式；项目里用到了编辑，在踩过一些坑之后，对 UITableView 的编辑更加的清晰了，这里简单记录下。
 
-## 开启编辑模式
+# 开启编辑模式
 - 这个很简单了，设置 UITableView 的编辑属性即可，方法则提供了动画选项：
 
 ```objc
@@ -55,7 +55,7 @@ editButtonItem 是控制器的属性；你可以重写这个方法，处理一�
     [super setEditing:editing animated:animated];
 }
 ```
-## 设置编辑样式
+# 设置编辑样式
 - 系统提供了3中编辑样式，分别是：
 
 ```objc
@@ -79,7 +79,7 @@ typedef NS_ENUM(NSInteger, UITableViewCellEditingStyle) {
 
 - 前两个都比较熟悉了，对于最后这个有些同学可能不是很熟悉了，这个是系统为我们提供的空白的，所以我们就利用这个进行自定义；
 
-## 自定义编辑样式
+# 自定义编辑样式
 - 自定义编辑样式的思路是：选择的系统样式 UITableViewCellEditingStyleNone，然后自己添加视图，做动画；实现代码：
 
 ```objc
@@ -168,8 +168,7 @@ datasource 处理：
 通过 editingStyle 区分开是哪种编辑；以上模式编辑时默认不可以选择，所以也不会触发选择的代理方法！
 可以通过 tableView.allowsSelectionDuringEditing = YES;允许选择！
 
-------
-### 如何支持多选？这是有些个头疼的问题
+### 如何支持多选
 
 - 使用系统提供的一个开关开启多选模式；在开启编辑模式前打开这个开关即可：
 
@@ -203,4 +202,6 @@ self.tableView.allowsMultipleSelectionDuringEditing = YES;//默认关闭的
 - 如果想改变这个多选的圆圈，切入口还是 cell 的 - (void)setEditing:(BOOL)editing animated:(BOOL)animated；方法;做法是找到系统的图片隐藏掉，然后把自己想要的加上，做下动画就行了，具体代码暂不放出了...
 
 
-#### 这个 Demo 已经传到了[github](https://github.com/debugly/UITableViewStudyDemo) 上，多谢支持！
+# 完
+
+已经把 Demo 传到了[github](https://github.com/debugly/UITableViewStudyDemo) 上，多谢支持！

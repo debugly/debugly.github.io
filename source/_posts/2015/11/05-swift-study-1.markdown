@@ -6,13 +6,12 @@ comments: true
 tags: iOS
 ---
 
-Introduction
-============
+# Introduction
 
 Swift 最新已经是 2.1 了，更优美了，日趋成熟了，加上公司项目以后可能支持到 iOS7，就可以使用 Swift 写项目了，所以必须学习下了，先看看官方的文档:     
  [Using Swift with Cocoa and Objective-C (Swift 2.1)](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/index.html#//apple_ref/doc/uid/TP40014216-CH2-ID0)
 
-### Interoperablility : 互动性
+# Interoperablility : 互动性
 
 - Initialization
 

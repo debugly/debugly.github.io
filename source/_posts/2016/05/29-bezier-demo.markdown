@@ -4,6 +4,7 @@ title: "使用 UIBezierPath 绘制圆角六边形"
 date: 2016-05-29 22:42:49 +0800
 comments: true
 tags: iOS
+toc: false
 ---
 
 UIBezierPath 能绘制各种图形，项目里总是用到，这里写个 demo 吧：

@@ -91,7 +91,7 @@ Subversion URL that's currently checked out to the workspace.
 
 中文对照：[https://www.cnblogs.com/EasonJim/p/6758382.html](https://www.cnblogs.com/EasonJim/p/6758382.html)
 
-# 邮件配置
+## 邮件配置
 
 - [https://blog.csdn.net/fullbug/article/details/53024562](https://blog.csdn.net/fullbug/article/details/53024562)
 - [https://blog.csdn.net/u013066244/article/details/78665075](https://blog.csdn.net/u013066244/article/details/78665075)

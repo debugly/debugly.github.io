@@ -7,10 +7,11 @@ tags: "iOS"
 keywords: iOS 无限循环轮播图
 ---
 
-<img src="/images/201507/EZCarouseImageView.gif" width="370" height="236">
-
 > 我们的 App 要展示广告，形式为几张循环滚动的图片，俗称 Banner，这里我称之为轮播图。 我写了两个版本一个 EY 版和一个 EZ 版，区别是实现方式的不同：EY 使用 ScrollerView，最多会有 3 个子 view ，EZ 使用 CollectionView，她有重用机制，所以最多会有 2 个子 view；轮播的触发使用了定时器，这个已经解决了循环引用问题，直接使用了，不清楚的可以移步 [这里](/ios/2015/07/14/jie-jue-nstimeryin-qi-de-nei-cun-xie-lou.html) ！下面分别介绍下：
 
+## 效果
+
+<img src="/images/201507/EZCarouseImageView.gif" width="370" height="236">
 
 ## EY 实现思路
 
