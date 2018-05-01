@@ -127,6 +127,7 @@
 
 <div class="app-content">
 <main class="app-body flex-box">
+  <input type='checkbox' id='asideToggle'>
   <!-- Article START -->
   <article class="post-article">
       
@@ -373,6 +374,18 @@
   <!-- Article END -->
   <!-- Catalog START -->
   
+    
+<aside class="catalog-container">
+  <div class="toc-indicator">
+    <label for="asideToggle" id="asideToggleLabel"><</label>
+  </div>
+  <div class="toc-main">
+    <strong class="toc-title">目录</strong>
+    <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#内置变量"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">内置变量</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#命令"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">命令</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#ps"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">ps</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#重定向"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">重定向</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#管道"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">管道</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#cp"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">cp</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#scp"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">scp</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#ssh"><span class="toc-nav-number">8.</span> <span class="toc-nav-text">ssh</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#kill-jekyll-server"><span class="toc-nav-number">9.</span> <span class="toc-nav-text">kill jekyll server</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#curl"><span class="toc-nav-number">10.</span> <span class="toc-nav-text">curl</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#chown"><span class="toc-nav-number">11.</span> <span class="toc-nav-text">chown</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#git"><span class="toc-nav-number">12.</span> <span class="toc-nav-text">git</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#date"><span class="toc-nav-number">13.</span> <span class="toc-nav-text">date</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#du"><span class="toc-nav-number">14.</span> <span class="toc-nav-text">du</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#文件（夹）是否存在"><span class="toc-nav-number">15.</span> <span class="toc-nav-text">文件（夹）是否存在</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#iOS-build-号自增"><span class="toc-nav-number">16.</span> <span class="toc-nav-text">iOS build 号自增</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Shell-参数含有空格"><span class="toc-nav-number">17.</span> <span class="toc-nav-text">Shell 参数含有空格</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Shell-算术运算"><span class="toc-nav-number">18.</span> <span class="toc-nav-text">Shell 算术运算</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Shell-字符串截取"><span class="toc-nav-number">19.</span> <span class="toc-nav-text">Shell 字符串截取</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Node"><span class="toc-nav-number">20.</span> <span class="toc-nav-text">Node</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Hexo"><span class="toc-nav-number">21.</span> <span class="toc-nav-text">Hexo</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Python"><span class="toc-nav-number">22.</span> <span class="toc-nav-text">Python</span></a></li></ol>
+  </div>
+</aside>
+
+  
   <!-- Catalog END -->
 </main>
 </div>
@@ -404,7 +417,7 @@
       if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
-        
+
         var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
         zoom = zoom < 1 ? 1 : zoom
         zoom = zoom > 2 ? 2 : zoom

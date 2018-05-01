@@ -127,11 +127,12 @@
 
 <div class="app-content">
 <main class="app-body flex-box">
+  <input type='checkbox' id='asideToggle'>
   <!-- Article START -->
   <article class="post-article">
       
     <section class="markdown-content"><blockquote>
-<p>时光荏苒，来搜狐已经 2 年整了，最近挺忙的，以至于今天来公司加班，查看邮件后才发现，今天是入职两周年的纪念日。</p>
+<p>时光荏苒，来搜狐已经 2 年整了，最近挺忙的，以至于今天来公司加班，查看邮件后才发现今天是入职两周年的纪念日。</p>
 </blockquote>
 <p>2 年 2 个城市 2 个团队。。。</p>
 <p><img src="/images/201708/2year.png" alt=""></p>
@@ -194,6 +195,8 @@
   <!-- Article END -->
   <!-- Catalog START -->
   
+    
+  
   <!-- Catalog END -->
 </main>
 </div>
@@ -225,7 +228,7 @@
       if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
-        
+
         var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
         zoom = zoom < 1 ? 1 : zoom
         zoom = zoom > 2 ? 2 : zoom

@@ -127,6 +127,7 @@
 
 <div class="app-content">
 <main class="app-body flex-box">
+  <input type='checkbox' id='asideToggle'>
   <!-- Article START -->
   <article class="post-article">
       
@@ -230,6 +231,18 @@
   <!-- Article END -->
   <!-- Catalog START -->
   
+    
+<aside class="catalog-container">
+  <div class="toc-indicator">
+    <label for="asideToggle" id="asideToggleLabel"><</label>
+  </div>
+  <div class="toc-main">
+    <strong class="toc-title">目录</strong>
+    <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#安装-RVM"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">安装 RVM</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#更新-Ruby"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">更新 Ruby</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#可能出现的错误"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">可能出现的错误</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#参考链接"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">参考链接</span></a></li></ol>
+  </div>
+</aside>
+
+  
   <!-- Catalog END -->
 </main>
 </div>
@@ -261,7 +274,7 @@
       if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
-        
+
         var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
         zoom = zoom < 1 ? 1 : zoom
         zoom = zoom > 2 ? 2 : zoom

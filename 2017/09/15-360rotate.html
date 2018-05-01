@@ -132,6 +132,7 @@
 
 <div class="app-content">
 <main class="app-body flex-box">
+  <input type='checkbox' id='asideToggle'>
   <!-- Article START -->
   <article class="post-article">
       
@@ -142,9 +143,9 @@
     <section class="markdown-content"><blockquote>
 <p>我想要实现一个图片不停的360度旋转的动画效果，类似于加载时候不停的转圈圈，通过网上查找资料，试用了两种方法：</p>
 </blockquote>
-<h2 id="1、UIView-动画递归的方式"><a href="#1、UIView-动画递归的方式" class="headerlink" title="1、UIView 动画递归的方式"></a>1、UIView 动画递归的方式</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)startAnimation  </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="built_in">CGAffineTransform</span> transform = <span class="built_in">CGAffineTransformMakeRotation</span>(imageviewAngle * (M_PI / <span class="number">180.0</span>f));  </span><br><span class="line">      </span><br><span class="line">    [<span class="built_in">UIView</span> animateWithDuration:<span class="number">0.01</span> delay:<span class="number">0</span> options:<span class="built_in">UIViewAnimationOptionCurveLinear</span> animations:^&#123;  </span><br><span class="line">        imageView.transform = transform;  </span><br><span class="line">    &#125; completion:^(<span class="built_in">BOOL</span> finished) &#123;  </span><br><span class="line">        imageviewAngle += <span class="number">10</span>; </span><br><span class="line">        [<span class="keyword">self</span> startAnimation];  </span><br><span class="line">    &#125;];  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="UIView-动画递归的方式"><a href="#UIView-动画递归的方式" class="headerlink" title="UIView 动画递归的方式"></a>UIView 动画递归的方式</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)startAnimation  </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="built_in">CGAffineTransform</span> transform = <span class="built_in">CGAffineTransformMakeRotation</span>(imageviewAngle * (M_PI / <span class="number">180.0</span>f));  </span><br><span class="line">      </span><br><span class="line">    [<span class="built_in">UIView</span> animateWithDuration:<span class="number">0.01</span> delay:<span class="number">0</span> options:<span class="built_in">UIViewAnimationOptionCurveLinear</span> animations:^&#123;  </span><br><span class="line">        imageView.transform = transform;  </span><br><span class="line">    &#125; completion:^(<span class="built_in">BOOL</span> finished) &#123;  </span><br><span class="line">        imageviewAngle += <span class="number">10</span>; </span><br><span class="line">        [<span class="keyword">self</span> startAnimation];  </span><br><span class="line">    &#125;];  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>点击之后，我调用了这个方式让图片不停旋转，但是不断地点击就会导致图片越转越快，原因是这个函数是递归的，每点击一次就会增加递归，使之角度增加10，之前点击触发的递归调用并没有出口，因此多次点击后imageviewAngle就在好几个递归里一直累加，点击次数越多，累加的频率也就越快，所以图片就会转的越来越快，于是使用了下面的方法。</p>
-<h2 id="2、CABasicAnimation-方式"><a href="#2、CABasicAnimation-方式" class="headerlink" title="2、CABasicAnimation 方式"></a>2、CABasicAnimation 方式</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">CABasicAnimation</span>* rotationAnimation;  </span><br><span class="line">rotationAnimation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"transform.rotation.z"</span>];  </span><br><span class="line">rotationAnimation.toValue = [<span class="built_in">NSNumber</span> numberWithFloat: M_PI * <span class="number">2.0</span> ];  </span><br><span class="line">rotationAnimation.duration = duration;  </span><br><span class="line">rotationAnimation.cumulative = <span class="literal">YES</span>;  </span><br><span class="line">rotationAnimation.repeatCount = repeat;  </span><br><span class="line">  </span><br><span class="line">[_loadingView.layer addAnimation:rotationAnimation forKey:<span class="string">@"rotationAnimation"</span>];</span><br></pre></td></tr></table></figure>
+<h2 id="CABasicAnimation-方式"><a href="#CABasicAnimation-方式" class="headerlink" title="CABasicAnimation 方式"></a>CABasicAnimation 方式</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">CABasicAnimation</span>* rotationAnimation;  </span><br><span class="line">rotationAnimation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"transform.rotation.z"</span>];  </span><br><span class="line">rotationAnimation.toValue = [<span class="built_in">NSNumber</span> numberWithFloat: M_PI * <span class="number">2.0</span> ];  </span><br><span class="line">rotationAnimation.duration = duration;  </span><br><span class="line">rotationAnimation.cumulative = <span class="literal">YES</span>;  </span><br><span class="line">rotationAnimation.repeatCount = repeat;  </span><br><span class="line">  </span><br><span class="line">[_loadingView.layer addAnimation:rotationAnimation forKey:<span class="string">@"rotationAnimation"</span>];</span><br></pre></td></tr></table></figure>
 <p>这种方式不会出现不断点击图片越转越快的问题，移除掉动画就能停止：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[_loadingView.layer removeAnimationForKey:@&quot;rotationAnimation&quot;];</span><br></pre></td></tr></table></figure></section>
     <!-- Post Nav START -->
@@ -204,6 +205,18 @@
   <!-- Article END -->
   <!-- Catalog START -->
   
+    
+<aside class="catalog-container">
+  <div class="toc-indicator">
+    <label for="asideToggle" id="asideToggleLabel"><</label>
+  </div>
+  <div class="toc-main">
+    <strong class="toc-title">目录</strong>
+    <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#UIView-动画递归的方式"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">UIView 动画递归的方式</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#CABasicAnimation-方式"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">CABasicAnimation 方式</span></a></li></ol>
+  </div>
+</aside>
+
+  
   <!-- Catalog END -->
 </main>
 </div>
@@ -235,7 +248,7 @@
       if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
-        
+
         var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
         zoom = zoom < 1 ? 1 : zoom
         zoom = zoom > 2 ? 2 : zoom

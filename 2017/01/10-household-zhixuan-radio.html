@@ -127,6 +127,7 @@
 
 <div class="app-content">
 <main class="app-body flex-box">
+  <input type='checkbox' id='asideToggle'>
   <!-- Article START -->
   <article class="post-article">
       
@@ -247,6 +248,18 @@
   <!-- Article END -->
   <!-- Catalog START -->
   
+    
+<aside class="catalog-container">
+  <div class="toc-indicator">
+    <label for="asideToggle" id="asideToggleLabel"><</label>
+  </div>
+  <div class="toc-main">
+    <strong class="toc-title">目录</strong>
+    <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#先睹为快"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">先睹为快</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#功能简介"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">功能简介</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#原理"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">原理</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#改装过程"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">改装过程</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#准备-12V-电源"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">准备 12V 电源</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#为收音机接输出线"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">为收音机接输出线</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#准备大喇叭，USB，电源键"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">准备大喇叭，USB，电源键</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#接线收工"><span class="toc-nav-number">4.4.</span> <span class="toc-nav-text">接线收工</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#换导航场景"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">换导航场景</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#After-Word"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">After Word</span></a></li></ol>
+  </div>
+</aside>
+
+  
   <!-- Catalog END -->
 </main>
 </div>
@@ -278,7 +291,7 @@
       if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
-        
+
         var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
         zoom = zoom < 1 ? 1 : zoom
         zoom = zoom > 2 ? 2 : zoom

@@ -127,6 +127,7 @@
 
 <div class="app-content">
 <main class="app-body flex-box">
+  <input type='checkbox' id='asideToggle'>
   <!-- Article START -->
   <article class="post-article">
       
@@ -271,6 +272,18 @@
   <!-- Article END -->
   <!-- Catalog START -->
   
+    
+<aside class="catalog-container">
+  <div class="toc-indicator">
+    <label for="asideToggle" id="asideToggleLabel"><</label>
+  </div>
+  <div class="toc-main">
+    <strong class="toc-title">目录</strong>
+    <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#三亚"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">三亚</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#新团队"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">新团队</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#天津"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">天津</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#结婚"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">结婚</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#广州"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">广州</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#买车"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">买车</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#总结"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">总结</span></a></li></ol>
+  </div>
+</aside>
+
+  
   <!-- Catalog END -->
 </main>
 </div>
@@ -302,7 +315,7 @@
       if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
-        
+
         var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
         zoom = zoom < 1 ? 1 : zoom
         zoom = zoom > 2 ? 2 : zoom

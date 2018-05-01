@@ -127,6 +127,7 @@
 
 <div class="app-content">
 <main class="app-body flex-box">
+  <input type='checkbox' id='asideToggle'>
   <!-- Article START -->
   <article class="post-article">
       
@@ -244,6 +245,18 @@
   <!-- Article END -->
   <!-- Catalog START -->
   
+    
+<aside class="catalog-container">
+  <div class="toc-indicator">
+    <label for="asideToggle" id="asideToggleLabel"><</label>
+  </div>
+  <div class="toc-main">
+    <strong class="toc-title">目录</strong>
+    <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#如何控制Apache"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">如何控制Apache</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#检查"><span class="toc-nav-number">1.0.1.</span> <span class="toc-nav-text">检查</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#启动"><span class="toc-nav-number">1.0.2.</span> <span class="toc-nav-text">启动</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#重启"><span class="toc-nav-number">1.0.3.</span> <span class="toc-nav-text">重启</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#关闭"><span class="toc-nav-number">1.0.4.</span> <span class="toc-nav-text">关闭</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Apache-目录下重要的配置文件"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Apache 目录下重要的配置文件</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#配置-Virtual-Hosts"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">配置 Virtual Hosts</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#困惑"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">困惑</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#TODO"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">TODO</span></a></li></ol>
+  </div>
+</aside>
+
+  
   <!-- Catalog END -->
 </main>
 </div>
@@ -275,7 +288,7 @@
       if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
-        
+
         var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
         zoom = zoom < 1 ? 1 : zoom
         zoom = zoom > 2 ? 2 : zoom

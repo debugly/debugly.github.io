@@ -127,6 +127,7 @@
 
 <div class="app-content">
 <main class="app-body flex-box">
+  <input type='checkbox' id='asideToggle'>
   <!-- Article START -->
   <article class="post-article">
       
@@ -302,6 +303,18 @@
   <!-- Article END -->
   <!-- Catalog START -->
   
+    
+<aside class="catalog-container">
+  <div class="toc-indicator">
+    <label for="asideToggle" id="asideToggleLabel"><</label>
+  </div>
+  <div class="toc-main">
+    <strong class="toc-title">目录</strong>
+    <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#名词解释"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">名词解释</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Ruby-基础知识"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Ruby 基础知识</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Rake-入门"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">Rake 入门</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Call-Shell"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">Call Shell</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#YAML"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">YAML</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#STDIN"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">STDIN</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Installed-xx-Gem"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">Installed xx Gem ?</span></a></li></ol>
+  </div>
+</aside>
+
+  
   <!-- Catalog END -->
 </main>
 </div>
@@ -333,7 +346,7 @@
       if (src !== '/css/images/404.png') {
         var imageW = $(this).width()
         var imageH = $(this).height()
-        
+
         var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
         zoom = zoom < 1 ? 1 : zoom
         zoom = zoom > 2 ? 2 : zoom
