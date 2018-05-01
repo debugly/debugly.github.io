@@ -4,7 +4,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <meta name="description" content="Matt Reach&#39;s blog">
-  <meta name="keyword" content=",许乾隆,Matt Reach">
+  <meta name="keyword" content="许乾隆,Matt Reach,">
   
     <link rel="shortcut icon" href="/css/images/logo.png">
   
@@ -134,12 +134,12 @@
     <section class="markdown-content"><h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><blockquote>
 <p>今天来说下使用 unsigned 数据类型时遇到的坑，也许这个很不起眼，但是有的时候她会坑了你的，如果你不信就来试试下面这道题，如果做对了那么说明你很细心，足够优秀，也不用继续看我的博客了，当然这也不排除是由于我提前说明了注意点使你细心…</p>
 </blockquote>
-<h3 id="小试牛刀"><a href="#小试牛刀" class="headerlink" title="小试牛刀"></a>小试牛刀</h3><p>习惯性的说下故事的背景，无缘无故的剧情我不喜欢，也不会是我入戏，作为一个 coder ，就像演员一样，你若想很出色地展示出你的演技就要入戏很深…</p>
+<h1 id="小试牛刀"><a href="#小试牛刀" class="headerlink" title="小试牛刀"></a>小试牛刀</h1><p>习惯性的说下故事的背景，无缘无故的剧情我不喜欢，也不会是我入戏，作为一个 coder ，就像演员一样，你若想很出色地展示出你的演技就要入戏很深…</p>
 <blockquote>
 <p>项目中某处逻辑需要评估磁盘剩余空间，以便做出决策是否继续任务，故而同事写了类似如下的逻辑：</p>
 </blockquote>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">BOOL</span>)hasEnoughDiskSpace &#123;</span><br><span class="line">    <span class="comment">//获取磁盘剩余空间；</span></span><br><span class="line">    <span class="built_in">UInt64</span> validFreeSpaceSize = [<span class="keyword">self</span> getTotalFreeSpace];</span><br><span class="line">    <span class="comment">//此次任务需要的总空间；</span></span><br><span class="line">    <span class="built_in">UInt64</span> taskTotalSize = <span class="keyword">self</span>.totalSize;</span><br><span class="line">    <span class="comment">//此次任务已经完成的空间；</span></span><br><span class="line">    <span class="built_in">UInt64</span> downloadedSize = <span class="keyword">self</span>.finishedSize;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ((validFreeSpaceSize - (taskTotalSize - downloadedSize)) &gt; <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="题目剖析"><a href="#题目剖析" class="headerlink" title="题目剖析"></a>题目剖析</h3><p>不用说上面的代码肯定是存在问题的，下面是我改过之后的代码，对比下也没有多少不同，按数学运算来看没什么不一样，你说是吗：</p>
+<h1 id="题目剖析"><a href="#题目剖析" class="headerlink" title="题目剖析"></a>题目剖析</h1><p>不用说上面的代码肯定是存在问题的，下面是我改过之后的代码，对比下也没有多少不同，按数学运算来看没什么不一样，你说是吗：</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">BOOL</span>)hasEnoughDiskSpace &#123;</span><br><span class="line">    <span class="comment">//获取磁盘剩余空间；</span></span><br><span class="line">    <span class="built_in">UInt64</span> validFreeSpaceSize = [<span class="keyword">self</span> getTotalFreeSpace];</span><br><span class="line">    <span class="comment">//此次任务需要的总空间；</span></span><br><span class="line">    <span class="built_in">UInt64</span> taskTotalSize = <span class="keyword">self</span>.totalSize;</span><br><span class="line">    <span class="comment">//此次任务已经完成的空间；</span></span><br><span class="line">    <span class="built_in">UInt64</span> downloadedSize = <span class="keyword">self</span>.finishedSize;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (validFreeSpaceSize &gt; (taskTotalSize - downloadedSize));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>看到这里你能明白问题出在哪了吗？如果你还是疑惑的话，或许你该去复习下 C 语言的数据类型了，特别是 有没有符号这一说；C 语言基础数据类型默认是有符号的，也就说有正负之分，无符号意味着都是非负数；上面之所以使用无符号是因为空间的大小不会存在负的，还有就是使用无符号能够表示的值就是有符号的二倍！</p>
 <p>简单了解了 unsigned 之后，就来仔细看这个表达式吧：</p>
@@ -149,7 +149,7 @@
 <li>当 validFreeSpaceSize 小于 (taskTotalSize - downloadedSize) 时，问题就来了，由于是无符号数据类型，所以我们认为的结果会是一个负值，其实却是一个非常大的正值！因此当没有足够磁盘空间的时候也检查不出来，说白了这个检查没有作用，永远返回 YES！</li>
 </ul>
 <p>经过这样 (validFreeSpaceSize &gt; (taskTotalSize - downloadedSize)) 的比较其实就避免了刚才小于判断出错问题；</p>
-<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>对于 unsigned 这种数据类型来说是需要的，因为他能够表示值的空间大了一倍，诸如磁盘空间这样的场景使用有符号类型也是一种浪费，因为变量占用着同样大小的空间，却不能够表示那么大的范围！因此使用时切记她带来的非负性就好了，不要让结果和 0 比较！</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>对于 unsigned 这种数据类型来说是需要的，因为他能够表示值的空间大了一倍，诸如磁盘空间这样的场景使用有符号类型也是一种浪费，因为变量占用着同样大小的空间，却不能够表示那么大的范围！因此使用时切记她带来的非负性就好了，不要让结果和 0 比较！</p>
 <p>C 语言的数据类型长度不是固定的，跟机器字长有关系，我也记不太清；不过 Java 是跨平台的，长度固定，这个是我记忆中的 Java 数据类型长度，可以简单看下：</p>
 <table>
 <thead>
@@ -258,7 +258,9 @@
   </div>
   <div class="toc-main">
     <strong class="toc-title">目录</strong>
-    <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Introduction"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Introduction</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#小试牛刀"><span class="toc-nav-number">1.0.1.</span> <span class="toc-nav-text">小试牛刀</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#题目剖析"><span class="toc-nav-number">1.0.2.</span> <span class="toc-nav-text">题目剖析</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#后记"><span class="toc-nav-number">1.0.3.</span> <span class="toc-nav-text">后记</span></a></li></ol></li></ol></li></ol>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Introduction"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Introduction</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#小试牛刀"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">小试牛刀</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#题目剖析"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">题目剖析</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#后记"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">后记</span></a></li></ol>
+    
   </div>
 </aside>
 

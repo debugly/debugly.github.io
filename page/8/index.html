@@ -4,7 +4,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <meta name="description" content="Matt Reach&#39;s blog">
-  <meta name="keyword" content=",许乾隆,Matt Reach">
+  <meta name="keyword" content="许乾隆,Matt Reach,">
   
     <link rel="shortcut icon" href="/css/images/logo.png">
   
@@ -123,25 +123,8 @@
       
       <div class="article-summary">
         
-          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>项目中大量使用了 Block，今天无意间有了新的用法，不同往常的一般使用方法，使得编程又有了新的乐趣！想了一下，第一次写 Block 应该是两年前了，这么长时间并没有总结过，今天顺便总结下使用 Block 的场景 …</p>
-<h3 id="Block的一般使用场景"><a href="#Block的一般使用场景" class="headerlink" title="Block的一般使用场景"></a>Block的一般使用场景</h3><p> 以下场景均是个人理解，词汇也是个人命名，理解就好了：</p>
-<ul>
-<li>完成事情的回掉；方法一般可以附加一个 completion handler 参数作为完成的回掉，AFNetworking 里网络请求好多都是这种场景了，比如这个方法，GET 请求成功后就会回调 success ，失败则回调 failure，并且可以带有 <strong>参数</strong> （ps：这个以后会有大用处）！</li>
-</ul>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">NSURLSessionDataTask</span> *)GET:(<span class="built_in">NSString</span> *)URLString</span><br><span class="line">                   parameters:(<span class="keyword">id</span>)parameters</span><br><span class="line">                      success:(<span class="keyword">void</span> (^)(<span class="built_in">NSURLSessionDataTask</span> *task, <span class="keyword">id</span> responseObject))success</span><br><span class="line">                      failure:(<span class="keyword">void</span> (^)(<span class="built_in">NSURLSessionDataTask</span> *task, <span class="built_in">NSError</span> *error))failure;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>下发任务的区块；方法附带一个获取任务的 block,我们把需要处理的任务放到里面即可，利用 GCD 派发任务，做动画等等都是这样做的，由于是单纯的任务，所以一般不需要参数：</li>
-</ul>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="built_in">dispatch_async</span>(<span class="built_in">dispatch_queue_t</span> queue, dispatch_block_t block);</span><br><span class="line"></span><br><span class="line">[<span class="built_in">UIView</span> animateWithDuration:<span class="number">0.25</span> animations:^&#123;</span><br><span class="line">   <span class="comment">//do your animates</span></span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">[<span class="built_in">NSBlockOperation</span> blockOperationWithBlock:^&#123;</span><br><span class="line"> <span class="comment">//your task       </span></span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>权利下放；如果做一件事情的时候，我们不知道该如何拍板，抉择的时候，就可以把这个权利下放给调用者，这样的代码就显得很灵活；</li>
-</ul>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[needSortArray sortedArrayUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">NSOrderedAscending</span>;<span class="comment">//your power!</span></span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>封装代码块；如果你的逻辑比较复杂，需要判断很多种情况，各种 if else 嵌套；很多个 else 的地方都调用同样的代码块，则可以考虑使用 block 块；我觉得你应该也遇见过这种情况！至少我见过别人这么写过，结果就是同样的代码块几十行，在一个方法里写了两次，其实不用 block 也行的，抽取一个方法或许也行，使用 block 的好处，大概就是可以捕获了！如果代码块是一个方法，那么可能就没必要使用 block 来封装了，不过如果是好多行的逻辑，使用 block 封装下很是比较好的！</li>
-</ul>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span>* (^callback)(<span class="built_in">NSArray</span> *needSortArray) = ^(<span class="built_in">NSArray</span> *needSortArray)&#123;</span><br><span class="line">        [needSortArray sortedArrayUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">NSOrderedAscending</span>;<span class="comment">//your power!</span></span><br><span class="line">        &#125;];</span><br><span class="line">        <span class="keyword">return</span> [needSortArray componentsJoinedByString:<span class="string">@"|"</span>];</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="built_in">BOOL</span> A,B,C;</span><br><span class="line">  <span class="built_in">NSArray</span> *needArr = @[<span class="string">@"A"</span>,<span class="string">@"C"</span>,<span class="string">@"D"</span>,<span class="string">@"F"</span>,];</span><br><span class="line">  <span class="keyword">if</span> (A) &#123;</span><br><span class="line">      <span class="keyword">if</span> (B) &#123;</span><br><span class="line">          <span class="keyword">if</span> (C) &#123;</span><br><span class="line">              [<span class="keyword">self</span> handleArr:needArr];</span><br><span class="line">          &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">              callback(needArr);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">          [<span class="keyword">self</span> handleArr2:needArr];</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      callback(needArr);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>从技术层面上看，基本上这些使用代理也可以完成，但是绝对没有使用 block 来的优雅！我是一个喜欢使用的 block 的 coder，因为觉得编写代理很麻烦，代码不是那么的直观；这里只是简单总结了下平时我经常用到的场景，当然还有别的很多场景；希望你能发邮件给我，补充这里来；</p>
+          Introduction项目中大量使用了 Block，今天无意间有了新的用法，不同往常的一般使用方法，使得编程又有了新的乐趣！想了一下，第一次写 Block 应该是两年前了，这么长时间并没有总结过，今天顺便总结下使用 Block 的场景 …
+Block的一般使用场景 以下场景均是个人理解，词 ...
         
       </div>
       <a class="more" href="/2015/10/29-Block_Use_Experiences.html">Read more</a>
@@ -164,7 +147,7 @@
       <div class="article-summary">
         
           <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>UITableView 提供了很多很方便的方法以至于我们有的时候不能完全记住他的代理方法，这里说下他的编辑模式；项目里用到了编辑，在踩过一些坑之后，对 UITableView 的编辑更加的清晰了，这里简单记录下。</p>
-<h2 id="开启编辑模式"><a href="#开启编辑模式" class="headerlink" title="开启编辑模式"></a>开启编辑模式</h2><ul>
+<h1 id="开启编辑模式"><a href="#开启编辑模式" class="headerlink" title="开启编辑模式"></a>开启编辑模式</h1><ul>
 <li>这个很简单了，设置 UITableView 的编辑属性即可，方法则提供了动画选项：</li>
 </ul>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// default is NO. setting is not animated.</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">getter</span>=isEditing) <span class="built_in">BOOL</span> editing;</span><br><span class="line">- (<span class="keyword">void</span>)setEditing:(<span class="built_in">BOOL</span>)editing animated:(<span class="built_in">BOOL</span>)animated;</span><br></pre></td></tr></table></figure>
@@ -317,8 +300,7 @@ ViewContrller 管理的 view 的大小是如何确定的？
       <div class="article-summary">
         
           
-
-我们的 App 要展示广告，形式为几张循环滚动的图片，俗称 Banner，这里我称之为轮播图。 我写了两个版本一个 EY 版和一个 EZ 版，区别是实现方式的不同：EY 使用 ScrollerView，最多会有 3 个子 view ，EZ 使用 CollectionView，她有重用机制 ...
+我们的 App 要展示广告，形式为几张循环滚动的图片，俗称 Banner，这里我称之为轮播图。 我写了两个版本一个 EY 版和一个 EZ 版，区别是实现方式的不同：EY 使用 ScrollerView，最多会有 3 个子 view ，EZ 使用 CollectionView，她有重用机制， ...
         
       </div>
       <a class="more" href="/2015/07/30-wo-xie-de-lun-bo-tu.html">Read more</a>

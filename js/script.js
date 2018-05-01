@@ -89,14 +89,13 @@
         }
         if (scrollTop > 100) {
             top.addClass('opacity')
+            var catalogs = $('aside.catalog-container')
+            if (catalogs){
+                var catelog = catalogs[0];
+                catelog.style.paddingTop = (scrollTop-100)+'px';
+            }
         } else {
             top.removeClass('opacity')
-        }
-
-        var catalogs = $('aside.catalog-container')
-        if (catalogs){
-            var catelog = catalogs[0];
-            catelog.style.paddingTop = scrollTop+'px';
         }
 
     }, 250);
