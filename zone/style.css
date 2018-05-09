@@ -1,0 +1,36 @@
+html body {
+  padding: 0px;
+  margin: 0px;
+}
+.grid {
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 10px 50px;
+}
+.grid:nth-of-type(odd) {
+  background-color: #faebd7;
+}
+.grid:nth-of-type(even) {
+  background-color: #f5f5dc;
+}
+.grid:nth-of-type(1) {
+  background-color: #ff7f50;
+  color: #fff;
+}
+.content {
+  padding-left: 50px;
+}
+.output,
+.input {
+  border: 1px #eaeaea solid;
+  width: 100%;
+  display: block;
+}
+.btn {
+  background-color: #59a8e1;
+  height: 45px;
+  width: 140px;
+  margin: 15px 15px 15px 0;
+  color: #fff;
+  font-size: 16px;
+}
