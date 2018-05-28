@@ -121,6 +121,33 @@
   
     <article class="article-card">
       <h2 class="article-head">
+        <a href="/2016/03/28-calayerinvalidgeometry.html">解决 CALayerInvalidGeometry 问题</a>
+      </h2>
+      <p class="article-date">March 28, 2016</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <p>今天遇到了很多 calyer 设置坐标的崩溃，原因如下：</p>
+<blockquote>
+<p>Fatal Exception: <strong>CALayerInvalidGeometry</strong><br>CALayer position <strong>contains NaN</strong>: [nan 8]</p>
+</blockquote>
+<p>坐标竟然是 NaN (非数字)！这还得了，马上排查！！！<br>下面是具体崩溃信息：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Thread : Fatal Exception: <span class="built_in">CALayerInvalidGeometry</span></span><br><span class="line"><span class="number">0</span>  CoreFoundation                 <span class="number">0x23a2a5f7</span> __exceptionPreprocess</span><br><span class="line"><span class="number">1</span>  libobjc.A.dylib                <span class="number">0x3129cc77</span> objc_exception_throw</span><br><span class="line"><span class="number">2</span>  CoreFoundation                 <span class="number">0x23a2a53d</span> -[<span class="built_in">NSException</span> initWithCoder:]</span><br><span class="line"><span class="number">3</span>  QuartzCore                     <span class="number">0x268f01cf</span> CA::Layer::set_position(CA::Vec2&lt;<span class="keyword">double</span>&gt; <span class="keyword">const</span>&amp;, <span class="keyword">bool</span>)</span><br><span class="line"><span class="number">4</span>  QuartzCore                     <span class="number">0x268f00d3</span> -[<span class="built_in">CALayer</span> setPosition:]</span><br><span class="line"><span class="number">5</span>  QuartzCore                     <span class="number">0x268f0065</span> -[<span class="built_in">CALayer</span> setFrame:]</span><br><span class="line"><span class="number">6</span>  <span class="built_in">UIKit</span>                          <span class="number">0x26ec8fe3</span> -[<span class="built_in">UIView</span>(Geometry) setFrame:]</span><br><span class="line"><span class="number">7</span>  SOHUVideo                      <span class="number">0xa937d</span> -[DiskStatusView updateDiskStatus] (DiskStatusView.m:<span class="number">65</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+        
+      </div>
+      <a class="more" href="/2016/03/28-calayerinvalidgeometry.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
         <a href="/2016/03/06-Objc-Associations-Advanced.html">深入理解关联引用</a>
       </h2>
       <p class="article-date">March 6, 2016</p>
@@ -345,31 +372,6 @@ SSH key 用来标识某台计算机被信任！一旦被信任，以后在这台
         
       </div>
       <a class="more" href="/2015/11/05-swift-study-1.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2015/10/30-unsigned-type-use.html">小心 unsigned 数据类型埋下坑</a>
-      </h2>
-      <p class="article-date">October 30, 2015</p>
-      
-        <span><i class="fa fa-tags"></i></span>
-
-  <a href="/tags#iOS" >
-    <span class="tag-code">iOS
-    </span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          Introduction
-今天来说下使用 unsigned 数据类型时遇到的坑，也许这个很不起眼，但是有的时候她会坑了你的，如果你不信就来试试下面这道题，如果做对了那么说明你很细心，足够优秀，也不用继续看我的博客了，当然这也不排除是由于我提前说明了注意点使你细心…
-
-小试牛刀习惯性的说下故事 ...
-        
-      </div>
-      <a class="more" href="/2015/10/30-unsigned-type-use.html">Read more</a>
     </article>
   
 
