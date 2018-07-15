@@ -1,8 +1,44 @@
+function url_decode() {
+    const o = document.getElementById('url_output');
+    const i = document.getElementById('url_input');
+    let v = i.value;
+    if (v) {
+        o.value = decodeURIComponent(v);
+    } else {
+        o.value = '';
+    }
+}
 
+function url_encode() {
+    const o = document.getElementById('url_output');
+    const i = document.getElementById('url_input');
+    let v = i.value;
+    if (v) {
+        o.value = encodeURIComponent(v);
+    } else {
+        o.value = '';
+    }
+}
 
+function url_exchange() {
+    const o = document.getElementById('url_output');
+    const i = document.getElementById('url_input');
+    const v = o.value;
+    o.value = i.value;
+    i.value = v;
+}
+
+function url_clean() {
+    const o = document.getElementById('url_output');
+    const i = document.getElementById('url_input');
+    o.value = '';
+    i.value = '';
+}
+
+//注释》
 function init() {
-    const d = document.getElementById('download');
-    d.style.visibility="hidden";
+    const download = document.getElementById('download');
+    download.style.visibility = "hidden";
 }
 
 function initTimeStamp() {
@@ -19,17 +55,17 @@ function generate(value) {
     const d = document.getElementById('download');
 
     const size = 240;
-    if (!value || value.length == 0){
+    if (!value || value.length == 0) {
         const ctx = c.getContext("2d");
-        ctx.clearRect(0,0,size,size);
-        d.style.visibility="hidden";
-    }else {
+        ctx.clearRect(0, 0, size, size);
+        d.style.visibility = "hidden";
+    } else {
         new QRious({
             element: c,
             value: value,
             size: size
         });
-        d.style.visibility="visible";
+        d.style.visibility = "visible";
     }
 };
 
@@ -49,7 +85,7 @@ function OnPropChanged(event) {
  * @param  {String} data     要保存到本地的图片数据
  * @param  {String} filename 文件名
  */
-function saveFile (data, filename) {
+function saveFile(data, filename) {
 
     var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
     save_link.href = data;
@@ -64,7 +100,7 @@ function saveAsLocalImage() {
     var myCanvas = document.getElementById("qr");
     var image = myCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
     // window.location.href = image; // it will save locally
-    saveFile(image,'二维码' + (new Date()).getTime() + '.png');
+    saveFile(image, '二维码' + (new Date()).getTime() + '.png');
 }
 
 window.onReady = function () {
