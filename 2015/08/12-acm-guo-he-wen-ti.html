@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content="许乾隆,Matt Reach,">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      ACM-过河问题 | Matt Reach
+    
+  </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/zenburn.min.css" rel="stylesheet">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/zone/" class="item-link">Zone</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        <!-- /zone/AAA
+          2015BBB
+          -1 -->
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/zone/" class="menu-link">Zone</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>ACM-过河问题</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#Other" >
+    <span class="tag-code">Other
+    </span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2015-08-12</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+
+<div class="app-content">
+<main class="app-body flex-box">
+  <input type='checkbox' id='asideToggle'>
+  <!-- Article START -->
+  <article class="post-article">
+      
+    <section class="markdown-content"><p>在我的一个群里，小伙伴发了一道题，考察下算法，自己试着想了想，拿出来一起看下吧，下面是题目：</p>
+<blockquote>
+<p>在漆黑的夜里，N 位旅行者来到了一座狭窄而且没有护栏的桥边。如果不借助手电筒的话，大家是无论如何也不敢过桥去的。不幸的是，N 个人一共只带了一只手电筒，而桥窄得只够让两个人同时过。如果各自单独过桥的话，N 人所需要的时间已知；而如果两人同时过桥，所需要的时间就是走得比较慢的那个人单独行动时所需的时间。问题是，如何设计一个方案，让这 N 人尽快过桥。（ ACM 难度系数 ：5）</p>
+</blockquote>
+<h1 id="分析问题"><a href="#分析问题" class="headerlink" title="分析问题"></a>分析问题</h1><p>面对毫无头绪的问题只能慢慢分析喽，首先把 N 个人需要的时间放到一个数组 T[n] 里面吧，时间的长短是不定的，因此先排为升序；既然是 N 个人，那就从 N = 1开始分析，找找规律吧：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">N ＝ <span class="number">1</span>； 当然需要花费 T[<span class="number">0</span>] 喽（数组下标从 <span class="number">0</span> 开始）；</span><br><span class="line">N ＝ <span class="number">2</span>； 需要花费 T[<span class="number">0</span>] ＋ T[<span class="number">1</span>]，也就是两个人一起过去；</span><br><span class="line">N ＝ <span class="number">3</span>； 需要花费 T[<span class="number">0</span>] ＋ T[<span class="number">1</span>] ＋ T[<span class="number">2</span>]; 很容易想到的是让最快那个人去送最慢的那个花费了 T[<span class="number">2</span>]；他返回来花费了 T[<span class="number">0</span>]，然后最快的这个和剩下的这个速度不是很快的一起过去花费了 T[<span class="number">1</span>]；</span><br><span class="line">N ＝ <span class="number">4</span>； 这个怎么过？陷入沉思之中...</span><br></pre></td></tr></table></figure>
+<p>这道题目的说白了就是送人，时间由最慢的那个人决定，而且送完一个，还要返回来接着送，所以我们不可能让一个走的慢的人来充当这个‘摆渡’的，既然如此，那么我们就从走的慢的人下手吧，因为他不能充当‘摆渡’的，那么他早晚都要‘坐船’走呀，所以 N ＝ 4 就转化为花最少的时间送走‘坐船’的；（为了简化描述，按照时间升序的顺序将4人命名为a,b,c,d）下面分析下：</p>
+<ol>
+<li>根据 N = 3 的经验，我们很容易想到让 a 去送每一个人，送完一个就返回，接着送最慢的，如此3次；</li>
+<li>可是还有一种送法，a 送 b,a 回来；c 送 d，b 回来；a 送 b，也可以，而且时间不一定哪个短，因此要比较下哪个短；</li>
+<li>4个人不可能就这两种送法啊，还有别的，不过时间都要比这两个长；</li>
+</ol>
+<p>当 N &gt; 4 呢？其实根据 N = 4 的情况来看，这就是一个如何先送走最慢的的2个人的问题，因此 N &gt; 4 的时候，先不考虑中间的，把最快的，次快的，最慢的，此慢的拿出来摆渡，然后问题就变成了 N - 2 的问题了！当然可以写个递归了！</p>
+<h1 id="下面是主要代码"><a href="#下面是主要代码" class="headerlink" title="下面是主要代码"></a>下面是主要代码</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> sumTimeNeed = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (size &gt; <span class="number">3</span>) &#123;</span><br><span class="line">    <span class="keyword">int</span> time1 = a[<span class="number">1</span>] + a[<span class="number">0</span>] + a[size<span class="number">-1</span>] + a[<span class="number">1</span>] ;</span><br><span class="line">    <span class="keyword">int</span> time2 = a[size<span class="number">-1</span>] + a[<span class="number">0</span>] + a[size<span class="number">-2</span>] + a[<span class="number">0</span>];</span><br><span class="line">	size -= <span class="number">2</span>;</span><br><span class="line">    sumTimeNeed += MIN(time1, time2);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (size == <span class="number">3</span>) &#123;</span><br><span class="line">    sumTimeNeed += a[<span class="number">0</span>] + a[<span class="number">1</span>] + a[<span class="number">2</span>];</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span> (size == <span class="number">2</span>)&#123;</span><br><span class="line">    sumTimeNeed += a[<span class="number">1</span>];</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span> (size == <span class="number">1</span>)&#123;</span><br><span class="line">    sumTimeNeed += a[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> sumTimeNeed;</span><br></pre></td></tr></table></figure>
+<h1 id="欢迎去我的-GitHub-建议"><a href="#欢迎去我的-GitHub-建议" class="headerlink" title="欢迎去我的 GitHub 建议"></a>欢迎去我的 <a href="https://github.com/SummerHanada/ACM" target="_blank" rel="noopener">GitHub</a> 建议</h1><ul>
+<li><a href="http://acm.nyist.net/JudgeOnline/talking.php?pid=47" target="_blank" rel="noopener">NYOJ_47</a></li>
+<li><a href="http://blog.csdn.net/u011550160/article/details/9990909" target="_blank" rel="noopener">ac了很多</a></li>
+<li><a href="http://ju.outofmemory.cn/entry/23944" target="_blank" rel="noopener">蓝飞技术部落格</a></li>
+</ul>
+<hr>
+<p>1.最古老的过河问题</p>
+<p>一个农民携带一只狼，一只羊和一棵白菜，要借助一条小船过河。小船上除了农民只能再带狼、羊、白菜中的一样。而农民不在时，狼会吃羊，羊会吃白菜。农民最少需要几趟才能安全过河呢？</p>
+<p>2.人鬼殊途</p>
+<p>三个鬼与三个人都要过河。河中只有一条小船，可容两人(鬼)。而且无论在船上或在岸上，每边的鬼数量如果多于人,鬼就会把人吃掉。最少需要几趟才能安全过河</p>
+<p>3.道士与和尚</p>
+<p>四个道士与四个和尚四个老道士与四个和尚分别在一条河的两岸，都要到河的对岸去。河中只有一条小船，可容两人。只有一个道士和一个和尚会划船。而且无论在船上或在岸上，道士的数量都不能超过和尚的数量。最少需要几趟才能安全过河</p>
+<p>4.夫妻过河</p>
+<p>两对夫妻两对夫妻要过河，河中只有一条小船，可容两人。两个丈夫都不愿让自己的妻子和另一个男人在一起，除非自己也在场。<br>最少需要几趟才能安全过河？</p>
+<p>5.一家人及警察与犯人</p>
+<p>现有一条河，共有八个人要过河，分别是爸爸，妈妈，两个儿子，两个女儿，一个警察，一个犯人．现有一条木伐，一次最多载两个人，在这八个人中，有妈妈，爸爸，警察会开船，即这个船上必须有爸爸，妈妈，警察三个中的一个，船才会开动．船过去无法自动回来．并且要避免以下三件事发生，１，警察不在犯人会伤害一家六口．２，爸爸不在，妈妈会伤害儿子．３，妈妈不在，爸爸会伤害女儿．<br>最少需要几趟才能安全过河</p>
+<p>6.虎毒不食子</p>
+<p>三只大老虎A、B、C和各自的小老虎a.b.c；其中只有A、B、C和a会划船；如果小老虎不和自己的母亲在一起就会被其他大老虎吃掉；只有一条船；船上可以坐一只大老虎和任意的小老虎；问：最少需要几趟才能安全过河</p>
+<p>7.八仙过海</p>
+<p>铁拐李 、汉钟离 、 张果老 、蓝采和 、 何仙姑 、 吕洞宾 、 韩湘子 、 曹国舅一同过海。小船只能容下三人，而且只有道铁拐李 、汉钟离、韩湘子会划船。如果韩湘子不在，曹国舅会攻击所有人；如果铁拐李不在，汉钟离会攻击张果老和蓝采和；如果汉钟离不在，铁拐李会攻击何仙姑 、 吕洞宾。请问最少需要几趟才能安全过海？</p>
+<h1 id="有兴趣的快去-AC-吧！"><a href="#有兴趣的快去-AC-吧！" class="headerlink" title="有兴趣的快去 AC 吧！"></a>有兴趣的快去 AC 吧！</h1></section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2015/07/30-wo-xie-de-lun-bo-tu.html">无限循环轮播图</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2015/09/05-viewcontroller-tian-jia-zi-kong-zhi-qi-shi.html">ViewController 子控制器 view 的大小问题</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="gitment"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    
+<aside class="catalog-container">
+  <div class="toc-indicator">
+    <label for="asideToggle" id="asideToggleLabel"><</label>
+  </div>
+  <div class="toc-main">
+    <strong class="toc-title">目录</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#分析问题"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">分析问题</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#下面是主要代码"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">下面是主要代码</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#欢迎去我的-GitHub-建议"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">欢迎去我的 GitHub 建议</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#有兴趣的快去-AC-吧！"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">有兴趣的快去 AC 吧！</span></a></li></ol>
+    
+  </div>
+</aside>
+
+  
+  <!-- Catalog END -->
+</main>
+</div>
+
+<script>
+  (function () {
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url("' + banner + '")'
+      })
+    } else {
+      var url = 'http://debugly.cn/2015/08/12-acm-guo-he-wen-ti.html';
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/404.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/404.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "ACM-过河问题",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ef799a3a8ea3c51cd976",
+          client_secret: "0c9fe417f7acc5d01b90186f949fee2faefffc30"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('gitment'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

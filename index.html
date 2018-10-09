@@ -4,7 +4,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <meta name="description" content="Matt Reach&#39;s blog">
-  <meta name="keyword" content=",许乾隆,Matt Reach">
+  <meta name="keyword" content="许乾隆,Matt Reach,">
   
     <link rel="shortcut icon" href="/css/images/logo.png">
   
@@ -13,11 +13,13 @@
       Matt Reach
     
   </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
   <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
-  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/zenburn.min.css" rel="stylesheet">
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
@@ -45,12 +47,6 @@
       
         <li class="list-item">
           
-            <a href="/archives/" class="item-link">Archives</a>
-          
-        </li>
-      
-        <li class="list-item">
-          
             <a href="/tags/" class="item-link">Tags</a>
           
         </li>
@@ -67,6 +63,12 @@
           
         </li>
       
+        <li class="list-item">
+          
+            <a href="/zone/" class="item-link">Zone</a>
+          
+        </li>
+      
     </ul>
     <div class="menu">
       <span class="icon-bar"></span>
@@ -75,16 +77,13 @@
     </div>
     <div class="menu-mask">
       <ul class="menu-list">
+        <!-- /zone/AAA
+          index.htmBBB
+          -1 -->
         
           <li class="menu-item">
             
               <a href="/" class="menu-link mobile-active">Home</a>
-            
-          </li>
-        
-          <li class="menu-item">
-            
-              <a href="/archives/" class="menu-link">Archives</a>
             
           </li>
         
@@ -106,23 +105,216 @@
             
           </li>
         
+          <li class="menu-item">
+            
+              <a href="/zone/" class="menu-link">Zone</a>
+            
+          </li>
+        
       </ul>
     </div>
   </div>
 </header>
 
-    <main class="app-body">
+    <div class="app-content">
+<main class="app-body">
   
     <article class="article-card">
       <h2 class="article-head">
-        <a href="/2018/01/07/2018-01-07-testUniversalLink.html">调试我乐棋牌通用链接</a>
+        <a href="/2018/08/29-xcodebuild-usages.html">iOS 脚本打包之 xcodebuild 用法</a>
+      </h2>
+      <p class="article-date">August 29, 2018</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS,
+    </span>
+  </a>
+
+  <a href="/tags#Script" >
+    <span class="tag-code">Script
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+1、不要把脚本打包想象的那么难
+2、你应当至少会使用一门脚本语言来提升效率
+
+一行命名就能打包1xcodebuild
+该命名会使用默认配置+默认Target（多个Target会选择第一个作为默认）+ Release Configuration 进行打包。
+
+如果目录下有多个 project ...
+        
+      </div>
+      <a class="more" href="/2018/08/29-xcodebuild-usages.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/04/29-config-my-webstorm.html">提升 Webstorm 开发效率</a>
+      </h2>
+      <p class="article-date">April 29, 2018</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#macOS" >
+    <span class="tag-code">macOS
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+我并不是一个前端开发者，由于今年转到了小游戏开发，游戏逻辑甚至框架都是用 Javascript 写的，因此选择使用 Webstorm 这款编辑器软件。
+
+
+优点：前端开发支持的相当不错了，支持变量方法跳转，断点调试，Filewatch，CVS，内置 Termianl，JSLint …
+缺点 ...
+        
+      </div>
+      <a class="more" href="/2018/04/29-config-my-webstorm.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/04/10-HTTP-Post.html">常见的 POST 请求体编码方式</a>
+      </h2>
+      <p class="article-date">April 10, 2018</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#HTTP" >
+    <span class="tag-code">HTTP
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+前面介绍过了 HTTP 请求，现在看下 POST 这种请求方式，根据 HTTP 协议的规定，通过 POST 方式提交的数据必须放在请求体中，但协议没有规定数据采用什么编码方式，所以请求体的消息格式其实可以自动决定，但要让服务器能够解析才有意义。
+
+请求体编码方式一般情况下主流的有以下 4  ...
+        
+      </div>
+      <a class="more" href="/2018/04/10-HTTP-Post.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/04/09-HTTP.html">HTTP/1.1 协议简介</a>
+      </h2>
+      <p class="article-date">April 9, 2018</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#HTTP" >
+    <span class="tag-code">HTTP
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          简介HTTP 是一种传输协议，全称（HyperText Transfer Protocol，超文本传输协议）。HTTP 是一个基于 TCP/IP 通信协议来传递数据（HTML 文件, 图片文件, 查询结果等）的应用层协议，早在 1990 年万维网兴起的时候，就得到了应用，截至目前可谓是使用最 ...
+        
+      </div>
+      <a class="more" href="/2018/04/09-HTTP.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/03/22-github-customdomain-support-https.html">Github Pages 自定义域名支持 HTTPS</a>
+      </h2>
+      <p class="article-date">March 22, 2018</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#Other" >
+    <span class="tag-code">Other
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+自从有了自己的域名后，我的博客就失去了那把小绿锁，就在刚刚我还在搜索：Github 自定义域名怎么支持https，当我看到这个 帖子 之后，事情就有了翻转，没想到 Github 支持了，皆大欢喜了！也不用去折腾 Cloudflare 了….
+
+看了下，使用的是 Let’s Encrypt  ...
+        
+      </div>
+      <a class="more" href="/2018/03/22-github-customdomain-support-https.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/03/07-macOS-Install-Jenkins.html">macOS 上安装 Jenkins</a>
+      </h2>
+      <p class="article-date">March 7, 2018</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#macOS" >
+    <span class="tag-code">macOS
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+官网https://jenkins.io/download/
+下载 Jenkins官网的 download 不好使，点击后没能开始下，估计是被墙了，所以找了个镜像:
+http://mirrors.jenkins-ci.org/osx/
+也由 war 包的镜像:
+http://updates ...
+        
+      </div>
+      <a class="more" href="/2018/03/07-macOS-Install-Jenkins.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/03/06-macOS-JavaRuntime.html">搞定 macOS JRE</a>
+      </h2>
+      <p class="article-date">March 6, 2018</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#macOS" >
+    <span class="tag-code">macOS
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+macOS 是自带了 JRE 的，但实际上却没那么好用，今天就来聊下我遇到的问题以及解决方案.
+
+我也记不清楚之前本机的 Java 环境是否是配置好了，昨天更新了 macOS 之后，今天想装个 Jenkins 玩下，结果在运行 Jenkins 的时候发现 No Java runtime p ...
+        
+      </div>
+      <a class="more" href="/2018/03/06-macOS-JavaRuntime.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2018/01/07-testUniversalLink.html">调试我乐棋牌通用链接</a>
       </h2>
       <p class="article-date">January 7, 2018</p>
       
-        <span><i class="fa fa-tags"></i> Tags:</span>
+        <span><i class="fa fa-tags"></i></span>
 
   <a href="/tags#test" >
-    <span class="tag-code">test</span>
+    <span class="tag-code">test
+    </span>
   </a>
 
       
@@ -140,23 +332,26 @@ Universal Link
   2、拉起斗地主-with-action
 
 URL Scheme
-  3、拉起斗地主-with-action
-  4、 ...
+  3、拉起斗地主
+
+Share URL
+  4、分 ...
         
       </div>
-      <a class="more" href="/2018/01/07/2018-01-07-testUniversalLink.html">Read more</a>
+      <a class="more" href="/2018/01/07-testUniversalLink.html">Read more</a>
     </article>
   
     <article class="article-card">
       <h2 class="article-head">
-        <a href="/2017/12/31/2017-12-31-my-2017.html">我的 2017</a>
+        <a href="/2017/12/31-my-2017.html">我的 2017</a>
       </h2>
       <p class="article-date">December 31, 2017</p>
       
-        <span><i class="fa fa-tags"></i> Tags:</span>
+        <span><i class="fa fa-tags"></i></span>
 
   <a href="/tags#个人总结" >
-    <span class="tag-code">个人总结</span>
+    <span class="tag-code">个人总结
+    </span>
   </a>
 
       
@@ -169,193 +364,32 @@ Bye，My 2017 !
 回首 2017，着实经历了不少事情，可真到写的时候不知道写什么了，还是按照时间顺序说几个大事吧： ...
         
       </div>
-      <a class="more" href="/2017/12/31/2017-12-31-my-2017.html">Read more</a>
+      <a class="more" href="/2017/12/31-my-2017.html">Read more</a>
     </article>
   
     <article class="article-card">
       <h2 class="article-head">
-        <a href="/2017/10/20/2017-10-20-CAGradientLayer.html">使用 CAGradientLayer 实现渐变遮罩</a>
+        <a href="/2017/12/20-awesome-sdk.html">追求卓越的 20 个月</a>
       </h2>
-      <p class="article-date">October 20, 2017</p>
+      <p class="article-date">December 31, 2017</p>
       
-        <span><i class="fa fa-tags"></i> Tags:</span>
+        <span><i class="fa fa-tags"></i></span>
 
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK
+    </span>
   </a>
 
       
       <div class="article-summary">
         
           
-在做歌词显示的时候需要实现文字渐变消失的效果，向同事请教后知道了一个实现方法：使用 CAGradientLayer 来做，但是对CAGradientLayer 的属性设置不是很明确，所以进行了总结，现将代码贴出来并做解释说明，方便大家使用：
+要告别 SDK 开发工作了，写篇文章纪念下这段美好的岁月吧！
 
-实现效果
-1、实现代码123456789101 ...
+追求卓越的20个月从 16 年 5 月以来，我就开始从事 SDK 的开发工作，我觉得做 SDK 跟 App 是有很大差别的，因为 SDK 需要考虑很多合理性，既要满足 App 调用方便又要保证其通用性，优雅性，内外兼修，有的放 ...
         
       </div>
-      <a class="more" href="/2017/10/20/2017-10-20-CAGradientLayer.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/10/12/2017-10-12-lrc.html">实现随音乐播放滚动歌词的音乐提词器</a>
-      </h2>
-      <p class="article-date">October 12, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-由于开发需要实现一个随音乐播放滚动歌词的音乐提词器，通过网上查找资料，实现了效果，将代码贴出来，方便大家使用，主要步骤如下：
-
-1、歌词解析TEMusicLrcParser.h
-123456789101112#import &lt;Foundation/Foundation.h&gt;@i ...
-        
-      </div>
-      <a class="more" href="/2017/10/12/2017-10-12-lrc.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/21/2017-09-21-reactnative native invoke.html">React Native和iOS原生方法交互</a>
-      </h2>
-      <p class="article-date">September 21, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          原生传递参数给React Native初始化时传值1234- (instancetype)initWithBundleURL:(NSURL *)bundleURL                       moduleName:(NSString *)moduleName          ...
-        
-      </div>
-      <a class="more" href="/2017/09/21/2017-09-21-reactnative native invoke.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/20/2017-09-20-UIButton-highlight.html">UIButton选中状态下点击触发高亮的问题</a>
-      </h2>
-      <p class="article-date">September 20, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          在写发射彩蛋红包页面时，需要实现这样一个功能，即有两只蛋，一只彩蛋，一只金蛋，点击其中一个会变大，另外一个会变小，具体效果如下图所示：
-
-具体的实现思路是设置两只蛋的Normal状态和Selected状态下的图片，一开始将彩蛋设为选中态，将金蛋设为正常态，然后在各自的点击事件中将两个按钮的状 ...
-        
-      </div>
-      <a class="more" href="/2017/09/20/2017-09-20-UIButton-highlight.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/20/2017-09-20-UITableViewAndUIGestureRecognizer.html">在UITableViewCell上添加手势的问题</a>
-      </h2>
-      <p class="article-date">September 20, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          问题描述在某一些UITableViewCell上添加长按手势。
-1234567891011121314- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)in ...
-        
-      </div>
-      <a class="more" href="/2017/09/20/2017-09-20-UITableViewAndUIGestureRecognizer.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/15/2017-09-15-ws2.html">TableViewCell 点击后背景蒙层变透明的解决方案</a>
-      </h2>
-      <p class="article-date">September 15, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-做OpenSdk下载列表时， 点击cell ,封面图上会有暂停蒙层（黑色半透明，加在了contentView上），但是点击其它cell时， 系统会把这个蒙层的背景颜色改为透明。 
-
-解决方案： 需要重写系统的 setSelected:(BOOL)selected animated:(BOO ...
-        
-      </div>
-      <a class="more" href="/2017/09/15/2017-09-15-ws2.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/15/2017-09-15-360rotate.html">实现一个图片 360 度不停旋转</a>
-      </h2>
-      <p class="article-date">September 15, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-我想要实现一个图片不停的360度旋转的动画效果，类似于加载时候不停的转圈圈，通过网上查找资料，试用了两种方法：
-
-1、UIView 动画递归的方式1234567891011- (void)startAnimation  &#123;      CGAffineTransform trans ...
-        
-      </div>
-      <a class="more" href="/2017/09/15/2017-09-15-360rotate.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/15/2017-09-15-reloadSections.html">IOS 刷新 UITableView 的 section 时崩溃</a>
-      </h2>
-      <p class="article-date">September 15, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          问题描述在调用UITableView的如下方法时崩溃
-12NSIndexSet *indexSet=[[NSIndexSet alloc]initWithIndex:1];[tableview reloadSections:indexSet withRowAnimation:UITableV ...
-        
-      </div>
-      <a class="more" href="/2017/09/15/2017-09-15-reloadSections.html">Read more</a>
+      <a class="more" href="/2017/12/20-awesome-sdk.html">Read more</a>
     </article>
   
 
@@ -370,6 +404,7 @@ Bye，My 2017 !
 </div>
   
 </main>
+</div>
 
 
     <div class="scroll-top">

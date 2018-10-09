@@ -4,7 +4,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <meta name="description" content="Matt Reach&#39;s blog">
-  <meta name="keyword" content=",许乾隆,Matt Reach">
+  <meta name="keyword" content="许乾隆,Matt Reach,">
   
     <link rel="shortcut icon" href="/css/images/logo.png">
   
@@ -13,11 +13,13 @@
       Matt Reach
     
   </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
   <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
-  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/zenburn.min.css" rel="stylesheet">
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
@@ -45,12 +47,6 @@
       
         <li class="list-item">
           
-            <a href="/archives/" class="item-link">Archives</a>
-          
-        </li>
-      
-        <li class="list-item">
-          
             <a href="/tags/" class="item-link">Tags</a>
           
         </li>
@@ -67,6 +63,12 @@
           
         </li>
       
+        <li class="list-item">
+          
+            <a href="/zone/" class="item-link">Zone</a>
+          
+        </li>
+      
     </ul>
     <div class="menu">
       <span class="icon-bar"></span>
@@ -75,16 +77,13 @@
     </div>
     <div class="menu-mask">
       <ul class="menu-list">
+        <!-- /zone/AAA
+          pageBBB
+          -1 -->
         
           <li class="menu-item">
             
               <a href="/" class="menu-link mobile-active">Home</a>
-            
-          </li>
-        
-          <li class="menu-item">
-            
-              <a href="/archives/" class="menu-link">Archives</a>
             
           </li>
         
@@ -106,23 +105,225 @@
             
           </li>
         
+          <li class="menu-item">
+            
+              <a href="/zone/" class="menu-link">Zone</a>
+            
+          </li>
+        
       </ul>
     </div>
   </div>
 </header>
 
-    <main class="app-body">
+    <div class="app-content">
+<main class="app-body">
   
     <article class="article-card">
       <h2 class="article-head">
-        <a href="/2016/06/19/2016-06-19-SLReachability.html">统一管理网络变化</a>
+        <a href="/2017/01/10-household-zhixuan-radio.html">致炫收音机改为家用音响</a>
+      </h2>
+      <p class="article-date">January 10, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#生活中的欢乐" >
+    <span class="tag-code">生活中的欢乐
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+最近买了辆小车—丰田-致炫，不是高配的，所以没有导航，雷达，倒车影像等，只有一个收音机，CD 都不带…
+
+上周六去汽配城装了导航和倒车影像，原车的收音机就被毫不客气的抛到后备箱里了，作为一个 Geeker ，不可能把他扔掉或者当破烂卖了，即使卖也是白菜价(论坛里有人出20大洋，呵呵)，这些 ...
+        
+      </div>
+      <a class="more" href="/2017/01/10-household-zhixuan-radio.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2016/12/31-my2016.html">我的 2016</a>
+      </h2>
+      <p class="article-date">December 31, 2016</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#个人总结" >
+    <span class="tag-code">个人总结
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+要和 2016 说再见了，是时候对今年做个总结了，今年是不平凡的一年，因为发生了几件人生重大的事情，还是按照时间顺序来说吧，这样简单些。
+
+三亚4 月 — 也就是刚过完年不久，天还有些冷的时候，我和未婚妻去了趟三亚，目的不是去旅行，而是去拍婚纱照。
+8 号，我们乘坐地铁从丰台东大街出发到东 ...
+        
+      </div>
+      <a class="more" href="/2016/12/31-my2016.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2016/12/03-qfsdk-refactor-chat.html">千帆 SDK Refactor: 优雅的处理聊天数据源</a>
+      </h2>
+      <p class="article-date">December 3, 2016</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+以下讨论基于的前提思想是：Cell 和 Model 是绑定的，一一对应的；Cell 是数据源所决定的，Cell 要做的就是展示数据源而已，或者说是先确定的数据源而不是 Cell，因此我们今天以讨论 Model 为主。简单的概括这次重构是为 Cell 建立一个CellModel，他有个实现构 ...
+        
+      </div>
+      <a class="more" href="/2016/12/03-qfsdk-refactor-chat.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2016/12/02-network-support-chain.html">SLNetwork 支持链式编程</a>
+      </h2>
+      <p class="article-date">December 2, 2016</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+之前用 Masonry 写过一阵子自动布局，感觉很是方便，最大的特点是：使用block，在block块内编写约束即可，方便 update 约束，并且支持链式编程，于是我研究了下如何链式编程后，为我的网络请求也加了这个功能…
+
+思考如何才能做到链式必须满足的一个条件肯定是调用方法之后，方法的 ...
+        
+      </div>
+      <a class="more" href="/2016/12/02-network-support-chain.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2016/11/30-qfsdk-issue-timestamp.html">千帆 SDK Issue: TimeStamp</a>
+      </h2>
+      <p class="article-date">November 30, 2016</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          简介去年我写过这么一篇文章 《小心 unsigned 数据类型埋下坑》 主要说明了一个问题，一定要小心不能将一个小于 0 的值赋给 unsigned 类型！今天要说的我们经常会给服务传个时间戳，客户端最好不要使用 int 类型来接受，因为很可能程序只能正常运行到 2038 年。
+时间戳服务器 ...
+        
+      </div>
+      <a class="more" href="/2016/11/30-qfsdk-issue-timestamp.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2016/11/28-qfsdk-refactor-network.html">千帆 SDK Refactor: NetWork</a>
+      </h2>
+      <p class="article-date">November 28, 2016</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+重构，不是说说而已，也不是不想看别人的烂代码自己重写一遍，而是真的遇到了会破坏当前架构的实际问题了，或者之前就没想那么多，继续往下写只会将业务逻辑搞得支离破碎，毫无条理而言，日后维护负担大，相同的逻辑写了多遍之时，才需要重构;我将会结合实际分享几篇SDK内关于重构的文章。
+
+网络请求的现状 ...
+        
+      </div>
+      <a class="more" href="/2016/11/28-qfsdk-refactor-network.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2016/11/28-qf-sdk-introduction.html">什么是千帆直播 SDK</a>
+      </h2>
+      <p class="article-date">November 28, 2016</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          千帆直播SDK简介
+说起千帆直播SDK，他包含了两个信息，一个是 千帆直播，一个是 SDK ，下面我们就说下他们的关系吧。
+
+千帆直播 是搜狐旗下的一个直播平台，提供了丰富的精彩的美女直播，主要属于秀场类，正在全力打造成一个品牌。开发团队在广州部门，前身是 56 视频 （14年10月被搜狐收 ...
+        
+      </div>
+      <a class="more" href="/2016/11/28-qf-sdk-introduction.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2016/11/27-blog-use-jekyll.html">使用 Jekyll 搭建博客</a>
+      </h2>
+      <p class="article-date">November 27, 2016</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#Script" >
+    <span class="tag-code">Script
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          博客大改版在此之前使用的是 Octopress 博客系统，或许是厌倦了吧，因此改为直接使用 Jekyll 来搭建,花了几个晚上的时间，一步步摸索着做了个 Jekyll 的主题出来，毕竟 Jekyll 的主题不是一个 Geek 想要的，我前端能力有限，所以目前这个主题只是能用而已，so 就没不 ...
+        
+      </div>
+      <a class="more" href="/2016/11/27-blog-use-jekyll.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2016/06/19-SLReachability.html">统一管理网络变化</a>
       </h2>
       <p class="article-date">June 19, 2016</p>
       
-        <span><i class="fa fa-tags"></i> Tags:</span>
+        <span><i class="fa fa-tags"></i></span>
 
   <a href="/tags#iOS" >
-    <span class="tag-code">iOS</span>
+    <span class="tag-code">iOS
+    </span>
   </a>
 
       
@@ -143,19 +344,20 @@
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSUInteger</span>, SLWWANStatus) &#123;</span><br><span class="line">    SLWWANNotReachable = SLNotReachable,</span><br><span class="line">    <span class="comment">///不允许WWAN网络；默认允许</span></span><br><span class="line">    SLNetWorkStatusWWANRefused = <span class="number">3</span>,</span><br><span class="line">    <span class="comment">///使用WWAN；</span></span><br><span class="line">    SLNetWorkStatusWWAN4G = <span class="number">4</span>,</span><br><span class="line">    SLNetWorkStatusWWAN3G = <span class="number">5</span>,</span><br><span class="line">    SLNetWorkStatusWWAN2G = <span class="number">6</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>, <span class="keyword">readonly</span>) SLNetWorkStatus wwanType;</span><br></pre></td></tr></table></figure>
         
       </div>
-      <a class="more" href="/2016/06/19/2016-06-19-SLReachability.html">Read more</a>
+      <a class="more" href="/2016/06/19-SLReachability.html">Read more</a>
     </article>
   
     <article class="article-card">
       <h2 class="article-head">
-        <a href="/2016/05/29/2016-05-29-bezier-demo.html">使用 UIBezierPath 绘制圆角六边形</a>
+        <a href="/2016/05/29-bezier-demo.html">使用 UIBezierPath 绘制圆角六边形</a>
       </h2>
       <p class="article-date">May 29, 2016</p>
       
-        <span><i class="fa fa-tags"></i> Tags:</span>
+        <span><i class="fa fa-tags"></i></span>
 
   <a href="/tags#iOS" >
-    <span class="tag-code">iOS</span>
+    <span class="tag-code">iOS
+    </span>
   </a>
 
       
@@ -177,195 +379,7 @@
 </ul>
         
       </div>
-      <a class="more" href="/2016/05/29/2016-05-29-bezier-demo.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2016/05/06/2016-05-06-new-mac-need-install-softwares.html">使用 Mac 开发必备神器</a>
-      </h2>
-      <p class="article-date">May 6, 2016</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#Other" >
-    <span class="tag-code">Other</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          背景今天公司配的新 Mac Book Pro 到了，比我个人的电脑配置稍高了一点哈(固态硬盘是 512G 的,触摸板有 Force Touch 功能）; 拿到手先登录下Apple 账号，简单设置下网络就开始用喽！我觉得从一个新电脑入手到打造出顺手的开发环境还是费了不少力气的，这里就记录下，以 ...
-        
-      </div>
-      <a class="more" href="/2016/05/06/2016-05-06-new-mac-need-install-softwares.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2016/03/28/2016-03-28-calayerinvalidgeometry.html">解决 CALayerInvalidGeometry 问题</a>
-      </h2>
-      <p class="article-date">March 28, 2016</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#iOS" >
-    <span class="tag-code">iOS</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          <p>今天遇到了很多 calyer 设置坐标的崩溃，原因如下：</p>
-<blockquote>
-<p>Fatal Exception: <strong>CALayerInvalidGeometry</strong><br>CALayer position <strong>contains NaN</strong>: [nan 8]</p>
-</blockquote>
-<p>坐标竟然是 NaN (非数字)！这还得了，马上排查！！！<br>下面是具体崩溃信息：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Thread : Fatal Exception: <span class="built_in">CALayerInvalidGeometry</span></span><br><span class="line"><span class="number">0</span>  CoreFoundation                 <span class="number">0x23a2a5f7</span> __exceptionPreprocess</span><br><span class="line"><span class="number">1</span>  libobjc.A.dylib                <span class="number">0x3129cc77</span> objc_exception_throw</span><br><span class="line"><span class="number">2</span>  CoreFoundation                 <span class="number">0x23a2a53d</span> -[<span class="built_in">NSException</span> initWithCoder:]</span><br><span class="line"><span class="number">3</span>  QuartzCore                     <span class="number">0x268f01cf</span> CA::Layer::set_position(CA::Vec2&lt;<span class="keyword">double</span>&gt; <span class="keyword">const</span>&amp;, <span class="keyword">bool</span>)</span><br><span class="line"><span class="number">4</span>  QuartzCore                     <span class="number">0x268f00d3</span> -[<span class="built_in">CALayer</span> setPosition:]</span><br><span class="line"><span class="number">5</span>  QuartzCore                     <span class="number">0x268f0065</span> -[<span class="built_in">CALayer</span> setFrame:]</span><br><span class="line"><span class="number">6</span>  <span class="built_in">UIKit</span>                          <span class="number">0x26ec8fe3</span> -[<span class="built_in">UIView</span>(Geometry) setFrame:]</span><br><span class="line"><span class="number">7</span>  SOHUVideo                      <span class="number">0xa937d</span> -[DiskStatusView updateDiskStatus] (DiskStatusView.m:<span class="number">65</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-        
-      </div>
-      <a class="more" href="/2016/03/28/2016-03-28-calayerinvalidgeometry.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2016/03/06/2016-03-06-Objc-Associations-Advanced.html">深入理解关联引用</a>
-      </h2>
-      <p class="article-date">March 6, 2016</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#iOS" >
-    <span class="tag-code">iOS</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-今日吃饱了，确实撑得慌，找了我的邻居-阿杰一起散步，走了好大一圈，最后在小区下聊起了技术，从YYKit，SDWebImage 等第三方库，扯到了关联引用，因为他们都用到了这个技术，然而我又想到了单例，单例和关联引用在实现上有一个相同点—都需要一个静态变量；那么疑问就来了：同样都需要一个静态 ...
-        
-      </div>
-      <a class="more" href="/2016/03/06/2016-03-06-Objc-Associations-Advanced.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2016/03/05/2016-03-05-Objc-Associations-Useage.html">关联引用的使用方法</a>
-      </h2>
-      <p class="article-date">March 5, 2016</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#iOS" >
-    <span class="tag-code">iOS</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-实际开发中，关联引用的使用是很广泛并且实用的，比如我们熟知的 SDWebImage,下拉刷新控件，YYKit等库里均有使用；我 14 年看 EGO 下拉刷新实现的时候发现了这种用法，那是我第一次接触，这里简单的介绍下使用方法…
-
-假如现有工程里已经有个类 SingletonObject，我 ...
-        
-      </div>
-      <a class="more" href="/2016/03/05/2016-03-05-Objc-Associations-Useage.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2015/12/31/2015-12-31-my2015.html">我的 2015</a>
-      </h2>
-      <p class="article-date">December 31, 2015</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#个人总结" >
-    <span class="tag-code">个人总结</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          <blockquote>
-<p>今天是 2015 年的最后一天了，在 7月 7号那天我搭建了属于自己的博客，6个月的时间发布了 20篇博客，还有需要完善的 11篇没有发布，等日后完善好了，可以拿出来晒晒的时候再发出来吧，毕竟我不需要追求数量；现在简单回顾下过去的这两年我经历了什么，收获了什么？遇见了哪些可爱的人？</p>
-</blockquote>
-        
-      </div>
-      <a class="more" href="/2015/12/31/2015-12-31-my2015.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2015/12/27/2015-12-27-online debug.html">通过浏览器调试视图和沙河</a>
-      </h2>
-      <p class="article-date">December 27, 2015</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#iOS" >
-    <span class="tag-code">iOS</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>最近在 GitHub 上看到了 Damian 写的一个在浏览器调试视图的工程 <a href="https://github.com/glock45/iOS-Hierarchy-Viewer" target="_blank" rel="noopener">iOS Hierarchy Viewer</a> ，跟 xCode 自带的类似，不过几乎没什么版本限制，我在他的基础上增加了查看沙河文件的功能，增加了一个首页，和返回首页…</p>
-<h2 id="At-a-glance"><a href="#At-a-glance" class="headerlink" title="At a glance"></a>At a glance</h2><ul>
-<li>首页：</li>
-</ul>
-<p><img src="/images/201512/img201512272145-1.png" width="1040" height="393"></p>
-        
-      </div>
-      <a class="more" href="/2015/12/27/2015-12-27-online debug.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2015/12/07/2015-12-07-review your code.html">Remember review your code</a>
-      </h2>
-      <p class="article-date">December 7, 2015</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#Other" >
-    <span class="tag-code">Other</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          今天科目二顺利过关，很高兴，可是紧接着就再也高兴不起来了，因为由于我的失误造成公司的项目上线延期了一天，失误了，原因很简单，没有看清楚类别是加了 DEBUG 判断了，我的方法当然也被这个宏包裹了，所以 release 下必崩无疑！
-
-        
-      </div>
-      <a class="more" href="/2015/12/07/2015-12-07-review your code.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2015/12/04/2015-12-04-ql-commom-alert.html">iOS 通用 Alert、ActionSheet</a>
-      </h2>
-      <p class="article-date">December 4, 2015</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#iOS" >
-    <span class="tag-code">iOS</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>在 14 年 iOS 8 发布之后就想着统一一下 AlertView 和 iOS 8 开始使用的 AletViewController，最近终于把这事给办了；虽然最近也很忙，但还是准备了不少东西，除了这个通用封装之外，紧接着将还有一篇，先剧透下—是有关通过浏览器线上调试的…</p>
-<h2 id="封装思路"><a href="#封装思路" class="headerlink" title="封装思路"></a>封装思路</h2><p>iOS 8 有了很大的变化，每个按钮对应了一个 UIAlertAction 对像，相关的索引和标题都在这里存放；block 回掉点击事件；因此，想办法处理一下 iOS 7 的AlertView，使之支持添加 Action，block 回掉点击事件；然后搞个manager，来管理 iOS 8 前后调用的类，从而达到通用的效果! ActionSheet 也是同样的道理，我觉得分开处理比较好，因此最终我讲封装出来两个控制器出来。</p>
-<p>iOS 7并没有 Action 类，因此自己写个命名为 QLBlockAlertAction ;<br>并且定义相关的枚举值，这个很好做，直接 copy iOS 8 系统定义的改个名字就行了;</p>
-<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><p>按照上面描述的思路开始 code：</p>
-<h5 id="处理-iOS-7-的-AlertView"><a href="#处理-iOS-7-的-AlertView" class="headerlink" title="处理 iOS 7 的 AlertView"></a>处理 iOS 7 的 AlertView</h5><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">QLBlockAlertAction</span> : <span class="title">NSObject</span></span></span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">instancetype</span>)actionWithTitle:(<span class="built_in">NSString</span> *)title style:(QLAlertActionStyle)style handler:(<span class="keyword">void</span> (^)(QLBlockAlertAction *action))handler;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">readonly</span>) <span class="built_in">NSString</span> *title;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>,<span class="keyword">readonly</span>) QLAlertActionStyle style;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">readonly</span>) <span class="keyword">void</span> (^AlertHandler)(QLBlockAlertAction *);</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
-        
-      </div>
-      <a class="more" href="/2015/12/04/2015-12-04-ql-commom-alert.html">Read more</a>
+      <a class="more" href="/2016/05/29-bezier-demo.html">Read more</a>
     </article>
   
 
@@ -380,6 +394,7 @@
 </div>
   
 </main>
+</div>
 
 
     <div class="scroll-top">

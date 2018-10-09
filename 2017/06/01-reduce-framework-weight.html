@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content="许乾隆,Matt Reach,framework 瘦身,iOS开发">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      iOS Framework 瘦身实战 | Matt Reach
+    
+  </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/zenburn.min.css" rel="stylesheet">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/zone/" class="item-link">Zone</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        <!-- /zone/AAA
+          2017BBB
+          -1 -->
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/zone/" class="menu-link">Zone</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>iOS Framework 瘦身实战</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS,
+    </span>
+  </a>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK
+    </span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2017-06-01</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+
+<div class="app-content">
+<main class="app-body flex-box">
+  <input type='checkbox' id='asideToggle'>
+  <!-- Article START -->
+  <article class="post-article">
+      
+    <section class="markdown-content"><p><img src="/images/201706/2014WorldCup.gif" alt=""></p>
+<blockquote>
+<p>近来业务增多，对应的 Framework 也越做越多，提供给搜狐视频的就多达 5个，物理包大小当然也越来越大了，因此查阅了资料，对 framework 进行瘦身！</p>
+</blockquote>
+<h2 id="工程配置"><a href="#工程配置" class="headerlink" title="工程配置"></a>工程配置</h2><ol>
+<li><p>调试符号(Generate Debug Sysmbols)</p>
+<p> 这个是控制是否生成调试符号的，因此 debug 模式下保持使用 YES，release改为 NO；也就说我们平时调试还生成调试信息，但是打包发布时不需要生成，如果 debug下也改为 NO 的话，会导致没有断点，你设置了断点，但是代码走到那之后不会停下来让你调试！经过试验，我从 97M 减到了 61M，减少了 37 %</p>
+</li>
+<li><p>cpu 架构(Architectures)</p>
+<p> 基本上每多支持一种架构，包大小就会翻一倍！目前而言，Architectures 设置为 armv7，arm64 就可以了，下面是架构对应的机型</p>
+<ul>
+<li>armv6 : iPhone,iPhone2,iPhone3G, iPhone3GS</li>
+<li>armv7 : iPhone4,iPhone4S;</li>
+<li>armv7s: iPhone5,iPhone5C;</li>
+<li>arm64 : iPhone5S,iPhoneSE,iPhone6(plus)(S),iPhone7(plus)(S)</li>
+</ul>
+</li>
+<li><p>压缩等级（Optimization Level）</p>
+<p> 使用默认值就行了</p>
+<ul>
+<li>release : Fastest,Smallest[-Os]</li>
+<li>debug : None,[-O0]</li>
+</ul>
+</li>
+<li><p>不可能执行到的代码 (Dead Code Stripping)</p>
+<p> 使用默认值就行了</p>
+<ul>
+<li>设置为 YES</li>
+</ul>
+</li>
+</ol>
+<h2 id="资源图片"><a href="#资源图片" class="headerlink" title="资源图片"></a>资源图片</h2><ol>
+<li><p>必要的资源图片，比如按钮的背景图，Loading 图标等，均可进行无损压缩；可以使用 <a href="/效率/2015/09/27/bo-ke-ti-su-shi-yong-imageiptimya-suo-tu-pian.html#2">ImageOptim</a> 这款开源软件！</p>
+</li>
+<li><p>除了必要的资源图片外，像礼物图片，大动画资源图片等，都可采用动态下载的方式，这样做除了减少包大小外，也能做到及时更新，满足产品需求！</p>
+</li>
+</ol>
+<h2 id="ipa-瘦身"><a href="#ipa-瘦身" class="headerlink" title="ipa 瘦身"></a>ipa 瘦身</h2><p>由于主要精力在 SDK 开发上，所以我暂无实际经验，这是网上找的一篇 <a href="http://blog.csdn.net/a2657222/article/details/45723161" target="_blank" rel="noopener">文章</a> 。</p>
+</section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2017/05/26-my-shell.html">常用 Shell 命令汇总</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2017/06/04-use-rake.html">使用 Rake 重写打包脚本</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="gitment"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    
+<aside class="catalog-container">
+  <div class="toc-indicator">
+    <label for="asideToggle" id="asideToggleLabel"><</label>
+  </div>
+  <div class="toc-main">
+    <strong class="toc-title">目录</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#工程配置"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">工程配置</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#资源图片"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">资源图片</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#ipa-瘦身"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">ipa 瘦身</span></a></li></ol>
+    
+  </div>
+</aside>
+
+  
+  <!-- Catalog END -->
+</main>
+</div>
+
+<script>
+  (function () {
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url("' + banner + '")'
+      })
+    } else {
+      var url = 'http://debugly.cn/2017/06/01-reduce-framework-weight.html';
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/404.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/404.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "iOS Framework 瘦身实战",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ef799a3a8ea3c51cd976",
+          client_secret: "0c9fe417f7acc5d01b90186f949fee2faefffc30"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('gitment'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

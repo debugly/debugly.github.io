@@ -4,7 +4,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <meta name="description" content="Matt Reach&#39;s blog">
-  <meta name="keyword" content=",许乾隆,Matt Reach">
+  <meta name="keyword" content="许乾隆,Matt Reach,">
   
     <link rel="shortcut icon" href="/css/images/logo.png">
   
@@ -13,11 +13,13 @@
       Matt Reach
     
   </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
   <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
-  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/zenburn.min.css" rel="stylesheet">
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
@@ -45,12 +47,6 @@
       
         <li class="list-item">
           
-            <a href="/archives/" class="item-link">Archives</a>
-          
-        </li>
-      
-        <li class="list-item">
-          
             <a href="/tags/" class="item-link">Tags</a>
           
         </li>
@@ -67,6 +63,12 @@
           
         </li>
       
+        <li class="list-item">
+          
+            <a href="/zone/" class="item-link">Zone</a>
+          
+        </li>
+      
     </ul>
     <div class="menu">
       <span class="icon-bar"></span>
@@ -75,16 +77,13 @@
     </div>
     <div class="menu-mask">
       <ul class="menu-list">
+        <!-- /zone/AAA
+          pageBBB
+          -1 -->
         
           <li class="menu-item">
             
               <a href="/" class="menu-link mobile-active">Home</a>
-            
-          </li>
-        
-          <li class="menu-item">
-            
-              <a href="/archives/" class="menu-link">Archives</a>
             
           </li>
         
@@ -106,23 +105,267 @@
             
           </li>
         
+          <li class="menu-item">
+            
+              <a href="/zone/" class="menu-link">Zone</a>
+            
+          </li>
+        
       </ul>
     </div>
   </div>
 </header>
 
-    <main class="app-body">
+    <div class="app-content">
+<main class="app-body">
   
     <article class="article-card">
       <h2 class="article-head">
-        <a href="/2017/09/14/2017-09-14-layerAnimation_frame.html">Core Animation 与 UIView.frame</a>
+        <a href="/2017/10/20-CAGradientLayer.html">使用 CAGradientLayer 实现渐变遮罩</a>
+      </h2>
+      <p class="article-date">October 20, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS,
+    </span>
+  </a>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+在做歌词显示的时候需要实现文字渐变消失的效果，向同事请教后知道了一个实现方法：使用 CAGradientLayer 来做，但是对CAGradientLayer 的属性设置不是很明确，所以进行了总结，现将代码贴出来并做解释说明，方便大家使用：
+
+实现效果
+实现代码12345678910111 ...
+        
+      </div>
+      <a class="more" href="/2017/10/20-CAGradientLayer.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/10/12-lrc.html">实现随音乐播放滚动歌词的音乐提词器</a>
+      </h2>
+      <p class="article-date">October 12, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+由于开发需要实现一个随音乐播放滚动歌词的音乐提词器，通过网上查找资料，实现了效果，将代码贴出来，方便大家使用，主要步骤如下：
+
+歌词解析TEMusicLrcParser.h
+123456789101112#import &lt;Foundation/Foundation.h&gt;@int ...
+        
+      </div>
+      <a class="more" href="/2017/10/12-lrc.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/21-reactnative native invoke.html">React Native和iOS原生方法交互</a>
+      </h2>
+      <p class="article-date">September 21, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS,
+    </span>
+  </a>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          原生传递参数给React Native
+初始化时传值
+  1234- (instancetype)initWithBundleURL:(NSURL *)bundleURL                       moduleName:(NSString *)moduleName      ...
+        
+      </div>
+      <a class="more" href="/2017/09/21-reactnative native invoke.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/20-UIButton-highlight.html">UIButton选中状态下点击触发高亮的问题</a>
+      </h2>
+      <p class="article-date">September 20, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS,
+    </span>
+  </a>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          在写发射彩蛋红包页面时，需要实现这样一个功能，即有两只蛋，一只彩蛋，一只金蛋，点击其中一个会变大，另外一个会变小，具体效果如下图所示：
+
+具体的实现思路是设置两只蛋的Normal状态和Selected状态下的图片，一开始将彩蛋设为选中态，将金蛋设为正常态，然后在各自的点击事件中将两个按钮的状 ...
+        
+      </div>
+      <a class="more" href="/2017/09/20-UIButton-highlight.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/20-UITableViewAndUIGestureRecognizer.html">在UITableViewCell上添加手势的问题</a>
+      </h2>
+      <p class="article-date">September 20, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS,
+    </span>
+  </a>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          问题描述在某一些UITableViewCell上添加长按手势。
+1234567891011121314- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)in ...
+        
+      </div>
+      <a class="more" href="/2017/09/20-UITableViewAndUIGestureRecognizer.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/15-ws2.html">TableViewCell 点击后背景蒙层变透明的解决方案</a>
+      </h2>
+      <p class="article-date">September 15, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS,
+    </span>
+  </a>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+做OpenSdk下载列表时， 点击cell ,封面图上会有暂停蒙层（黑色半透明，加在了contentView上），但是点击其它cell时， 系统会把这个蒙层的背景颜色改为透明。 
+
+解决方案： 需要重写系统的 setSelected:(BOOL)selected animated:(BOO ...
+        
+      </div>
+      <a class="more" href="/2017/09/15-ws2.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/15-360rotate.html">实现一个图片 360 度不停旋转</a>
+      </h2>
+      <p class="article-date">September 15, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS,
+    </span>
+  </a>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+我想要实现一个图片不停的360度旋转的动画效果，类似于加载时候不停的转圈圈，通过网上查找资料，试用了两种方法：
+
+UIView 动画递归的方式1234567891011- (void)startAnimation  &#123;      CGAffineTransform transfo ...
+        
+      </div>
+      <a class="more" href="/2017/09/15-360rotate.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/15-reloadSections.html">IOS 刷新 UITableView 的 section 时崩溃</a>
+      </h2>
+      <p class="article-date">September 15, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS,
+    </span>
+  </a>
+
+  <a href="/tags#issues" >
+    <span class="tag-code">issues
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          问题描述在调用UITableView的如下方法时崩溃
+12NSIndexSet *indexSet=[[NSIndexSet alloc]initWithIndex:1];[tableview reloadSections:indexSet withRowAnimation:UITableV ...
+        
+      </div>
+      <a class="more" href="/2017/09/15-reloadSections.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/09/14-layerAnimation_frame.html">Core Animation 与 UIView.frame</a>
       </h2>
       <p class="article-date">September 14, 2017</p>
       
-        <span><i class="fa fa-tags"></i> Tags:</span>
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS,
+    </span>
+  </a>
 
   <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
+    <span class="tag-code">issues
+    </span>
   </a>
 
       
@@ -134,19 +377,25 @@
 Core A ...
         
       </div>
-      <a class="more" href="/2017/09/14/2017-09-14-layerAnimation_frame.html">Read more</a>
+      <a class="more" href="/2017/09/14-layerAnimation_frame.html">Read more</a>
     </article>
   
     <article class="article-card">
       <h2 class="article-head">
-        <a href="/2017/09/14/2017-09-14-use-semaphore.html">使用信号量解决多线程同步问题</a>
+        <a href="/2017/09/14-use-semaphore.html">使用信号量解决多线程同步问题</a>
       </h2>
       <p class="article-date">September 14, 2017</p>
       
-        <span><i class="fa fa-tags"></i> Tags:</span>
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS,
+    </span>
+  </a>
 
   <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
+    <span class="tag-code">issues
+    </span>
   </a>
 
       
@@ -158,196 +407,7 @@ Core A ...
 IMP看代 ...
         
       </div>
-      <a class="more" href="/2017/09/14/2017-09-14-use-semaphore.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/13/2017-09-13-c-malloc.html">C语言malloc、free、memmove</a>
-      </h2>
-      <p class="article-date">September 13, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          在开发斗地主的语音房时，显示当前音量用的C语言实现，会分配buffer地址，最后释放buffer，使用了malloc、free和memmove等方法。三个方法的具体使用如下：
-mallocvoid *malloc(long NumBytes);
-该函数分配了NumBytes个字节，并返回了指 ...
-        
-      </div>
-      <a class="more" href="/2017/09/13/2017-09-13-c-malloc.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/13/2017-09-13-scrollsToTop.html">UIScrollView 的 scrollsToTop 失效问题</a>
-      </h2>
-      <p class="article-date">September 13, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-一般情况下，当前页面有滚动视图(UIScrollView或者UIScrollView的子类)时，触摸状态栏，视图会自动滚动的最顶端。如果页面有多个滚动视图，且是iOS10.0以下的系统，你会发现触摸状态栏没有反应了，回到顶部功能失效了。目前iOS10.0或以上系统没发现存在这个问题。
-
-解 ...
-        
-      </div>
-      <a class="more" href="/2017/09/13/2017-09-13-scrollsToTop.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/13/2017-09-13-ws1.html">UIButton 设置图片的 contentMode</a>
-      </h2>
-      <p class="article-date">September 13, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          在开发彩蛋红包时，有两个发送红包的按钮 “+”和 “-”。这两个按钮是两张图片。在设置图片时，发现其不能很好的适配6 plus机型，如下图所示。于是我尝试了设置图片的contentMode:
-1[minus.imageView setContentMode:UIViewContentMode ...
-        
-      </div>
-      <a class="more" href="/2017/09/13/2017-09-13-ws1.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/12/2017-09-12-anchorPoint_position.html">CALayer 的 anchorPoint 与 position</a>
-      </h2>
-      <p class="article-date">September 12, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-在项目中要实现一个动画，想让view从底部展开，经过搜索，知道了CALayer的anchorPoint可以控制动画的固定点，遂直接写了如下代码：
-
-123456self.redView.layer.anchorPoint = CGPointMake(0.5, 1.0);self.redVi ...
-        
-      </div>
-      <a class="more" href="/2017/09/12/2017-09-12-anchorPoint_position.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/12/2017-09-12-main-thread-checker.html">Main Thread Checker</a>
-      </h2>
-      <p class="article-date">September 12, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-我的测试机升级到 iOS11 beta10 之后，发现了严重的问题，我的手机直接卡死了，只有强制关机！这是我使用 Xcode 调试抓到的日志:
-
-123456789101112131415161718192021222324252627282930313233343536373839404 ...
-        
-      </div>
-      <a class="more" href="/2017/09/12/2017-09-12-main-thread-checker.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/11/2017-09-11-sdk-issues.html">SDK-issues 简介</a>
-      </h2>
-      <p class="article-date">September 11, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#issues" >
-    <span class="tag-code">issues</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-该分类由千帆 SDK 团队共同维护，主要用来记录 SDK 开发过程中遇到的各种问题以及解决方案。写成博客记录是为了供组内其他成员学习参考，这样知识才能像血液一样在整个团队里不停循环，为我们注入更多的新鲜血液！
-
-提升团队整体战斗力，拉低技术差距。我为人人，人人为我。Hello,SDK is ...
-        
-      </div>
-      <a class="more" href="/2017/09/11/2017-09-11-sdk-issues.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/08/2017-09-08-install-iOS11-beta10.html">安装 iOS 11</a>
-      </h2>
-      <p class="article-date">September 8, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#iOS" >
-    <span class="tag-code">iOS</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-9月12号苹果会发布新一代设备 — iPhone8，搭载 iOS 11 是肯定的，现在测试已经提了一些 iOS11上的问题了，因此我决定把我的设备也升级到 iOS 11，用来解 bug，适配等工作。
-
-安装途径以下两种方式都可行，各有优缺，自行选择吧：
-
-OTA升级
- 到开发者中心，去下载 ...
-        
-      </div>
-      <a class="more" href="/2017/09/08/2017-09-08-install-iOS11-beta10.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/09/05/2017-09-05-unix-crontab.html">Unix 定时任务</a>
-      </h2>
-      <p class="article-date">September 5, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#Script" >
-    <span class="tag-code">Script</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          截止目前，SDK的打包，已经代码审查都是通过脚本完成的，利用脚本可以轻松的帮我们搞定那些重复的枯燥工作，可以节省宝贵的时间又能避免修改配置环境引发的错误。虽然有了这些这些脚本了，不过还是得人工去执行，不够省心啊，作为一个追求极致又很懒的人，是不能忍的，于是就搞了个定时任务，每天下班后我们只需 ...
-        
-      </div>
-      <a class="more" href="/2017/09/05/2017-09-05-unix-crontab.html">Read more</a>
+      <a class="more" href="/2017/09/14-use-semaphore.html">Read more</a>
     </article>
   
 
@@ -362,6 +422,7 @@ OTA升级
 </div>
   
 </main>
+</div>
 
 
     <div class="scroll-top">

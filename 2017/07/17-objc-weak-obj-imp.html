@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content="许乾隆,Matt Reach,ios weak,dealloc,nil">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      源码分析 weak 对象自动置空原理 | Matt Reach
+    
+  </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/zenburn.min.css" rel="stylesheet">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/zone/" class="item-link">Zone</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        <!-- /zone/AAA
+          2017BBB
+          -1 -->
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/zone/" class="menu-link">Zone</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>源码分析 weak 对象自动置空原理</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS
+    </span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2017-07-18</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+
+<div class="app-content">
+<main class="app-body flex-box">
+  <input type='checkbox' id='asideToggle'>
+  <!-- Article START -->
+  <article class="post-article">
+      
+    <section class="markdown-content"><blockquote>
+<p>我们都知道 weak 修饰的变量，在对象释放后，会自动置为 nil，这一机制减少了大量的野指针崩溃；我们还知道在 dealloc 里不要 weak 修饰 self 对象，否则当对象 dealloc 时就会崩溃掉；一起看下源码实现吧!</p>
+</blockquote>
+<h2 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h2><p>虽然 iOS 不是开源的，但是 OBJC 这部分代码是 Open的，下载地址 : <a href="https://opensource.apple.com/tarballs/objc4/" target="_blank" rel="noopener">objc4-709.tar.gz</a> 。这是第二次阅读 objc 源码，第一次是分析关联引用实现原理时阅读的 : <a href="/ios/2016/03/06/Objc-Associations-Advanced.html#1">深入理解关联引用</a>;我猜测 weak 的实现和关联对象应该是大同小异的，思路上应该是相同的，应该也是在创建后存表，dealloc 时置空，然后从表里移除掉。</p>
+<h2 id="注册-weak-变量"><a href="#注册-weak-变量" class="headerlink" title="注册 weak 变量"></a>注册 weak 变量</h2><p>初始化一个 weak 指针时会走 objc_initWeak 函数:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * Initialize a fresh weak pointer to some object location. </span></span><br><span class="line"><span class="comment"> * It would be used for code like: </span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * (The nil case) </span></span><br><span class="line"><span class="comment"> * __weak id weakPtr;</span></span><br><span class="line"><span class="comment"> * (The non-nil case) </span></span><br><span class="line"><span class="comment"> * NSObject *o = ...;</span></span><br><span class="line"><span class="comment"> * __weak id weakPtr = o;</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * This function IS NOT thread-safe with respect to concurrent </span></span><br><span class="line"><span class="comment"> * modifications to the weak variable. (Concurrent weak clear is safe.)</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param location Address of __weak ptr. </span></span><br><span class="line"><span class="comment"> * @param newObj Object ptr. </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">id</span> objc_initWeak(<span class="keyword">id</span> *location, <span class="keyword">id</span> newObj)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (!newObj) &#123;</span><br><span class="line">        *location = <span class="literal">nil</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> storeWeak&lt;DontHaveOld, DoHaveNew, DoCrashIfDeallocating&gt;</span><br><span class="line">        (location, (objc_object*)newObj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>内部会走 objc_storeWeak 方法来存储你声明的 weak 变量 :</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * This function stores a new value into a __weak variable. It would</span></span><br><span class="line"><span class="comment"> * be used anywhere a __weak variable is the target of an assignment.</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @param location The address of the weak pointer itself</span></span><br><span class="line"><span class="comment"> * @param newObj The new object this weak ptr should now point to</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return newObj</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">id</span> objc_storeWeak(<span class="keyword">id</span> *location, <span class="keyword">id</span> newObj)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> storeWeak&lt;DoHaveOld, DoHaveNew, DoCrashIfDeallocating&gt;</span><br><span class="line">        (location, (objc_object *)newObj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>内部则调用了 storeWeak 这个函数，其实这个注释已经说的很明白了，<strong>如果 CrashIfDeallocating 是 true 的话，当 newObj 正在 dealloc 或者 newObj 不支持 weak 就会崩溃！</strong>调用的时候传的是枚举值 DoCrashIfDeallocating，正是 true ！所以上一篇博客里提到的在 dealloc 里使用 weak self 会崩溃，立即 <a href="/ios/2017/07/17/weakself-in-dealloc-cause-crash.html">传送</a> ！</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Update a weak variable.</span></span><br><span class="line"><span class="comment">// If HaveOld is true, the variable has an existing value </span></span><br><span class="line"><span class="comment">//   that needs to be cleaned up. This value might be nil.</span></span><br><span class="line"><span class="comment">// If HaveNew is true, there is a new value that needs to be </span></span><br><span class="line"><span class="comment">//   assigned into the variable. This value might be nil.</span></span><br><span class="line"><span class="comment">// If CrashIfDeallocating is true, the process is halted if newObj is </span></span><br><span class="line"><span class="comment">//   deallocating or newObj's class does not support weak references. </span></span><br><span class="line"><span class="comment">//   If CrashIfDeallocating is false, nil is stored instead.</span></span><br><span class="line"><span class="keyword">enum</span> CrashIfDeallocating &#123;</span><br><span class="line">    DontCrashIfDeallocating = <span class="literal">false</span>, DoCrashIfDeallocating = <span class="literal">true</span></span><br><span class="line">&#125;;</span><br><span class="line">template &lt;HaveOld haveOld, HaveNew haveNew,</span><br><span class="line">          CrashIfDeallocating crashIfDeallocating&gt;</span><br><span class="line">          </span><br><span class="line"><span class="keyword">static</span> <span class="keyword">id</span> storeWeak(<span class="keyword">id</span> *location, objc_object *newObj)</span><br><span class="line">&#123;</span><br><span class="line">    assert(haveOld  ||  haveNew);</span><br><span class="line">    <span class="keyword">if</span> (!haveNew) assert(newObj == <span class="literal">nil</span>);</span><br><span class="line"></span><br><span class="line">    Class previouslyInitializedClass = <span class="literal">nil</span>;</span><br><span class="line">    <span class="keyword">id</span> oldObj;</span><br><span class="line">    SideTable *oldTable;</span><br><span class="line">    SideTable *newTable;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Acquire locks for old and new values.</span></span><br><span class="line">    <span class="comment">// Order by lock address to prevent lock ordering problems. </span></span><br><span class="line">    <span class="comment">// Retry if the old value changes underneath us.</span></span><br><span class="line"> retry:</span><br><span class="line">    <span class="keyword">if</span> (haveOld) &#123;</span><br><span class="line">        oldObj = *location;</span><br><span class="line">        oldTable = &amp;SideTables()[oldObj];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        oldTable = <span class="literal">nil</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (haveNew) &#123;</span><br><span class="line">        newTable = &amp;SideTables()[newObj];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        newTable = <span class="literal">nil</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    SideTable::lockTwo&lt;haveOld, haveNew&gt;(oldTable, newTable);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (haveOld  &amp;&amp;  *location != oldObj) &#123;</span><br><span class="line">        SideTable::unlockTwo&lt;haveOld, haveNew&gt;(oldTable, newTable);</span><br><span class="line">        <span class="keyword">goto</span> retry;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Prevent a deadlock between the weak reference machinery</span></span><br><span class="line">    <span class="comment">// and the +initialize machinery by ensuring that no </span></span><br><span class="line">    <span class="comment">// weakly-referenced object has an un-+initialized isa.</span></span><br><span class="line">    <span class="keyword">if</span> (haveNew  &amp;&amp;  newObj) &#123;</span><br><span class="line">        Class cls = newObj-&gt;getIsa();</span><br><span class="line">        <span class="keyword">if</span> (cls != previouslyInitializedClass  &amp;&amp;  </span><br><span class="line">            !((objc_class *)cls)-&gt;isInitialized()) </span><br><span class="line">        &#123;</span><br><span class="line">            SideTable::unlockTwo&lt;haveOld, haveNew&gt;(oldTable, newTable);</span><br><span class="line">            _class_initialize(_class_getNonMetaClass(cls, (<span class="keyword">id</span>)newObj));</span><br><span class="line"></span><br><span class="line">            <span class="comment">// If this class is finished with +initialize then we're good.</span></span><br><span class="line">            <span class="comment">// If this class is still running +initialize on this thread </span></span><br><span class="line">            <span class="comment">// (i.e. +initialize called storeWeak on an instance of itself)</span></span><br><span class="line">            <span class="comment">// then we may proceed but it will appear initializing and </span></span><br><span class="line">            <span class="comment">// not yet initialized to the check above.</span></span><br><span class="line">            <span class="comment">// Instead set previouslyInitializedClass to recognize it on retry.</span></span><br><span class="line">            previouslyInitializedClass = cls;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">goto</span> retry;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Clean up old value, if any.</span></span><br><span class="line">    <span class="keyword">if</span> (haveOld) &#123;</span><br><span class="line">        weak_unregister_no_lock(&amp;oldTable-&gt;weak_table, oldObj, location);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Assign new value, if any.</span></span><br><span class="line">    <span class="keyword">if</span> (haveNew) &#123;</span><br><span class="line">        newObj = (objc_object *)</span><br><span class="line">            weak_register_no_lock(&amp;newTable-&gt;weak_table, (<span class="keyword">id</span>)newObj, location, </span><br><span class="line">                                  crashIfDeallocating);</span><br><span class="line">        <span class="comment">// weak_register_no_lock returns nil if weak store should be rejected</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// Set is-weakly-referenced bit in refcount table.</span></span><br><span class="line">        <span class="keyword">if</span> (newObj  &amp;&amp;  !newObj-&gt;isTaggedPointer()) &#123;</span><br><span class="line">            newObj-&gt;setWeaklyReferenced_nolock();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Do not set *location anywhere else. That would introduce a race.</span></span><br><span class="line">        *location = (<span class="keyword">id</span>)newObj;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// No new value. The storage is not changed.</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    SideTable::unlockTwo&lt;haveOld, haveNew&gt;(oldTable, newTable);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">id</span>)newObj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>内部调用 weak_register_no_lock 注册一个 weak指针和对象的键值对，然后返回；如果注册的时候发现该对象正在 dealloc 则会崩溃，并且通过 _objc_fatal 方法留了遗言！！</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * Registers a new (object, weak pointer) pair. Creates a new weak</span></span><br><span class="line"><span class="comment"> * object entry if it does not exist.</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @param weak_table The global weak table.</span></span><br><span class="line"><span class="comment"> * @param referent The object pointed to by the weak reference.</span></span><br><span class="line"><span class="comment"> * @param referrer The weak pointer address.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">id</span> </span><br><span class="line">weak_register_no_lock(weak_table_t *weak_table, <span class="keyword">id</span> referent_id, </span><br><span class="line">                      <span class="keyword">id</span> *referrer_id, <span class="keyword">bool</span> crashIfDeallocating)</span><br><span class="line">&#123;</span><br><span class="line">    objc_object *referent = (objc_object *)referent_id;</span><br><span class="line">    objc_object **referrer = (objc_object **)referrer_id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!referent  ||  referent-&gt;isTaggedPointer()) <span class="keyword">return</span> referent_id;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ensure that the referenced object is viable</span></span><br><span class="line">    <span class="keyword">bool</span> deallocating;</span><br><span class="line">    <span class="keyword">if</span> (!referent-&gt;ISA()-&gt;hasCustomRR()) &#123;</span><br><span class="line">        deallocating = referent-&gt;rootIsDeallocating();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">BOOL</span> (*allowsWeakReference)(objc_object *, SEL) = </span><br><span class="line">            (<span class="built_in">BOOL</span>(*)(objc_object *, SEL))</span><br><span class="line">            object_getMethodImplementation((<span class="keyword">id</span>)referent, </span><br><span class="line">                                           SEL_allowsWeakReference);</span><br><span class="line">        <span class="keyword">if</span> ((IMP)allowsWeakReference == _objc_msgForward) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        deallocating =</span><br><span class="line">            ! (*allowsWeakReference)(referent, SEL_allowsWeakReference);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (deallocating) &#123;</span><br><span class="line">        <span class="keyword">if</span> (crashIfDeallocating) &#123;</span><br><span class="line">            _objc_fatal(<span class="string">"Cannot form weak reference to instance (%p) of "</span></span><br><span class="line">                        <span class="string">"class %s. It is possible that this object was "</span></span><br><span class="line">                        <span class="string">"over-released, or is in the process of deallocation."</span>,</span><br><span class="line">                        (<span class="keyword">void</span>*)referent, object_getClassName((<span class="keyword">id</span>)referent));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// now remember it and where it is being stored</span></span><br><span class="line">    weak_entry_t *entry;</span><br><span class="line">    <span class="keyword">if</span> ((entry = weak_entry_for_referent(weak_table, referent))) &#123;</span><br><span class="line">        append_referrer(entry, referrer);</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        weak_entry_t new_entry(referent, referrer);</span><br><span class="line">        weak_grow_maybe(weak_table);</span><br><span class="line">        weak_entry_insert(weak_table, &amp;new_entry);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Do not set *referrer. objc_storeWeak() requires that the </span></span><br><span class="line">    <span class="comment">// value not change.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> referent_id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里只能猜测 runtime 是通过引用计数是否为 0 来判断一个对象是否是处于 deallocing 状态的，因为 SEL_allowsWeakReference 这个函数的定义是找不到的！但是我们从源码上可以确切的了解到，如果对象正在 deallocing 不能让他使用 weak 修饰！否者就崩溃掉了！！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">if (deallocating) &#123;</span><br><span class="line">    if (crashIfDeallocating) &#123;</span><br><span class="line">        _objc_fatal(&quot;Cannot form weak reference to instance (%p) of &quot;</span><br><span class="line">                    &quot;class %s. It is possible that this object was &quot;</span><br><span class="line">                    &quot;over-released, or is in the process of deallocation.&quot;,</span><br><span class="line">                    (void*)referent, object_getClassName((id)referent));</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return nil;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>objc 里封装了 _objc_fatal 这个函数用于停止程序，并且搞个遗言，内部则是调用了 _objc_fatalv</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> _objc_fatal(<span class="keyword">const</span> <span class="keyword">char</span> *fmt, ...)</span><br><span class="line">&#123;</span><br><span class="line">    va_list ap; </span><br><span class="line">    va_start(ap,fmt); </span><br><span class="line">    _objc_fatalv(OBJC_EXIT_REASON_UNSPECIFIED, </span><br><span class="line">                 OS_REASON_FLAG_ONE_TIME_FAILURE, </span><br><span class="line">                 fmt, ap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>_objc_fatalv 属于内部私有方法，可以正常 exit，也可以 abort，取决于 DebugDontCrash</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> _objc_fatalv(uint64_t reason, uint64_t flags, <span class="keyword">const</span> <span class="keyword">char</span> *fmt, va_list ap)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">char</span> *buf1;</span><br><span class="line">    vasprintf(&amp;buf1, fmt, ap);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> *buf2;</span><br><span class="line">    asprintf(&amp;buf2, <span class="string">"objc[%d]: %s\n"</span>, getpid(), buf1);</span><br><span class="line">    _objc_syslog(buf2);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (DebugDontCrash) &#123;</span><br><span class="line">        <span class="keyword">char</span> *buf3;</span><br><span class="line">        asprintf(&amp;buf3, <span class="string">"objc[%d]: HALTED\n"</span>, getpid());</span><br><span class="line">        _objc_syslog(buf3);</span><br><span class="line">        _Exit(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        abort_with_reason(OS_REASON_OBJC, reason, buf1, flags);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的流程大致是将 weak 描述的变量存起来的过程，我们再挖掘下对象释放后，weak 变量自动置空的逻辑:</p>
+<h2 id="dealloc-时清理掉-weak-变量"><a href="#dealloc-时清理掉-weak-变量" class="headerlink" title="dealloc 时清理掉 weak 变量"></a>dealloc 时清理掉 weak 变量</h2><p>既然我们知道了结论，那么就直接从 dealloc 开始看方法调用吧:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)dealloc &#123;</span><br><span class="line">    _objc_rootDealloc(<span class="keyword">self</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> _objc_rootDealloc(<span class="keyword">id</span> obj)</span><br><span class="line">&#123;</span><br><span class="line">    assert(obj);</span><br><span class="line"></span><br><span class="line">    obj-&gt;rootDealloc();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">void</span> objc_object::rootDealloc()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (isTaggedPointer()) <span class="keyword">return</span>;</span><br><span class="line">    object_dispose((<span class="keyword">id</span>)<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">id</span> object_dispose(<span class="keyword">id</span> obj) </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> (*_dealloc)(obj); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">///注意 _dealloc 其实就是 _object_dispose</span></span><br><span class="line"><span class="keyword">id</span> (*_dealloc)(<span class="keyword">id</span>) = _object_dispose;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">id</span> _object_dispose(<span class="keyword">id</span> anObject) </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (anObject==<span class="literal">nil</span>) <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line"></span><br><span class="line">    objc_destructInstance(anObject);</span><br><span class="line">    </span><br><span class="line">    anObject-&gt;initIsa(_objc_getFreedObjectClass ()); </span><br><span class="line"></span><br><span class="line">    free(anObject);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看注释可以知道，这个方法是干清理的工作的，不释放对象的内存；具体是清理关联应用的对象和存储的 weak 指针 : </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line">/***********************************************************************</span><br><span class="line">* objc_destructInstance</span><br><span class="line">* Destroys an instance without freeing memory. </span><br><span class="line">* Calls C++ destructors.</span><br><span class="line">* Removes associative references.</span><br><span class="line">* Returns `obj`. Does nothing if `obj` is nil.</span><br><span class="line">* CoreFoundation and other clients do call this under GC.</span><br><span class="line">**********************************************************************/</span><br><span class="line"></span><br><span class="line">void *objc_destructInstance(id obj) </span><br><span class="line">&#123;</span><br><span class="line">    if (obj) &#123;</span><br><span class="line">        Class isa = obj-&gt;getIsa();</span><br><span class="line"></span><br><span class="line">        if (isa-&gt;hasCxxDtor()) &#123;</span><br><span class="line">            object_cxxDestruct(obj);</span><br><span class="line">        &#125;</span><br><span class="line">		 ///之前看关联引用的时候，已经看过这个方法</span><br><span class="line">        if (isa-&gt;instancesHaveAssociatedObjects()) &#123;</span><br><span class="line">            _object_remove_assocations(obj);</span><br><span class="line">        &#125;</span><br><span class="line">		 ///今天来看下清理 weak 指针的方法吧</span><br><span class="line">        objc_clear_deallocating(obj);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void objc_clear_deallocating(id obj) </span><br><span class="line">&#123;</span><br><span class="line">    assert(obj);</span><br><span class="line"></span><br><span class="line">    if (obj-&gt;isTaggedPointer()) return;</span><br><span class="line">    obj-&gt;clearDeallocating();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">inline void objc_object::clearDeallocating()</span><br><span class="line">&#123;</span><br><span class="line">    sidetable_clearDeallocating();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void objc_object::sidetable_clearDeallocating()</span><br><span class="line">&#123;</span><br><span class="line">    SideTable&amp; table = SideTables()[this];</span><br><span class="line"></span><br><span class="line">    // clear any weak table items</span><br><span class="line">    // clear extra retain count and deallocating bit</span><br><span class="line">    // (fixme warn or abort if extra retain count == 0 ?)</span><br><span class="line">    table.lock();</span><br><span class="line">    RefcountMap::iterator it = table.refcnts.find(this);</span><br><span class="line">    if (it != table.refcnts.end()) &#123;</span><br><span class="line">        if (it-&gt;second &amp; SIDE_TABLE_WEAKLY_REFERENCED) &#123;</span><br><span class="line">            weak_clear_no_lock(&amp;table.weak_table, (id)this);</span><br><span class="line">        &#125;</span><br><span class="line">        table.refcnts.erase(it);</span><br><span class="line">    &#125;</span><br><span class="line">    table.unlock();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/** </span><br><span class="line"> * Called by dealloc; nils out all weak pointers that point to the </span><br><span class="line"> * provided object so that they can no longer be used.</span><br><span class="line"> * </span><br><span class="line"> * @param weak_table </span><br><span class="line"> * @param referent The object being deallocated. </span><br><span class="line"> */</span><br><span class="line">void </span><br><span class="line">weak_clear_no_lock(weak_table_t *weak_table, id referent_id) </span><br><span class="line">&#123;</span><br><span class="line">    objc_object *referent = (objc_object *)referent_id;</span><br><span class="line"></span><br><span class="line">    weak_entry_t *entry = weak_entry_for_referent(weak_table, referent);</span><br><span class="line">    if (entry == nil) &#123;</span><br><span class="line">        /// XXX shouldn&apos;t happen, but does with mismatched CF/objc</span><br><span class="line">        //printf(&quot;XXX no entry for clear deallocating %p\n&quot;, referent);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // zero out references</span><br><span class="line">    weak_referrer_t *referrers;</span><br><span class="line">    size_t count;</span><br><span class="line">    </span><br><span class="line">    if (entry-&gt;out_of_line()) &#123;</span><br><span class="line">        referrers = entry-&gt;referrers;</span><br><span class="line">        count = TABLE_SIZE(entry);</span><br><span class="line">    &#125; </span><br><span class="line">    else &#123;</span><br><span class="line">        referrers = entry-&gt;inline_referrers;</span><br><span class="line">        count = WEAK_INLINE_COUNT;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    for (size_t i = 0; i &lt; count; ++i) &#123;</span><br><span class="line">        objc_object **referrer = referrers[i];</span><br><span class="line">        if (referrer) &#123;</span><br><span class="line">            if (*referrer == referent) &#123;</span><br><span class="line">                *referrer = nil;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (*referrer) &#123;</span><br><span class="line">                _objc_inform(&quot;__weak variable at %p holds %p instead of %p. &quot;</span><br><span class="line">                             &quot;This is probably incorrect use of &quot;</span><br><span class="line">                             &quot;objc_storeWeak() and objc_loadWeak(). &quot;</span><br><span class="line">                             &quot;Break on objc_weak_error to debug.\n&quot;, </span><br><span class="line">                             referrer, (void*)*referrer, (void*)referent);</span><br><span class="line">                objc_weak_error();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    weak_entry_remove(weak_table, entry);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>找了半天，我们想看到的代码无非是在dealloc里执行置空和从table里移除：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (*referrer == referent) &#123;</span><br><span class="line">    *referrer = nil;</span><br><span class="line">&#125;</span><br><span class="line">weak_entry_remove(weak_table, entry);</span><br></pre></td></tr></table></figure>
+<p>截止到今日，了解了对象 dealloc 时系统框架到底做了什么，清楚的知道了关联引用对象的生命周期和 weak 变量置空的原理，对于日后修改一些问题，实现某些特性的逻辑(网络库里的自动取消就是通过关联引用做的，利用了对象释放时，自动释放关联对象这一特性)，就更加有把握了！</p>
+<p>注：objc 的源码是一直在更新的，如果你看的不是 objc4-709.tar.gz 这个包的话，可能源码与我贴的有差异！</p>
+</section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2017/07/17-weakself-in-dealloc-cause-crash.html">在 dealloc 里使用 weak self 引起崩溃？</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2017/07/19-install-cocoapods.html">macOS 上安装 CocoaPods</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="gitment"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    
+<aside class="catalog-container">
+  <div class="toc-indicator">
+    <label for="asideToggle" id="asideToggleLabel"><</label>
+  </div>
+  <div class="toc-main">
+    <strong class="toc-title">目录</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#下载源码"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">下载源码</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#注册-weak-变量"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">注册 weak 变量</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#dealloc-时清理掉-weak-变量"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">dealloc 时清理掉 weak 变量</span></a></li></ol>
+    
+  </div>
+</aside>
+
+  
+  <!-- Catalog END -->
+</main>
+</div>
+
+<script>
+  (function () {
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url("' + banner + '")'
+      })
+    } else {
+      var url = 'http://debugly.cn/2017/07/17-objc-weak-obj-imp.html';
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/404.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/404.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "源码分析 weak 对象自动置空原理",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ef799a3a8ea3c51cd976",
+          client_secret: "0c9fe417f7acc5d01b90186f949fee2faefffc30"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('gitment'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

@@ -4,7 +4,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <meta name="description" content="Matt Reach&#39;s blog">
-  <meta name="keyword" content=",许乾隆,Matt Reach">
+  <meta name="keyword" content="许乾隆,Matt Reach,">
   
     <link rel="shortcut icon" href="/css/images/logo.png">
   
@@ -13,11 +13,13 @@
       Matt Reach
     
   </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
   <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
-  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/zenburn.min.css" rel="stylesheet">
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
@@ -45,12 +47,6 @@
       
         <li class="list-item">
           
-            <a href="/archives/" class="item-link">Archives</a>
-          
-        </li>
-      
-        <li class="list-item">
-          
             <a href="/tags/" class="item-link">Tags</a>
           
         </li>
@@ -67,6 +63,12 @@
           
         </li>
       
+        <li class="list-item">
+          
+            <a href="/zone/" class="item-link">Zone</a>
+          
+        </li>
+      
     </ul>
     <div class="menu">
       <span class="icon-bar"></span>
@@ -75,16 +77,13 @@
     </div>
     <div class="menu-mask">
       <ul class="menu-list">
+        <!-- /zone/AAA
+          pageBBB
+          -1 -->
         
           <li class="menu-item">
             
               <a href="/" class="menu-link mobile-active">Home</a>
-            
-          </li>
-        
-          <li class="menu-item">
-            
-              <a href="/archives/" class="menu-link">Archives</a>
             
           </li>
         
@@ -106,23 +105,233 @@
             
           </li>
         
+          <li class="menu-item">
+            
+              <a href="/zone/" class="menu-link">Zone</a>
+            
+          </li>
+        
       </ul>
     </div>
   </div>
 </header>
 
-    <main class="app-body">
+    <div class="app-content">
+<main class="app-body">
   
     <article class="article-card">
       <h2 class="article-head">
-        <a href="/2017/04/17/2017-04-17-apache-vhost.html">Mac 上配置 Apache 服务器</a>
+        <a href="/2017/06/18-my-mbp-adversity.html">Fuck，Mac 无法进入系统了</a>
+      </h2>
+      <p class="article-date">June 18, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#macOS" >
+    <span class="tag-code">macOS
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+今天擦桌子的时候顺便擦了下我的 MBP，为了不在擦的时候按下键盘误操作，所以在擦之前我把 Mac 关机了。等到下午没事开机时却遇到了个大大的问题：进度条走到百分之八十左右的时候卡住，卡一会之后就关机了！接着又试了好几次，还是不行，我有点慌了，此本追随我快三年了，可不能有个三长两短啊，于是赶 ...
+        
+      </div>
+      <a class="more" href="/2017/06/18-my-mbp-adversity.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/06/04-use-rake.html">使用 Rake 重写打包脚本</a>
+      </h2>
+      <p class="article-date">June 4, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#Script" >
+    <span class="tag-code">Script
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+我最初的博客系统使用的是 Octopress，创建博客或者预览博客都是使用的 rake 命令，感觉很是方便，现在虽然直接使用了 Jekyll，但是这套命令还是被我移植过来继续使用着。之前我用 Shell 编写过一套打包的脚本，现在接触了 Ruby 脚本，对比之下感觉 Shell 这门语言太 ...
+        
+      </div>
+      <a class="more" href="/2017/06/04-use-rake.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/06/01-reduce-framework-weight.html">iOS Framework 瘦身实战</a>
+      </h2>
+      <p class="article-date">June 1, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#iOS" >
+    <span class="tag-code">iOS,
+    </span>
+  </a>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+
+近来业务增多，对应的 Framework 也越做越多，提供给搜狐视频的就多达 5个，物理包大小当然也越来越大了，因此查阅了资料，对 framework 进行瘦身！
+
+工程配置
+调试符号(Generate Debug Sysmbols)
+ 这个是控制是否生成调试符号的，因此 debug 模 ...
+        
+      </div>
+      <a class="more" href="/2017/06/01-reduce-framework-weight.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/05/26-my-shell.html">常用 Shell 命令汇总</a>
+      </h2>
+      <p class="article-date">May 26, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#Script" >
+    <span class="tag-code">Script
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+日常工作中，特别是我搭建远程打包环境的过程中用到了不少 Shell 命令，这里记录下，省得以后再去查询，浪费时间。
+
+内置变量以下结果来自 Mac OS 10.12，提示：这些内置变量是以美元符号开头的哈,因为这些都是变量，在 Shell 脚本里面取变量的值需要以美元符号开头；
+
+$SHE ...
+        
+      </div>
+      <a class="more" href="/2017/05/26-my-shell.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/05/21-liquid.html">初识 Liquid 模板语言</a>
+      </h2>
+      <p class="article-date">May 21, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#Script" >
+    <span class="tag-code">Script
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+去年 11 月，我开始使用 Jekyll 搭建静态博客系统，由于默认的主题过于简陋，因此我为自己定制了主题，Jekyll 使用 Liquid 模板标记语言作为模板引擎，所以要定制主题，就不得不去学习下 Liquid 这个标记语言，如果你点进去看的话，你会发现我的主题跟这个惊人的相似…
+
+我 ...
+        
+      </div>
+      <a class="more" href="/2017/05/21-liquid.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/05/19-use-workspace-share-code.html">使用 WorkSpace 管理共享代码</a>
+      </h2>
+      <p class="article-date">May 19, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          在上篇博客中提到可以把通用代码打成静态库，然后多个项目可使用多个 Framework 包裹这些静态库的方式共享通用代码，详见最后的思维导图！这个方案的确是可行的，但是只用了两天就被干掉了！原因是太不方便了！程序刚好崩溃到打到静态库中的方法了，没法搞断点去一步步 debug ，降低了开发的效率 ...
+        
+      </div>
+      <a class="more" href="/2017/05/19-use-workspace-share-code.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/05/17-sharecode-framework-wrap-static-library.html">使用 Framework 包裹静态库共享代码</a>
+      </h2>
+      <p class="article-date">May 17, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          正如上篇博客介绍的，提取公共 Framework 确实能够让多个 SDK 共享基础代码 ！这毋庸置疑，我们已经实践了好几个项目了，但是随着业务的发展，发现这个粒度有时还不够细，换句话说 SCF 包含的东西多了些，对于某些项目而言不需要用这么多的功能，SCF 显得有些臃肿了，这要怎么办？
+背景 ...
+        
+      </div>
+      <a class="more" href="/2017/05/17-sharecode-framework-wrap-static-library.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/05/16-sharecode-use-framework.html">使用 Framewrok 管理共享代码</a>
+      </h2>
+      <p class="article-date">May 16, 2017</p>
+      
+        <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK
+    </span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          这不是一篇讲解如何使用 Xcode 创建 Framework 的教程，而是代码共享的一个解决方案！
+背景今年 2 月刚迭代完千帆直播 SDK 之后，我们启动了 夺宝SDK 的开发工作，除了常规的产品需求外，有个特殊的要求：
+
+作为千帆直播 SDK 的组成部分（集成到搜狐视频）
+单独提供给千帆 ...
+        
+      </div>
+      <a class="more" href="/2017/05/16-sharecode-use-framework.html">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2017/04/17-apache-vhost.html">Mac 上配置 Apache 服务器</a>
       </h2>
       <p class="article-date">April 17, 2017</p>
       
-        <span><i class="fa fa-tags"></i> Tags:</span>
+        <span><i class="fa fa-tags"></i></span>
 
-  <a href="/tags#Other" >
-    <span class="tag-code">Other</span>
+  <a href="/tags#macOS" >
+    <span class="tag-code">macOS
+    </span>
   </a>
 
       
@@ -134,19 +343,20 @@
 如何控制ApacheApache 要启 ...
         
       </div>
-      <a class="more" href="/2017/04/17/2017-04-17-apache-vhost.html">Read more</a>
+      <a class="more" href="/2017/04/17-apache-vhost.html">Read more</a>
     </article>
   
     <article class="article-card">
       <h2 class="article-head">
-        <a href="/2017/02/12/2017-02-12-fuckblocksyntaxtoo.html">Block 使用方式由浅入深</a>
+        <a href="/2017/02/12-fuckblocksyntaxtoo.html">Block 使用方式由浅入深</a>
       </h2>
       <p class="article-date">February 12, 2017</p>
       
-        <span><i class="fa fa-tags"></i> Tags:</span>
+        <span><i class="fa fa-tags"></i></span>
 
   <a href="/tags#iOS" >
-    <span class="tag-code">iOS</span>
+    <span class="tag-code">iOS
+    </span>
   </a>
 
       
@@ -156,193 +366,7 @@
 Objective-C 语言一直以来由苹果公司维护着，为其增加了不少更加现代化的语法，其中 block （其他语言一般都称闭包）语法就是在 iOS 4 发布的，与此同时还提供了抽象程度极高的GCD 技术，用于简化线程的操作！所以今天说的 block 并不是新的技术，但它恐怕是最难记忆的的语 ...
         
       </div>
-      <a class="more" href="/2017/02/12/2017-02-12-fuckblocksyntaxtoo.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2017/01/10/2017-01-10-household-zhixuan-radio.html">致炫收音机改为家用音响</a>
-      </h2>
-      <p class="article-date">January 10, 2017</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#生活中的欢乐" >
-    <span class="tag-code">生活中的欢乐</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-最近买了辆小车—丰田-致炫，不是高配的，所以没有导航，雷达，倒车影像等，只有一个收音机，CD 都不带…
-
-上周六去汽配城装了导航和倒车影像，原车的收音机就被毫不客气的抛到后备箱里了，作为一个 Geeker ，不可能把他扔掉或者当破烂卖了，即使卖也是白菜价(论坛里有人出20大洋，呵呵)，这些 ...
-        
-      </div>
-      <a class="more" href="/2017/01/10/2017-01-10-household-zhixuan-radio.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2016/12/31/2016-12-31-my2016.html">我的 2016</a>
-      </h2>
-      <p class="article-date">December 31, 2016</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#个人总结" >
-    <span class="tag-code">个人总结</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-要和 2016 说再见了，是时候对今年做个总结了，今年是不平凡的一年，因为发生了几件人生重大的事情，还是按照时间顺序来说吧，这样简单些。
-
-三亚4 月 — 也就是刚过完年不久，天还有些冷的时候，我和未婚妻去了趟三亚，目的不是去旅行，而是去拍婚纱照。
-8 号，我们乘坐地铁从丰台东大街出发到东 ...
-        
-      </div>
-      <a class="more" href="/2016/12/31/2016-12-31-my2016.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2016/12/03/2016-12-03-qfsdk-refactor-chat.html">千帆 SDK Refactor: 优雅的处理聊天数据源</a>
-      </h2>
-      <p class="article-date">December 3, 2016</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#千帆SDK" >
-    <span class="tag-code">千帆SDK</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-以下讨论基于的前提思想是：Cell 和 Model 是绑定的，一一对应的；Cell 是数据源所决定的，Cell 要做的就是展示数据源而已，或者说是先确定的数据源而不是 Cell，因此我们今天以讨论 Model 为主。简单的概括这次重构是为 Cell 建立一个CellModel，他有个实现构 ...
-        
-      </div>
-      <a class="more" href="/2016/12/03/2016-12-03-qfsdk-refactor-chat.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2016/12/02/2016-12-02-network-support-chain.html">SLNetwork 支持链式编程</a>
-      </h2>
-      <p class="article-date">December 2, 2016</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#千帆SDK" >
-    <span class="tag-code">千帆SDK</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-之前用 Masonry 写过一阵子自动布局，感觉很是方便，最大的特点是：使用block，在block块内编写约束即可，方便 update 约束，并且支持链式编程，于是我研究了下如何链式编程后，为我的网络请求也加了这个功能…
-
-思考如何才能做到链式必须满足的一个条件肯定是调用方法之后，方法的 ...
-        
-      </div>
-      <a class="more" href="/2016/12/02/2016-12-02-network-support-chain.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2016/11/30/2016-11-30-qfsdk-issue-timestamp.html">千帆 SDK Issue: TimeStamp</a>
-      </h2>
-      <p class="article-date">November 30, 2016</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#千帆SDK" >
-    <span class="tag-code">千帆SDK</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          简介去年我写过这么一篇文章 《小心 unsigned 数据类型埋下坑》 主要说明了一个问题，一定要小心不能将一个小于 0 的值赋给 unsigned 类型！今天要说的我们经常会给服务传个时间戳，客户端最好不要使用 int 类型来接受，因为很可能程序只能正常运行到 2038 年。
-时间戳服务器 ...
-        
-      </div>
-      <a class="more" href="/2016/11/30/2016-11-30-qfsdk-issue-timestamp.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2016/11/28/2016-11-28-qfsdk-refactor-network.html">千帆 SDK Refactor: NetWork</a>
-      </h2>
-      <p class="article-date">November 28, 2016</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#千帆SDK" >
-    <span class="tag-code">千帆SDK</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          
-重构，不是说说而已，也不是不想看别人的烂代码自己重写一遍，而是真的遇到了会破坏当前架构的实际问题了，或者之前就没想那么多，继续往下写只会将业务逻辑搞得支离破碎，毫无条理而言，日后维护负担大，相同的逻辑写了多遍之时，才需要重构;我将会结合实际分享几篇SDK内关于重构的文章。
-
-网络请求的现状 ...
-        
-      </div>
-      <a class="more" href="/2016/11/28/2016-11-28-qfsdk-refactor-network.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2016/11/28/2016-11-28-qf-sdk-introduction.html">什么是千帆直播 SDK</a>
-      </h2>
-      <p class="article-date">November 28, 2016</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#千帆SDK" >
-    <span class="tag-code">千帆SDK</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          千帆直播SDK简介
-说起千帆直播SDK，他包含了两个信息，一个是 千帆直播，一个是 SDK ，下面我们就说下他们的关系吧。
-
-千帆直播 是搜狐旗下的一个直播平台，提供了丰富的精彩的美女直播，主要属于秀场类，正在全力打造成一个品牌。开发团队在广州部门，前身是 56 视频 （14年10月被搜狐收 ...
-        
-      </div>
-      <a class="more" href="/2016/11/28/2016-11-28-qf-sdk-introduction.html">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2016/11/27/2016-11-27-blog-use-jekyll.html">使用 Jekyll 搭建博客</a>
-      </h2>
-      <p class="article-date">November 27, 2016</p>
-      
-        <span><i class="fa fa-tags"></i> Tags:</span>
-
-  <a href="/tags#Script" >
-    <span class="tag-code">Script</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          博客大改版在此之前使用的是 Octopress 博客系统，或许是厌倦了吧，因此改为直接使用 Jekyll 来搭建,花了几个晚上的时间，一步步摸索着做了个 Jekyll 的主题出来，毕竟 Jekyll 的主题不是一个 Geek 想要的，我前端能力有限，所以目前这个主题只是能用而已，so 就没不 ...
-        
-      </div>
-      <a class="more" href="/2016/11/27/2016-11-27-blog-use-jekyll.html">Read more</a>
+      <a class="more" href="/2017/02/12-fuckblocksyntaxtoo.html">Read more</a>
     </article>
   
 
@@ -357,6 +381,7 @@ Objective-C 语言一直以来由苹果公司维护着，为其增加了不少�
 </div>
   
 </main>
+</div>
 
 
     <div class="scroll-top">

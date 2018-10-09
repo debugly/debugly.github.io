@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Matt Reach&#39;s blog">
+  <meta name="keyword" content="许乾隆,Matt Reach,framework,static library">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      使用 Framewrok 管理共享代码 | Matt Reach
+    
+  </title>
+  
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/zenburn.min.css" rel="stylesheet">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Matt Reach</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/zone/" class="item-link">Zone</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        <!-- /zone/AAA
+          2017BBB
+          -1 -->
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/zone/" class="menu-link">Zone</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>使用 Framewrok 管理共享代码</h2>
+  <!-- Tags START -->
+  
+    <div class="tags">
+      <span><i class="fa fa-tags"></i></span>
+
+  <a href="/tags#千帆SDK" >
+    <span class="tag-code">千帆SDK
+    </span>
+  </a>
+
+    </div>
+  
+  <!-- Tags END -->
+  <p class="post-date">2017-05-16</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+
+<div class="app-content">
+<main class="app-body flex-box">
+  <input type='checkbox' id='asideToggle'>
+  <!-- Article START -->
+  <article class="post-article">
+      
+    <section class="markdown-content"><p>这不是一篇讲解如何使用 Xcode 创建 Framework 的教程，而是代码共享的一个解决方案！</p>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>今年 2 月刚迭代完千帆直播 SDK 之后，我们启动了 <code>夺宝SDK</code> 的开发工作，除了常规的产品需求外，有个特殊的要求：</p>
+<ul>
+<li>作为千帆直播 SDK 的组成部分（集成到搜狐视频）</li>
+<li>单独提供给千帆直播 App</li>
+</ul>
+<h1 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h1><p>听起来挺简单的，仔细考虑后，并不简单，原因如下：</p>
+<ul>
+<li>时间有限，不可能重复造轮子，所以千帆直播SDK里的代码要共享</li>
+<li>为了日后维护方便，相同的代码不能 copy 两份(这是我的原则)</li>
+<li>夺宝 SDK 要具备单独提供的能力</li>
+<li>夺宝 SDK 要具备组件的能力</li>
+</ul>
+<p>为了更加简单的解决这个问题，我是这么思考的，先解决上面列举的前 3 条，先不考虑第 4 条；因此我需要考虑夺宝 SDK 如何共享 <code>千帆直播SDK</code> 的通用代码，我不喜欢 copy 代码，所以没有更好的办法，只能是将通用代码抽取出来了，可以使用静态库（.a），也可以使用框架（.framework），你会怎么选择 ？</p>
+<h1 id="开搞"><a href="#开搞" class="headerlink" title="开搞"></a>开搞</h1><p>我不喜欢静态库，因为使用的时候很不方面，他的可执行文件和头文件是分开的，甚至于使用的时候还要设置下 search path ！因此我毫不犹豫的选择了框架，框架的名字命名为 <strong>SohuLiveFoundation</strong>。</p>
+<p>辛好千帆直播 SDK 工程的代码组织的还不错，所有通用的库均在 libs 文件下，接下来的工作几乎成为了搬运 libs 到 SohuLiveFoundation 工程，由于现在还没开始做，只是准备工作，因此只把网络库，解析库，缓存库，下载图片库等很通用的搬运下，日后用到哪些再具体分析决定是否搬运，如何搬运的问题。</p>
+<p>接下来创建了夺宝 SDK 的工程，命名为 <strong>SohuOneSDK</strong>，为了使用通用库，所以要引用下 SohuLiveFoundation 库，然后随便写了个界面，发了个请求，简单模拟下，只要能用就行，然后再来到我的 Demo （模拟 千帆App），尝试在 Demo 里调用 SohuOneSDK 的功能，这里要注意的是：</p>
+<ul>
+<li>SohuOneSDK 只是引用了 SohuLiveFoundation，并不包含（copy）其可执行文件，这个从大小上可以看出来，SohuOneSDK 刚创建，文件比较少，很小的；而 SohuLiveFoundation 包含了的文件多，要大一些；</li>
+<li>由于 SohuOneSDK 没有包含 SohuLiveFoundation 的可执行文件，那么在执行的时候就要保证能够找到对应的可执行文件！因此要在 demo 里导入 SohuLiveFoundation 和 SohuOneSDK ！</li>
+</ul>
+<blockquote>
+<p>假如 A.framework 使用了 B.framework ，在编译 A 的时候，并不需要找到 B 的可执行文件，只需要 B 库的头文件即可，从而避免编译报错，并且给调用 B 库的地方分配个相对的函数调用地址或者说是占位符，以后再具体填充；所以在集成 A 库的 App 里必须导入 B 库，而在 link 的时候也会把 A 库里的占位符换成 B 库的可执行地址.具体怎么换的我也不清楚，因为 App 里使用了 A 库，也需要把 A 库的占位符替换下，具体按照什么循序来的，我也不确定。</p>
+</blockquote>
+<h1 id="搞定组件化"><a href="#搞定组件化" class="headerlink" title="搞定组件化"></a>搞定组件化</h1><p>到目前为止，已经实现了前 3 条了，我们再回过头来看下第 4 条 — 将夺宝 SDK 作为直播 SDK 的一部分；由上面提到的理论大家很容易想到，可将 SohuOneSDK 引用到 SohuLiveSDK（千帆直播SDK），而 SohuLiveFoundation 为 SohuOneSDK 和 SohuLiveSDK 提供基础支持，集成到视频的时候，将这三个 framework 一并提供集成即可，这里需要说明的是，SohuOneSDK 和 SohuLiveSDK 均不包含 SohuLiveFoundation 的可执行文件，好处就是避免符号重复定义！！！ </p>
+<p>最初的时候感觉不好实现呢，现在看来貌似这倒是成了简单的事情了，O(∩_∩)O哈哈~。接下来的事情，就是在 SohuLiveSDK 里完成对 SohuOneSDK 的调用封装，我们不希望视频 App 去调用 SohuOneSDK 的任何功能，毕竟他只是个组成部分而已，况且入口都在 SohuLiveSDK 里面！</p>
+<p>事实证明，这个方案是可行的，确实满足了单独提供和作为组件的需求！</p>
+<blockquote>
+<p>经过试验，如果 A.framework 里使用了 b.a 的话，你也可以只导入 b 库的头文件，而在 A 集成的 App 里添加下 b 库的可执行文件！道理是一样的，毕竟 framework 可以简单的等同于一个包含了可执行文件和头文件的 bundle(文件夹).</p>
+</blockquote>
+<h1 id="思维导图"><a href="#思维导图" class="headerlink" title="思维导图"></a>思维导图</h1><ul>
+<li>集成到视频</li>
+</ul>
+<p><img src="/images/201705/01.png" alt=""></p>
+<ul>
+<li>集成到千帆App</li>
+</ul>
+<p><img src="/images/201705/02.png" alt=""></p>
+<h1 id="SLF-gt-SCF"><a href="#SLF-gt-SCF" class="headerlink" title="SLF -&gt; SCF"></a>SLF -&gt; SCF</h1><p>随着时间的推移，我们做了更多的项目，包括 <code>搜狐课堂</code> 和几款 <code>千帆小游戏</code>，我们在做搜狐课堂的时候发现 SohuLiveFoundation 这个名字不太合理，里面包含有直播字眼，透漏出的是直播相关的内容，课堂是个单独的项目，虽然也要集成到搜狐视频了，但跟千帆直播SDK 没关系，最初共用于夺宝 SDK 还没问题，但是这时我们发现 SohuLiveFoundation 这个名字已经不合时宜了，我们是个最求完美的团队，哪怕是个名字也要完美！</p>
+<p>因此我们在开启搜狐课堂的开发之前，就将 SohuLiveFoundation 重命名为 SohuCoreFoundation 了！并且这也作为我们的新纪元，开始了 Foundation 的 2.0 版本，内部简称 SCF ！</p>
+<p>随后的项目—搜狐课堂，千帆小游戏均是构建在 SCF 的基础之上。</p>
+</section>
+    <!-- Post Nav START -->
+    
+      <div class="postnav">
+          
+    <div>
+        <span>上一篇 :</span>
+        <a href="/2017/04/17-apache-vhost.html">Mac 上配置 Apache 服务器</a>
+      </div>
+   
+  
+    <div>
+        <span>下一篇 : </span>
+        <a href="/2017/05/17-sharecode-framework-wrap-static-library.html">使用 Framework 包裹静态库共享代码</a>
+    </div>
+   
+      </div>
+      
+    <!-- Post Nav END -->
+      
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="gitment"></div>
+      <!-- Gitment END -->
+    
+
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    
+<aside class="catalog-container">
+  <div class="toc-indicator">
+    <label for="asideToggle" id="asideToggleLabel"><</label>
+  </div>
+  <div class="toc-main">
+    <strong class="toc-title">目录</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#背景"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">背景</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#思考"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">思考</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#开搞"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">开搞</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#搞定组件化"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">搞定组件化</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#思维导图"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">思维导图</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#SLF-gt-SCF"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">SLF -&gt; SCF</span></a></li></ol>
+    
+  </div>
+</aside>
+
+  
+  <!-- Catalog END -->
+</main>
+</div>
+
+<script>
+  (function () {
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url("' + banner + '")'
+      })
+    } else {
+      var url = 'http://debugly.cn/2017/05/16-sharecode-use-framework.html';
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/404.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/404.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "debugly";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "使用 Framewrok 管理共享代码",
+        owner: "debugly",
+        repo: "debugly.github.io",
+        oauth: {
+          client_id: "ef799a3a8ea3c51cd976",
+          client_secret: "0c9fe417f7acc5d01b90186f949fee2faefffc30"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('gitment'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+      Copyright &copy; 2018.
+      Powered by <a href="https://hexo.io" target="_blank">Hexo</a>.
+      Theme by <a href="https://github.com/debugly/hexo-theme-yaris">hexo-theme-yaris</a>.
+      Hosted on <a href="https://github.com/" target="_blank">GitHub</a>.
+    <br>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
