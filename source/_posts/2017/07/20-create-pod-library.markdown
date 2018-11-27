@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "创建自己的 CocoaPods 库"
+title: "创建 CocoaPods 库"
 date: 2017-07-20 17:23:12 +0800
 comments: true
 tags: [iOS,CocoaPods]
@@ -50,11 +50,24 @@ keywords: CocoaPods,podspec,library
 
 第一次可能写不好，所以可以直接下载一个，看着改。
 
-写好了，就验证下文件是否有误，可能需要多次修改，多次验证：
+# 验证 podspec
 
-`pod spec lint --allow-warnings`
+写好了，就验证下文件是否有误，可能需要多次修改验证；验证这块有3 点需要提前说下：
 
-我遇到的错误：
+1、先本地验证而不是从 github 仓库下载代码验证；下载代码验证是可以的，不过太麻烦了，你需要提交你的代码后重新打tag
+
+2、验证前要清理缓存，避免缓存干扰；无论是远程还是本地，都有缓存的，所以验证前先清理掉，省得修改了代码，还是报同样的错误
+
+3、验证出错了，不知道错在哪里，无从下手时，加上 **--verbose** 可以查看整个过程，帮助我们快速找到问题
+
+## 本地验证
+
+```bash
+pod cache clean --all
+pod lib lint
+```
+
+我当时遇到的错误：
 
 ```
 -> SCNetworkKit (1.0.0)
@@ -76,48 +89,14 @@ keywords: CocoaPods,podspec,library
   - Running pre install hooks
 ```
 
-还遇到了这个错误：
+## 远程验证
 
-```
- -> SCNetworkKit (1.0.0)
-    - ERROR | [iOS] xcodebuild: Returned an unsuccessful exit code. You can use `--verbose` for more information.
-    - NOTE  | xcodebuild:  /var/folders/2z/l7ftfgd54lv0_nvq7pnr_zbw0000gn/T/CocoaPods/Lint/DerivedData/App/Build/Products/Release-iphonesimulator/SCNetworkKit/SCNetworkKit.framework/Headers/SCNetworkKit.h:14:9: fatal error: 'SCJSONUtil.h' file not found
-    - NOTE  | xcodebuild:  /var/folders/2z/l7ftfgd54lv0_nvq7pnr_zbw0000gn/T/CocoaPods/Lint/App/main.m:3:9: fatal error: could not build module 'SCNetworkKit'
-    - NOTE  | xcodebuild:  clang: error: linker command failed with exit code 1 (use -v to see invocation)
-    - NOTE  | [iOS] xcodebuild:  fatal error: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: can't open input file: /var/folders/2z/l7ftfgd54lv0_nvq7pnr_zbw0000gn/T/CocoaPods/Lint/DerivedData/App/Build/Intermediates/App.build/Release-iphonesimulator/App.build/Objects-normal/i386/App (No such file or directory)
-```
-
-原因是 demo 里有个 SCJSONUtil.h 文件，我不小心把他导入到 SCNetworkKit.h 里了，但是 pods 检查是不会去下载 demo，所以根本找不到这个 SCJSONUtil.h 这个头文件！！！于是我删了这个头文件，接着 push 到了 github，并且修改了 tag 号！ 再次检查后发现还是这个错误，试了几次都是，我觉得不对劲，是不是走了缓存了？沿着这个思路去检查，发现果真**不是每次检查都会重新下载代码的，而是读了缓存了**！！！因此我删掉了缓存的代码，再次验证就通过了！ 删除之后，发现在 Copy 之前确实会重新下载！
-
-```
-Downloading dependencies
-
--> Installing SCNetworkKit (1.0.0)
- > Git download
- > Git download
-     $ /usr/bin/git clone https://github.com/debugly/SCNetworkKit.git
-     /var/folders/2z/l7ftfgd54lv0_nvq7pnr_zbw0000gn/T/d20170720-43460-137oplc
-     --template= --single-branch --depth 1 --branch 1.0.0
-     Cloning into '/var/folders/2z/l7ftfgd54lv0_nvq7pnr_zbw0000gn/T/d20170720-43460-137oplc'...
-     Note: checking out '733b52034ca83c8ced0fb709e40bec8e3ccde344'.
-     
-     You are in 'detached HEAD' state. You can look around, make experimental
-     changes and commit them, and you can discard any commits you make in this
-     state without impacting any branches by performing another checkout.
-     
-     If you want to create a new branch to retain commits you create, you may
-     do so (now or later) by using -b with the checkout command again. Example:
-     
-       git checkout -b <new-branch-name>
-> Copying SCNetworkKit from
-  `/Users/crown/Library/Caches/CocoaPods/Pods/External/SCNetworkKit/d91c7ff7dcd08eaf54117a932c0d41d7-2e598`
-  to
-  `../../../../private/var/folders/2z/l7ftfgd54lv0_nvq7pnr_zbw0000gn/T/CocoaPods/Lint/Pods/SCNetworkKit`
-  - Running pre install hooks
+```bash
+pod cache clean --all
+pod spec lint --allow-warnings
 ```
 
 这个过程可能会遇到各种错误，只要耐心看打印的日志，一般都能解决的，可能需要反复验证，需要有些耐心！
-
 通过后会打印:
 
 ```
@@ -138,7 +117,7 @@ SCNetworkKit.podspec passed validation.
 
 通过这个命令注册后，你的邮箱很快就会收到 CocoaPods 发来的验证链接，点击即可激活，名称无法修改哦！激活之后，我们返回到终端继续往下操作即可，使用 `pod trunk me` 查看个人信息：
 
-```
+```bash
 pod trunk me
   - Name:     Matt Reach
   - Email:    qianlongxu@gmail.com
@@ -149,11 +128,11 @@ pod trunk me
     - July 20th, 02:05 - November 25th, 04:34. IP: 125.35.217.43
 ```
 
-# 发布 podspec
+# 发布/更新 podspec
 
-将刚才已经验证通过的 podspec push 到 cocoapods 的仓库里，这样别人就能通过 pods 搜索到你的库了，从而使用你的库了；
+将刚才已经验证通过的 podspec 推送到 cocoapods 的仓库里，这样别人就能通过 pods 搜索到你的库了，从而使用你的库了；
 
-```
+```bash
 pod trunk push SCNetworkKit.podspec 
 Updating spec repo `master`
 
@@ -185,7 +164,7 @@ For more information, see https://blog.cocoapods.org and the CHANGELOG for this 
 --------------------------------------------------------------------------------
 ```
 
-看到这个就表明已经 push 成功了！！
+看到这个就表明已经发布成功了！！
 
 # 🔍搜索
 
@@ -205,7 +184,7 @@ For more information, see https://blog.cocoapods.org and the CHANGELOG for this 
 
 再次搜索，会重新建立索引，这个过程大概需要片刻，耐心等待即可:
 
-```
+```bash
 pod search SCNetworkKit
 Creating search index for spec repo 'macdownapp'.. Done!
 Creating search index for spec repo 'master'.. Done!
@@ -239,45 +218,3 @@ end
 - 最后在 demo 里写几个调用库的范例就 OK 了！
 
 当别人使用 pod try 的时候，就会把你这个 demo 下载到一个临时目录里，如果不提供 demo，别人就无法使用 pod try 尝试你的库！
-
-# 更新 pods 库版本
-
-你的开源库会越来越稳定，功能也更加的强大，这时就应该考虑升级下 pods 库的版本了，比如要发布 1.0.1 版本了，那么可以这么操作：
-
-1、 将代码全部提交；因为更新pod库之前都会校验下，校验是从 github 下载的代码的。
-
-2、 修改 podspec 文件里的版本号为 1.0.1；podspec 文件可以提交到 github 仓库，不提也没有关系，考虑到多个电脑工作，为了方便下次更新，所以提交到仓库里，不需要提交是因为已经 push 到 cocoapods 仓库里了！
-
-3、 基于最新提交记录给仓库打个 1.0.1 的新 tag；tag名要跟刚才修改的 podspec 文件里的版本号一致！
-
-```shell 
-pod trunk push SCNetworkKit.podspec 
-Updating spec repo `master`
-	
-CocoaPods 1.3.0.beta.3 is available.
-To update use: `sudo gem install cocoapods --pre`
-[!] This is a test version we'd love you to try.
-	
-For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3
-	
-Validating podspec
- -> SCNetworkKit (1.0.1)
-	
-Updating spec repo `master`
-	
-CocoaPods 1.3.0.beta.3 is available.
-To update use: `sudo gem install cocoapods --pre`
-[!] This is a test version we'd love you to try.
-	
-For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3
-	
-	
---------------------------------------------------------------------------------
- 🎉  Congrats
-	
- 🚀  SCNetworkKit (1.0.1) successfully published
- 📅  July 21st, 00:16
- 🌎  https://cocoapods.org/pods/SCNetworkKit
- 👍  Tell your friends!
---------------------------------------------------------------------------------
-```

@@ -377,7 +377,7 @@ npm run build
 	```
 	每当你修改了 html，或者 js 文件，浏览器就会自动刷新，帮你节省下来一大把时间！
 	
-# 参考
+## 参考
 
 - [ECMAScript modules in browsers](https://jakearchibald.com/2017/es-modules-in-browsers/)
 - [An Intro To Using npm and ES6 Modules for Front End Development](https://wesbos.com/javascript-modules/)
