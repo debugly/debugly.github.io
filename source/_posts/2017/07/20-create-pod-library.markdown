@@ -7,7 +7,7 @@ tags: [iOS,CocoaPods]
 keywords: CocoaPods,podspec,library
 ---
 
-使用 CocoaPods 管理 iOS 库已经不是什么新鲜事了，我最近刚开源了一个网络库，为了方便集成使用，因此决定支持下 CocoaPods，期间也遇到了几个问题，分享给大家。
+使用 [CocoaPods](https://cocoapods.org/) 管理 iOS 依赖库已经不是什么新鲜事了，我最近刚开源了一个网络库，为了方便集成使用，因此决定支持下 CocoaPods，期间也遇到了几个问题，分享给大家。
 
 # 准备工作
 
@@ -218,3 +218,7 @@ end
 - 最后在 demo 里写几个调用库的范例就 OK 了！
 
 当别人使用 pod try 的时候，就会把你这个 demo 下载到一个临时目录里，如果不提供 demo，别人就无法使用 pod try 尝试你的库！
+
+# 参考
+
+- [CocoaPods Command-line Reference](https://guides.cocoapods.org/terminal/commands.html)
