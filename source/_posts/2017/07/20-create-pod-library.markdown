@@ -9,6 +9,11 @@ keywords: CocoaPods,podspec,library
 
 使用 [CocoaPods](https://cocoapods.org/) 管理 iOS 依赖库已经不是什么新鲜事了，我最近刚开源了一个网络库，为了方便集成使用，因此决定支持下 CocoaPods，期间也遇到了几个问题，分享给大家。
 
+打个广告，我自己的维护了几个 Pods 库，欢迎使用:
+
+- [JSONUtil](https://github.com/debugly/SCJSONUtil)
+- [SCNetworkKit](https://github.com/debugly/SCNetworkKit)
+
 # 准备工作
 
 创建 Pods 库，其实意思是让你的开源库支持 CocoaPods 管理，因此前提是你应当有一个开源库，先发布到 github 上，记得创建空仓库的时候让 github 给你生成一个 license，方面等会填写 Spec License。
