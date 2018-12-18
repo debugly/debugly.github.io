@@ -9,7 +9,7 @@ keywords: CocoaPods,podspec,library
 
 使用 [CocoaPods](https://cocoapods.org/) 管理 iOS 依赖库已经不是什么新鲜事了，我最近刚开源了一个网络库，为了方便集成使用，因此决定支持下 CocoaPods，期间也遇到了几个问题，分享给大家。
 
-打个广告，我自己的维护了几个 Pods 库，欢迎使用:
+打个广告，我维护了几个 Pods 库，欢迎使用:
 
 - [JSONUtil](https://github.com/debugly/SCJSONUtil)
 - [SCNetworkKit](https://github.com/debugly/SCNetworkKit)
