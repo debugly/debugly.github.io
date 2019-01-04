@@ -5,7 +5,7 @@
 # Site
 title: Matt Reach
 subtitle: An iOS Developer
-description: 
+description:
 author: 许乾隆
 language:
 timezone:
@@ -81,5 +81,5 @@ theme: hexo-theme-yaris
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo:
-    github: git@github.com:debugly/debugly.github.io.git,master
+  branch: master
+  repo: git@github.com:debugly/debugly.github.io.git
