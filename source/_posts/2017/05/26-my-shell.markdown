@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "常用 Shell 命令汇总"
+title: "Shell 编程经验总结"
 date: 2017-05-26 21:03:36 +0800
 comments: true
 tags: Script
@@ -232,6 +232,12 @@ cp -r debugly/init.sh d2
 	app-release.apk   
 	```
 	下载文件夹加上 -r 即可；可以看出 scp 的第一个参数其实就是源文件，第二个参数是目的地，这样比较好记些。
+
+**注:**
+
+- 使用 scp 复制文件时，如果目标文件已经存在，则会覆盖！
+- 目标地址是一个文件夹时，复制文件的话，文件名保持不变。
+- 目标地址是一个文件时，复制文件的话，则会重命名文件。
 
 # ssh
 
@@ -539,6 +545,92 @@ str1=${str% *}
 ```
 
 [https://www.cnblogs.com/zwgblog/p/6031256.html](https://www.cnblogs.com/zwgblog/p/6031256.html)
+
+# Shell 函数返回值
+
+```bash
+function test(){
+    echo "a";
+    echo "b";
+    echo "c";
+    return 10;
+}
+
+r=$(test);
+echo $?;
+echo $r;
+echo $?;
+```
+运行结果是:
+
+```bash
+10
+a b c
+0
+```
+把返回值改成非整数值，会报错:
+
+```bash
+test.sh: line 5: return: 10.1: numeric argument required
+test.sh: line 5: return: a: numeric argument required
+```
+
+把返回值改成非[0~255]的整数值，会因为溢出，而舍弃高位，比如:
+
+```bash
+返回 256 ，实际接收到的是 0;
+返回 257 ，实际接收到的是 1;
+这个也很好理解，因为返回只暂用了一个字节，相当于 c 语言里的 unsigned char !
+```
+
+正因为这个返回值是个无符号整形，所以很多时候并不是我们想要的，因此这个返回值，都是用来告诉调用者内部是否正常执行的，如果执行出错了就返回一个非 0 值！
+
+- 编程时是需要返回值的，怎么办？
+
+一种方法是像上面的例子一样，使用 echo 打印，其缺点是可能你只需要最后一个 echo 的打印值，中间的调试日志并不是你想要的，我曾经也遇到了这个问题！本来程序执行的没问题，就在中间加了一个函数调用，结果那个函数里有 echo 日志，导致了一个问题。
+
+如果遇到这种情况，建议不要使用 echo 作为返回值，echo 正常用来写日志，而是使用全局变量！调用者使用全局变量拿到这个值；或者就是封装一个打印日志的方法，将日志重定向到文件。
+
+```bash
+function test(){
+    echo "a";
+    echo "b";
+    echo "c";
+    DOWNLOAD_URL='return abc';
+    return '2';
+}
+
+test;
+echo $?;
+echo $DOWNLOAD_URL;
+
+结果:
+qianlongxu:Desktop qianlongxu$ sh test.sh
+a
+b
+c
+2
+return abc
+```
+
+这里有个有趣的问题，如果你还想获取echo打印的返回值，你会发现全局变量的值取不到!
+
+```bash
+r=$(test);
+echo $?;
+echo $r;
+echo $DOWNLOAD_URL;
+
+结果:
+qianlongxu:Desktop qianlongxu$ sh test.sh
+2
+a b c
+
+
+```
+
+有兴趣可以看下这个链接: [https://stackoverflow.com/questions/23564995/how-to-modify-a-global-variable-within-a-function-in-bash](https://stackoverflow.com/questions/23564995/how-to-modify-a-global-variable-within-a-function-in-bash)
+
 
 # Node
 
