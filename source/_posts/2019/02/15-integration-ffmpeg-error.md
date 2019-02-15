@@ -10,7 +10,7 @@ tags: FFmpeg
 > 由于 FFmpeg 依赖了很多个系统框架，所以在集成过程中很可能会遇到以下问题，只需要加上缺少的库就行了。下面列举的是集成 FFmpeg 3.1.11 版本时可能遇到的。
 
 
-1、缺少 Security.framework
+### 1、缺少 Security.framework
 
 ```
 Undefined symbols for architecture x86_64:
@@ -48,7 +48,7 @@ Undefined symbols for architecture x86_64:
 ld: symbol(s) not found for architecture x86_64
 ```
 
-2、缺少 VideoDecodeAcceleration.framework
+### 2、缺少 VideoDecodeAcceleration.framework
 
 ```
 Undefined symbols for architecture x86_64:
@@ -78,7 +78,7 @@ Undefined symbols for architecture x86_64:
 ld: symbol(s) not found for architecture x86_64
 ```
 
-3、缺少  AudioToolbox.framework
+### 3、缺少  AudioToolbox.framework
 
 ```
 Undefined symbols for architecture x86_64:
@@ -110,7 +110,7 @@ Undefined symbols for architecture x86_64:
 ld: symbol(s) not found for architecture x86_64
 ```
 
-4、缺少 CoreMedia.framework
+### 4、缺少 CoreMedia.framework
 
 ```
 Undefined symbols for architecture x86_64:
@@ -153,7 +153,7 @@ Undefined symbols for architecture x86_64:
 ld: symbol(s) not found for architecture x86_64
 ```
 
-5、缺少 CoreFoundation.framework
+### 5、缺少 CoreFoundation.framework
 
 ```
 Undefined symbols for architecture x86_64:
@@ -258,7 +258,7 @@ Undefined symbols for architecture x86_64:
 ld: symbol(s) not found for architecture x86_64
 ```
 
-6、缺少 CoreVideo.framework
+### 6、缺少 CoreVideo.framework
 
 ```
 Undefined symbols for architecture x86_64:
@@ -351,7 +351,7 @@ Undefined symbols for architecture x86_64:
 ld: symbol(s) not found for architecture x86_64
 ```
 
-7、缺少 VideoToolbox.framework
+### 7、缺少 VideoToolbox.framework
 
 ```
 Undefined symbols for architecture x86_64:
@@ -476,7 +476,7 @@ Undefined symbols for architecture x86_64:
 ld: symbol(s) not found for architecture x86_64
 ```
 
-8、缺少 libz.tbd
+### 8、缺少 libz.tbd
 
 ```
 Undefined symbols for architecture x86_64:
@@ -567,7 +567,7 @@ ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 ```
 
-9、缺少 liblzma.tbd
+### 9、缺少 liblzma.tbd
 
 ```
 Undefined symbols for architecture x86_64:
@@ -581,7 +581,7 @@ ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 ```
 
-10、缺少 libbz2.tbd
+### 10、缺少 libbz2.tbd
 
 ```
 Undefined symbols for architecture x86_64:
@@ -594,7 +594,7 @@ Undefined symbols for architecture x86_64:
 ld: symbol(s) not found for architecture x86_64
 ```
 
-11、缺少 libiconv.tbd
+### 11、缺少 libiconv.tbd
 
 ```
 Undefined symbols for architecture x86_64:
@@ -698,3 +698,26 @@ Undefined symbols for architecture x86_64:
       _http_read_header in libavformat.a(http.o)
 ld: symbol(s) not found for architecture x86_64
 ```
+
+# 总结
+
+死记这些没一点用，反而会浪费脑细胞，只要找到通用解决方法才好，你可以问度娘，但是度娘也不知道怎么办？
+
+下面就来看下出错信息吧，比如:
+
+```
+Undefined symbols for architecture x86_64:
+  "_SSLClose", referenced from:
+      _tls_open in libavformat.a(tls_securetransport.o)
+      _tls_close in libavformat.a(tls_securetransport.o)
+  "_SSLCopyPeerTrust", 
+  ……
+```
+
+可以看到是因为 _SSLClose 这个符号未定义导致了出错，而这个符号是在 tls_open 这个方法里使用的。tls_open 方法就在 libavformat 库里 tls_securetransport.c 文件中，因此找到 tls_securetransport.c 这个文件，你会发现:
+
+```
+#include <Security/Security.h>
+#include <Security/SecureTransport.h>
+```
+所以就知道了，FFmpeg 需要 Security.framework 这个框架。
