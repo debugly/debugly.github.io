@@ -538,13 +538,23 @@ result=`expr $a + $b`
 ```
 # Shell 字符串截取
 
-```bash
-str="1234444 +8000"
-///str1="1234444"
-str1=${str% *}
-```
+- % 截取，以空格举例：
 
-[https://www.cnblogs.com/zwgblog/p/6031256.html](https://www.cnblogs.com/zwgblog/p/6031256.html)
+	```bash
+	str="1234444 +8000 +ddd"
+	echo ${str% *}
+	///1234444 +8000
+	```
+	从右往左截取，遇到第一个空格为止（空格也会截取）；
+- \## 截取，以 / 为例：
+
+	```bash
+	str="/Users/qianlongxu/Documents/build_local.sh"
+	echo ${str##*/}
+	///build_local.sh
+	```
+	从左往右删除，直到删掉最后一个 / 为止；
+- 参考:[https://www.cnblogs.com/zwgblog/p/6031256.html](https://www.cnblogs.com/zwgblog/p/6031256.html)
 
 # Shell 函数返回值
 
@@ -631,6 +641,53 @@ a b c
 
 有兴趣可以看下这个链接: [https://stackoverflow.com/questions/23564995/how-to-modify-a-global-variable-within-a-function-in-bash](https://stackoverflow.com/questions/23564995/how-to-modify-a-global-variable-within-a-function-in-bash)
 
+
+# zip 命令
+
+## 不带目录压缩
+
+举例： 将 ./a 目录下的文件压缩成 zip 包，解压后不包含 a 目录，如果 a 里面有文件夹则保持原有层级；（不要使用 mac 自动的解压工具，否则解压后都会放到 a 目录里！搜索后是否包含目录，可以到 windows 下查看。）
+
+```bash
+function mr_zip(){
+    full_path=$1
+
+    folder_name=${full_path##*/}
+    zip_name="${folder_name}.zip"
+
+    cp=$PWD    
+    cd "$full_path"
+    zip -rq ../"$zip_name" ./*
+    mr_ckr $? $LINENO
+    cd ..
+    zip_Path="${PWD}/${zip_name}"
+    cd $cp
+    echo "${zip_Path}"
+}
+
+zip_file=$(mr_zip "${path}")
+```
+
+# sed 命令
+
+```bash
+///将 fn 文件里的 'VV' 替换成 ${version}
+sed -i '' "s/VV/${version}/" "${fn}"
+
+///将 zip_url 变量里的 / 替换成 \/ ; 管道处理后赋值给 escape_url ; 这里转义了，所以不容易理解;
+escape_url=$(echo "${zip_url}" | sed "s/\//\\\\\//g")
+escape_url=$(echo "${zip_url}" | sed 's/\//\\\//g')
+
+把 sed 's/\//\\\//g' 展开看下：
+
+sed 's/ \/ / \\\/ /g'; \/ 是 / 的转义， \\ 是 \ 的转义； /g 是全局替换；
+
+//用 : 分割更加容易理解：
+escape_url=$(echo "${zip_url}" | sed "s:/:\\\/:g")
+escape_url=$(echo "${zip_url}" | sed 's:/:\\\/:g')
+
+https://stackoverflow.com/questions/13971113/how-to-replace-on-path-string-with-using-sed
+```
 
 # Node
 

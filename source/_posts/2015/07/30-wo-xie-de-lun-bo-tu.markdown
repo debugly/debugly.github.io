@@ -3,7 +3,7 @@ layout: post
 title: "无限循环轮播图"
 date: 2015-07-30 11:09:45 +0800
 comments: true
-tags: "iOS"
+tags: iOS
 keywords: iOS 无限循环轮播图
 ---
 
