@@ -7,7 +7,7 @@ title: Matt Reach
 subtitle: An iOS Developer
 description:
 author: 许乾隆
-language:
+language: zh-CN
 timezone:
 
 # URL
@@ -75,7 +75,8 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 
 ## Themes: https://github.com/debugly/hexo-theme-yaris  landscape
-theme: hexo-theme-yaris
+theme: next
+#theme: hexo-theme-yaris
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
