@@ -11,14 +11,14 @@ keywords: shell,Linux shell
 
 # 内置变量
 
-以下结果来自 Mac OS 10.12，提示：这些内置变量是以美元符号开头的哈,因为这些都是变量，在 Shell 脚本里面取变量的值需要以美元符号开头；
+以下结果来自 Mac OS 10.12，提示：这些内置变量是以美元符号开头的哈，内置变量也是变量，在 Shell 脚本里面取变量的值需要以美元符号开头。
 
-- $SHELL : 查看终端使用是哪种 shell，shell 也不止一种哦: `/bin/bash`
+- $SHELL : 查看当前终端使用是哪种 shell: `/bin/bash`
 - $HOME : 登陆用户主目录: `/Users/xuqianlong`
-- $PATH : 截取一小段来看下: `/opt/local/bin:/opt/local/sbin`,分号是分隔符;在终端输入命令就能执行的原理其实是，遍历设置的PATH路径，直到找到该命令如果找不到就输出：`-bash: ee: command not found` 学习过 Java 的同学肯定都知道 Path 的概念。
-- $USER  : 当前登陆用户名称: `xuqianlong`
-- $OSTYPE :  操作系统类型: `darwin16`
-- $MACHTYPE :  CPU架构及系统类型: `x86_64-apple-darwin16`
+- $PATH : 截取一小段来看下: `/opt/local/bin:/opt/local/sbin`，分号是分隔符；在终端输入命令就能执行的原理其实是，按照顺序遍历 PATH 路径，直到找到该命令，如果找不到就输出：`-bash: ee: command not found` (这里的 -bash 是当前 shell 类型) 学习过 Java 的同学肯定都知道 Path 的概念。
+- $USER : 当前登陆用户名称: `xuqianlong`
+- $OSTYPE : 操作系统类型: `darwin16`
+- $MACHTYPE : CPU架构及系统类型: `x86_64-apple-darwin16`
 - $LANG : 语言类型: `zh_CN.UTF-8`
 
 # 命令
@@ -83,6 +83,7 @@ keywords: shell,Linux shell
 - ls /bin/*sh ，结果跟上面是一样的
 - hostname -s 主机名称: `debugly`
 - tar -czf sdk.tar.gz *.framework : 先将目录里所有后缀名为 framework 的文件打包成 sdk.tar，然后用 gzip 压缩，生成 sdk.tar.gz 压缩的压缩包
+- chsh -s /bin/zsh ，修改用户 shell，重启终端生效
 
 # ps
 
@@ -687,6 +688,47 @@ escape_url=$(echo "${zip_url}" | sed "s:/:\\\/:g")
 escape_url=$(echo "${zip_url}" | sed 's:/:\\\/:g')
 
 https://stackoverflow.com/questions/13971113/how-to-replace-on-path-string-with-using-sed
+```
+
+# AutoJump
+
+```
+# https://github.com/wting/autojump
+brew install autojump
+vim ~/.zhsrc 
+# 追加 autojump
+plugins=(autojump) 
+# 最后一行添加
+# autojump configure by xql;
+[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
+```
+
+查看进入过的目录，进入过的就可以通过部分文件名跳转了: ~/Library/autojump/autojump.txt
+
+# zsh-syntax-highlighting
+
+命令高亮，默认绿色高亮：
+
+```
+# https://github.com/zsh-users/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+vim ~/.zhsrc
+# 追加 
+plugins=(zsh-syntax-highlighting)
+source ~/.zshrc
+```
+
+# zsh-autosuggestions
+
+命令提示，按键盘 → 补全
+
+```
+# https://github.com/zsh-users/zsh-autosuggestions
+git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+vim ~/.zhsrc
+# 追加
+plugins=(zsh-autosuggestions)
+source ~/.zshrc
 ```
 
 # Node

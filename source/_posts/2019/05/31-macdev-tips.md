@@ -7,6 +7,21 @@ tags: Mac开发
 
 > 忙了大概 2 个月了，基本 9116 的节奏，现在临近封板了，赶紧把最近使用的一些小技巧总结下。
 
+## 监听 ESC 键按下
+
+```
+#import <Carbon/Carbon.h>
+
+id eventMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSKeyDownMask handler:^NSEvent * _Nullable(NSEvent * _Nonnull theEvent) {
+        if ([theEvent keyCode] == kVK_Escape){
+            NSLog("ESC key down");
+        }
+        return theEvent;
+    }];
+///dealloc 里记得移除
+[NSEvent removeMonitor:eventMonitor];
+```
+
 ## 商店屏幕快照和预览图尺寸
 
 ```
