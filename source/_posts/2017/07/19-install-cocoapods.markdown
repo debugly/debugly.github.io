@@ -11,7 +11,7 @@ keywords: gem install cocoapods,安装 cocoapods
 
 # Install
 
-如果没接触过 ruby 的话，最好是先来看下这篇博客里的名词解释 : [使用 Rake 重写打包脚本](/script/2017/06/04/use-rake.html#1)
+如果没接触过 ruby 的话，最好是先来看下这篇博客里的名词解释 : [使用 Rake 重写打包脚本](/2017/06/04-use-rake.html)
 
 使用 gem 命令安装即可 ： `sudo gem install cocoapods` ；安装过程：
 
@@ -126,7 +126,15 @@ Done installing documentation for i18n, thread_safe, tzinfo, activesupport, nap,
 
 ```
 
-如遇到问题，很能是源的问题，可以开启 VPN ，或者替换为下面的源地址：
+如遇到权限问题，可以通过 -n 参数修改安装目录再装:
+
+```
+ERROR:  While executing gem ... (Gem::FilePermissionError)
+    You don't have write permissions for the /usr/bin directory.
+sudo gem install -n /usr/local/bin cocoapods
+```
+
+下载过程出问题的话，很可能是源的问题，可以开启 VPN ，或者替换为下面的源地址：
 
 - Ruby 社区的 Gem 托管服务: RubyGems.org
 - RubyGems 镜像 gems.ruby-china.org
@@ -152,7 +160,7 @@ gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
 
 可以尝试玩下：
 
-- 版本 ： pod --version
+- 版本 ： pod -\-version
 - 搜索 ： pod search SCNetworkKit
 - 尝试demo ： pod try SCNetworkKit
 
@@ -189,3 +197,5 @@ gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
 --no-ansi       Show output without ANSI codes
 --help          Show help banner of specified command
 ```
+
+后续博客会对某些命令做更加详细的介绍。

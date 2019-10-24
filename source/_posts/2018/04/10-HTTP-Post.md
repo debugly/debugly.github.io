@@ -19,7 +19,9 @@ keywords: HTTP,POST,4 种编码方式
     ```
     ts=1521518926&plat=iPhone&uid=sh-upeadqawgz&signature=3de948ae93767a2382c6a3a4f389ca9b&bundleId=com.sohu.live.demo
     ```
-    
+  
+<!--more-->
+   
 - application/json
     
     有个别情况，服务器要求我们给他 POST 过去一个 json 格式的参数，这时这种编码格式就排上用场了！还是刚才那些参数，使用这种方式编码结果如下：

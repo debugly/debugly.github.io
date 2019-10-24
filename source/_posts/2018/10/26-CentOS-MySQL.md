@@ -33,6 +33,8 @@ tags: [CentOS]
 - service mysqld restart
 - service mysqld stop
 
+<!--more-->
+
 ## 登录 MySQL
 
 - mysql -u root //使用root账户登录

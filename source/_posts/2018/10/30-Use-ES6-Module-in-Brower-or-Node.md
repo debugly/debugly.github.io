@@ -21,6 +21,8 @@ tags: [JavaScript]
 - ES6 Module 规范 [http://es6.ruanyifeng.com/#docs/module](http://es6.ruanyifeng.com/#docs/module)
 - CommonJS 规范 [http://javascript.ruanyifeng.com/nodejs/module.html](http://javascript.ruanyifeng.com/nodejs/module.html)
 
+<!--more-->
+
 ## 浏览器加载 ES6 模块
 
 很简单，只需要按照 ES6 的 Module 规范去编写代码，然后在 HTML 导入即可:

@@ -15,6 +15,8 @@ tags: macOS
 
 如果看到需要安装的话，择说明没有 Java 环境，需要配置 JRE 了。
 
+<!--more-->
+
 ## 安装 JRE
 
 *JRE : Jave Runtime Environment，即运行 Java程序的环境。*

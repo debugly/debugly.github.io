@@ -27,6 +27,8 @@ tocnum: false
     
     4、[分享地址](https://s1.h5.itc.cn/qipai/ddz/game.html?customAction=ddz56sdk%3A%2F%2Faction.cmd%3Faction%3D1.0%26from%3DH5&shareDescription=%E5%BF%AB%E6%9D%A5%E4%B8%8B%E8%BD%BD%E6%88%91%E4%B9%90%E6%96%97%E5%9C%B0%E4%B8%BBAPP%EF%BC%8C%E4%B8%8E%E5%A5%BD%E5%8F%8B%E7%8E%8B%E8%8D%A3%E6%85%A7%E8%BE%B9%E8%81%8A%E5%A4%A9%E8%BE%B9%E6%B8%B8%E6%88%8F%E5%90%A7%EF%BC%81&partner=1&shareTitle=%E6%88%91%E4%B9%90%E6%96%97%E5%9C%B0%E4%B8%BB&from=singlemessage&isappinstalled=0) 
 
+<!--more-->
+
 # 2、四川麻将
 
 - Universal Link

@@ -18,6 +18,8 @@ tags: Mac开发
 .AppleSystemUIFont:.AppleSystemUIFont
 ```
 
+<!--more-->
+
 ## 支持的 FontFamily
 
 `NSLog(@"%@",[[NSFontManager sharedFontManager]availableFontFamilies]);`

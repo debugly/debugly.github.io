@@ -45,6 +45,8 @@ https://help.apple.com/app-store-connect/#/dev4e413fcb8
 
 ```
 
+<!--more-->
+
 ## 窗口最小化后如何还原
 
 直接调用 window 的 orderFront 是不好使的，其实 window 进入了 miniaturize 模式了，只要调用 deminiaturize 方法就行了:

@@ -17,6 +17,8 @@ HTTP 是一个基于 TCP/IP 通信协议来传递数据（HTML 文件, 图片文
 
 协议里规定的请求方法有: OPTIONS，GET，HEAD，POST，PUT，DELETE，TRACE，CONNECT 这几种，客户端开发以 GET、POST 最为常见。
 
+<!--more-->
+
 HTTP 协议将报文分为三个部分，分别是：请求行，请求头，请求体。一起来看一个完整的 POST 请求：
 
 ```

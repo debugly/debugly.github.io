@@ -12,6 +12,8 @@ tags: macOS
 
 [https://jenkins.io/download/](https://jenkins.io/download/)
 
+<!--more-->
+
 ## 下载 Jenkins
 
 官网的 download 不好使，点击后没能开始下，估计是被墙了，所以找了个镜像:

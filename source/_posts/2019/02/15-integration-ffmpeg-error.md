@@ -48,6 +48,8 @@ Undefined symbols for architecture x86_64:
 ld: symbol(s) not found for architecture x86_64
 ```
 
+<!--more-->
+
 ### 2、缺少 VideoDecodeAcceleration.framework
 
 ```
