@@ -75,6 +75,7 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 
 ## Themes: https://github.com/debugly/hexo-theme-yaris  landscape
+## git clone https://github.com/theme-next/hexo-theme-next.git themes/next
 theme: next
 #theme: hexo-theme-yaris
 
