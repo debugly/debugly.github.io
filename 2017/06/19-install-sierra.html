@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="由于 Mac 无法进入系统，已经分析出了原因 — 磁盘爆满的缘故，因此就想通过进入 PE 的方式，删除掉无用的文件，这样理论上就应该能够顺利进入系统了！ 刻盘进 PE在大学时期曾用 PE 装过 Windows，只不过几年不弄过了，于是就去网上下了 大白菜 PE，然后刻成启动盘，然后开始进入 PE 啦！在 Window 上进 PE 要按下 delete，然后选择从 U 盘启动，而 macOS 则是开">
+<meta name="keywords" content="U盘安装 macOS,Sierra,Mac PE FireWolf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 U 盘安装 macOS Sierra">
+<meta property="og:url" content="http://debugly.cn/2017/06/19-install-sierra.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="由于 Mac 无法进入系统，已经分析出了原因 — 磁盘爆满的缘故，因此就想通过进入 PE 的方式，删除掉无用的文件，这样理论上就应该能够顺利进入系统了！ 刻盘进 PE在大学时期曾用 PE 装过 Windows，只不过几年不弄过了，于是就去网上下了 大白菜 PE，然后刻成启动盘，然后开始进入 PE 啦！在 Window 上进 PE 要按下 delete，然后选择从 U 盘启动，而 macOS 则是开">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://debugly.cn/images/201706/4.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/5.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/6.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/7.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/8.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/9.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/10.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/11.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/12-0.jpeg">
+<meta property="og:image" content="http://debugly.cn/images/201706/12-1.png">
+<meta property="og:image" content="http://debugly.cn/images/201706/12.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/13.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/14.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/15.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/16.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/17.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/18.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/19.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/20.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/21.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/22.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/23.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/24.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/25.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/26.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/27.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/28.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/29.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/30.JPG">
+<meta property="og:image" content="http://debugly.cn/images/201706/31.JPG">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.317Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 U 盘安装 macOS Sierra">
+<meta name="twitter:description" content="由于 Mac 无法进入系统，已经分析出了原因 — 磁盘爆满的缘故，因此就想通过进入 PE 的方式，删除掉无用的文件，这样理论上就应该能够顺利进入系统了！ 刻盘进 PE在大学时期曾用 PE 装过 Windows，只不过几年不弄过了，于是就去网上下了 大白菜 PE，然后刻成启动盘，然后开始进入 PE 啦！在 Window 上进 PE 要按下 delete，然后选择从 U 盘启动，而 macOS 则是开">
+<meta name="twitter:image" content="http://debugly.cn/images/201706/4.JPG">
+
+<link rel="canonical" href="http://debugly.cn/2017/06/19-install-sierra.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>使用 U 盘安装 macOS Sierra | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/06/19-install-sierra.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 U 盘安装 macOS Sierra
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-06-19 16:57:32" itemprop="dateCreated datePublished" datetime="2017-06-19T16:57:32+08:00">2017-06-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>由于 Mac 无法进入系统，已经分析出了原因 — 磁盘爆满的缘故，因此就想通过进入 PE 的方式，删除掉无用的文件，这样理论上就应该能够顺利进入系统了！</p>
+<h1 id="刻盘进-PE"><a href="#刻盘进-PE" class="headerlink" title="刻盘进 PE"></a>刻盘进 PE</h1><p>在大学时期曾用 PE 装过 Windows，只不过几年不弄过了，于是就去网上下了 <code>大白菜 PE</code>，然后刻成启动盘，然后开始进入 PE 啦！在 Window 上进 PE 要按下 delete，然后选择从 U 盘启动，而 macOS 则是开机时按下 Option 键，然后就会出现选择启动盘 :</p>
+<p>开机前插上 U 盘</p>
+<p><img src="/images/201706/4.JPG" alt></p>
+<p>按住 Option 开机</p>
+<p><img src="/images/201706/5.JPG" alt></p>
+<p>PE 是 Win8 系统</p>
+<p><img src="/images/201706/6.JPG" alt></p>
+<p>可惜进入后无法识别苹果分区</p>
+<p><img src="/images/201706/7.JPG" alt></p>
+<p>安装识别苹果分区软件</p>
+<p><img src="/images/201706/8.JPG" alt></p>
+<p>然并卵，高版本的系统都是逻辑分区，所以无法识别！！</p>
+<h1 id="Mac-PE"><a href="#Mac-PE" class="headerlink" title="Mac PE"></a>Mac PE</h1><p>网上继续搜寻了一番，发现还有个办法可行，那就是搞个 Mac PE 来识别苹果分区，因为 Mac PE 是使用 macOS 做出来的，所以天然性的就具备识别苹果分区的能力了！啥也不说了，开始装 Mac PE 了:</p>
+<p>首先下载镜像文件，google 才能找到官网，百度根本找不到，唉，不说了，去下载吧:</p>
+<p><a href="https://www.firewolf.science/firewolf-os-x-pe-v7/download-firewolf-os-x-pe-v7/" target="_blank" rel="noopener">FireWolf OS X PE V7.0 Download Center</a></p>
+<p>Mac 上使用磁盘工具恢复到 U 盘就行了！同样的开机按住 Option 选择 FireWolf 盘符就行了，当时没拍照，直接看下进去后的情况吧 :</p>
+<p><img src="/images/201706/9.JPG" alt></p>
+<p>启动后我也傻眼了，妈的磁盘是加密的，虽然识别了，但都是加密的文件，备份了也没啥用。新亏我摸索到了方法，找到磁盘实用工具，选择 <code>从 Time Machine 恢复</code></p>
+<p><img src="/images/201706/10.JPG" alt></p>
+<p>一步步往下走就行了，走着走着会提示输入密码，因为解密磁盘需要权限，解密后会去搜索备份，结果当然搜不出来了，不过这时文件已经全部解密了！看后面的文件夹名字 : <code>xuqianlong</code></p>
+<p><img src="/images/201706/11.JPG" alt></p>
+<p>这下以为总算可以了呢，唉，fuck 了，文件是只读的，不能删除！！！好吧，能解密就谢天谢地了，我用移动硬盘copy下资料吧！资料备份后我就放心了，实现是没别的办法了，我选择了重做系统！</p>
+<h1 id="刻盘装-Mac-系统"><a href="#刻盘装-Mac-系统" class="headerlink" title="刻盘装 Mac 系统"></a>刻盘装 Mac 系统</h1><p>若是刻录一个 Windows 的启动盘很简单，很容易就能下到 ios 镜像文件，可是由于苹果官方现在只提供了 macOS Sierra 的升级程序，而没提供完整的镜像，想要全新安装的话，只能自己去制作一个 macOS Sierra 的 U 盘启动盘/安装盘了。没有别的办法先下载安装器吧，然后再想办法恢复到 U 盘，这是 <a href="https://itunes.apple.com/us/app/macos-sierra/id1127487414?mt=12" target="_blank" rel="noopener">macOS Sierra</a> 下载地址，打开 AppStore 下载即可</p>
+<p><img src="/images/201706/12-0.jpeg" alt></p>
+<p>共 4.96GB，网速慢的话，需要等一阵子了，下载完毕后，你会发现 Launchpad 多出一个 <code>安装 macOS Sierra</code>。</p>
+<p><img src="/images/201706/12-1.png" alt></p>
+<p>然后插上 U 盘，最好是 3.0 的，这样会快些，打开磁盘工具，将其抹掉，格式化为 Mac OS 扩展 （日志式） ，命名为 <code>Sierra</code>，然后打开终端执行以下命令 :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /Applications/Install\ macOS\ Sierra.app/Contents/Resources/createinstallmedia --volume /Volumes/Sierra --application /Applications/Install\ macOS\ Sierra.app --nointeraction</span><br></pre></td></tr></table></figure>
+<p>前面是安装器执行文件路径，通过 volume 参数指定安装路径，这里指定 U 盘 : <code>/Volumes/Sierra</code>，通过 application 参数指定安装程序，在输入以上命令后，执行过程如下 :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Erasing Disk: 0%... 10%... 20%... 30%...100%...</span><br><span class="line">Copying installer files to disk... //这一步会执行好长时间</span><br><span class="line">Copy complete.</span><br><span class="line">Making disk bootable...</span><br><span class="line">Copying boot files...</span><br><span class="line">Copy complete.</span><br><span class="line">Done.</span><br></pre></td></tr></table></figure>
+<p>看到 Done 之后，就可以了，你会发现 U 盘名称变为了 <code>Install macOS Sierra</code>，种种迹象表明 U 盘刻录成功了，可以去装机了，按住 Option 开机吧 :</p>
+<p>哇咔咔，选择从 <code>Install macOS Sierra</code> 启动！</p>
+<p><img src="/images/201706/12.JPG" alt></p>
+<p>等待这个进度条走完</p>
+<p><img src="/images/201706/13.JPG" alt></p>
+<p>好不激动么，选择简体中文</p>
+<p><img src="/images/201706/14.JPG" alt></p>
+<p>选择安装 macOS</p>
+<p><img src="/images/201706/15.JPG" alt></p>
+<p>继续吧</p>
+<p><img src="/images/201706/16.JPG" alt></p>
+<p>选择 MBP 的硬盘<br><img src="/images/201706/17.JPG" alt></p>
+<p>不行，没空间了，所以返回去，找到磁盘工具，格式化硬盘</p>
+<p><img src="/images/201706/18.JPG" alt></p>
+<p>抹掉就行了</p>
+<p><img src="/images/201706/19.JPG" alt></p>
+<p>这些可干净了，啥也没了</p>
+<p><img src="/images/201706/20.JPG" alt></p>
+<p>继续安装</p>
+<p><img src="/images/201706/21.JPG" alt></p>
+<p>说是7分钟，实际要长些，主要是我 U 盘不是 3.0 的，拷贝文件速度慢</p>
+<p><img src="/images/201706/22.JPG" alt></p>
+<p>还有 1 分钟</p>
+<p><img src="/images/201706/23.JPG" alt></p>
+<p>重启是正常的，看来就快好了</p>
+<p><img src="/images/201706/24.JPG" alt></p>
+<p>选择中国</p>
+<p><img src="/images/201706/25.JPG" alt></p>
+<p>选择 WiFi</p>
+<p><img src="/images/201706/26.JPG" alt></p>
+<p>不用传输了</p>
+<p><img src="/images/201706/27.JPG" alt></p>
+<p>设置下 iCloud</p>
+<p><img src="/images/201706/28.JPG" alt></p>
+<p>选择时区</p>
+<p><img src="/images/201706/29.JPG" alt></p>
+<p>哇咔咔，进来了！！！好熟悉的桌面-内华达山脉</p>
+<p><img src="/images/201706/30.JPG" alt></p>
+<p>刚格式化的时候可用空间是 249G，现在是 239G，看来系统占用了 10G。</p>
+<p><img src="/images/201706/31.JPG" alt></p>
+<h1 id="完"><a href="#完" class="headerlink" title="完"></a>完</h1><p>使用 U 盘安装系统或者安装 Mac PE 的前提都是要有个 Mac 才行，这样才能做出启动盘来，这对于很多用户而言是不太容易满足的，所以最好别让我们的 Mac 挂掉，省得如此麻烦，特别建议和我一样使用 256 G 磁盘的用户，多给系统预留一些空间，至少 20G 左右，最好是买个移动做下日常硬盘备份，才不会出现我今天的悲剧! 当磁盘空间小时，Mac 经常弹出来一个提示让我清理，我没有去深度清理，我记得我好像剩下 13G 左右，现在想来还挺后悔的，要不然就不用在这折腾了！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/macOS/" rel="tag"># macOS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/06/18-my-mbp-adversity.html" rel="prev" title="Fuck，Mac 无法进入系统了">
+      <i class="fa fa-chevron-left"></i> Fuck，Mac 无法进入系统了
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/06/20-update-ruby-use-rvm.html" rel="next" title="使用 RVM 更新 Ruby 版本">
+      使用 RVM 更新 Ruby 版本 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#刻盘进-PE"><span class="nav-number">1.</span> <span class="nav-text">刻盘进 PE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mac-PE"><span class="nav-number">2.</span> <span class="nav-text">Mac PE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#刻盘装-Mac-系统"><span class="nav-number">3.</span> <span class="nav-text">刻盘装 Mac 系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#完"><span class="nav-number">4.</span> <span class="nav-text">完</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

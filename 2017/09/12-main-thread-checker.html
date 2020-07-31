@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="我的测试机升级到 iOS11 beta10 之后，发现了严重的问题，我的手机直接卡死了，只有强制关机！这是我使用 Xcode 调试抓到的日志:  123456789101112131415161718192021222324252627282930313233343536373839404142Main Thread Checker: UI API called on a background">
+<meta name="keywords" content="iOS11,Xcode9,Main Thread Checker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Main Thread Checker">
+<meta property="og:url" content="http://debugly.cn/2017/09/12-main-thread-checker.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="我的测试机升级到 iOS11 beta10 之后，发现了严重的问题，我的手机直接卡死了，只有强制关机！这是我使用 Xcode 调试抓到的日志:  123456789101112131415161718192021222324252627282930313233343536373839404142Main Thread Checker: UI API called on a background">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.321Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Main Thread Checker">
+<meta name="twitter:description" content="我的测试机升级到 iOS11 beta10 之后，发现了严重的问题，我的手机直接卡死了，只有强制关机！这是我使用 Xcode 调试抓到的日志:  123456789101112131415161718192021222324252627282930313233343536373839404142Main Thread Checker: UI API called on a background">
+
+<link rel="canonical" href="http://debugly.cn/2017/09/12-main-thread-checker.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Main Thread Checker | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/09/12-main-thread-checker.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Main Thread Checker
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-09-12 17:36:14" itemprop="dateCreated datePublished" datetime="2017-09-12T17:36:14+08:00">2017-09-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>我的测试机升级到 iOS11 beta10 之后，发现了严重的问题，我的手机直接卡死了，只有强制关机！这是我使用 Xcode 调试抓到的日志:</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">Main Thread Checker: UI API called on a background thread: -[UIApplication applicationState]</span><br><span class="line">PID: 2015, TID: 196235, Thread name: (none), Queue name: com.apple.avfoundation.videodataoutput.bufferqueue, QoS: 0</span><br><span class="line">Backtrace:</span><br><span class="line">4   LittleVideoDemo                     0x0000000104ca9630 -[TECaptureViewController didOutputVideoSampleBuffer:] + 92</span><br><span class="line">5   LittleVideoDemo                     0x0000000104c77fcc -[FUCamera captureOutput:didOutputSampleBuffer:fromConnection:] + 416</span><br><span class="line">6   AVFoundation                        0x000000018bf57f0c &lt;redacted&gt; + 344</span><br><span class="line">7   AVFoundation                        0x000000018bf57d24 &lt;redacted&gt; + 100</span><br><span class="line">8   CoreMedia                           0x000000018983d598 &lt;redacted&gt; + 260</span><br><span class="line">9   CoreMedia                           0x0000000189859b70 &lt;redacted&gt; + 224</span><br><span class="line">10  libdispatch.dylib                   0x000000010750d45c _dispatch_client_callout + 16</span><br><span class="line">11  libdispatch.dylib                   0x000000010751a800 _dispatch_continuation_pop + 592</span><br><span class="line">12  libdispatch.dylib                   0x000000010750f24c _dispatch_source_invoke + 1592</span><br><span class="line">13  libdispatch.dylib                   0x000000010751bf30 _dispatch_queue_serial_drain + 212</span><br><span class="line">14  libdispatch.dylib                   0x00000001075109a4 _dispatch_queue_invoke + 332</span><br><span class="line">15  libdispatch.dylib                   0x000000010751bf30 _dispatch_queue_serial_drain + 212</span><br><span class="line">16  libdispatch.dylib                   0x00000001075109a4 _dispatch_queue_invoke + 332</span><br><span class="line">17  libdispatch.dylib                   0x000000010751d104 _dispatch_root_queue_drain_deferred_wlh + 424</span><br><span class="line">18  libdispatch.dylib                   0x0000000107524100 _dispatch_workloop_worker_thread + 652</span><br><span class="line">19  libsystem_pthread.dylib             0x000000018631efe0 _pthread_wqthread + 932</span><br><span class="line">20  libsystem_pthread.dylib             0x000000018631ec30 start_wqthread + 4</span><br><span class="line">2017-09-12 10:43:02.790898+0800 LittleVideoDemo[2015:196235] [reports] Main Thread Checker: UI API called on a background thread: -[UIApplication applicationState]</span><br><span class="line">PID: 2015, TID: 196235, Thread name: (none), Queue name: com.apple.avfoundation.videodataoutput.bufferqueue, QoS: 0</span><br><span class="line">Backtrace:</span><br><span class="line">4   LittleVideoDemo                     0x0000000104ca9630 -[TECaptureViewController didOutputVideoSampleBuffer:] + 92</span><br><span class="line">5   LittleVideoDemo                     0x0000000104c77fcc -[FUCamera captureOutput:didOutputSampleBuffer:fromConnection:] + 416</span><br><span class="line">6   AVFoundation                        0x000000018bf57f0c &lt;redacted&gt; + 344</span><br><span class="line">7   AVFoundation                        0x000000018bf57d24 &lt;redacted&gt; + 100</span><br><span class="line">8   CoreMedia                           0x000000018983d598 &lt;redacted&gt; + 260</span><br><span class="line">9   CoreMedia                           0x0000000189859b70 &lt;redacted&gt; + 224</span><br><span class="line">10  libdispatch.dylib                   0x000000010750d45c _dispatch_client_callout + 16</span><br><span class="line">11  libdispatch.dylib                   0x000000010751a800 _dispatch_continuation_pop + 592</span><br><span class="line">12  libdispatch.dylib                   0x000000010750f24c _dispatch_source_invoke + 1592</span><br><span class="line">13  libdispatch.dylib                   0x000000010751bf30 _dispatch_queue_serial_drain + 212</span><br><span class="line">14  libdispatch.dylib                   0x00000001075109a4 _dispatch_queue_invoke + 332</span><br><span class="line">15  libdispatch.dylib                   0x000000010751bf30 _dispatch_queue_serial_drain + 212</span><br><span class="line">16  libdispatch.dylib                   0x00000001075109a4 _dispatch_queue_invoke + 332</span><br><span class="line">17  libdispatch.dylib                   0x000000010751d104 _dispatch_root_queue_drain_deferred_wlh + 424</span><br><span class="line">18  libdispatch.dylib                   0x0000000107524100 _dispatch_workloop_worker_thread + 652</span><br><span class="line">19  libsystem_pthread.dylib             0x000000018631efe0 _pthread_wqthread + 932</span><br><span class="line">20  libsystem_pthread.dylib             0x000000018631ec30 start_wqthread + 4</span><br><span class="line">2017-09-12 10:43:03.145023+0800 LittleVideoDemo[2015:196235] current bundle is nil</span><br><span class="line">2017-09-12 10:43:05.278417+0800 LittleVideoDemo[2015:195860] key = 109004    attach =</span><br></pre></td></tr></table></figure>
+<p>可以很直观的看到，问题是在子线程更新了UI导致的，修改很简单，找到对应的代码，在主线程里调用即可。查了下之后才知道，他是继 <a href="https://developer.apple.com/documentation/code_diagnostics/thread_sanitizer" target="_blank" rel="noopener">Thread Sanitizer</a> 之后新出的一种新的代码诊断，用来发现在子线程更新UI的问题。</p>
+<h1 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h1><p>在 App 启动后，这个 Checker 就利用 runtime 将只能在主线程执行的方法给替换掉（这不正是那些年被我们玩坏了的AOP嘛）然后帮你检查调用是否合法，对于本身就是线程安全的方法，则不会替换，不会帮你再次审查。因为是AOP所以不用重新编译代码，持续集成工具注入这个动态库 <code>/Applications/Xcode.app/Contents/Developer/usr/lib/libMainThreadChecker.dylib</code> 就能帮你检查了[^Note]。</p>
+<h1 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h1><p>会额外增加大约 0.1s 的启动时候，和 1–2% 的 CPU 开销。这 0.1s 肯定是利用 runtime 是 swizzle 方法了呗。[^footnote]因为这个开销比较小，所以当连着线，直接使用 xcode 调试时，这货会自动启动，帮你检查，听起来挺省心的[^debugger]。</p>
+<p>参考文章：<a href="https://developer.apple.com/documentation/code_diagnostics/main_thread_checker" target="_blank" rel="noopener">https://developer.apple.com/documentation/code_diagnostics/main_thread_checker </a></p>
+<p>[^Note]:<br>    &gt; Unlike other code diagnostic tools, the Main Thread Checker doesn’t require recompilation, and can be used with existing binaries. You can run it on a macOS app without the Xcode debugger, such as on a continuous integration system, by injecting the dynamic library file located at /Applications/Xcode.app/Contents/Developer/usr/lib/libMainThreadChecker.dylib.</p>
+<p>[^debugger]:<br>    &gt; The Main Thread Checker is automatically enabled when you’re running your app with the Xcode debugger.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/issues/" rel="tag"># issues</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/09/11-sdk-issues.html" rel="prev" title="SDK-issues 简介">
+      <i class="fa fa-chevron-left"></i> SDK-issues 简介
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/09/12-anchorPoint_position.html" rel="next" title="CALayer 的 anchorPoint 与 position">
+      CALayer 的 anchorPoint 与 position <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#工作原理"><span class="nav-number">1.</span> <span class="nav-text">工作原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#性能"><span class="nav-number">2.</span> <span class="nav-text">性能</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

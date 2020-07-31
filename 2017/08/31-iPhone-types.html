@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="有的时候我们需要针对特定的机型或者系统版本做一些特殊的处理，使得我们的程序能够正常的运行，这时就要去判断设备型号、系统版本了，获取这些信息本身并没有什么技术含量，只是比较零碎，因此为了查阅方便，整理了一份代码出来，用的时候直接copy即可。  设备信息使用 uname 方法可以获取设备的硬件信息，其中就包括型号，我们可以根据型号具体的判断一个设备，比如 iPhone5s 的型号是 ‘iPhone">
+<meta name="keywords" content="iOS,iphone uname,获取当前设备具体型号">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 获取设备、应用相关信息">
+<meta property="og:url" content="http://debugly.cn/2017/08/31-iPhone-types.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="有的时候我们需要针对特定的机型或者系统版本做一些特殊的处理，使得我们的程序能够正常的运行，这时就要去判断设备型号、系统版本了，获取这些信息本身并没有什么技术含量，只是比较零碎，因此为了查阅方便，整理了一份代码出来，用的时候直接copy即可。  设备信息使用 uname 方法可以获取设备的硬件信息，其中就包括型号，我们可以根据型号具体的判断一个设备，比如 iPhone5s 的型号是 ‘iPhone">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.320Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 获取设备、应用相关信息">
+<meta name="twitter:description" content="有的时候我们需要针对特定的机型或者系统版本做一些特殊的处理，使得我们的程序能够正常的运行，这时就要去判断设备型号、系统版本了，获取这些信息本身并没有什么技术含量，只是比较零碎，因此为了查阅方便，整理了一份代码出来，用的时候直接copy即可。  设备信息使用 uname 方法可以获取设备的硬件信息，其中就包括型号，我们可以根据型号具体的判断一个设备，比如 iPhone5s 的型号是 ‘iPhone">
+
+<link rel="canonical" href="http://debugly.cn/2017/08/31-iPhone-types.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>iOS 获取设备、应用相关信息 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/08/31-iPhone-types.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS 获取设备、应用相关信息
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-08-31 09:13:18" itemprop="dateCreated datePublished" datetime="2017-08-31T09:13:18+08:00">2017-08-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>有的时候我们需要针对特定的机型或者系统版本做一些特殊的处理，使得我们的程序能够正常的运行，这时就要去判断设备型号、系统版本了，获取这些信息本身并没有什么技术含量，只是比较零碎，因此为了查阅方便，整理了一份代码出来，用的时候直接copy即可。</p>
+</blockquote>
+<h1 id="设备信息"><a href="#设备信息" class="headerlink" title="设备信息"></a>设备信息</h1><p>使用 uname 方法可以获取设备的硬件信息，其中就包括型号，我们可以根据型号具体的判断一个设备，比如 iPhone5s 的型号是 ‘iPhone6,2’;</p>
+<p>使用的时候需要导入头文件： #import &lt;sys/utsname.h&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct utsname systemInfo;</span><br><span class="line"></span><br><span class="line">uname(&amp;systemInfo);</span><br><span class="line"></span><br><span class="line">NSString *platform = [NSString stringWithCString:systemInfo.machine encoding:NSASCIIStringEncoding];</span><br></pre></td></tr></table></figure>
+<p>这样获取的型号，不是我们平时叫的设备名称，所以一般都需要一个对应关系，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br></pre></td><td class="code"><pre><span class="line">- (NSString *)deviceType &#123;</span><br><span class="line"></span><br><span class="line">	struct utsname systemInfo;</span><br><span class="line"></span><br><span class="line">	uname(&amp;systemInfo);</span><br><span class="line"></span><br><span class="line">	NSString *platform = [NSString stringWithCString:systemInfo.machine encoding:NSASCIIStringEncoding];</span><br><span class="line"></span><br><span class="line">	if ([platform isEqualToString:@&quot;iPhone1,1&quot;]) return @&quot;iPhone 2G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone1,2&quot;]) return @&quot;iPhone 3G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone2,1&quot;]) return @&quot;iPhone 3GS&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone3,1&quot;]) return @&quot;iPhone 4&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone3,2&quot;]) return @&quot;iPhone 4&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone3,3&quot;]) return @&quot;iPhone 4&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone4,1&quot;]) return @&quot;iPhone 4S&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone5,1&quot;]) return @&quot;iPhone 5&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone5,2&quot;]) return @&quot;iPhone 5&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone5,3&quot;]) return @&quot;iPhone 5c&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone5,4&quot;]) return @&quot;iPhone 5c&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone6,1&quot;]) return @&quot;iPhone 5s&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone6,2&quot;]) return @&quot;iPhone 5s&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone7,1&quot;]) return @&quot;iPhone 6 Plus&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone7,2&quot;]) return @&quot;iPhone 6&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone8,1&quot;]) return @&quot;iPhone 6s&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone8,2&quot;]) return @&quot;iPhone 6s Plus&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone8,4&quot;]) return @&quot;iPhone SE&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone9,1&quot;]) return @&quot;iPhone 7&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone9,2&quot;]) return @&quot;iPhone 7 Plus&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone9,3&quot;]) return @&quot;iPhone 7&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone9,4&quot;]) return @&quot;iPhone 7 Plus&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone10,1&quot;]) return @&quot;iPhone 8&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone10,2&quot;]) return @&quot;iPhone 8 Plus&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone10,3&quot;]) return @&quot;iPhone X&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone10,4&quot;]) return @&quot;iPhone 8&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone10,5&quot;]) return @&quot;iPhone 8 Plus&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPhone10,6&quot;]) return @&quot;iPhone X&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPod1,1&quot;])  return @&quot;iPod Touch 1G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPod2,1&quot;])  return @&quot;iPod Touch 2G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPod3,1&quot;])  return @&quot;iPod Touch 3G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPod4,1&quot;])  return @&quot;iPod Touch 4G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPod5,1&quot;])  return @&quot;iPod Touch 5G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad1,1&quot;])  return @&quot;iPad 1G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad2,1&quot;])  return @&quot;iPad 2&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad2,2&quot;])  return @&quot;iPad 2&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad2,3&quot;])  return @&quot;iPad 2&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad2,4&quot;])  return @&quot;iPad 2&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad2,5&quot;])  return @&quot;iPad Mini 1G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad2,6&quot;])  return @&quot;iPad Mini 1G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad2,7&quot;])  return @&quot;iPad Mini 1G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad3,1&quot;])  return @&quot;iPad 3&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad3,2&quot;])  return @&quot;iPad 3&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad3,3&quot;])  return @&quot;iPad 3&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad3,4&quot;])  return @&quot;iPad 4&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad3,5&quot;])  return @&quot;iPad 4&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad3,6&quot;])  return @&quot;iPad 4&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad4,1&quot;])  return @&quot;iPad Air&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad4,2&quot;])  return @&quot;iPad Air&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad4,3&quot;])  return @&quot;iPad Air&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad4,4&quot;])  return @&quot;iPad Mini 2G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad4,5&quot;])  return @&quot;iPad Mini 2G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad4,6&quot;])  return @&quot;iPad Mini 2G&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad4,7&quot;])  return @&quot;iPad Mini 3&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad4,8&quot;])  return @&quot;iPad Mini 3&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad4,9&quot;])  return @&quot;iPad Mini 3&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad5,1&quot;])  return @&quot;iPad Mini 4 (WiFi)&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad5,2&quot;])  return @&quot;iPad Mini 4 (LTE)&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad5,3&quot;])  return @&quot;iPad Air 2&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad5,4&quot;])  return @&quot;iPad Air 2&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad6,3&quot;])  return @&quot;iPad Pro 9.7&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad6,4&quot;])  return @&quot;iPad Pro 9.7&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad6,7&quot;])  return @&quot;iPad Pro 12.9&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad6,8&quot;])  return @&quot;iPad Pro 12.9&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad6,11&quot;])  return @&quot;iPad 5 (WiFi)&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad6,12&quot;])  return @&quot;iPad 5 (Cellular)&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad7,1&quot;])  return @&quot;iPad Pro 12.9 inch 2nd gen (WiFi)&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad7,2&quot;])  return @&quot;iPad Pro 12.9 inch 2nd gen (Cellular)&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad7,3&quot;])  return @&quot;iPad Pro 10.5 inch (WiFi)&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;iPad7,4&quot;])  return @&quot;iPad Pro 10.5 inch (Cellular)&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;AppleTV2,1&quot;])  return @&quot;Apple TV 2&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;AppleTV3,1&quot;])  return @&quot;Apple TV 3&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;AppleTV3,2&quot;])  return @&quot;Apple TV 3&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;AppleTV5,3&quot;])  return @&quot;Apple TV 4&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;i386&quot;])  return @&quot;iPhone Simulator&quot;;</span><br><span class="line">    </span><br><span class="line">    if ([platform isEqualToString:@&quot;x86_64&quot;])  return @&quot;iPhone Simulator&quot;;</span><br><span class="line"></span><br><span class="line">	return @&quot;unKnown&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="UIDevice-获取设备相关信息"><a href="#UIDevice-获取设备相关信息" class="headerlink" title="UIDevice 获取设备相关信息"></a>UIDevice 获取设备相关信息</h1><ul>
+<li>系统版本号</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 10.3.2</span><br><span class="line">[[UIDevice currentDevice]systemVersion]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>系统名称</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// iOS</span><br><span class="line">[[UIDevice currentDevice] systemName]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>电池电量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//模拟器得到的是 -1</span><br><span class="line">[[UIDevicecurrentDevice]batteryLevel]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>厂商唯一串号</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//226072EA-5C4C-43F9-9E66-6E8ACE31DE49</span><br><span class="line"></span><br><span class="line">[[[UIDevice currentDevice] identifierForVendor]UUIDString]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>用户名</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">///Matt Reach&apos;s iPhone</span><br><span class="line">[[UIDevice currentDevice] name]</span><br></pre></td></tr></table></figure>
+<h1 id="infoDictionary"><a href="#infoDictionary" class="headerlink" title="infoDictionary"></a>infoDictionary</h1><p>App 的版本，应用名称等都记录在 info.plist 里，可以这样获取：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];</span><br><span class="line"></span><br><span class="line">// 应用装到设备上之后，显示的名称  </span><br><span class="line">[infoDictionary objectForKey:@&quot;CFBundleDisplayName&quot;]</span><br><span class="line"></span><br><span class="line">// 应用的版本号  比如：6.8.3</span><br><span class="line">[infoDictionary objectForKey:@&quot;CFBundleShortVersionString&quot;];</span><br><span class="line"></span><br><span class="line">// 应用的build号  比如：2778</span><br><span class="line">NSString *appCurVersionNum = [infoDictionary objectForKey:kCFBundleVersionKey];</span><br></pre></td></tr></table></figure>
+<p>其实这个里面信息蛮多的，其他的不再一一列举了：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    BuildMachineOSBuild = 16A323;</span><br><span class="line">    CFBundleDevelopmentRegion = "zh_CN";</span><br><span class="line">    CFBundleDisplayName = "\U5343\U5e06-SDK";</span><br><span class="line">    CFBundleExecutable = SohuLiveDemo;</span><br><span class="line">    CFBundleIcons =     &#123;</span><br><span class="line">        CFBundlePrimaryIcon =         &#123;</span><br><span class="line">            CFBundleIconFiles =             (</span><br><span class="line">                AppIcon29x29,</span><br><span class="line">                AppIcon40x40,</span><br><span class="line">                AppIcon57x57,</span><br><span class="line">                AppIcon60x60</span><br><span class="line">            );</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">    CFBundleIdentifier = "com.sohu.live.demo";</span><br><span class="line">    CFBundleInfoDictionaryVersion = "6.0";</span><br><span class="line">    CFBundleName = SohuLiveDemo;</span><br><span class="line">    CFBundleNumericVersion = 0;</span><br><span class="line">    CFBundlePackageType = APPL;</span><br><span class="line">    CFBundleShortVersionString = "6.8.3";</span><br><span class="line">    CFBundleSignature = "????";</span><br><span class="line">    CFBundleSupportedPlatforms =     (</span><br><span class="line">        iPhoneSimulator</span><br><span class="line">    );</span><br><span class="line">    CFBundleVersion = 1598;</span><br><span class="line">    DTCompiler = "com.apple.compilers.llvm.clang.1_0";</span><br><span class="line">    DTPlatformBuild = "";</span><br><span class="line">    DTPlatformName = iphonesimulator;</span><br><span class="line">    DTPlatformVersion = "10.2";</span><br><span class="line">    DTSDKBuild = 14C89;</span><br><span class="line">    DTSDKName = "iphonesimulator10.2";</span><br><span class="line">    DTXcode = 0821;</span><br><span class="line">    DTXcodeBuild = 8C1002;</span><br><span class="line">    LSApplicationCategoryType = "";</span><br><span class="line">    LSApplicationQueriesSchemes =     (</span><br><span class="line">        wechat,</span><br><span class="line">        weixin,</span><br><span class="line">        alipay,</span><br><span class="line">        qianfan56,</span><br><span class="line">        qfA31D406E33689950,</span><br><span class="line">        mqq</span><br><span class="line">    );</span><br><span class="line">    LSRequiresIPhoneOS = 1;</span><br><span class="line">    MinimumOSVersion = "7.0";</span><br><span class="line">    NSAppTransportSecurity =     &#123;</span><br><span class="line">        NSAllowsArbitraryLoads = 1;</span><br><span class="line">    &#125;;</span><br><span class="line">    NSCameraUsageDescription = "\U7231\U4e0a\U76f4\U64ad";</span><br><span class="line">    NSMicrophoneUsageDescription = "\U8bf7\U5141\U8bb8\U6211\U4f7f\U7528\U9ea6\U514b\U98ce";</span><br><span class="line">    NSPhotoLibraryUsageDescription = "\U5343\U5e06SDK\U60f3\U4f7f\U7528\U60a8\U7684\U76f8\U518c";</span><br><span class="line">    UIAppFonts =     (</span><br><span class="line">        "MFLiHei-Regular.ttf"</span><br><span class="line">    );</span><br><span class="line">    UIDeviceFamily =     (</span><br><span class="line">        1</span><br><span class="line">    );</span><br><span class="line">    UILaunchImages =     (</span><br><span class="line">                &#123;</span><br><span class="line">            UILaunchImageMinimumOSVersion = "8.0";</span><br><span class="line">            UILaunchImageName = "Brand Assets-800-Portrait-736h";</span><br><span class="line">            UILaunchImageOrientation = Portrait;</span><br><span class="line">            UILaunchImageSize = "&#123;414, 736&#125;";</span><br><span class="line">        &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">            UILaunchImageMinimumOSVersion = "8.0";</span><br><span class="line">            UILaunchImageName = "Brand Assets-800-667h";</span><br><span class="line">            UILaunchImageOrientation = Portrait;</span><br><span class="line">            UILaunchImageSize = "&#123;375, 667&#125;";</span><br><span class="line">        &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">            UILaunchImageMinimumOSVersion = "7.0";</span><br><span class="line">            UILaunchImageName = "Brand Assets-700";</span><br><span class="line">            UILaunchImageOrientation = Portrait;</span><br><span class="line">            UILaunchImageSize = "&#123;320, 480&#125;";</span><br><span class="line">        &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">            UILaunchImageMinimumOSVersion = "7.0";</span><br><span class="line">            UILaunchImageName = "Brand Assets-700-568h";</span><br><span class="line">            UILaunchImageOrientation = Portrait;</span><br><span class="line">            UILaunchImageSize = "&#123;320, 568&#125;";</span><br><span class="line">        &#125;</span><br><span class="line">    );</span><br><span class="line">    UILaunchStoryboardName = "Launch Screen";</span><br><span class="line">    UIRequiredDeviceCapabilities =     (</span><br><span class="line">        armv7</span><br><span class="line">    );</span><br><span class="line">    UIStatusBarStyle = UIStatusBarStyleDefault;</span><br><span class="line">    UISupportedInterfaceOrientations =     (</span><br><span class="line">        UIInterfaceOrientationPortrait,</span><br><span class="line">        UIInterfaceOrientationLandscapeLeft,</span><br><span class="line">        UIInterfaceOrientationLandscapeRight</span><br><span class="line">    );</span><br><span class="line">    UIViewControllerBasedStatusBarAppearance = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/08/19-join-sohu-2year.html" rel="prev" title="入职搜狐两周年">
+      <i class="fa fa-chevron-left"></i> 入职搜狐两周年
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/09/05-unix-crontab.html" rel="next" title="macOS 定时任务">
+      macOS 定时任务 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#设备信息"><span class="nav-number">1.</span> <span class="nav-text">设备信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UIDevice-获取设备相关信息"><span class="nav-number">2.</span> <span class="nav-text">UIDevice 获取设备相关信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#infoDictionary"><span class="nav-number">3.</span> <span class="nav-text">infoDictionary</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

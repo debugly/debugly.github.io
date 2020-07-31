@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="CocoaPods 工具安装好了，为了更好的利用这个工具，有必要去熟悉下支持的功能，本篇博客介绍的是 pod spec 二级命令。 pod spec先看下 spec 命令支持了哪些参数吧 123456789101112131415161718192021➜  ~ pod spec --helpUsage:    $ pod spec COMMAND      Manage pod specsCom">
+<meta name="keywords" content="CocoaPods,podspec,library">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pod spec 命令">
+<meta property="og:url" content="http://debugly.cn/2017/07/21-pod-spec.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="CocoaPods 工具安装好了，为了更好的利用这个工具，有必要去熟悉下支持的功能，本篇博客介绍的是 pod spec 二级命令。 pod spec先看下 spec 命令支持了哪些参数吧 123456789101112131415161718192021➜  ~ pod spec --helpUsage:    $ pod spec COMMAND      Manage pod specsCom">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.318Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pod spec 命令">
+<meta name="twitter:description" content="CocoaPods 工具安装好了，为了更好的利用这个工具，有必要去熟悉下支持的功能，本篇博客介绍的是 pod spec 二级命令。 pod spec先看下 spec 命令支持了哪些参数吧 123456789101112131415161718192021➜  ~ pod spec --helpUsage:    $ pod spec COMMAND      Manage pod specsCom">
+
+<link rel="canonical" href="http://debugly.cn/2017/07/21-pod-spec.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>pod spec 命令 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/07/21-pod-spec.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pod spec 命令
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-07-21 11:23:12" itemprop="dateCreated datePublished" datetime="2017-07-21T11:23:12+08:00">2017-07-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>CocoaPods 工具安装好了，为了更好的利用这个工具，有必要去熟悉下支持的功能，本篇博客介绍的是 pod spec 二级命令。</p>
+<h2 id="pod-spec"><a href="#pod-spec" class="headerlink" title="pod spec"></a>pod spec</h2><p>先看下 spec 命令支持了哪些参数吧</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ pod spec --help</span><br><span class="line">Usage:</span><br><span class="line"></span><br><span class="line">    $ pod spec COMMAND</span><br><span class="line"></span><br><span class="line">      Manage pod specs</span><br><span class="line"></span><br><span class="line">Commands:</span><br><span class="line"></span><br><span class="line">    + cat       Prints a spec file</span><br><span class="line">    + create    Create spec file stub.</span><br><span class="line">    + edit      Edit a spec file</span><br><span class="line">    + lint      Validates a spec file</span><br><span class="line">    + which     Prints the path of the given spec</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"></span><br><span class="line">    --silent    Show nothing</span><br><span class="line">    --verbose   Show more debugging information</span><br><span class="line">    --no-ansi   Show output without ANSI codes</span><br><span class="line">    --help      Show help banner of specified command</span><br></pre></td></tr></table></figure>
+<p>可以看出共有 5 个命令，还可以加些可选参数，用于控制日志等</p>
+<ul>
+<li>pod spec cat</li>
+</ul>
+<p>查看已经发布库的 spec 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ pod spec cat AFNetworking</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;AFNetworking&quot;,</span><br><span class="line">  &quot;version&quot;: &quot;3.2.1&quot;,</span><br><span class="line">  &quot;license&quot;: &quot;MIT&quot;,</span><br><span class="line">  &quot;summary&quot;: &quot;A delightful iOS and OS X networking framework.&quot;,</span><br><span class="line">  &quot;homepage&quot;: &quot;https://github.com/AFNetworking/AFNetworking&quot;,</span><br><span class="line">  &quot;social_media_url&quot;: &quot;https://twitter.com/AFNetworking&quot;,</span><br><span class="line">  &quot;authors&quot;: &#123;</span><br><span class="line">    &quot;Mattt Thompson&quot;: &quot;m@mattt.me&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;source&quot;: &#123;</span><br><span class="line">    &quot;git&quot;: &quot;https://github.com/AFNetworking/AFNetworking.git&quot;,</span><br><span class="line">    &quot;tag&quot;: &quot;3.2.1&quot;,</span><br><span class="line">    &quot;submodules&quot;: true</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;requires_arc&quot;: true,</span><br><span class="line">  &quot;public_header_files&quot;: &quot;AFNetworking/AFNetworking.h&quot;,</span><br><span class="line">  &quot;source_files&quot;: &quot;AFNetworking/AFNetworking.h&quot;,</span><br><span class="line">  &quot;prefix_header_contents&quot;: &quot;#ifndef TARGET_OS_IOS\n  #define TARGET_OS_IOS TARGET_OS_IPHONE\n#endif\n\n#ifndef TARGET_OS_WATCH\n  #define TARGET_OS_WATCH 0\n#endif\n\n#ifndef TARGET_OS_TV\n  #define TARGET_OS_TV 0\n#endif&quot;,</span><br><span class="line">  &quot;platforms&quot;: &#123;</span><br><span class="line">    &quot;ios&quot;: &quot;7.0&quot;,</span><br><span class="line">    &quot;osx&quot;: &quot;10.9&quot;,</span><br><span class="line">    &quot;watchos&quot;: &quot;2.0&quot;,</span><br><span class="line">    &quot;tvos&quot;: &quot;9.0&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;subspecs&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Serialization&quot;,</span><br><span class="line">      &quot;source_files&quot;: &quot;AFNetworking/AFURL&#123;Request,Response&#125;Serialization.&#123;h,m&#125;&quot;,</span><br><span class="line">      &quot;public_header_files&quot;: &quot;AFNetworking/AFURL&#123;Request,Response&#125;Serialization.h&quot;,</span><br><span class="line">      &quot;watchos&quot;: &#123;</span><br><span class="line">        &quot;frameworks&quot;: [</span><br><span class="line">          &quot;MobileCoreServices&quot;,</span><br><span class="line">          &quot;CoreGraphics&quot;</span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;ios&quot;: &#123;</span><br><span class="line">        &quot;frameworks&quot;: [</span><br><span class="line">          &quot;MobileCoreServices&quot;,</span><br><span class="line">          &quot;CoreGraphics&quot;</span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;osx&quot;: &#123;</span><br><span class="line">        &quot;frameworks&quot;: &quot;CoreServices&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Security&quot;,</span><br><span class="line">      &quot;source_files&quot;: &quot;AFNetworking/AFSecurityPolicy.&#123;h,m&#125;&quot;,</span><br><span class="line">      &quot;public_header_files&quot;: &quot;AFNetworking/AFSecurityPolicy.h&quot;,</span><br><span class="line">      &quot;frameworks&quot;: &quot;Security&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Reachability&quot;,</span><br><span class="line">      &quot;platforms&quot;: &#123;</span><br><span class="line">        &quot;ios&quot;: &quot;7.0&quot;,</span><br><span class="line">        &quot;osx&quot;: &quot;10.9&quot;,</span><br><span class="line">        &quot;tvos&quot;: &quot;9.0&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;source_files&quot;: &quot;AFNetworking/AFNetworkReachabilityManager.&#123;h,m&#125;&quot;,</span><br><span class="line">      &quot;public_header_files&quot;: &quot;AFNetworking/AFNetworkReachabilityManager.h&quot;,</span><br><span class="line">      &quot;frameworks&quot;: &quot;SystemConfiguration&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;NSURLSession&quot;,</span><br><span class="line">      &quot;dependencies&quot;: &#123;</span><br><span class="line">        &quot;AFNetworking/Serialization&quot;: [</span><br><span class="line"></span><br><span class="line">        ],</span><br><span class="line">        &quot;AFNetworking/Security&quot;: [</span><br><span class="line"></span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;ios&quot;: &#123;</span><br><span class="line">        &quot;dependencies&quot;: &#123;</span><br><span class="line">          &quot;AFNetworking/Reachability&quot;: [</span><br><span class="line"></span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;osx&quot;: &#123;</span><br><span class="line">        &quot;dependencies&quot;: &#123;</span><br><span class="line">          &quot;AFNetworking/Reachability&quot;: [</span><br><span class="line"></span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;tvos&quot;: &#123;</span><br><span class="line">        &quot;dependencies&quot;: &#123;</span><br><span class="line">          &quot;AFNetworking/Reachability&quot;: [</span><br><span class="line"></span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;source_files&quot;: [</span><br><span class="line">        &quot;AFNetworking/AF&#123;URL,HTTP&#125;SessionManager.&#123;h,m&#125;&quot;,</span><br><span class="line">        &quot;AFNetworking/AFCompatibilityMacros.h&quot;</span><br><span class="line">      ],</span><br><span class="line">      &quot;public_header_files&quot;: [</span><br><span class="line">        &quot;AFNetworking/AF&#123;URL,HTTP&#125;SessionManager.h&quot;,</span><br><span class="line">        &quot;AFNetworking/AFCompatibilityMacros.h&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;UIKit&quot;,</span><br><span class="line">      &quot;platforms&quot;: &#123;</span><br><span class="line">        &quot;ios&quot;: &quot;7.0&quot;,</span><br><span class="line">        &quot;tvos&quot;: &quot;9.0&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;dependencies&quot;: &#123;</span><br><span class="line">        &quot;AFNetworking/NSURLSession&quot;: [</span><br><span class="line"></span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;public_header_files&quot;: &quot;UIKit+AFNetworking/*.h&quot;,</span><br><span class="line">      &quot;source_files&quot;: &quot;UIKit+AFNetworking&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个有什么用呢，我主要用他来学习别人的 spec 文件，以改造自己库的 spec 文件。</p>
+<ul>
+<li>pod spec create</li>
+</ul>
+<p>创建一个 spec 文件，使用模板把必要信息填充好</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pod spec create SCNetworkKit</span><br><span class="line"></span><br><span class="line">Specification created at SCNetworkKit.podspec</span><br></pre></td></tr></table></figure>
+<ul>
+<li>pod spec edit</li>
+</ul>
+<p>编辑 cocoapods spec 仓库里 spec 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">pod spec edit SCNetworkKit </span><br><span class="line">///进入vim编辑器编辑</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;SCNetworkKit&quot;,</span><br><span class="line">  &quot;version&quot;: &quot;1.0.14&quot;,</span><br><span class="line">  &quot;summary&quot;: &quot;SCNetworkKit is a simple but powerful iOS and OS X networking framework.&quot;,</span><br><span class="line">  &quot;description&quot;: &quot;SCNetworkKit is a simple but powerful iOS and OS X networking framework,based on NSURLSession and NSURLSessionConfiguration, written by Objective-C, Support iOS 7+ ;&quot;,</span><br><span class="line">  &quot;homepage&quot;: &quot;http://debugly.cn/SCNetworkKit/&quot;,</span><br><span class="line">  &quot;license&quot;: &quot;MIT&quot;,</span><br><span class="line">  &quot;authors&quot;: &#123;</span><br><span class="line">    &quot;qianlongxu&quot;: &quot;qianlongxu@sohu-inc.com&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;platforms&quot;: &#123;</span><br><span class="line">    &quot;ios&quot;: &quot;7.0&quot;,</span><br><span class="line">    &quot;osx&quot;: &quot;10.10&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;source&quot;: &#123;</span><br><span class="line">    &quot;git&quot;: &quot;https://github.com/debugly/SCNetworkKit.git&quot;,</span><br><span class="line">    &quot;tag&quot;: &quot;1.0.14&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;source_files&quot;: &quot;SCNetworkKit/Classes/**/*.&#123;h,m&#125;&quot;,</span><br><span class="line">  &quot;requires_arc&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>pod spec which</li>
+</ul>
+<p>查找 spec 文件路径，这个验证了上述 edit 命令编辑的是 cocoapods spec 仓库里的这一说法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod spec which SCNetworkKit</span><br><span class="line">/Users/qianlongxu/.cocoapods/repos/edu-git-cocoapods-specs/Specs/3/1/4/SCNetworkKit/1.0.14/SCNetworkKit.podspec.json</span><br></pre></td></tr></table></figure>
+<ul>
+<li>pod spec lint</li>
+</ul>
+<p>检验 spec 文件是否合法，不仅检验文件内容是否符合格式，并且会对 pod 库文件进行检查，以免发布后出现链接等报错问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">pod spec lint TestPod.podspec </span><br><span class="line"></span><br><span class="line"> -&gt; TestPod (0.1.0)</span><br><span class="line">    - WARN  | summary: The summary is not meaningful.</span><br><span class="line">    - WARN  | url: The URL (https://github.com/summerhanada@163.com/TestPod) is not reachable.</span><br><span class="line">    - ERROR | [iOS] unknown: Encountered an unknown error ([!] /usr/bin/git clone https://github.com/summerhanada@163.com/TestPod.git /var/folders/hw/trnqbttn445dj8s7jchxhk6r0000gn/T/d20190819-24321-cjtl0w --template= --single-branch --depth 1 --branch 0.1.0</span><br><span class="line"></span><br><span class="line">Cloning into &apos;/var/folders/hw/trnqbttn445dj8s7jchxhk6r0000gn/T/d20190819-24321-cjtl0w&apos;...</span><br><span class="line">fatal: unable to access &apos;https://github.com/summerhanada@163.com/TestPod.git/&apos;: The requested URL returned error: 400</span><br><span class="line">) during validation.</span><br><span class="line"></span><br><span class="line">Analyzed 1 podspec.</span><br><span class="line"></span><br><span class="line">[!] The spec did not pass validation, due to 1 error and 2 warnings.</span><br></pre></td></tr></table></figure>
+<p>如果自己有 pod 库的话，这个命令很有用，常用的可选参数有:</p>
+<ul>
+<li>–allow-warnings</li>
+<li>–no-clean </li>
+<li>–fail-fast</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://guides.cocoapods.org/terminal/commands.html#group_specifications" target="_blank" rel="noopener">CocoaPods Command-line Reference</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/CocoaPods/" rel="tag"># CocoaPods</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/07/19-install-cocoapods.html" rel="prev" title="macOS 上安装 CocoaPods">
+      <i class="fa fa-chevron-left"></i> macOS 上安装 CocoaPods
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/07/23-pod-ipc.html" rel="next" title="pod ipc 命令">
+      pod ipc 命令 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pod-spec"><span class="nav-number">1.</span> <span class="nav-text">pod spec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

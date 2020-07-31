@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="2018 年回顾工作今天是 2018 年的最后一个班了，原本计划 mac 影音 2.16 版发布的，因为公司有规定，所以只能先封板，下周再上线。 哦，是的，我现在是一名 macOS 开发者了，今年 11 月初公司人员优化后转行过来的，边开发边学习到现在基本算是 2 个月了。经过实战，我对于 macOS 开发有了一定的了解，不过还没有 iOS 开发那么熟练，毕竟桌面应用开发跟移动端是有些区别的。 再">
+<meta name="keywords" content="个人总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的 2018">
+<meta property="og:url" content="http://debugly.cn/2018/12/31-my-2018.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="2018 年回顾工作今天是 2018 年的最后一个班了，原本计划 mac 影音 2.16 版发布的，因为公司有规定，所以只能先封板，下周再上线。 哦，是的，我现在是一名 macOS 开发者了，今年 11 月初公司人员优化后转行过来的，边开发边学习到现在基本算是 2 个月了。经过实战，我对于 macOS 开发有了一定的了解，不过还没有 iOS 开发那么熟练，毕竟桌面应用开发跟移动端是有些区别的。 再">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.330Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的 2018">
+<meta name="twitter:description" content="2018 年回顾工作今天是 2018 年的最后一个班了，原本计划 mac 影音 2.16 版发布的，因为公司有规定，所以只能先封板，下周再上线。 哦，是的，我现在是一名 macOS 开发者了，今年 11 月初公司人员优化后转行过来的，边开发边学习到现在基本算是 2 个月了。经过实战，我对于 macOS 开发有了一定的了解，不过还没有 iOS 开发那么熟练，毕竟桌面应用开发跟移动端是有些区别的。 再">
+
+<link rel="canonical" href="http://debugly.cn/2018/12/31-my-2018.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>我的 2018 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2018/12/31-my-2018.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          我的 2018
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-12-29 21:45:06" itemprop="dateCreated datePublished" datetime="2018-12-29T21:45:06+08:00">2018-12-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="2018-年回顾"><a href="#2018-年回顾" class="headerlink" title="2018 年回顾"></a>2018 年回顾</h2><h3 id="工作"><a href="#工作" class="headerlink" title="工作"></a>工作</h3><p>今天是 2018 年的最后一个班了，原本计划 mac 影音 2.16 版发布的，因为公司有规定，所以只能先封板，下周再上线。</p>
+<p>哦，是的，我现在是一名 macOS 开发者了，今年 11 月初公司人员优化后转行过来的，边开发边学习到现在基本算是 2 个月了。经过实战，我对于 macOS 开发有了一定的了解，不过还没有 iOS 开发那么熟练，毕竟桌面应用开发跟移动端是有些区别的。</p>
+<p>再往前说的话，我学习了两个前端框架：Angular 和 React，分别写了两个小应用，部署在公司内网，部署时简单学习了 Nginx 配置。</p>
+<p>然后就是在做小游戏开发了，去年年底一直做到今年 10 月份左右，很遗憾没有像样的产品拿出来，对于公司而言，又投入没回报；对于本人而言，无非是对微信小游戏开发 API 有些了解，cocos2d 小游戏引擎的简单使用，还有 JavaScript 语言的深入学习，以及前端开发环境搭建，前端代码调试等方面的学习罢了。</p>
+<p>除此之外，还创建了技术 WIKI 站点，方便使用 Markdown 编写 WIKI。还有很多个Jenkins项目，实现了自动化打包发布，节省了很多时间，避免了很多人为错误。</p>
+<a id="more"></a>
+<h3 id="生活"><a href="#生活" class="headerlink" title="生活"></a>生活</h3><p>以上是有关工作的，而生活上快乐的事情有以下:</p>
+<ul>
+<li>4 月份我女儿如期而至，给家庭带来了很多欢乐；</li>
+<li>7 月份买到了二手房，紧接着开始简单装修买家具家电，那阵子挺忙的；</li>
+<li>10 月份又回了趟老家，回来后搬进了新家，从此结束了北漂生活；</li>
+</ul>
+<p>也有让人悲伤的事情:</p>
+<ul>
+<li>爷爷在 6 月份老去，享年 84 岁…</li>
+</ul>
+<h2 id="2019-年规划"><a href="#2019-年规划" class="headerlink" title="2019 年规划"></a>2019 年规划</h2><p>影音项目最近这两个版本的迭代，主要是我发起的，除了产品简单更新外，主要做了下面四件事情：</p>
+<ul>
+<li><p>源码管理方式从 SVN 迁移到 Git: 没有用过 Git 的时候，可以忍受 SVN，可是当我在使用了 3 年 Git 之后，再回去用 SVN 却发现没有暂存处，真的很不适应，这设计简直反人类！SVN 用着实在是太蹩脚了，用了 2 天之后决定迁移，迁移完成后，之前的记录还在！</p>
+</li>
+<li><p>Jenkins 自动化打包: 今年跟 Jenkins 打了很多交道，因此我迫不及待地要去编写调试脚本，为影音项目配置 Jenkins 自动化打包；现在可以一键打出 dmg 渠道安装包（发布到测试服务器-&gt;上传符号文件-&gt;发送邮件）也支持打用于上传到 AppStore 的 pkg 包，并备份符号文件。之前版本有的没有上传符号文件，导致线上崩溃如法符号化！因此我用脚本实现了备份功能！</p>
+</li>
+<li><p>内存管理使用 ARC: 原本项目是 MRC 的，这是遗留问题了！忍了一期之后，第二期第一件事就是转换成 ARC ！懒惰的开发者可不能把时间浪费在写 release 上！况且 weak 特性是那么的友好！</p>
+</li>
+<li><p>使用 CocoaPods: 为了方便使用三方库，集成了 CocoaPods；本人写的网络框架和 JSON 转 Model 框架也都因此适配了 macOS 平台，并且已经集成了进来，后续需要三方库，集成就简单并且快速了！</p>
+</li>
+</ul>
+<p>经过这两个版本的迭代，大体上已经符合我的口味了，剩下的就需要稳着来了，下面五件事是我想做的:</p>
+<ul>
+<li><p>API 需要配合着 SCNetworkKit 重构: 因为现在的网路请求封装的不是很友好，网络着陆使用的是代理模式，并且没有很好的处理解析，最大的问题是一个类里发多个请求如何区分是哪个请求着陆了!</p>
+</li>
+<li><p>集成开源播放器: 比如使用 VLC,MPV 播放器替代系统播放器；但还没找到一个说服领导的理由，但无论如何也是要学习的，哪怕是自己做个项目玩玩也行！</p>
+</li>
+<li><p>优化 HttpServer: 项目里自己起了一个 HttpServer 来给系统播放器提供数据，做本地缓存；现在对这部分逻辑不是很熟悉，存在的问题也不是很明确，等熟悉后，发现了问题，做个优化！</p>
+</li>
+<li><p>使用 Swift 混编: 现在项目使用的是 Objective-C 语言，我觉得是时候尝试下 Swift 语言了，明天开发新功能时就开始边学边用吧，之前说要学下的，由于转行了也就没去学。</p>
+</li>
+<li><p>大改版: 改头换面，版本以 <strong>3.0</strong> 为开始；但是产品那边还没有规划好，毕竟时间+成本能换来多少收益呢？！如果不大改版，那我就一直 2.x 发版吧！</p>
+</li>
+</ul>
+<p>这几个 Flag 都不大，只要我明年一直在做 macOS 开发，我想这些都不是问题，应该是水到渠成的事情！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/个人总结/" rel="tag"># 个人总结</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html" rel="prev" title="搭建同时支持 ES6 Module 和 CommonJS 的开发环境">
+      <i class="fa fa-chevron-left"></i> 搭建同时支持 ES6 Module 和 CommonJS 的开发环境
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/02/15-integration-ffmpeg-error.html" rel="next" title="解决集成 FFmpeg 时编译报错问题">
+      解决集成 FFmpeg 时编译报错问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2018-年回顾"><span class="nav-number">1.</span> <span class="nav-text">2018 年回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#工作"><span class="nav-number">1.1.</span> <span class="nav-text">工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生活"><span class="nav-number">1.2.</span> <span class="nav-text">生活</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2019-年规划"><span class="nav-number">2.</span> <span class="nav-text">2019 年规划</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

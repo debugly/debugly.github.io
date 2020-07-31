@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="正如上篇博客介绍的，提取公共 Framework 确实能够让多个 SDK 共享基础代码 ！这毋庸置疑，我们已经实践了好几个项目了，但是随着业务的发展，发现这个粒度有时还不够细，换句话说 SCF 包含的东西多了些，对于某些项目而言不需要用这么多的功能，SCF 显得有些臃肿了，这要怎么办？ 背景去年的这个时候，我来到了这个团队之后，开始做千帆直播 SDK ，经过一年的时间已经迭代到了线上 2.4 版本">
+<meta name="keywords" content="framework wrap static library">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Framework 包裹静态库共享代码">
+<meta property="og:url" content="http://debugly.cn/2017/05/17-sharecode-framework-wrap-static-library.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="正如上篇博客介绍的，提取公共 Framework 确实能够让多个 SDK 共享基础代码 ！这毋庸置疑，我们已经实践了好几个项目了，但是随着业务的发展，发现这个粒度有时还不够细，换句话说 SCF 包含的东西多了些，对于某些项目而言不需要用这么多的功能，SCF 显得有些臃肿了，这要怎么办？ 背景去年的这个时候，我来到了这个团队之后，开始做千帆直播 SDK ，经过一年的时间已经迭代到了线上 2.4 版本">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://debugly.cn/images/201705/03.png">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.315Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 Framework 包裹静态库共享代码">
+<meta name="twitter:description" content="正如上篇博客介绍的，提取公共 Framework 确实能够让多个 SDK 共享基础代码 ！这毋庸置疑，我们已经实践了好几个项目了，但是随着业务的发展，发现这个粒度有时还不够细，换句话说 SCF 包含的东西多了些，对于某些项目而言不需要用这么多的功能，SCF 显得有些臃肿了，这要怎么办？ 背景去年的这个时候，我来到了这个团队之后，开始做千帆直播 SDK ，经过一年的时间已经迭代到了线上 2.4 版本">
+<meta name="twitter:image" content="http://debugly.cn/images/201705/03.png">
+
+<link rel="canonical" href="http://debugly.cn/2017/05/17-sharecode-framework-wrap-static-library.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>使用 Framework 包裹静态库共享代码 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/05/17-sharecode-framework-wrap-static-library.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 Framework 包裹静态库共享代码
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-05-17 22:19:28" itemprop="dateCreated datePublished" datetime="2017-05-17T22:19:28+08:00">2017-05-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>正如上篇博客介绍的，提取公共 Framework 确实能够让多个 SDK 共享基础代码 ！这毋庸置疑，我们已经实践了好几个项目了，但是随着业务的发展，发现这个粒度有时还不够细，换句话说 SCF 包含的东西多了些，对于某些项目而言不需要用这么多的功能，SCF 显得有些臃肿了，这要怎么办？</p>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>去年的这个时候，我来到了这个团队之后，开始做千帆直播 SDK ，经过一年的时间已经迭代到了线上 2.4 版本，而现在我又接到任务做开放平台的点播 SDK，且称之为 SohuVideoFoundation。这只是个巧合，但时间上的重合挺有趣的。</p>
+<h1 id="准备开搞"><a href="#准备开搞" class="headerlink" title="准备开搞"></a>准备开搞</h1><p>开始做之前，我都会去思考下架构上的问题，这次又遇到了新的问题了： SohuVideoFoundation 是需要对外公开的，目前只需要用到网络库，解析库，这些库已经包含在 SCF 里了，不过 SCF 提供的功能不止这些，所以包的体积自然会大些，既然是对外公开，那就代表的是公司的技术水平，逼格自然要提升上去，我不禁心里一颤，因为我是第一次对外去做，之前面向的都是公司的兄弟部门，较为熟悉！</p>
+<p>基于以上的顾虑，因此我决定 SohuVideoFoundation 不依赖 SCF ，但是如何共享网络库和解析库呢？这是个新的问题，我也不愿意去 copy 代码，因为日后难以维护，给代码升级带来麻烦！</p>
+<p>为了方便，以下将 SohuVideoFoundation 简称为 SVF 。</p>
+<h1 id="寻找方案"><a href="#寻找方案" class="headerlink" title="寻找方案"></a>寻找方案</h1><p>我最初的设想是，将网络库打成 Framework ，然后分别包含到 SCF 和 SVF 里，结果我失败了，得出的结论是：</p>
+<blockquote>
+<p>A.Framework 不能包裹 B.Framework ，即不能把 B 的可执行文件一并打 A 里面，或者说不能嵌套。</p>
+</blockquote>
+<p>如果有办法的话，请联系我，谢谢！</p>
+<p>然后我就转向了使用静态库的方案，我将网络库打成了静态库，然后分别包含到 SCF 和 SVF 里，结果我成功了，得出的结论是：</p>
+<blockquote>
+<p>A.Framework 能包裹 B.a ，能把 B 的可执行文件一并打 A 里面，或者说 Framwork可以包裹静态库。还记得上一篇博客的总结吗？（Framwork包裹静态库时，也可以不copy可执行文件！）</p>
+</blockquote>
+<p>所以，最终的方案就是：<strong>将需要在 Framework 之间共享的代码打成静态库，然后 Framework 包裹该静态库！</strong></p>
+<h2 id="思维导图"><a href="#思维导图" class="headerlink" title="思维导图"></a>思维导图</h2><p>这是调整后的工程框架结构图：</p>
+<p><img src="/images/201705/03.png" alt></p>
+<p>解释：</p>
+<ul>
+<li>SCNetworkKit.a : 最底层的共享网络库<ul>
+<li>SohuVideoFoundation.framework : 开放平台的播放器 SDK ，包裹了 SCNetworkKit</li>
+<li>SohuCoreFoundation.framework : 共享框架，包裹了 SCNetworkKit 为以下几个 SDK 提供服务<ul>
+<li>SohuLiveSDK.framework : 千帆直播SDK ，基于 SCF</li>
+<li>SohuOneSDK.framework : 千帆夺宝SDK ，基于 SCF</li>
+<li>SohuGameSDK.framework : 千帆小游戏SDK ，基于 SCF</li>
+<li>SohuEduSDK.framework : 搜狐课堂SDK ，基于 SCF</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="完"><a href="#完" class="headerlink" title="完"></a>完</h1><p>到此为止，我们的目的已经达到了，怎么样？是不是感觉做 SDK 越来越有意思了呢？几乎每做一个项目都会引发一次对工程的结构的变革，这些变革也正是一次的尝试与思考的成果！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/千帆SDK/" rel="tag"># 千帆SDK</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/05/16-sharecode-use-framework.html" rel="prev" title="使用 Framewrok 管理共享代码">
+      <i class="fa fa-chevron-left"></i> 使用 Framewrok 管理共享代码
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/05/19-use-workspace-share-code.html" rel="next" title="使用 WorkSpace 管理共享代码">
+      使用 WorkSpace 管理共享代码 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#准备开搞"><span class="nav-number">2.</span> <span class="nav-text">准备开搞</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#寻找方案"><span class="nav-number">3.</span> <span class="nav-text">寻找方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#思维导图"><span class="nav-number">3.1.</span> <span class="nav-text">思维导图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#完"><span class="nav-number">4.</span> <span class="nav-text">完</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

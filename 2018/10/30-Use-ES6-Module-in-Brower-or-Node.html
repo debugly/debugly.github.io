@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="我在编写 RxJS 入门教程的时候，折腾了大半上午都没能跑出一个 demo 来，让我感到沮丧，我知道使用 node.js 分分钟就能出现效果，可我就是想用 node 的 npm 去管理项目依赖，然后在浏览器里执行，因为我感觉使用这种方式才是做前端项目管理依赖的正确方式，而不是拿来源码，拖到 H5 工程里！我坚信我是对的，因为使用 Creator 编写小游戏时就能这么用，它是如何做到的呢？又经过一">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建同时支持 ES6 Module 和 CommonJS 的开发环境">
+<meta property="og:url" content="http://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="我在编写 RxJS 入门教程的时候，折腾了大半上午都没能跑出一个 demo 来，让我感到沮丧，我知道使用 node.js 分分钟就能出现效果，可我就是想用 node 的 npm 去管理项目依赖，然后在浏览器里执行，因为我感觉使用这种方式才是做前端项目管理依赖的正确方式，而不是拿来源码，拖到 H5 工程里！我坚信我是对的，因为使用 Creator 编写小游戏时就能这么用，它是如何做到的呢？又经过一">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.330Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="搭建同时支持 ES6 Module 和 CommonJS 的开发环境">
+<meta name="twitter:description" content="我在编写 RxJS 入门教程的时候，折腾了大半上午都没能跑出一个 demo 来，让我感到沮丧，我知道使用 node.js 分分钟就能出现效果，可我就是想用 node 的 npm 去管理项目依赖，然后在浏览器里执行，因为我感觉使用这种方式才是做前端项目管理依赖的正确方式，而不是拿来源码，拖到 H5 工程里！我坚信我是对的，因为使用 Creator 编写小游戏时就能这么用，它是如何做到的呢？又经过一">
+
+<link rel="canonical" href="http://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>搭建同时支持 ES6 Module 和 CommonJS 的开发环境 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          搭建同时支持 ES6 Module 和 CommonJS 的开发环境
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-10-30 10:09:10" itemprop="dateCreated datePublished" datetime="2018-10-30T10:09:10+08:00">2018-10-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>我在编写 RxJS 入门教程的时候，折腾了大半上午都没能跑出一个 demo 来，让我感到沮丧，我知道使用 node.js 分分钟就能出现效果，可我就是想用 node 的 npm 去管理项目依赖，然后在浏览器里执行，因为我感觉使用这种方式才是做前端项目管理依赖的正确方式，而不是拿来源码，拖到 H5 工程里！我坚信我是对的，因为使用 Creator 编写小游戏时就能这么用，它是如何做到的呢？又经过一个下午的折腾，终于搞明白了全部流程，并对 JavaScript 模块化编程有的新的认识。</p>
+</blockquote>
+<p>本文是一篇基础教程，前端大神可直接忽略；旨在学习:</p>
+<ol>
+<li>浏览器如何加载 ES6 模块(Module)？</li>
+<li>最新语法如何兼容老版本引擎(浏览器，Node…)？</li>
+<li>Node.js 如何支持 ES6 模块(Module)?</li>
+<li>浏览器如何加载 CommonJS 模块？</li>
+<li>代码修改后如何自动编译并刷新浏览器预览？</li>
+</ol>
+<p>本文不会讲以下概念，但可以通过准备好的连接去补习:</p>
+<ul>
+<li>什么是 npm ？<a href="https://www.npmjs.com.cn/" target="_blank" rel="noopener">https://www.npmjs.com.cn/</a></li>
+<li>ES6 Module 规范 <a href="http://es6.ruanyifeng.com/#docs/module" target="_blank" rel="noopener">http://es6.ruanyifeng.com/#docs/module</a></li>
+<li>CommonJS 规范 <a href="http://javascript.ruanyifeng.com/nodejs/module.html" target="_blank" rel="noopener">http://javascript.ruanyifeng.com/nodejs/module.html</a></li>
+</ul>
+<a id="more"></a>
+<h2 id="浏览器加载-ES6-模块"><a href="#浏览器加载-ES6-模块" class="headerlink" title="浏览器加载 ES6 模块"></a>浏览器加载 ES6 模块</h2><p>很简单，只需要按照 ES6 的 Module 规范去编写代码，然后在 HTML 导入即可:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// utils.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">sayHello</span>(<span class="params">text</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">  div.textContent = text || <span class="string">'Hello World!'</span>;</span><br><span class="line">  <span class="built_in">document</span>.body.appendChild(div);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// index.html</span></span><br><span class="line">&lt;script type=<span class="string">"module"</span>&gt;</span><br><span class="line">  <span class="keyword">import</span> &#123;sayHello&#125; <span class="keyword">from</span> <span class="string">'./utils.js'</span>;</span><br><span class="line">  sayHello(<span class="string">'ES6 Module worked.'</span>);</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<p>一定要注意，type 必须是 ‘module’，与导入普通 js 文件区别开，告诉浏览器你使用了 Module 。</p>
+<p>上一篇 <a href="/2018/10/28-JavaScript-Module-Programming.html">《JavaScript 模块化编程》</a>中曾提到并不是所有的浏览器版本都完全支持 ES6 语法，所以使用 ES6 模块之后，就要想办法让他在不支持 ES6 的浏览器里跑起来！</p>
+<h2 id="Babel"><a href="#Babel" class="headerlink" title="Babel"></a>Babel</h2><p><code>Babel is a JavaScript compiler.</code></p>
+<p>Babel 通过语法转换器支持最新版本的 JavaScript，允许你立刻使用新语法，无需等待浏览器支持。</p>
+<ul>
+<li><a href="https://babeljs.io" target="_blank" rel="noopener">https://babeljs.io</a></li>
+<li><a href="https://www.babeljs.cn" target="_blank" rel="noopener">https://www.babeljs.cn</a></li>
+</ul>
+<h3 id="1、安装与使用"><a href="#1、安装与使用" class="headerlink" title="1、安装与使用"></a>1、安装与使用</h3><ol>
+<li><p>通过 npm 安装 Babel CLI</p>
+<p> npm install –save-dev babel-cli babel-preset-env</p>
+</li>
+<li><p>创建 .babelrc 配置文件</p>
+<p> 定义 .babelrc 文件，当 babel 转化时会读取这个配置文件，可以在配置文件里指定支持到哪个版本。具体参考:  <a href="https://www.babeljs.cn/docs/plugins/preset-env/" target="_blank" rel="noopener">Env preset</a>.</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">&quot;presets&quot;: [&quot;env&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在 package.json 中的 “scripts” 属性里添加一个 build 属性</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">   	&quot;build&quot;: &quot;babel source -d dist&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打开终端，    运行以下命令开始转换</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="2、运行"><a href="#2、运行" class="headerlink" title="2、运行"></a>2、运行</h3><p>将 index.html 里路径修改为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;module&quot;&gt;</span><br><span class="line">    // import &apos;./source/index.js&apos;</span><br><span class="line">    import &apos;./dist/index.js&apos;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>然后浏览器运行，发现出错了，报错如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ReferenceError: Can&apos;t find variable: require</span><br><span class="line">or</span><br><span class="line">ReferenceError: require is not defined</span><br></pre></td></tr></table></figure>
+<p>立即搜索问题，找到这个答案:</p>
+<blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; Yes, Babel is just intended for translating new language features to be compatible with modern javascript engines. Babel doesn’t compile to require.js module import syntax. Rather it uses the CommonJS module syntax as used by Node.js. So you could run the code directly without further build dependencies in Node.js.<br>&nbsp;&nbsp;&nbsp;&nbsp; As it operates on single files at a time and is a straight forward translation, it doesn’t make any decisions as to how you want to include the source code of those other files into the current one.<br>&nbsp;&nbsp;&nbsp;&nbsp; That said, if you are going to use it in browser, you will need a build system or bundler that supports CommonJS modules statements:<br>· See <a href="https://babeljs.io/docs/setup/#installation" target="_blank" rel="noopener">https://babeljs.io/docs/setup/#installation</a> for a list of many typical build configurations<br>· Browserify and Webpack are two of the most popular ones in the Javacript ecosystem<br>· These systems ‘bundle’ your javascript code by injecting files wherever ‘require’ is referenced and thus typically produce one output js file which you can run in ecma5</p>
+</blockquote>
+<ul>
+<li><a href="https://stackoverflow.com/questions/38166498/babel-transpiles-import-to-require-but-require-isnt-useable-in-ecma5" target="_blank" rel="noopener">https://stackoverflow.com/questions/38166498/babel-transpiles-import-to-require-but-require-isnt-useable-in-ecma5</a></li>
+<li><a href="https://stackoverflow.com/questions/19059580/client-on-node-uncaught-referenceerror-require-is-not-defined" target="_blank" rel="noopener">https://stackoverflow.com/questions/19059580/client-on-node-uncaught-referenceerror-require-is-not-defined</a></li>
+</ul>
+<p>意思是 Babel 没有将 ES6 Module 转成 AMD 模块规范，而是转成了 CommonJS 规范！所以需要 Browserify 或者 Webpack 这样的打包工具，将依赖处理下，并提供 CommonJS 执行的环境，从而可以在 ES5 的环境中执行！</p>
+<p>我之前用过 webpack 这个打包工具，她的功能十分强大，不仅可以处理 JS 文件模块，资源文件也可当做模块，可以使用对应的 loader 去处理，学习成本略高，今天的目的是搞懂流程，所以选择相对简单的 Browerify 举例。</p>
+<h2 id="Browerify"><a href="#Browerify" class="headerlink" title="Browerify"></a>Browerify</h2><p><code>Browserify lets you require(&#39;modules&#39;) in the browser by bundling up all of your dependencies.</code></p>
+<p>Browserify 通过打包依赖库，让你具备在浏览器里使用 require 的能力。</p>
+<ul>
+<li><a href="http://browserify.org" target="_blank" rel="noopener">http://browserify.org</a></li>
+</ul>
+<h3 id="1、安装与使用-1"><a href="#1、安装与使用-1" class="headerlink" title="1、安装与使用"></a>1、安装与使用</h3><ol>
+<li><p>通过 npm 安装 browserify</p>
+<p> npm install browserify –save-dev</p>
+</li>
+<li><p>在 package.json 中的 “scripts” 属性里添加一个 bundle 属性</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">   	&quot;bundle&quot;: &quot;browserify --entry dist/index.js --outfile dist/bundle.js&quot;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="3">
+<li><p>打开终端，    运行以下命令开始打包</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run bundle</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="2、运行-1"><a href="#2、运行-1" class="headerlink" title="2、运行"></a>2、运行</h3><p>将 index.html 里路径修改为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;dist/bundle.js&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<p>然后浏览器运行，再次看到了期待已久的日志输入！</p>
+<h2 id="了解-Browserify-工作原理"><a href="#了解-Browserify-工作原理" class="headerlink" title="了解 Browserify 工作原理"></a>了解 Browserify 工作原理</h2><p>阮一峰老师很好的解释了这一原理，我们也来走一遍这个过程:</p>
+<ol>
+<li><p>通过 npm 安装 browser-unpack</p>
+<p> <code>npm install browser-unpack --save-dev</code></p>
+</li>
+<li><p>在 package.json 中的 “scripts” 属性里添加一个 bundle 属性</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">   	&quot;unpack&quot;: &quot;browser-unpack &lt; dist/bundle.js &gt; dist/unpack.json&quot;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="3">
+<li><p>打开终端，    运行以下命令开始打包</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run unpack</span><br></pre></td></tr></table></figure>
+<p> 打开 dist/unpack.json 文件，可以看到 browerify 将所有模块放入一个数组，id 属性是模块的编号，source 属性是模块的源码，deps 属性是模块的依赖。</p>
+<p> 因为 index.js 里面加载了 test.js，所以 deps 属性就指定 ./test 对应 2 号模块。执行的时候，浏览器遇到 require(‘./test’) 语句，就自动执行 2 号模块的 source 属性，并将执行后的 module.exports 属性值输出。</p>
+</li>
+</ol>
+<h2 id="Node-js-支持-ES6-模块-Module"><a href="#Node-js-支持-ES6-模块-Module" class="headerlink" title="Node.js 支持 ES6 模块(Module)"></a>Node.js 支持 ES6 模块(Module)</h2><p>上一篇<a href="/2018/10/28-JavaScript-Module-Programming.html">《JavaScript 模块化编程》</a>里强调了，目前 Node.js 还不支持 ES6 Module ！接下来拿 RxJS 这个库做个试验:</p>
+<p><code>npm install rxjs rxjs-compat --save</code></p>
+<p>然后编写测试代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//rx.js</span><br><span class="line">var Rx = require(&apos;rxjs/Rx&apos;);</span><br><span class="line"></span><br><span class="line">Observable.of(1,2,3).subscribe((e)=&gt;&#123;</span><br><span class="line">  console.log(&apos;=====:&apos; + e);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>直接通过 node 执行，完成没问题！然后我们把它导入到我的 index.js 里</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//index.js</span><br><span class="line">import works from &apos;./test.js&apos;;</span><br><span class="line">import &apos;./rx.js&apos;;</span><br><span class="line">works(&quot;Hello,MR !&quot;);</span><br></pre></td></tr></table></figure>
+<p>然后运行会报错:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(function (exports, require, module, __filename, __dirname) &#123; import works from &apos;./test.js&apos;;</span><br><span class="line">                                                                     ^^^^^</span><br><span class="line"></span><br><span class="line">SyntaxError: Unexpected identifier</span><br></pre></td></tr></table></figure>
+<p>肯定报错！Node.js 不支持这个语法！</p>
+<p>你可能会想到刚才不是刚介绍了 Babel 吗？用它转换下语法不就行了！是的，所以只要先执行下刚写过的 </p>
+<p>npm run build</p>
+<p>进行编译，再让 node 执行 dist/index.js 就OK了! </p>
+<h2 id="浏览器加载-CommonJS-模块"><a href="#浏览器加载-CommonJS-模块" class="headerlink" title="浏览器加载 CommonJS 模块"></a>浏览器加载 CommonJS 模块</h2><p>有了 Browserify 的支持，我们已经具备了加载 CommonJS 规范的能力，刚才 dist/index.js 已经是 Babel 编译过的 CommonJS 规范的代码了，所以用 Browserify 直接打包按道理就能在浏览器里运行了！</p>
+<p>是的，你成功了！这样做到了通过 npm 管理依赖库问题！</p>
+<h2 id="自动编译-amp-刷新预览"><a href="#自动编译-amp-刷新预览" class="headerlink" title="自动编译 &amp; 刷新预览"></a>自动编译 &amp; 刷新预览</h2><p>我们的工作流程也随之确定了:</p>
+<ol>
+<li>编写/修改源文件</li>
+<li>通过 npm build 编译</li>
+<li>通过 npm bundle 打包</li>
+<li>通过 node 运行 index.html</li>
+</ol>
+<p>每次写两行代码想看个效果就这么费劲么！有没有省时省力的办法啊！当然有，让我们一起来搭建一个专业的前端开发环境吧！</p>
+<h3 id="自动化构建工具-Gulp"><a href="#自动化构建工具-Gulp" class="headerlink" title="自动化构建工具 Gulp"></a>自动化构建工具 Gulp</h3><ol>
+<li><p>作为项目的开发依赖（devDependencies）安装：</p>
+<p> npm install –save-dev gulp</p>
+</li>
+<li><p>在项目根目录下创建一个名为 gulpfile.js 的文件：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var gulp = require(&apos;gulp&apos;);</span><br><span class="line"></span><br><span class="line">gulp.task(&apos;start&apos;, function() &#123;</span><br><span class="line">  console.log(&apos;Gulp works!&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在 package.json 中的 “scripts” 属性里添加一个 start 属性</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">   	&quot;start&quot;: &quot;gulp start&quot;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="4">
+<li><p>打开终端，    运行以下命令执行 gulp 任务</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run start</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="5">
+<li><p>添加 gulp 任务</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">/// babel任务</span><br><span class="line">const babel = require(&apos;gulp-babel&apos;);</span><br><span class="line"></span><br><span class="line">gulp.task(&apos;babel&apos;,function (cb) &#123;</span><br><span class="line">   gulp.src(&apos;source/*.js&apos;)</span><br><span class="line">       .pipe(babel(&#123;</span><br><span class="line">           presets: [&apos;env&apos;]</span><br><span class="line">       &#125;))</span><br><span class="line">       // .pipe(uglify())</span><br><span class="line">       .pipe(gulp.dest(&apos;dist&apos;));</span><br><span class="line">   cb();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">/// browserify任务</span><br><span class="line"></span><br><span class="line">const browserify = require(&apos;browserify&apos;);</span><br><span class="line">const source = require(&apos;vinyl-source-stream&apos;);</span><br><span class="line"></span><br><span class="line">gulp.task(&apos;browserify&apos;,function (cb) &#123;</span><br><span class="line">   var b = browserify(&#123;</span><br><span class="line">       entries: &quot;dist/index.js&quot;</span><br><span class="line">   &#125;);</span><br><span class="line"></span><br><span class="line">   b.bundle()</span><br><span class="line">       .pipe(source(&quot;bundle.js&quot;))</span><br><span class="line">       .pipe(gulp.dest(&quot;dist&quot;));</span><br><span class="line">   cb();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">/// 修改 start 任务，把 &apos;babel&apos; 和 &apos;browserify&apos; 任务作为它的同步依赖：</span><br><span class="line">gulp.task(&apos;start&apos;,[&apos;server&apos;,&apos;babel&apos;,&apos;browserify&apos;,&apos;watch2&apos;],function () &#123;</span><br><span class="line">   console.log(&apos;OK!&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p> 终端里重新执行 npm run start，看下效果吧，其实是将 build 和 bundle 合二为一了。接下来做个文件监听，当文件发生变化，自动触发这个编译打包过程！</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/// watch 任务</span><br><span class="line">gulp.task(&apos;watch&apos;,function () &#123;</span><br><span class="line">    gulp.watch(&apos;source/*.js&apos;, [&apos;babel&apos;]);</span><br><span class="line">    gulp.watch(&apos;dist/index.js&apos;, [&apos;browserify&apos;]);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p> 再次修改 start 任务:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gulp.task(&apos;start&apos;,[&apos;babel&apos;,&apos;browserify&apos;,&apos;watch&apos;],function () &#123;</span><br><span class="line">   console.log(&apos;OK!&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p> 这样一来，只要 js 文件发生变化就会自动编译，打包了！万事俱备，只差一个听使唤的资源服务器了，当打包完毕后让服务器通知浏览器去刷新 H5 页面:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">/// server任务</span><br><span class="line">const browserSync = require(&apos;browser-sync&apos;).create();</span><br><span class="line">const reload      = browserSync.reload;</span><br><span class="line"></span><br><span class="line">gulp.task(&apos;server&apos;,function () &#123;</span><br><span class="line">   browserSync.init(&#123;</span><br><span class="line">       server: &quot;./&quot;</span><br><span class="line">   &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">gulp.task(&apos;watch-html&apos;,function () &#123;</span><br><span class="line">   gulp.watch(&apos;*.html&apos;).on(&apos;change&apos;,reload);</span><br><span class="line">&#125;);</span><br><span class="line">	</span><br><span class="line">gulp.task(&apos;watch&apos;,[&apos;watch-html&apos;],function () &#123;</span><br><span class="line">    const watcher = gulp.watch(&apos;source/*.js&apos;, [&apos;babel&apos;,&apos;browserify&apos;]);</span><br><span class="line">    watcher.on(&apos;change&apos;,function () &#123;</span><br><span class="line">        console.log(&apos;bundle done,auto reload!&apos;);</span><br><span class="line">        reload();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">gulp.task(&apos;start&apos;,[&apos;babel&apos;,&apos;browserify&apos;,&apos;server&apos;,&apos;watch&apos;],function () &#123;</span><br><span class="line">   console.log(&apos;OK!&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p> 再次执行 npm run start ，你会看到浏览器窗口自动打开了，终端输出如下信息:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[14:42:41] Using gulpfile ~/Documents/demoWorkspace/rxjs/gulpfile.js</span><br><span class="line">[14:42:41] Starting &apos;server&apos;...</span><br><span class="line">[14:42:41] Finished &apos;server&apos; after 12 ms</span><br><span class="line">[14:42:41] Starting &apos;babel&apos;...</span><br><span class="line">[14:42:41] Finished &apos;babel&apos; after 6.03 ms</span><br><span class="line">[14:42:41] Starting &apos;browserify&apos;...</span><br><span class="line">[14:42:42] Finished &apos;browserify&apos; after 5.67 ms</span><br><span class="line">[14:42:42] Starting &apos;watch-html&apos;...</span><br><span class="line">[14:42:42] Finished &apos;watch-html&apos; after 6.62 ms</span><br><span class="line">[14:42:42] Starting &apos;watch&apos;...</span><br><span class="line">[14:42:42] Finished &apos;watch&apos; after 2.77 ms</span><br><span class="line">[14:42:42] Starting &apos;start&apos;...</span><br><span class="line">OK!</span><br><span class="line">[14:42:42] Finished &apos;start&apos; after 72 μs</span><br><span class="line">[Browsersync] Access URLs:</span><br><span class="line"> ------------------------------------</span><br><span class="line">       Local: http://localhost:3000</span><br><span class="line">    External: http://10.7.36.117:3000</span><br><span class="line"> ------------------------------------</span><br><span class="line">          UI: http://localhost:3001</span><br><span class="line"> UI External: http://localhost:3001</span><br><span class="line"> ------------------------------------</span><br><span class="line">[Browsersync] Serving files from: ./</span><br></pre></td></tr></table></figure>
+<p> 每当你修改了 html，或者 js 文件，浏览器就会自动刷新，帮你节省下来一大把时间！</p>
+</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://jakearchibald.com/2017/es-modules-in-browsers/" target="_blank" rel="noopener">ECMAScript modules in browsers</a></li>
+<li><a href="https://wesbos.com/javascript-modules/" target="_blank" rel="noopener">An Intro To Using npm and ES6 Modules for Front End Development</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2015/05/commonjs-in-browser.html" target="_blank" rel="noopener">浏览器加载 CommonJS 模块的原理与实现</a></li>
+<li><a href="https://www.gulpjs.com.cn/docs/getting-started/" target="_blank" rel="noopener">Gulp入门</a></li>
+<li><a href="http://www.browsersync.cn/docs/gulp/" target="_blank" rel="noopener">Browsersync + Gulp.js</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/10/28-JavaScript-Module-Programming.html" rel="prev" title="JavaScript 模块化编程">
+      <i class="fa fa-chevron-left"></i> JavaScript 模块化编程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/12/31-my-2018.html" rel="next" title="我的 2018">
+      我的 2018 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器加载-ES6-模块"><span class="nav-number">1.</span> <span class="nav-text">浏览器加载 ES6 模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Babel"><span class="nav-number">2.</span> <span class="nav-text">Babel</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、安装与使用"><span class="nav-number">2.1.</span> <span class="nav-text">1、安装与使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、运行"><span class="nav-number">2.2.</span> <span class="nav-text">2、运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Browerify"><span class="nav-number">3.</span> <span class="nav-text">Browerify</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、安装与使用-1"><span class="nav-number">3.1.</span> <span class="nav-text">1、安装与使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、运行-1"><span class="nav-number">3.2.</span> <span class="nav-text">2、运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#了解-Browserify-工作原理"><span class="nav-number">4.</span> <span class="nav-text">了解 Browserify 工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Node-js-支持-ES6-模块-Module"><span class="nav-number">5.</span> <span class="nav-text">Node.js 支持 ES6 模块(Module)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器加载-CommonJS-模块"><span class="nav-number">6.</span> <span class="nav-text">浏览器加载 CommonJS 模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动编译-amp-刷新预览"><span class="nav-number">7.</span> <span class="nav-text">自动编译 &amp; 刷新预览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自动化构建工具-Gulp"><span class="nav-number">7.1.</span> <span class="nav-text">自动化构建工具 Gulp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

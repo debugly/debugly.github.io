@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="macOS 是自带了 JRE 的，但实际上却没那么好用，今天就来聊下我遇到的问题以及解决方案.  我也记不清楚之前本机的 Java 环境是否是配置好了，昨天更新了 macOS 之后，今天想装个 Jenkins 玩下，结果在运行 Jenkins 的时候发现 No Java runtime present, requesting install. 查看 Java 环境 如果看到需要安装的话，择说明没">
+<meta name="keywords" content="macOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搞定 macOS JRE">
+<meta property="og:url" content="http://debugly.cn/2018/03/06-macOS-JavaRuntime.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="macOS 是自带了 JRE 的，但实际上却没那么好用，今天就来聊下我遇到的问题以及解决方案.  我也记不清楚之前本机的 Java 环境是否是配置好了，昨天更新了 macOS 之后，今天想装个 Jenkins 玩下，结果在运行 Jenkins 的时候发现 No Java runtime present, requesting install. 查看 Java 环境 如果看到需要安装的话，择说明没">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://debugly.cn/images/201803/0.png">
+<meta property="og:image" content="http://debugly.cn/images/201803/1.png">
+<meta property="og:image" content="http://debugly.cn/images/201803/2.png">
+<meta property="og:image" content="http://debugly.cn/images/201803/3.png">
+<meta property="og:image" content="http://debugly.cn/images/201803/4.png">
+<meta property="og:image" content="http://debugly.cn/images/201803/6.png">
+<meta property="og:image" content="http://debugly.cn/images/201803/7.png">
+<meta property="og:image" content="http://debugly.cn/images/201803/5.png">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.326Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="搞定 macOS JRE">
+<meta name="twitter:description" content="macOS 是自带了 JRE 的，但实际上却没那么好用，今天就来聊下我遇到的问题以及解决方案.  我也记不清楚之前本机的 Java 环境是否是配置好了，昨天更新了 macOS 之后，今天想装个 Jenkins 玩下，结果在运行 Jenkins 的时候发现 No Java runtime present, requesting install. 查看 Java 环境 如果看到需要安装的话，择说明没">
+<meta name="twitter:image" content="http://debugly.cn/images/201803/0.png">
+
+<link rel="canonical" href="http://debugly.cn/2018/03/06-macOS-JavaRuntime.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>搞定 macOS JRE | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2018/03/06-macOS-JavaRuntime.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          搞定 macOS JRE
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-03-06 23:28:58" itemprop="dateCreated datePublished" datetime="2018-03-06T23:28:58+08:00">2018-03-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>macOS 是自带了 JRE 的，但实际上却没那么好用，今天就来聊下我遇到的问题以及解决方案.</p>
+</blockquote>
+<p>我也记不清楚之前本机的 Java 环境是否是配置好了，昨天更新了 macOS 之后，今天想装个 Jenkins 玩下，结果在运行 Jenkins 的时候发现 <strong>No Java runtime present, requesting install.</strong></p>
+<h2 id="查看-Java-环境"><a href="#查看-Java-环境" class="headerlink" title="查看 Java 环境"></a>查看 Java 环境</h2><p><img src="/images/201803/0.png" alt></p>
+<p>如果看到需要安装的话，择说明没有 Java 环境，需要配置 JRE 了。</p>
+<a id="more"></a>
+<h2 id="安装-JRE"><a href="#安装-JRE" class="headerlink" title="安装 JRE"></a>安装 JRE</h2><p><em>JRE : Jave Runtime Environment，即运行 Java程序的环境。</em></p>
+<ul>
+<li>点击 <strong>系统偏好设置</strong> 里的 Java 图标</li>
+</ul>
+<p><img src="/images/201803/1.png" alt></p>
+<p>如果没有这个图标或者点击后没有出来 <strong>Java 控制面板</strong></p>
+<p><img src="/images/201803/2.png" alt></p>
+<p>那就需要去 oracle 下载安装 JRE <a href="http://www.oracle.com/technetwork/java/javase/downloads/jre9-downloads-3848532.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/java/javase/downloads/jre9-downloads-3848532.html</a>；下载 dmg 包就行，需要选中 Accept License Agreement !</p>
+<p><img src="/images/201803/3.png" alt></p>
+<p>下载完成，双击一路安装即可！</p>
+<p>本以为这样就行了，其实不行，安装完成后 <strong>Java 控制面板</strong> 到是有了！</p>
+<h2 id="查找问题"><a href="#查找问题" class="headerlink" title="查找问题"></a>查找问题</h2><p>既然 <strong>Java 控制面板</strong> 里显示了 java 环境了，那么肯定是环境已经有了，只不过命令行里使用的时候没找到而已，这好办，查一查 java 的真实身份吧：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">which java</span><br><span class="line">/usr/bin/java</span><br><span class="line">ls -al /usr/bin/java</span><br><span class="line">lrwxr-xr-x  1 root  wheel  74 11 28 23:06 /usr/bin/java -&gt; /System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java</span><br></pre></td></tr></table></figure>
+<p>这说明了 java 命令搜索路径是 <strong>/usr/bin/java</strong> 并且这只是个替身，原身是 <em>/System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java</em> ！！！</p>
+<p>如下图:</p>
+<p><img src="/images/201803/4.png" alt></p>
+<p>原身 JavaVM.framework:</p>
+<p><img src="/images/201803/6.png" alt></p>
+<p>这个 JavaVM.framework 不是我们安装的，好像是苹果自带的！！再回过头检查了下，<strong>发现 Desktop 这里的路径跟苹果自带的 JRE 路径不一样</strong>，这个路径是安装过 Oracle JRE 的路径！！</p>
+<p><img src="/images/201803/7.png" alt></p>
+<p>目录结构如下图:</p>
+<p><img src="/images/201803/5.png" alt></p>
+<p>因此解决方案就是将苹果自带的 JRE 修改为 Oracle 的 JRE，原本想着将这个替身直接改为我们安装的这个JRE里的java，可是很遗憾，对于高版本的 macOS 而言 /usr/bin 目录没有修改权限，想拥有权限有些麻烦，这里不再介绍。所以换个思路去解决。</p>
+<p>我们知道命令行输入的命令查找顺序是按照设定的 PATH 路径查找的，因此可以从 PATH 入手，先来看下完整的 PATH 搜索路径:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bogon:~ xuqianlong$ echo $PATH</span><br><span class="line">/Users/xuqianlong/.rvm/gems/ruby-2.2.6/bin:/Users/xuqianlong/.rvm/gems/ruby-2.2.6@global/bin:/Users/xuqianlong/.rvm/rubies/ruby-2.2.6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/xuqianlong/.rvm/bin:/usr/local/ssl</span><br></pre></td></tr></table></figure>
+<p>由于是按顺序查找的，所以只要在 <strong>/usr/bin</strong> 之前搜索到就不会使用默认的苹果指定的 JRE 了，经过仔细查看发现 <strong>/usr/local/bin</strong> 在 <strong>/usr/bin</strong> 之前搜索，所以我们可以在 <strong>/usr/local/bin</strong> 里建个 Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java 的替身！</p>
+<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><p>上面讨论了解决方案，下面实施下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java /usr/local/bin</span><br></pre></td></tr></table></figure>
+<p>重启终端再次查看环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br><span class="line">java version &quot;9.0.4&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 9.0.4+11)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 9.0.4+11, mixed mode)</span><br></pre></td></tr></table></figure>
+<p>这次对啦，正是我们刚装的 9.0.4 版本！</p>
+<p>为什么苹果自带的不行呢，我还不能确定！</p>
+<h2 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h2><ul>
+<li><a href="https://anas.pk/2015/09/02/solution-no-java-runtime-present-mac-yosemite/" target="_blank" rel="noopener">https://anas.pk/2015/09/02/solution-no-java-runtime-present-mac-yosemite/</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/macOS/" rel="tag"># macOS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/01/07-testUniversalLink.html" rel="prev" title="调试我乐棋牌通用链接">
+      <i class="fa fa-chevron-left"></i> 调试我乐棋牌通用链接
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/03/07-macOS-Install-Jenkins.html" rel="next" title="macOS 上安装 Jenkins">
+      macOS 上安装 Jenkins <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看-Java-环境"><span class="nav-number">1.</span> <span class="nav-text">查看 Java 环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-JRE"><span class="nav-number">2.</span> <span class="nav-text">安装 JRE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找问题"><span class="nav-number">3.</span> <span class="nav-text">查找问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决问题"><span class="nav-number">4.</span> <span class="nav-text">解决问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考博客"><span class="nav-number">5.</span> <span class="nav-text">参考博客</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

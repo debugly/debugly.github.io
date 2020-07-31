@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本篇博客介绍的是 pod repo 命令，推送 podspec 文件，创建 pods 私有库等均会用到 repo 命令。 pod repo先看下 repo 二级命令支持了哪些参数吧 1234567891011121314151617181920212223➜  ~ pod repo --help                                                 Usa">
+<meta name="keywords" content="CocoaPods,podspec,library">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pod repo 命令">
+<meta property="og:url" content="http://debugly.cn/2017/07/22-pod-repo.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="本篇博客介绍的是 pod repo 命令，推送 podspec 文件，创建 pods 私有库等均会用到 repo 命令。 pod repo先看下 repo 二级命令支持了哪些参数吧 1234567891011121314151617181920212223➜  ~ pod repo --help                                                 Usa">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.319Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pod repo 命令">
+<meta name="twitter:description" content="本篇博客介绍的是 pod repo 命令，推送 podspec 文件，创建 pods 私有库等均会用到 repo 命令。 pod repo先看下 repo 二级命令支持了哪些参数吧 1234567891011121314151617181920212223➜  ~ pod repo --help                                                 Usa">
+
+<link rel="canonical" href="http://debugly.cn/2017/07/22-pod-repo.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>pod repo 命令 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/07/22-pod-repo.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pod repo 命令
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-07-22 16:23:12" itemprop="dateCreated datePublished" datetime="2017-07-22T16:23:12+08:00">2017-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本篇博客介绍的是 pod repo 命令，推送 podspec 文件，创建 pods 私有库等均会用到 repo 命令。</p>
+<h2 id="pod-repo"><a href="#pod-repo" class="headerlink" title="pod repo"></a>pod repo</h2><p>先看下 repo 二级命令支持了哪些参数吧</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ pod repo --help                                                 </span><br><span class="line">Usage:</span><br><span class="line"></span><br><span class="line">    $ pod repo [COMMAND]</span><br><span class="line"></span><br><span class="line">      Manage spec-repositories</span><br><span class="line"></span><br><span class="line">Commands:</span><br><span class="line"></span><br><span class="line">    + add       Add a spec repo</span><br><span class="line">    + add-cdn   Add a spec repo backed by a CDN</span><br><span class="line">    + lint      Validates all specs in a repo</span><br><span class="line">    &gt; list      List repos</span><br><span class="line">    + push      Push new specifications to a spec-repo</span><br><span class="line">    + remove    Remove a spec repo</span><br><span class="line">    + update    Update a spec repo</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"></span><br><span class="line">    --silent    Show nothing</span><br><span class="line">    --verbose   Show more debugging information</span><br><span class="line">    --no-ansi   Show output without ANSI codes</span><br><span class="line">    --help      Show help banner of specified command</span><br></pre></td></tr></table></figure>
+<p>可以看出共有 7 个命令，还可以加些可选参数，用于控制日志等</p>
+<ul>
+<li>pod repo add</li>
+</ul>
+<p>添加 podspec 仓库，用于搭建私有库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod repo add Pods_Specs git@code.sohuno.com:ifox/Pods_Specs.git    </span><br><span class="line">Cloning spec repo `Pods_Specs` from `git@code.sohuno.com:ifox/Pods_Specs.git</span><br></pre></td></tr></table></figure>
+<p>Pods_Specs 为私有仓库别名，默认是 master，这个名字在推送 spec 文件时也需要用到，因此需要留意下，别起的太随意了！</p>
+<ul>
+<li>pod repo add-cdn</li>
+</ul>
+<p>cocoapods 1.7 之后添加的新功能，暂时还没去尝试。</p>
+<ul>
+<li>pod repo lint</li>
+</ul>
+<p>验证仓库下的所有 spec 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ pod repo lint Pods_Specs  </span><br><span class="line"></span><br><span class="line">Linting spec repo `Pods_Specs`</span><br><span class="line"></span><br><span class="line">.......................................................................................</span><br><span class="line"></span><br><span class="line">Analyzed 87 podspecs files.</span><br><span class="line"></span><br><span class="line">All the specs passed validation.</span><br></pre></td></tr></table></figure>
+<ul>
+<li>pod repo list</li>
+</ul>
+<p>查看所有的 spec 仓库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ pod repo list           </span><br><span class="line"></span><br><span class="line">edu-git-cocoapods-specs</span><br><span class="line">- Type: git (master)</span><br><span class="line">- URL:  https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git</span><br><span class="line">- Path: /Users/qianlongxu/.cocoapods/repos/edu-git-cocoapods-specs</span><br><span class="line"></span><br><span class="line">master</span><br><span class="line">- Type: git (master)</span><br><span class="line">- URL:  https://github.com/CocoaPods/Specs.git</span><br><span class="line">- Path: /Users/qianlongxu/.cocoapods/repos/master</span><br><span class="line"></span><br><span class="line">Pods_Specs</span><br><span class="line">- Type: git (master)</span><br><span class="line">- URL:  git@code.sohuno.com:ifox/Pods_Specs.git</span><br><span class="line">- Path: /Users/qianlongxu/.cocoapods/repos/Pods_Specs</span><br><span class="line"></span><br><span class="line">3 repos</span><br></pre></td></tr></table></figure>
+<ul>
+<li>pod repo push</li>
+</ul>
+<p>将 spec 文件推送到仓库，不执行仓库时，默认是官方的 master 仓库。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">pod repo push Pods_Specs SCHTTPServer_B.podspec --allow-warnings</span><br><span class="line"></span><br><span class="line">Validating spec</span><br><span class="line"> -&gt; SCHTTPServer_B (1.0.56)</span><br><span class="line">    - WARN  | http: The URL (`http://10.7.36.192/Pods_Static/1.0.56/SCHTTPServer.framework.zip`) doesn&apos;t use the encrypted HTTPS protocol. It is crucial for Pods to be transferred over a secure protocol to protect your users from man-in-the-middle attacks. This will be an error in future releases. Please update the URL to use https.</span><br><span class="line">    - WARN  | [OSX] license: Unable to find a license file</span><br><span class="line">    - NOTE  | xcodebuild:  note: Using new build system</span><br><span class="line">    - NOTE  | [OSX] xcodebuild:  note: Planning build</span><br><span class="line">    - NOTE  | [OSX] xcodebuild:  note: Constructing build description</span><br><span class="line"></span><br><span class="line">Updating the `Pods_Specs&apos; repo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Adding the spec to the `Pods_Specs&apos; repo</span><br><span class="line"></span><br><span class="line"> - [Update] SCHTTPServer_B (1.0.56)</span><br><span class="line"></span><br><span class="line">Pushing the `Pods_Specs&apos; repo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[!] &apos;SCHTTPServer_B&apos; uses the unencrypted &apos;http&apos; protocol to transfer the Pod. Please be sure you&apos;re in a safe network with only trusted hosts. Otherwise, please reach out to the library author to notify them of this security issue.</span><br><span class="line"></span><br><span class="line">[!] Unable to read the license file `LICENSE` for the spec `SCHTTPServer_B (1.0.56)`</span><br><span class="line"></span><br><span class="line">[!] Unable to read the license file `LICENSE` for the spec `SCHTTPServer_B (1.0.56)`</span><br></pre></td></tr></table></figure>
+<ul>
+<li>pod repo remove</li>
+</ul>
+<p>移除现有的 spec 仓库，这里只做个测试玩下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">✗ pod repo remove abc            </span><br><span class="line">[!] repo abc does not exist</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line"></span><br><span class="line">    $ pod repo remove NAME</span><br><span class="line"></span><br><span class="line">      Deletes the remote named `NAME` from the local spec-repos directory at</span><br><span class="line">      `/Users/qianlongxu/.cocoapods/repos`.</span><br></pre></td></tr></table></figure>
+<ul>
+<li>pod repo update</li>
+</ul>
+<p>pods spec 仓库本质上是个 git 仓库，所以 update 命名是从远程拉取 git 仓库而已。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">✗ pod repo update Pods_Specs</span><br><span class="line">Updating spec repo `Pods_Specs`</span><br><span class="line">  $ /usr/bin/git -C /Users/qianlongxu/.cocoapods/repos/Pods_Specs fetch origin</span><br><span class="line">  --progress</span><br><span class="line">  $ /usr/bin/git -C /Users/qianlongxu/.cocoapods/repos/Pods_Specs rev-parse</span><br><span class="line">  --abbrev-ref HEAD</span><br><span class="line">  master</span><br><span class="line">  $ /usr/bin/git -C /Users/qianlongxu/.cocoapods/repos/Pods_Specs reset --hard</span><br><span class="line">  origin/master</span><br><span class="line">  HEAD is now at 84ae3ae [Update] MRFoundation_B (1.0.56)</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://guides.cocoapods.org/terminal/commands.html#group_repos" target="_blank" rel="noopener">CocoaPods Command-line Reference</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/CocoaPods/" rel="tag"># CocoaPods</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/07/23-pod-ipc.html" rel="prev" title="pod ipc 命令">
+      <i class="fa fa-chevron-left"></i> pod ipc 命令
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/07/24-pod-lib-create.html" rel="next" title="使用 pod lib 创建 CocoaPods 库">
+      使用 pod lib 创建 CocoaPods 库 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pod-repo"><span class="nav-number">1.</span> <span class="nav-text">pod repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

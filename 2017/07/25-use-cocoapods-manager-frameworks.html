@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="通过前几篇博客的介绍，已经知道了如何去创建自己的 pods 库，前提是公开源码的，但有时候你可能不想或者不能把源码提供出去，那还能继续使用 cocoapods 管理库和依赖吗？答案是肯定的，接下来就来介绍下 cocoapods 如何管理 frameworks ！  无论是源码还是库的形式，对于 pod 而言，区别就是 podspec 文件，比如我做了几个管理源码的 pod 库，现在我只需要修改下">
+<meta name="keywords" content="use cocoapods manager frameworks">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 CocoaPods 管理 frameworks">
+<meta property="og:url" content="http://debugly.cn/2017/07/25-use-cocoapods-manager-frameworks.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="通过前几篇博客的介绍，已经知道了如何去创建自己的 pods 库，前提是公开源码的，但有时候你可能不想或者不能把源码提供出去，那还能继续使用 cocoapods 管理库和依赖吗？答案是肯定的，接下来就来介绍下 cocoapods 如何管理 frameworks ！  无论是源码还是库的形式，对于 pod 而言，区别就是 podspec 文件，比如我做了几个管理源码的 pod 库，现在我只需要修改下">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.319Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 CocoaPods 管理 frameworks">
+<meta name="twitter:description" content="通过前几篇博客的介绍，已经知道了如何去创建自己的 pods 库，前提是公开源码的，但有时候你可能不想或者不能把源码提供出去，那还能继续使用 cocoapods 管理库和依赖吗？答案是肯定的，接下来就来介绍下 cocoapods 如何管理 frameworks ！  无论是源码还是库的形式，对于 pod 而言，区别就是 podspec 文件，比如我做了几个管理源码的 pod 库，现在我只需要修改下">
+
+<link rel="canonical" href="http://debugly.cn/2017/07/25-use-cocoapods-manager-frameworks.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>使用 CocoaPods 管理 frameworks | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/07/25-use-cocoapods-manager-frameworks.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 CocoaPods 管理 frameworks
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-07-25 15:09:56" itemprop="dateCreated datePublished" datetime="2017-07-25T15:09:56+08:00">2017-07-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>通过前几篇博客的介绍，已经知道了如何去创建自己的 pods 库，前提是公开源码的，但有时候你可能不想或者不能把源码提供出去，那还能继续使用 cocoapods 管理库和依赖吗？答案是肯定的，接下来就来介绍下 cocoapods 如何管理 frameworks ！</p>
+</blockquote>
+<p>无论是源码还是库的形式，对于 pod 而言，区别就是 podspec 文件，比如我做了几个管理源码的 pod 库，现在我只需要修改下就可以了，以 <a href="https://github.com/debugly/SCNetworkKit" target="_blank" rel="noopener">SCNetworkKit</a> 举例说明:</p>
+<p>将</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s.source       = &#123; :git =&gt; &quot;https://github.com/debugly/SCNetworkKit.git&quot;, :tag =&gt; &quot;#&#123;s.version&#125;&quot; &#125;</span><br><span class="line">s.source_files  = &quot;SCNetworkKit/Classes/**/*.&#123;h,m&#125;&quot;</span><br></pre></td></tr></table></figure>
+<p>修改为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s.source       = &#123; :http =&gt; &quot;http://10.7.36.192/Pods_Static/1.0.55/SCNetworkKit.framework.zip&quot; &#125;</span><br><span class="line">s.vendored_frameworks = &quot;SCNetworkKit.framework&quot;</span><br></pre></td></tr></table></figure>
+<p>source 支持四种类型:</p>
+<ul>
+<li>:git =&gt; :tag, :branch, :commit, :submodules</li>
+<li>:svn =&gt; :folder, :tag, :revision</li>
+<li>:hg =&gt; :revision</li>
+<li>:http =&gt; :flatten, :type, :sha256, :sha1, :headers</li>
+</ul>
+<p>这里使用 http 是因为实际项目中更为方便，我们会把库文件放到服务器上，通过不通的文件夹去管理版本，下载也比较快速。</p>
+<p>剩下的验证和发布步骤就和创建管理源码的 pods 库一样了，如果你没有创建过 pods 库的话，出门右转: <a href="/2017/07/24-pod-lib-create.html">使用 pod lib 创建 CocoaPods 库</a>。</p>
+<h2 id="vendored-frameworks-说明"><a href="#vendored-frameworks-说明" class="headerlink" title="vendored_frameworks 说明"></a>vendored_frameworks 说明</h2><p>1、从名字上就可以知道，这个配置支持多个 framework，配置时只需要使用逗号分隔即可；</p>
+<p>2、可以支持路径，比如 s.vendored_frameworks = “Release/SCNetworkKit.framework” 那么 SCNetworkKit.framework 必须位于相对于 spec 文件的 Release 目录下，发布到服务器上的压缩文件，解压后也必须能够解压出 Release 文件夹，否则会验证失败！</p>
+<h2 id="vendored-libraries-说明"><a href="#vendored-libraries-说明" class="headerlink" title="vendored_libraries 说明"></a>vendored_libraries 说明</h2><p>cocoapods 不仅可以管理 frameworks ，还可以管理 .a 静态库，只需要把 <strong>vendored_frameworks</strong> 换成 <strong>vendored_libraries</strong> 即可!</p>
+<h2 id="resources-说明"><a href="#resources-说明" class="headerlink" title="resources 说明"></a>resources 说明</h2><p>前面的博客里没提到 resources 管理，这里顺便提下，假设我的 SohuGameSDK.framework 里包含的有 SohuGame.xcassets 文件夹，podspec 配置如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s.resources = &quot;SohuGameSDK.framework/SohuGame.xcassets&quot;</span><br></pre></td></tr></table></figure>
+<p>我觉得很赞的是，不用将资源手动添加到主工程里去，pods会自动通过脚本帮你完成这件事，这个是新版 pods 才有的功能，最初是不支持的，大概是从 1.0 开始支持的！！</p>
+<h2 id="完"><a href="#完" class="headerlink" title="完"></a>完</h2><p>我在做 SDK 开发工作期间，并没有通过 cocoapods 管理，也没有提供 pods 库，原因大概是:</p>
+<p>我需要去配合集成 SDK 的 App，有的 App 对于 cocoapods 依赖性很大，也经常更新，对于这个 App 来讲，其实可以支持下 pods库，但是有个 App 虽然使用了 cocoapods，但是好久都没更新过了，工程较复杂，他们不愿意使用这种方式集成，避免更新我的库时，搞乱了他们的工程依赖关系！所以都是手动替换的。</p>
+<p>其实使用 cocoapods 实现这一过程也是可以的，举例说明(SDK 发布到内网 CDN服务器):</p>
+<p>SDK 要更新包了，我需要:</p>
+<ol>
+<li>将 SDK（也就是相关的 frameworks）上传到服务器</li>
+<li>升级 podspec 版本号</li>
+<li>将 podspec 推送到私有 cocospods</li>
+</ol>
+<p>这些工作完全可以通过脚本完成，然后通过 jenkins 调用即可；大致的脚本流程如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">build_sdk : 编译SDK工程</span><br><span class="line">zip_frameworks : 压缩生成的 frameworks</span><br><span class="line">scp_frameworks : 将 zip 包推到 cdn 服务器</span><br><span class="line">generate_spec : 通过模板，生成目标 spec 文件，这里推荐使用 json 格式的spec，便于模板替换</span><br><span class="line">push_spec : 将 spec 文件推送到私聊 pod 仓库</span><br><span class="line">send_mail : 发送邮件给开发者</span><br></pre></td></tr></table></figure>
+<p>集成者的工作是:</p>
+<ol>
+<li>升级 Podfile 里 SDK 的版本号</li>
+<li>使用 pod update xx 把指定库更新下来</li>
+<li>提交 pods 变动</li>
+</ol>
+<p>本文更新时，我已经不再做 SDK 开发了，现在做 App 了，但是也不等于这套流程没用了，因为我可以把这套流程修改成 <strong>组件二进制化</strong> 流程。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/CocoaPods/" rel="tag"># CocoaPods</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/07/24-pod-lib-create.html" rel="prev" title="使用 pod lib 创建 CocoaPods 库">
+      <i class="fa fa-chevron-left"></i> 使用 pod lib 创建 CocoaPods 库
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/08/12-sandbox-filemanager.html" rel="next" title="iOS 沙盒与文件管理类">
+      iOS 沙盒与文件管理类 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#vendored-frameworks-说明"><span class="nav-number">1.</span> <span class="nav-text">vendored_frameworks 说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vendored-libraries-说明"><span class="nav-number">2.</span> <span class="nav-text">vendored_libraries 说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#resources-说明"><span class="nav-number">3.</span> <span class="nav-text">resources 说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完"><span class="nav-number">4.</span> <span class="nav-text">完</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

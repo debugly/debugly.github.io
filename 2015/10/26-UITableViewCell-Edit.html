@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="IntroductionUITableView 提供了很多很方便的方法以至于我们有的时候不能完全记住他的代理方法，这里说下他的编辑模式；项目里用到了编辑，在踩过一些坑之后，对 UITableView 的编辑更加的清晰了，这里简单记录下。 开启编辑模式 这个很简单了，设置 UITableView 的编辑属性即可，方法则提供了动画选项：  123// default is NO. setting is">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UITableViewCell 编辑模式">
+<meta property="og:url" content="http://debugly.cn/2015/10/26-UITableViewCell-Edit.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="IntroductionUITableView 提供了很多很方便的方法以至于我们有的时候不能完全记住他的代理方法，这里说下他的编辑模式；项目里用到了编辑，在踩过一些坑之后，对 UITableView 的编辑更加的清晰了，这里简单记录下。 开启编辑模式 这个很简单了，设置 UITableView 的编辑属性即可，方法则提供了动画选项：  123// default is NO. setting is">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://debugly.cn/images/201510/1026-1051-2.png">
+<meta property="og:image" content="http://debugly.cn/images/201510/1026-1051-0.png">
+<meta property="og:image" content="http://debugly.cn/images/201510/1026-1051-1.png">
+<meta property="og:image" content="http://debugly.cn/images/201510/1026-1051-4.gif">
+<meta property="og:image" content="http://debugly.cn/images/201510/1026-1051-5.gif">
+<meta property="og:image" content="http://debugly.cn/images/201510/1026-1051-6.gif">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.309Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UITableViewCell 编辑模式">
+<meta name="twitter:description" content="IntroductionUITableView 提供了很多很方便的方法以至于我们有的时候不能完全记住他的代理方法，这里说下他的编辑模式；项目里用到了编辑，在踩过一些坑之后，对 UITableView 的编辑更加的清晰了，这里简单记录下。 开启编辑模式 这个很简单了，设置 UITableView 的编辑属性即可，方法则提供了动画选项：  123// default is NO. setting is">
+<meta name="twitter:image" content="http://debugly.cn/images/201510/1026-1051-2.png">
+
+<link rel="canonical" href="http://debugly.cn/2015/10/26-UITableViewCell-Edit.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>UITableViewCell 编辑模式 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2015/10/26-UITableViewCell-Edit.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UITableViewCell 编辑模式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-10-26 21:57:49" itemprop="dateCreated datePublished" datetime="2015-10-26T21:57:49+08:00">2015-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>UITableView 提供了很多很方便的方法以至于我们有的时候不能完全记住他的代理方法，这里说下他的编辑模式；项目里用到了编辑，在踩过一些坑之后，对 UITableView 的编辑更加的清晰了，这里简单记录下。</p>
+<h1 id="开启编辑模式"><a href="#开启编辑模式" class="headerlink" title="开启编辑模式"></a>开启编辑模式</h1><ul>
+<li>这个很简单了，设置 UITableView 的编辑属性即可，方法则提供了动画选项：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// default is NO. setting is not animated.</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">getter</span>=isEditing) <span class="built_in">BOOL</span> editing;</span><br><span class="line">- (<span class="keyword">void</span>)setEditing:(<span class="built_in">BOOL</span>)editing animated:(<span class="built_in">BOOL</span>)animated;</span><br></pre></td></tr></table></figure>
+<p>如果控制器是 UITableViewController ,那么可直接使用控制器的方法，而无需写一句代码，iOS 代码就是这么简单，系统为我们做了太多的东西了，点击 item 的方法也已经绑定好了！</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">self</span>.navigationItem.leftBarButtonItem = <span class="keyword">self</span>.editButtonItem;</span><br></pre></td></tr></table></figure>
+<p>editButtonItem 是控制器的属性；你可以重写这个方法，处理一些必要的操作，不过千万要记得调用 super 哦！</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UIViewController</span> (<span class="title">UIViewControllerEditing</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">getter</span>=isEditing) <span class="built_in">BOOL</span> editing;</span><br><span class="line"><span class="comment">// Updates the appearance of the Edit|Done button item as necessary. Clients who override it must call super first.</span></span><br><span class="line">- (<span class="keyword">void</span>)setEditing:(<span class="built_in">BOOL</span>)editing animated:(<span class="built_in">BOOL</span>)animated;</span><br><span class="line"><span class="comment">// Return an Edit|Done button that can be used as a navigation item's custom view. Default action toggles the editing state with animation.</span></span><br><span class="line">- (<span class="built_in">UIBarButtonItem</span> *)editButtonItem;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>这是我 Demo 里重写的,目的是切换编辑效果的，每次点击都会不一样，循环往复的：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)setEditing:(<span class="built_in">BOOL</span>)editing animated:(<span class="built_in">BOOL</span>)animated</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (editing) &#123;</span><br><span class="line">        <span class="keyword">self</span>.editingStyle = <span class="keyword">self</span>.editingStyle + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">UITableViewCellEditingStyleInsert</span> &lt; <span class="keyword">self</span>.editingStyle) &#123;</span><br><span class="line">            <span class="keyword">self</span>.editingStyle = <span class="built_in">UITableViewCellEditingStyleNone</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    [<span class="keyword">self</span>.tableView reloadData];</span><br><span class="line">    [<span class="keyword">super</span> setEditing:editing animated:animated];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="设置编辑样式"><a href="#设置编辑样式" class="headerlink" title="设置编辑样式"></a>设置编辑样式</h1><ul>
+<li>系统提供了3中编辑样式，分别是：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSInteger</span>, <span class="built_in">UITableViewCellEditingStyle</span>) &#123;</span><br><span class="line">    <span class="built_in">UITableViewCellEditingStyleNone</span>,</span><br><span class="line">    <span class="built_in">UITableViewCellEditingStyleDelete</span>,</span><br><span class="line">    <span class="built_in">UITableViewCellEditingStyleInsert</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>UITableViewCellEditingStyleDelete 对应的效果是:</li>
+</ul>
+<p><img src="/images/201510/1026-1051-2.png" width="375" height="667"></p>
+<ul>
+<li>UITableViewCellEditingStyleInsert 对应的效果是:</li>
+</ul>
+<p><img src="/images/201510/1026-1051-0.png" width="375" height="667"></p>
+<ul>
+<li>UITableViewCellEditingStyleNone 对应的效果是:</li>
+</ul>
+<p><img src="/images/201510/1026-1051-1.png" width="375" height="667"></p>
+<ul>
+<li>前两个都比较熟悉了，对于最后这个有些同学可能不是很熟悉了，这个是系统为我们提供的空白的，所以我们就利用这个进行自定义；</li>
+</ul>
+<h1 id="自定义编辑样式"><a href="#自定义编辑样式" class="headerlink" title="自定义编辑样式"></a>自定义编辑样式</h1><ul>
+<li>自定义编辑样式的思路是：选择的系统样式 UITableViewCellEditingStyleNone，然后自己添加视图，做动画；实现代码：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)setEditing:(<span class="built_in">BOOL</span>)editing animated:(<span class="built_in">BOOL</span>)animated</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>.isEditing == editing) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">UITableViewCellEditingStyleNone</span> == <span class="keyword">self</span>.editingStyle) &#123;</span><br><span class="line">        <span class="keyword">if</span> (editing) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="built_in">UIControl</span> *view = [[<span class="built_in">UIControl</span> alloc]initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">-20</span>,(<span class="keyword">self</span>.bounds.size.height <span class="number">-20</span>)/<span class="number">2.0</span>, <span class="number">20</span>, <span class="number">20</span>)];</span><br><span class="line">            view.backgroundColor = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">            [view addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(tipedEditView) forControlEvents:<span class="built_in">UIControlEventTouchUpInside</span>];</span><br><span class="line">            view.tag = <span class="number">23456</span>;</span><br><span class="line">            [<span class="keyword">self</span> addSubview:view];</span><br><span class="line">            <span class="built_in">CGRect</span> destRect = view.frame;</span><br><span class="line">            destRect.origin.x = <span class="number">15</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (animated) &#123;</span><br><span class="line">                [<span class="built_in">UIView</span> animateWithDuration:<span class="number">0.25</span> animations:^&#123;</span><br><span class="line">                    view.frame = destRect;</span><br><span class="line">                &#125;];</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                view.frame = destRect;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="built_in">UIView</span> *view = [<span class="keyword">self</span> viewWithTag:<span class="number">23456</span>];</span><br><span class="line">            <span class="built_in">CGRect</span> destRect = view.frame;</span><br><span class="line">            destRect.origin.x = <span class="number">-20</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (animated) &#123;</span><br><span class="line">                [<span class="built_in">UIView</span> animateWithDuration:<span class="number">0.25</span> animations:^&#123;</span><br><span class="line">                    view.frame = destRect;</span><br><span class="line">                &#125;completion:^(<span class="built_in">BOOL</span> finished) &#123;</span><br><span class="line">                    [view removeFromSuperview];</span><br><span class="line">                &#125;];</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                view.frame = destRect;</span><br><span class="line">                [view removeFromSuperview];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    [<span class="keyword">super</span> setEditing:editing animated:animated];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)tipedEditView</span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//    回掉到tableview的dasource去；</span></span><br><span class="line">    <span class="keyword">id</span>&lt;<span class="built_in">UITableViewDataSource</span>&gt;delete = <span class="keyword">self</span>.ownerTable.dataSource;</span><br><span class="line">    <span class="built_in">NSIndexPath</span> *idx = [<span class="keyword">self</span>.ownerTable indexPathForCell:<span class="keyword">self</span>];</span><br><span class="line">    [delete tableView:<span class="keyword">self</span>.ownerTable commitEditingStyle:<span class="built_in">UITableViewCellEditingStyleNone</span> forRowAtIndexPath:idx];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>datasource 处理：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//        自定义删除；</span></span><br><span class="line">  [<span class="keyword">self</span>.objects removeObjectAtIndex:indexPath.row];</span><br><span class="line">  [tableView beginUpdates];</span><br><span class="line">  [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:<span class="built_in">UITableViewRowAnimationRight</span>];</span><br><span class="line">  [tableView endUpdates];</span><br></pre></td></tr></table></figure>
+<p>最终的效果是：</p>
+<p><img src="/images/201510/1026-1051-4.gif" width="373" height="545"></p>
+<ul>
+<li>通过验证发现，编辑动画，系统也是在 setEditing 方法里处理的；如果直接返回的话可以看到向右滑动的效果就没有了；</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)setEditing:(<span class="built_in">BOOL</span>)editing animated:(<span class="built_in">BOOL</span>)animated</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/201510/1026-1051-5.gif" width="373" height="545"></p>
+<p>注：这个是 <strong>不支持多选</strong> 的！</p>
+<p>以上编辑模式，会触发这个代理方法：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)tableView:(<span class="built_in">UITableView</span> *)tableView commitEditingStyle:(<span class="built_in">UITableViewCellEditingStyle</span>)editingStyle forRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath;</span><br></pre></td></tr></table></figure>
+<p>通过 editingStyle 区分开是哪种编辑；以上模式编辑时默认不可以选择，所以也不会触发选择的代理方法！<br>可以通过 tableView.allowsSelectionDuringEditing = YES;允许选择！</p>
+<h3 id="如何支持多选"><a href="#如何支持多选" class="headerlink" title="如何支持多选"></a>如何支持多选</h3><ul>
+<li>使用系统提供的一个开关开启多选模式；在开启编辑模式前打开这个开关即可：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">self</span>.tableView.allowsMultipleSelectionDuringEditing = <span class="literal">YES</span>;<span class="comment">//默认关闭的</span></span><br></pre></td></tr></table></figure>
+<p>效果是：</p>
+<p><img src="/images/201510/1026-1051-6.gif" width="373" height="545"></p>
+<p>如果没什么特别要求，那么这个是可以满足需求的；选中和取消分别调用下面的代理方法，回调方法和其他编辑模式不太一样：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)tableView:(<span class="built_in">UITableView</span> *)tableView didSelectRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath;</span><br><span class="line">- (<span class="keyword">void</span>)tableView:(<span class="built_in">UITableView</span> *)tableView didDeselectRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath;</span><br></pre></td></tr></table></figure>
+<p>注：开启这个开关后，这个代理方法不再调用<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">UITableViewCellEditingStyle</span>)tableView:(<span class="built_in">UITableView</span> *)tableView editingStyleForRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>使用系统没有公开的枚举值开启:</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">UITableViewCellEditingStyle</span>)tableView:(<span class="built_in">UITableView</span> *)tableView editingStyleForRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">UITableViewCellEditingStyleDelete</span> | <span class="built_in">UITableViewCellEditingStyleInsert</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果想改变这个多选的圆圈，切入口还是 cell 的 - (void)setEditing:(BOOL)editing animated:(BOOL)animated；方法;做法是找到系统的图片隐藏掉，然后把自己想要的加上，做下动画就行了，具体代码暂不放出了…</li>
+</ul>
+<h1 id="完"><a href="#完" class="headerlink" title="完"></a>完</h1><p>已经把 Demo 传到了<a href="https://github.com/debugly/UITableViewStudyDemo" target="_blank" rel="noopener">github</a> 上，多谢支持！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2015/10/15-RunLoopStudy1.html" rel="prev" title="RunLoop Study (一)">
+      <i class="fa fa-chevron-left"></i> RunLoop Study (一)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2015/10/29-Block_Use_Experiences.html" rel="next" title="使用 Block 的一些技巧和心得">
+      使用 Block 的一些技巧和心得 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#开启编辑模式"><span class="nav-number">2.</span> <span class="nav-text">开启编辑模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置编辑样式"><span class="nav-number">3.</span> <span class="nav-text">设置编辑样式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义编辑样式"><span class="nav-number">4.</span> <span class="nav-text">自定义编辑样式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何支持多选"><span class="nav-number">4.0.1.</span> <span class="nav-text">如何支持多选</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#完"><span class="nav-number">5.</span> <span class="nav-text">完</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

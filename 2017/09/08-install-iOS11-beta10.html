@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="9月12号苹果会发布新一代设备 — iPhone8，搭载 iOS 11 是肯定的，现在测试已经提了一些 iOS11上的问题了，因此我决定把我的设备也升级到 iOS 11，用来解 bug，适配等工作。  安装途径以下两种方式都可行，各有优缺，自行选择吧：  OTA升级  到开发者中心，去下载 OTA 升级的一个描述文件：    这个描述文件需要装到手机里，最简单的方式是给自己发送一封邮件，把描述文">
+<meta name="keywords" content="安装 iOS 11">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安装 iOS 11">
+<meta property="og:url" content="http://debugly.cn/2017/09/08-install-iOS11-beta10.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="9月12号苹果会发布新一代设备 — iPhone8，搭载 iOS 11 是肯定的，现在测试已经提了一些 iOS11上的问题了，因此我决定把我的设备也升级到 iOS 11，用来解 bug，适配等工作。  安装途径以下两种方式都可行，各有优缺，自行选择吧：  OTA升级  到开发者中心，去下载 OTA 升级的一个描述文件：    这个描述文件需要装到手机里，最简单的方式是给自己发送一封邮件，把描述文">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://debugly.cn/images/201709/1ota.jpeg">
+<meta property="og:image" content="http://debugly.cn/images/201709/3pp.jpeg">
+<meta property="og:image" content="http://debugly.cn/images/201709/4new.jpeg">
+<meta property="og:image" content="http://debugly.cn/images/201709/5downloading.jpeg">
+<meta property="og:image" content="http://debugly.cn/images/201709/6install.jpeg">
+<meta property="og:image" content="http://debugly.cn/images/201709/2image.jpeg">
+<meta property="og:image" content="http://debugly.cn/images/201709/8.jpeg">
+<meta property="og:image" content="http://debugly.cn/images/201709/9.jpeg">
+<meta property="og:image" content="http://debugly.cn/images/201709/10.jpeg">
+<meta property="og:image" content="http://debugly.cn/images/201709/11.jpeg">
+<meta property="og:image" content="http://debugly.cn/images/201709/12.jpeg">
+<meta property="og:image" content="http://debugly.cn/images/201709/13.jpeg">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.321Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安装 iOS 11">
+<meta name="twitter:description" content="9月12号苹果会发布新一代设备 — iPhone8，搭载 iOS 11 是肯定的，现在测试已经提了一些 iOS11上的问题了，因此我决定把我的设备也升级到 iOS 11，用来解 bug，适配等工作。  安装途径以下两种方式都可行，各有优缺，自行选择吧：  OTA升级  到开发者中心，去下载 OTA 升级的一个描述文件：    这个描述文件需要装到手机里，最简单的方式是给自己发送一封邮件，把描述文">
+<meta name="twitter:image" content="http://debugly.cn/images/201709/1ota.jpeg">
+
+<link rel="canonical" href="http://debugly.cn/2017/09/08-install-iOS11-beta10.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>安装 iOS 11 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/09/08-install-iOS11-beta10.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          安装 iOS 11
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-09-08 08:46:43" itemprop="dateCreated datePublished" datetime="2017-09-08T08:46:43+08:00">2017-09-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>9月12号苹果会发布新一代设备 — iPhone8，搭载 iOS 11 是肯定的，现在测试已经提了一些 iOS11上的问题了，因此我决定把我的设备也升级到 iOS 11，用来解 bug，适配等工作。</p>
+</blockquote>
+<h1 id="安装途径"><a href="#安装途径" class="headerlink" title="安装途径"></a>安装途径</h1><p>以下两种方式都可行，各有优缺，自行选择吧：</p>
+<ol>
+<li><p>OTA升级</p>
+<p> 到开发者中心，去下载 OTA 升级的一个描述文件：</p>
+<p> <img src="/images/201709/1ota.jpeg" alt></p>
+<p> 这个描述文件需要装到手机里，最简单的方式是给自己发送一封邮件，把描述文件作为附件发给自己，然后在邮件App里点击附件就会安装了:</p>
+<p> <img src="/images/201709/3pp.jpeg" alt></p>
+<p> 安装之后，去设置里就可以看到有新的更新了:</p>
+<p> <img src="/images/201709/4new.jpeg" alt></p>
+<p> 点击下载并安装:</p>
+<p> <img src="/images/201709/5downloading.jpeg" alt></p>
+<p> 下载完毕后，安装:</p>
+<p> <img src="/images/201709/6install.jpeg" alt>    </p>
+<p> 手机会重启，开机后会播放一段音乐。</p>
+</li>
+<li><p>下载镜像，使用 itunes 刷固件</p>
+<p> 到开发者中心，去下载对应机型的镜像文件：</p>
+<p> <img src="/images/201709/2image.jpeg" alt></p>
+<p> 下载完毕后，手机先要关闭查找我的 iPhone 功能，然后连上电脑，打开 itunes，找到 <code>恢复 iPhone...</code>选项：</p>
+<p> 按下 option 键 + 点击 <code>恢复 iPhone...</code> 就会弹出文件选择框，选择你下载的镜像即可。</p>
+</li>
+</ol>
+<h1 id="iOS-11-变化"><a href="#iOS-11-变化" class="headerlink" title="iOS 11 变化"></a>iOS 11 变化</h1><p>大标题</p>
+<p><img src="/images/201709/8.jpeg" alt></p>
+<p>📶好山寨，我之前信号没这么差的！桌面这些图标有所变化</p>
+<p><img src="/images/201709/9.jpeg" alt></p>
+<p>控制项更多了，亮度和音量这里可以上下滑动的</p>
+<p><img src="/images/201709/10.jpeg" alt></p>
+<p>下拉通知栏，猛地一看好像锁屏页面</p>
+<p><img src="/images/201709/11.jpeg" alt></p>
+<p>新增文件App，感觉就是之前的 iCloud Drive</p>
+<p><img src="/images/201709/12.jpeg" alt></p>
+<p>App Store改版挺大的</p>
+<p><img src="/images/201709/13.jpeg" alt></p>
+<h1 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h1><p>安装了 iOS 11之后，Xcode 也要升级到 9 才能调试了，安装 Xcode9 必须升级 macOS ，至少是 10.12.6 ，一个个升级吧。都搞定之后就要去做适配工作了。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/09/05-unix-crontab.html" rel="prev" title="macOS 定时任务">
+      <i class="fa fa-chevron-left"></i> macOS 定时任务
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/09/11-sdk-issues.html" rel="next" title="SDK-issues 简介">
+      SDK-issues 简介 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安装途径"><span class="nav-number">1.</span> <span class="nav-text">安装途径</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iOS-11-变化"><span class="nav-number">2.</span> <span class="nav-text">iOS 11 变化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调试"><span class="nav-number">3.</span> <span class="nav-text">调试</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

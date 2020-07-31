@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="截止目前，SDK的打包，已经代码审查都是通过脚本完成的，利用脚本可以轻松的帮我们搞定那些重复的枯燥工作，可以节省宝贵的时间又能避免修改配置环境引发的错误。虽然有了这些这些脚本了，不过还是得人工去执行，不够省心啊，作为一个追求极致又很懒的人，是不能忍的，于是就搞了个定时任务，每天下班后我们只需要提交下代码，到规定的时间后，打包机器（不关机）就自动去执行打包脚本，为我们打包，代码审查！ 简介在 Lin">
+<meta name="keywords" content="Linux,Unix,macOS,crontab,定时任务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="macOS 定时任务">
+<meta property="og:url" content="http://debugly.cn/2017/09/05-unix-crontab.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="截止目前，SDK的打包，已经代码审查都是通过脚本完成的，利用脚本可以轻松的帮我们搞定那些重复的枯燥工作，可以节省宝贵的时间又能避免修改配置环境引发的错误。虽然有了这些这些脚本了，不过还是得人工去执行，不够省心啊，作为一个追求极致又很懒的人，是不能忍的，于是就搞了个定时任务，每天下班后我们只需要提交下代码，到规定的时间后，打包机器（不关机）就自动去执行打包脚本，为我们打包，代码审查！ 简介在 Lin">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.321Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="macOS 定时任务">
+<meta name="twitter:description" content="截止目前，SDK的打包，已经代码审查都是通过脚本完成的，利用脚本可以轻松的帮我们搞定那些重复的枯燥工作，可以节省宝贵的时间又能避免修改配置环境引发的错误。虽然有了这些这些脚本了，不过还是得人工去执行，不够省心啊，作为一个追求极致又很懒的人，是不能忍的，于是就搞了个定时任务，每天下班后我们只需要提交下代码，到规定的时间后，打包机器（不关机）就自动去执行打包脚本，为我们打包，代码审查！ 简介在 Lin">
+
+<link rel="canonical" href="http://debugly.cn/2017/09/05-unix-crontab.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>macOS 定时任务 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/09/05-unix-crontab.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          macOS 定时任务
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-09-05 13:10:32" itemprop="dateCreated datePublished" datetime="2017-09-05T13:10:32+08:00">2017-09-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>截止目前，SDK的打包，已经代码审查都是通过脚本完成的，利用脚本可以轻松的帮我们搞定那些重复的枯燥工作，可以节省宝贵的时间又能避免修改配置环境引发的错误。虽然有了这些这些脚本了，不过还是得人工去执行，不够省心啊，作为一个追求极致又很懒的人，是不能忍的，于是就搞了个定时任务，每天下班后我们只需要提交下代码，到规定的时间后，打包机器（不关机）就自动去执行打包脚本，为我们打包，代码审查！</p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>在 Linux、Unix、MacOS(类Unix)系统下，crontab 命令可以用来设置周期性执行的任务。系统为每个用户分配一个 “table” 存储这些任务，这些任务通常称为 “cron job”。这些任务是在 cron 守护进程里执行的，因此执行时的环境跟用户登录的环境是不一样的，这也导致了很多新手都会遇到一个问题：直接执行脚本没一点问题，加入到 crontab 之后，就不能正常执行。</p>
+<h1 id="crontab-使用"><a href="#crontab-使用" class="headerlink" title="crontab 使用"></a>crontab 使用</h1><p>1、查看当前用户下的定时任务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">crontab -l</span><br><span class="line">///没有定时任务</span><br><span class="line">crontab: no crontab for qianlongxu</span><br><span class="line">///有定时任务</span><br><span class="line"># 每分钟打印一次当前时间</span><br><span class="line">1 * * * * /Users/qianlongxu/Desktop/logdate.sh</span><br></pre></td></tr></table></figure>
+<p>2、删除当前用户设定的全部任务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -r</span><br></pre></td></tr></table></figure>
+<p>3、添加定时任务</p>
+<ul>
+<li><p>先准备一个任务脚本 ‘logdate.sh’，最终由 cron 守护进程执行，内容如下：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 打印当前日期到文件</span><br><span class="line">echo $(date) &gt;&gt; /Users/qianlongxu/Desktop/log.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>任务写好了，然后添加到 crontab 中，实现周期性的执行有两种方法：</p>
+<ul>
+<li><p>直接编辑</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure>
+<p>   此时应该会打开 vim 编辑器，直接在里面写任务配置就好了；比如每分钟都执行可以这么写：</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 每分钟打印一次当前时间</span><br><span class="line">* * * * * /Users/qianlongxu/Desktop/logdate.sh</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>编写一个名为 <code>job.cron</code> 的shell脚本作为 crontab 的输入，内容如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 每分钟打印一次当前时间</span><br><span class="line">* * * * * /Users/qianlongxu/Desktop/logdate.sh</span><br></pre></td></tr></table></figure>
+<p>  然后执行：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab /Users/qianlongxu/Desktop/job.cron</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>这两种方法都可以添加任务。</p>
+</li>
+</ul>
+<h1 id="任务格式"><a href="#任务格式" class="headerlink" title="任务格式"></a>任务格式</h1><p>编写任务是有格式的，一共6列，前五列是设定周期的，最后一列是要执行的命令或者脚本:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">分　时　日　月　周　命令/脚本</span><br><span class="line">* * * * * cmd</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第1列表示分钟1～59 每分钟用<em>或者 </em>/1表示 </li>
+<li>第2列表示小时1～23（0表示0点） </li>
+<li>第3列表示日期1～31 </li>
+<li>第4列表示月份1～12 </li>
+<li>第5列标识号星期0～6（0表示星期天） </li>
+<li>第6列要运行的命令 </li>
+</ul>
+<h1 id="任务不执行"><a href="#任务不执行" class="headerlink" title="任务不执行"></a>任务不执行</h1><p>添加了任务后可能没有按照预期的周期去执行，可能是以下原因:</p>
+<ol>
+<li>任务脚本没有执行权限，给他一个可执行的权限： <code>sudo chmod 755 /Users/qianlongxu/Desktop/logdate.sh</code></li>
+<li>添加任务是时间设置的有问题，我曾经想当然的把每小时的第一分钟执行理解为了每分钟都执行，我找了半个小时也没找到问题！</li>
+<li><p>网上有人说到 cron 服务，这个在 Mac下比较特殊，不像 Linux，cron 服务我们貌似干预不了，是 launchctl 控制的，比如:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">///在 launchctl 里找下 cron 服务</span><br><span class="line">sudo launchctl list | grep cron</span><br><span class="line">Password:</span><br><span class="line">225	0	com.vix.cron</span><br><span class="line">  /// 尝试停止 cron 服务，结果失败了</span><br><span class="line">sudo /usr/sbin/cron stop</span><br><span class="line">Password:</span><br><span class="line">cron: cron already running, pid: 225</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>你就没法停止这个服务，执行 restart 也是一样的，服务也不会重新开始；
+</code></pre><ol start="4">
+<li>任务脚本里的路径不对，由于任务开始执行的进程没有加载环境变量，所以在脚本里使用的命名需要带上路径，使用的目录也需要是绝对路径。</li>
+<li>中文乱码，这个也是环境问题，可以在脚本的最上面声明下语言：<code>export LANG=&quot;zh_CN.UTF-8&quot;</code></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Script/" rel="tag"># Script</a>
+              <a href="/tags/macOS/" rel="tag"># macOS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/08/31-iPhone-types.html" rel="prev" title="iOS 获取设备、应用相关信息">
+      <i class="fa fa-chevron-left"></i> iOS 获取设备、应用相关信息
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/09/08-install-iOS11-beta10.html" rel="next" title="安装 iOS 11">
+      安装 iOS 11 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#crontab-使用"><span class="nav-number">2.</span> <span class="nav-text">crontab 使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#任务格式"><span class="nav-number">3.</span> <span class="nav-text">任务格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#任务不执行"><span class="nav-number">4.</span> <span class="nav-text">任务不执行</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

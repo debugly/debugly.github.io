@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="在上篇博客中提到可以把通用代码打成静态库，然后多个项目可使用多个 Framework 包裹这些静态库的方式共享通用代码，详见最后的思维导图！这个方案的确是可行的，但是只用了两天就被干掉了！原因是太不方便了！程序刚好崩溃到打到静态库中的方法了，没法搞断点去一步步 debug ，降低了开发的效率！这种方案也不是完全没有用武之地，比如现在有几和后台商议好的加密算法，一般不需要人人都知道，省得泄漏出去，这">
+<meta name="keywords" content="workspace,share code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 WorkSpace 管理共享代码">
+<meta property="og:url" content="http://debugly.cn/2017/05/19-use-workspace-share-code.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="在上篇博客中提到可以把通用代码打成静态库，然后多个项目可使用多个 Framework 包裹这些静态库的方式共享通用代码，详见最后的思维导图！这个方案的确是可行的，但是只用了两天就被干掉了！原因是太不方便了！程序刚好崩溃到打到静态库中的方法了，没法搞断点去一步步 debug ，降低了开发的效率！这种方案也不是完全没有用武之地，比如现在有几和后台商议好的加密算法，一般不需要人人都知道，省得泄漏出去，这">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.315Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 WorkSpace 管理共享代码">
+<meta name="twitter:description" content="在上篇博客中提到可以把通用代码打成静态库，然后多个项目可使用多个 Framework 包裹这些静态库的方式共享通用代码，详见最后的思维导图！这个方案的确是可行的，但是只用了两天就被干掉了！原因是太不方便了！程序刚好崩溃到打到静态库中的方法了，没法搞断点去一步步 debug ，降低了开发的效率！这种方案也不是完全没有用武之地，比如现在有几和后台商议好的加密算法，一般不需要人人都知道，省得泄漏出去，这">
+
+<link rel="canonical" href="http://debugly.cn/2017/05/19-use-workspace-share-code.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>使用 WorkSpace 管理共享代码 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/05/19-use-workspace-share-code.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 WorkSpace 管理共享代码
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-05-19 22:47:32" itemprop="dateCreated datePublished" datetime="2017-05-19T22:47:32+08:00">2017-05-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在上篇博客中提到可以把通用代码打成静态库，然后多个项目可使用多个 Framework 包裹这些静态库的方式共享通用代码，详见最后的思维导图！这个方案的确是可行的，但是只用了两天就被干掉了！原因是太不方便了！程序刚好崩溃到打到静态库中的方法了，没法搞断点去一步步 debug ，降低了开发的效率！这种方案也不是完全没有用武之地，比如现在有几和后台商议好的加密算法，一般不需要人人都知道，省得泄漏出去，这时就可以把加密算法打成库，然后需要用的时候把库加到自己的 Framework 里就行了！</p>
+<p>因此需要继续摸索共享代码的方式，既要满足需求，又要方便调试！方便调试的话没办法，只能开放源码了，所以我想到了 Workspace ，其实我早该想到的，不知道为何我先想到的是使用 Framework 包裹 静态库的方式，按道理我应该先想到使用 Workspace 共享才对，因为从一开始我就是使用 Workspace 管理的工程！</p>
+<p>简单说下 Workspace 和 Project 的关系，一般情况下一个项目对应一个工程（Project)，有时候为了方便管理就把几个工程都放在一起，这时就要使用 Workspace 了，因为这是 Project 是平级的关系，不是包含的关系，当然 Project 也可以包含，今天不说包含的事哈，既然是平级的，那总得来个管事的吧，这就是今天的主角— Workspace ！说得直白些就是她管理了 N 个 Project ，实质上就是记录了 Project 的索引而已，最常见的是使用 Pods 的工程，会自动生成一个 Workspace，包含了原来的 Project 和 名为 Pods 的 Project ！</p>
+<p>思考是有局限性的，或者说之前的考虑是陷入了一个胡同里了，觉得搞成静态库后者框架才能共享，其实不用，比如现在的工程目录结构是这样的：</p>
+<ul>
+<li>workspace<ul>
+<li>projectA<ul>
+<li>libCC</li>
+</ul>
+</li>
+<li>projectB</li>
+</ul>
+</li>
+</ul>
+<p>其实 B 工程是可以直接添加 A 工程里的代码的，对于 B 而言就把 projectA 当做一个文件夹就好了，不要考虑太多，加入的时候不要选择 copy 就行了，这样其实就是共享了！为了凸显 libCC 是通用的，因此我们整理下工程目录：</p>
+<ul>
+<li>workspace<ul>
+<li>libCC</li>
+<li>projectA</li>
+<li>projectB</li>
+</ul>
+</li>
+</ul>
+<p>这样从结构上就能一目了然了，接下来 A 、B 都添加下 libCC 到工程，都不要 copy !!! 即只添加引用，文件仍旧在 libCC 目录；由于实体文件仍在 libCC 里面，所以无论 A 、B 谁修改了源码，对方都可以立马更新，如果添加新的文件，则需要再次添加下哦！</p>
+<p>libCC 可以到 Workspace 里和 A、B 同级，也可以不添加，我就没添加，感觉是多余的，因为没其他的用途，不会因为没有在 Workspace 里添加索引就导致 A、B找不到 libCC 了。</p>
+<blockquote>
+<p>其实，共享 libCC 跟 Workspace 没多大关系，只不过 A、B 是 由 Workspace 管理的，如果你不用 Workspace 的话，直接创建个 libCC 的文件夹也能共享，只要不 copy 就行了！这才是重点！！</p>
+</blockquote>
+<p>比起包裹静态库而言，这种方式才是我想要的呢！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/千帆SDK/" rel="tag"># 千帆SDK</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/05/17-sharecode-framework-wrap-static-library.html" rel="prev" title="使用 Framework 包裹静态库共享代码">
+      <i class="fa fa-chevron-left"></i> 使用 Framework 包裹静态库共享代码
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/05/21-liquid.html" rel="next" title="初识 Liquid 模板语言">
+      初识 Liquid 模板语言 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

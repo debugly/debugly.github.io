@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="回想 17 年自己想搞自动化构建，没有相关环境，只好使用 crontab 去做，真是好费劲，因为很多环境变量没有，本地调试好的脚本可是定时任务执行时就报错。这是之前对 crontab 使用的简单介绍：macOS 定时任务 而现在呢，我们有了自己的打包机，打包机上装了 jenkins，为脚本执行提供了环境，支持参数化构建，定时构建，远程构建等。 jenkins 执行的是脚本，他不能操作我们的 xCo">
+<meta name="keywords" content="iOS,Script">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 自动化构建（一）">
+<meta property="og:url" content="http://debugly.cn/2018/08/29-xcodebuild-usages.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="回想 17 年自己想搞自动化构建，没有相关环境，只好使用 crontab 去做，真是好费劲，因为很多环境变量没有，本地调试好的脚本可是定时任务执行时就报错。这是之前对 crontab 使用的简单介绍：macOS 定时任务 而现在呢，我们有了自己的打包机，打包机上装了 jenkins，为脚本执行提供了环境，支持参数化构建，定时构建，远程构建等。 jenkins 执行的是脚本，他不能操作我们的 xCo">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.328Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 自动化构建（一）">
+<meta name="twitter:description" content="回想 17 年自己想搞自动化构建，没有相关环境，只好使用 crontab 去做，真是好费劲，因为很多环境变量没有，本地调试好的脚本可是定时任务执行时就报错。这是之前对 crontab 使用的简单介绍：macOS 定时任务 而现在呢，我们有了自己的打包机，打包机上装了 jenkins，为脚本执行提供了环境，支持参数化构建，定时构建，远程构建等。 jenkins 执行的是脚本，他不能操作我们的 xCo">
+
+<link rel="canonical" href="http://debugly.cn/2018/08/29-xcodebuild-usages.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>iOS 自动化构建（一） | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2018/08/29-xcodebuild-usages.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS 自动化构建（一）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-29 14:09:10" itemprop="dateCreated datePublished" datetime="2018-08-29T14:09:10+08:00">2018-08-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>回想 17 年自己想搞自动化构建，没有相关环境，只好使用 crontab 去做，真是好费劲，因为很多环境变量没有，本地调试好的脚本可是定时任务执行时就报错。这是之前对 crontab 使用的简单介绍：<a href="/2017/09/05-unix-crontab.html">macOS 定时任务</a></p>
+<p>而现在呢，我们有了自己的打包机，打包机上装了 jenkins，为脚本执行提供了环境，支持参数化构建，定时构建，远程构建等。</p>
+<p>jenkins 执行的是脚本，他不能操作我们的 xCode，所以我们要把打包命令写成脚本，交给 jenkins 去执行，因此今天来看下如何使用命令打 iOS 的包。</p>
+<a id="more"></a>
+<h1 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h1><p>在学习打包命名之前，有必要先简单统一下对 xCode 工程相关概念的理解：</p>
+<ul>
+<li>Project：一个 xCode工程包含了所有文件、资源以及构建一个或者多个产品的必要信息的仓库。工程可包含一个或多个目标产物（target），定义了适用于所有 target的默认构建配置（每个Target可以指定自己的构建配置）。工程文件可以单独存在，也可以包含到 workspace 里，以 .xcodeproj 为后缀。官网解释：<a href="https://developer.apple.com/library/archive/featuredarticles/XcodeConcepts/Concept-Projects.html" target="_blank" rel="noopener">Xcode Project</a></li>
+<li>Workspace：工作空间是一个这样的文档：包含了一个或多个Project（或者其他类型的文档，并不局限于Project）。除此之外，还能很好的解决间接或直接依赖关系。并且这些工程的产物也在同一个build目录下，工程文件以 .xcworkspace 为后缀。官网解释：<a href="https://developer.apple.com/library/archive/featuredarticles/XcodeConcepts/Concept-Workspace.html#//apple_ref/doc/uid/TP40009328-CH7-SW1" target="_blank" rel="noopener">Xcode Workspace</a></li>
+<li>Target：包含了构建指定产品的指令和文件以及如何构建；一个 target 对应一个产品；一个工程可以包含一个或多个 target；同一时刻只能有一个激活的 target，通过指定 scheme 做到这一点。官网解释：<a href="https://developer.apple.com/library/archive/featuredarticles/XcodeConcepts/Concept-Targets.html#//apple_ref/doc/uid/TP40009328-CH4-SW1" target="_blank" rel="noopener">Xcode Target</a></li>
+<li>Scheme：将指定 targets 的构建过程分类，默认情况下新增一个 target 就会自动为其生成一个同名的 Scheme，目前构建过程有：Build、Run、Test、Profile、Analyze、Archive。官网解释：<a href="https://developer.apple.com/library/archive/featuredarticles/XcodeConcepts/Concept-Schemes.html#//apple_ref/doc/uid/TP40009328-CH8-SW1" target="_blank" rel="noopener">Xcode Scheme</a></li>
+<li>BuildSettings：一个 build setting 就是一个变量，这个变量是很具体的，决定了编译器应当如何处理。前面提到了每个工程都有默认的 build settings，每个target 默认继承这些配置，当然可以指定 target 的配置来覆盖工程配置。一个配置就是一个键值对，具体配置信息就比较多了，比如是否支持 bitcode，CPU架构支持哪些，是否开启 ARC 等。除了 xCode 的默认配置外，也可以自定义配置；在 xCode里看到的不是配置的键值对，而是显示名称，如何拿到这些键值对呢？有个小技巧是在 xCode 里选中具体配置，复制下，粘贴到文本编辑器里就行了！官网解释：<a href="https://developer.apple.com/library/archive/featuredarticles/XcodeConcepts/Concept-Build_Settings.html#//apple_ref/doc/uid/TP40009328-CH6-SW1" target="_blank" rel="noopener">Build Settings</a></li>
+</ul>
+<p>说了这么多还没接触到打包命令，是不是着急了呢，客官别急，马上就来。</p>
+<h1 id="一行命令"><a href="#一行命令" class="headerlink" title="一行命令"></a>一行命令</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcodebuild</span><br></pre></td></tr></table></figure>
+<p>该命令会使用默认配置+默认 Target（多个 Target 会选择第一个作为默认）+ Release Configuration 进行打包。</p>
+<ul>
+<li>如果目录下有多个 project 就不能打了，因为他还没有聪明到可以自动选择你想要打包 project 的地步。</li>
+<li>如果目录下没有 project 文件，而是 *.xcworkspace 的话，也必须加上一些额外参数才能打，因为我们知道一个 workspace 里面可以包含多个  project，每个 project 可以包含多个 Target，可以为每个 Target 建立 Scheme，所以工程环境是很复杂的；比如我之前的一个项目，使用 <code>xcodebuild -list 命令查看工程信息</code>：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">xcodebuild -workspace SohuLive.xcworkspace -list</span><br><span class="line">Information about workspace &quot;SohuLive&quot;:</span><br><span class="line">Schemes:</span><br><span class="line">    OCLint</span><br><span class="line">    SohuCoreFoundation</span><br><span class="line">    SohuDoudizhu4AppStore</span><br><span class="line">    SohuDoudizhu4Inhouse</span><br><span class="line">    SohuDoudizhuDevelop</span><br><span class="line">    SohuDoudizhuLane</span><br><span class="line">    SohuDoudizhuSDK</span><br><span class="line">    SohuEduSDK</span><br><span class="line">    SohuGameSDK</span><br><span class="line">    SohuLiveDemo</span><br><span class="line">    SohuLiveDemo4Car</span><br><span class="line">    SohuLiveDemo4News</span><br><span class="line">    SohuLiveDemo4Puppy</span><br><span class="line">    SohuLiveSDK-Car</span><br><span class="line">    SohuLiveSDK-News</span><br><span class="line">    SohuLiveSDK-Puppy</span><br><span class="line">    SohuLiveSDK-Video</span><br><span class="line">    SohuOneSDK</span><br><span class="line">    SohuOpenSDKDemo</span><br><span class="line">    SohuUploadDemo</span><br><span class="line">    SohuUploadSDK</span><br><span class="line">    SohuVideoFoundation</span><br><span class="line">    SohuVRDemo</span><br><span class="line">    </span><br><span class="line">/// 查看工程</span><br><span class="line">xcodebuild -list -project /Users/qianlongxu/Documents/GitWorkSpace/awesome-smallgame-sdk/iOS-Libs/SSZipArchive/SSZipArchive.xcodeproj </span><br><span class="line">Information about project &quot;SSZipArchive&quot;:</span><br><span class="line">Targets:</span><br><span class="line">    SSZipArchive copy</span><br><span class="line">    SSZipArchive</span><br><span class="line"></span><br><span class="line">Build Configurations:</span><br><span class="line">    Debug</span><br><span class="line">    Release</span><br><span class="line"></span><br><span class="line">If no build configuration is specified and -scheme is not passed then &quot;Release&quot; is used.</span><br><span class="line"></span><br><span class="line">Schemes:</span><br><span class="line">    SSZipArchive</span><br><span class="line">    SSZipArchive copy</span><br></pre></td></tr></table></figure>
+<p>一般都使用了 workspace ，所以打包时都会带上一些参数，不会直接使用这一行命令，下面举例说明。</p>
+<h2 id="Project-Scheme"><a href="#Project-Scheme" class="headerlink" title="Project + Scheme"></a>Project + Scheme</h2><p>适用于一个 Project 里面包含 N 个 Scheme 的工程:</p>
+<h3 id="Clean"><a href="#Clean" class="headerlink" title="Clean"></a>Clean</h3><p>这命令相当于我们 xCode 里的 <code>cmd + k</code>，要打包了，所以先清理下缓存。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xcodebuild -project "$&#123;XC_PROJECT&#125;" \</span><br><span class="line">           -scheme "$&#123;SCHEME_NAME&#125;" \</span><br><span class="line">           clean</span><br></pre></td></tr></table></figure>
+<h3 id="Build"><a href="#Build" class="headerlink" title="Build"></a>Build</h3><p>这命令相当于我们 xCode 里的 <code>cmd + b</code>，用于编译出我们想要的产品。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">BUILD_DIR=<span class="string">"<span class="variable">$&#123;BUILD_DIR&#125;</span>"</span>就是一个build setting键值对</span></span><br><span class="line">xcodebuild -project "$&#123;XC_PROJECT&#125;" \</span><br><span class="line">	        -scheme "$&#123;SCHEME_NAME&#125;" \</span><br><span class="line">	        -configuration "$&#123;XC_Configuration&#125;" \</span><br><span class="line">	        -sdk "$&#123;tmp_sdk&#125;" \</span><br><span class="line">	        BUILD_DIR="$&#123;BUILD_DIR&#125;" \</span><br><span class="line">	        DWARF_DSYM_FOLDER_PATH="$&#123;CURRENT_BUILD_DIR&#125;" \</span><br><span class="line">	        DEBUG_INFORMATION_FORMAT="$DEBUG_INFORMATION_FORMAT" \</span><br><span class="line">	        DWARF_DSYM_FILE_NAME="$DWARF_DSYM_FILE_NAME" \</span><br><span class="line">	        GCC_PREPROCESSOR_DEFINITIONS="$&#123;GCC_PREPROCESSOR_DEFINITIONS&#125;" \</span><br><span class="line">	        FULL_PRODUCT_NAME="$FULL_PRODUCT_NAME" \</span><br><span class="line">	        PRODUCT_NAME="$PRODUCT_NAME" \</span><br><span class="line">	        MACH_O_TYPE="$MACH_O_TYPE" \</span><br><span class="line">	        ENABLE_BITCODE="$ENABLE_BITCODE" \</span><br><span class="line">	        OTHER_LDFLAGS="$OTHER_LDFLAGS" \</span><br><span class="line">	        build</span><br></pre></td></tr></table></figure>
+<p>Clean，Build 是什么？这些是构建行为，默认是 build，所以可以不写；出了这个两个常用的之外还有 test，archive 用于测试和归档。</p>
+<h2 id="Workspace-Scheme"><a href="#Workspace-Scheme" class="headerlink" title="Workspace + Scheme"></a>Workspace + Scheme</h2><p>适用于 Workspace 工程，命令跟打 Project 的差不多:</p>
+<h3 id="Clean-1"><a href="#Clean-1" class="headerlink" title="Clean"></a>Clean</h3><p>这命令相当于我们 xCode 里的 <code>cmd + k</code>，要打包了，所以先清理下缓存。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xcodebuild -workspace "$&#123;XC_PROJECT&#125;" \</span><br><span class="line">           -scheme "$&#123;SCHEME_NAME&#125;" \</span><br><span class="line">           clean</span><br></pre></td></tr></table></figure>
+<h3 id="Build-1"><a href="#Build-1" class="headerlink" title="Build"></a>Build</h3><p>这命令相当于我们 xCode 里的 <code>cmd + b</code>，用于编译出我们想要的产品。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">BUILD_DIR=<span class="string">"<span class="variable">$&#123;BUILD_DIR&#125;</span>"</span>就是一个build setting键值对</span></span><br><span class="line">xcodebuild -workspace "$&#123;XC_PROJECT&#125;" \</span><br><span class="line">	        -scheme "$&#123;SCHEME_NAME&#125;" \</span><br><span class="line">	        -configuration "$&#123;XC_Configuration&#125;" \</span><br><span class="line">	        -sdk "$&#123;tmp_sdk&#125;" \</span><br><span class="line">	        BUILD_DIR="$&#123;BUILD_DIR&#125;" \</span><br><span class="line">	        DWARF_DSYM_FOLDER_PATH="$&#123;CURRENT_BUILD_DIR&#125;" \</span><br><span class="line">	        DEBUG_INFORMATION_FORMAT="$DEBUG_INFORMATION_FORMAT" \</span><br><span class="line">	        DWARF_DSYM_FILE_NAME="$DWARF_DSYM_FILE_NAME" \</span><br><span class="line">	        GCC_PREPROCESSOR_DEFINITIONS="$&#123;GCC_PREPROCESSOR_DEFINITIONS&#125;" \</span><br><span class="line">	        FULL_PRODUCT_NAME="$FULL_PRODUCT_NAME" \</span><br><span class="line">	        PRODUCT_NAME="$PRODUCT_NAME" \</span><br><span class="line">	        MACH_O_TYPE="$MACH_O_TYPE" \</span><br><span class="line">	        ENABLE_BITCODE="$ENABLE_BITCODE" \</span><br><span class="line">	        OTHER_LDFLAGS="$OTHER_LDFLAGS" \</span><br><span class="line">	        build</span><br></pre></td></tr></table></figure>
+<h1 id="如何查看-buildsettings"><a href="#如何查看-buildsettings" class="headerlink" title="如何查看 buildsettings"></a>如何查看 buildsettings</h1><p>刚接触打包命令，不知道键值对是啥，上面也提到了，你可以去 xCode 里复制，或者使用命令把当前配置给全部打出来，你去挑选也行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">qianlongxu:SSZipArchive qianlongxu$ xcodebuild -project &apos;SSZipArchive.xcodeproj&apos; -showBuildSettings</span><br><span class="line">Build settings for action build and target SSZipArchive:</span><br><span class="line">    ACTION = build</span><br><span class="line">    AD_HOC_CODE_SIGNING_ALLOWED = NO</span><br><span class="line">    ALTERNATE_GROUP = staff</span><br><span class="line">    ALTERNATE_MODE = u+w,go-w,a+rX</span><br><span class="line">    ALTERNATE_OWNER = qianlongxu</span><br><span class="line">    ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO</span><br><span class="line">    ALWAYS_SEARCH_USER_PATHS = NO</span><br><span class="line">    ALWAYS_USE_SEPARATE_HEADERMAPS = NO</span><br><span class="line">    APPLE_INTERNAL_DEVELOPER_DIR = /AppleInternal/Developer</span><br><span class="line">    APPLE_INTERNAL_DIR = /AppleInternal</span><br><span class="line">    APPLE_INTERNAL_DOCUMENTATION_DIR = /AppleInternal/Documentation</span><br><span class="line">    APPLE_INTERNAL_LIBRARY_DIR = /AppleInternal/Library</span><br><span class="line">    APPLE_INTERNAL_TOOLS = /AppleInternal/Developer/Tools</span><br><span class="line">    APPLICATION_EXTENSION_API_ONLY = NO</span><br><span class="line">    APPLY_RULES_IN_COPY_FILES = NO</span><br><span class="line">    ARCHS = armv7 arm64</span><br><span class="line">    ARCHS_STANDARD = armv7 arm64</span><br><span class="line">	//....</span><br></pre></td></tr></table></figure>
+<p>除了 -list -showBuildSettings 之外，还有 -version -sdk -showdestinations 等辅助命令。</p>
+<h1 id="Man-xcodebuild"><a href="#Man-xcodebuild" class="headerlink" title="Man xcodebuild"></a>Man xcodebuild</h1><p>如何知道一个命令后面应该加什么参数呢？这可能是很多新手的疑问，答案是通过文档！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">man xcodebuild</span><br><span class="line">///你会看到如下使用规则</span><br><span class="line">xcodebuild [-project name.xcodeproj]</span><br><span class="line">           [[-target targetname] ... | -alltargets]</span><br><span class="line">           [-configuration configurationname]</span><br><span class="line">           [-sdk [sdkfullpath | sdkname]] [action ...]</span><br><span class="line">           [buildsetting=value ...] [-userdefault=value ...]</span><br><span class="line"></span><br><span class="line">xcodebuild [-project name.xcodeproj] -scheme schemename</span><br><span class="line">           [[-destination destinationspecifier] ...]</span><br><span class="line">           [-destination-timeout value]</span><br><span class="line">           [-configuration configurationname]</span><br><span class="line">           [-sdk [sdkfullpath | sdkname]] [action ...]</span><br><span class="line">           [buildsetting=value ...] [-userdefault=value ...]</span><br><span class="line"></span><br><span class="line">xcodebuild -workspace name.xcworkspace -scheme schemename</span><br><span class="line">    	  [[-destination destinationspecifier] ...]</span><br><span class="line">    	  [-destination-timeout value]</span><br></pre></td></tr></table></figure>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>有兴趣的可以去动手实践了，如果是 SDK 开发，那么 build 之后就能顺利拿到 .a 或者 .framework;当如果是 App 开发的话，恐怕还拿不到 .ipa，下一篇准备搞个 带 SDK 的 App 工程并配套打包脚本。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/Script/" rel="tag"># Script</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/04/29-config-my-webstorm.html" rel="prev" title="提升 Webstorm 开发效率">
+      <i class="fa fa-chevron-left"></i> 提升 Webstorm 开发效率
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/10/26-CentOS-MySQL.html" rel="next" title="CentOS 安装 MySQL">
+      CentOS 安装 MySQL <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#名词解释"><span class="nav-number">1.</span> <span class="nav-text">名词解释</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一行命令"><span class="nav-number">2.</span> <span class="nav-text">一行命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Project-Scheme"><span class="nav-number">2.1.</span> <span class="nav-text">Project + Scheme</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Clean"><span class="nav-number">2.1.1.</span> <span class="nav-text">Clean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Build"><span class="nav-number">2.1.2.</span> <span class="nav-text">Build</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Workspace-Scheme"><span class="nav-number">2.2.</span> <span class="nav-text">Workspace + Scheme</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Clean-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">Clean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Build-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">Build</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何查看-buildsettings"><span class="nav-number">3.</span> <span class="nav-text">如何查看 buildsettings</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Man-xcodebuild"><span class="nav-number">4.</span> <span class="nav-text">Man xcodebuild</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束语"><span class="nav-number">5.</span> <span class="nav-text">结束语</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

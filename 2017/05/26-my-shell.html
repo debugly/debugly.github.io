@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="日常工作中，特别是我搭建远程打包环境的过程中用到了不少 Shell 命令，这里记录下，省得以后再去查询，浪费时间。  内置变量以下结果来自 Mac OS 10.12，提示：这些内置变量是以美元符号开头的哈，内置变量也是变量，在 Shell 脚本里面取变量的值需要以美元符号开头。  $SHELL : 查看当前终端使用是哪种 shell: /bin/bash $HOME : 登陆用户主目录: /Us">
+<meta name="keywords" content="shell,Linux shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell 编程经验总结">
+<meta property="og:url" content="http://debugly.cn/2017/05/26-my-shell.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="日常工作中，特别是我搭建远程打包环境的过程中用到了不少 Shell 命令，这里记录下，省得以后再去查询，浪费时间。  内置变量以下结果来自 Mac OS 10.12，提示：这些内置变量是以美元符号开头的哈，内置变量也是变量，在 Shell 脚本里面取变量的值需要以美元符号开头。  $SHELL : 查看当前终端使用是哪种 shell: /bin/bash $HOME : 登陆用户主目录: /Us">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.316Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shell 编程经验总结">
+<meta name="twitter:description" content="日常工作中，特别是我搭建远程打包环境的过程中用到了不少 Shell 命令，这里记录下，省得以后再去查询，浪费时间。  内置变量以下结果来自 Mac OS 10.12，提示：这些内置变量是以美元符号开头的哈，内置变量也是变量，在 Shell 脚本里面取变量的值需要以美元符号开头。  $SHELL : 查看当前终端使用是哪种 shell: /bin/bash $HOME : 登陆用户主目录: /Us">
+
+<link rel="canonical" href="http://debugly.cn/2017/05/26-my-shell.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Shell 编程经验总结 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/05/26-my-shell.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Shell 编程经验总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-05-26 21:03:36" itemprop="dateCreated datePublished" datetime="2017-05-26T21:03:36+08:00">2017-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>日常工作中，特别是我搭建远程打包环境的过程中用到了不少 Shell 命令，这里记录下，省得以后再去查询，浪费时间。</p>
+</blockquote>
+<h1 id="内置变量"><a href="#内置变量" class="headerlink" title="内置变量"></a>内置变量</h1><p>以下结果来自 Mac OS 10.12，提示：这些内置变量是以美元符号开头的哈，内置变量也是变量，在 Shell 脚本里面取变量的值需要以美元符号开头。</p>
+<ul>
+<li>$SHELL : 查看当前终端使用是哪种 shell: <code>/bin/bash</code></li>
+<li>$HOME : 登陆用户主目录: <code>/Users/xuqianlong</code></li>
+<li>$PATH : 截取一小段来看下: <code>/opt/local/bin:/opt/local/sbin</code>，分号是分隔符；在终端输入命令就能执行的原理其实是，按照顺序遍历 PATH 路径，直到找到该命令，如果找不到就输出：<code>-bash: ee: command not found</code> (这里的 -bash 是当前 shell 类型) 学习过 Java 的同学肯定都知道 Path 的概念。</li>
+<li>$USER : 当前登陆用户名称: <code>xuqianlong</code></li>
+<li>$OSTYPE : 操作系统类型: <code>darwin16</code></li>
+<li>$MACHTYPE : CPU架构及系统类型: <code>x86_64-apple-darwin16</code></li>
+<li>$LANG : 语言类型: <code>zh_CN.UTF-8</code></li>
+</ul>
+<h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><ul>
+<li><p>env 查看所有的环境变量，这个命令太厉害了，上面提到的好多内置变量的值都包括了：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">MANPATH=/Users/xuqianlong/.nvm/versions/node/v4.0.0/share/man:/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/man:/usr/<span class="built_in">local</span>/share/man:/usr/share/man:/opt/X11/share/man:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/share/man:/Applications/Xcode.app/Contents/Developer/usr/share/man:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/share/man</span><br><span class="line">NVM_IOJS_ORG_VERSION_LISTING=https://iojs.org/dist/index.tab</span><br><span class="line">rvm_bin_path=/Users/xuqianlong/.rvm/bin</span><br><span class="line">TERM_PROGRAM=Apple_Terminal</span><br><span class="line">SHELL=/bin/bash</span><br><span class="line">TERM=xterm-256color</span><br><span class="line">TMPDIR=/var/folders/d2/bt0v98895vd53lcx9w_spzdw0000gn/T/</span><br><span class="line">NVM_PATH=/Users/xuqianlong/.nvm/versions/node/v4.0.0/lib/node</span><br><span class="line">Apple_PubSub_Socket_Render=/private/tmp/com.apple.launchd.f7R2BOD9jj/Render</span><br><span class="line">TERM_PROGRAM_VERSION=377</span><br><span class="line">TERM_SESSION_ID=75991873-8124-4503-8BA0-F10EB73C0D84</span><br><span class="line">NVM_DIR=/Users/xuqianlong/.nvm</span><br><span class="line">USER=xuqianlong</span><br><span class="line">_system_type=Darwin</span><br><span class="line">rvm_path=/Users/xuqianlong/.rvm</span><br><span class="line">SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.SZQYe5MXKe/Listeners</span><br><span class="line">__CF_USER_TEXT_ENCODING=0x1F5:0x19:0x34</span><br><span class="line">rvm_prefix=/Users/xuqianlong</span><br><span class="line">PATH=/Library/Frameworks/Python.framework/Versions/3.5/bin:/opt/<span class="built_in">local</span>/bin:/opt/<span class="built_in">local</span>/sbin:/Users/xuqianlong/.nvm/versions/node/v4.0.0/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/bin:/usr/<span class="built_in">local</span>/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Users/xuqianlong/libwebp-0.5.1-mac-10.9/bin:/Users/xuqianlong/bin:/Users/xuqianlong/.rvm/bin</span><br><span class="line">NVM_NODEJS_ORG_MIRROR=https://nodejs.org/dist</span><br><span class="line">PWD=/Users/xuqianlong</span><br><span class="line">JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home</span><br><span class="line">LANG=zh_CN.UTF-8</span><br><span class="line">_system_arch=x86_64</span><br><span class="line">XPC_FLAGS=0x0</span><br><span class="line">_system_version=10.12</span><br><span class="line">XPC_SERVICE_NAME=0</span><br><span class="line">rvm_version=1.27.0 (latest)</span><br><span class="line">SHLVL=1</span><br><span class="line">HOME=/Users/xuqianlong</span><br><span class="line">LOGNAME=xuqianlong</span><br><span class="line">NVM_BIN=/Users/xuqianlong/.nvm/versions/node/v4.0.0/bin</span><br><span class="line">NVM_IOJS_ORG_MIRROR=https://iojs.org/dist</span><br><span class="line">DISPLAY=/private/tmp/com.apple.launchd.0jBYczqYJG/org.macosforge.xquartz:0</span><br><span class="line">SECURITYSESSIONID=186a6</span><br><span class="line">_system_name=OSX</span><br><span class="line">_=/usr/bin/env</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>cat 查看文本内容，比如查看下机器上安装了几种 shell：cat /etc/shells</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># List of acceptable shells for chpass(1).</span></span><br><span class="line"><span class="comment"># Ftpd will not allow users to connect who are not using</span></span><br><span class="line"><span class="comment"># one of these shells.</span></span><br><span class="line"></span><br><span class="line">/bin/bash</span><br><span class="line">/bin/csh</span><br><span class="line">/bin/ksh</span><br><span class="line">/bin/sh</span><br><span class="line">/bin/tcsh</span><br><span class="line">/bin/zsh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ls /bin/*sh ，结果跟上面是一样的</p>
+</li>
+<li>hostname -s 主机名称: <code>debugly</code></li>
+<li>tar -czf sdk.tar.gz *.framework : 先将目录里所有后缀名为 framework 的文件打包成 sdk.tar，然后用 gzip 压缩，生成 sdk.tar.gz 压缩的压缩包</li>
+<li>chsh -s /bin/zsh ，修改用户 shell，重启终端生效</li>
+</ul>
+<h1 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h1><p>用 ps 命令可以查看进程相关信息，哪些进程正在运行和运行状态、进程是否结束、进程有没有僵死、哪些进程占用了过多地资源等等。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">qianlongxu:~ qianlongxu$ ps</span><br><span class="line">  PID TTY           TIME CMD</span><br><span class="line"> 2771 ttys000    0:00.07 -bash</span><br><span class="line"> 2836 ttys001    0:00.06 -bash</span><br><span class="line"> 1398 ttys004    0:00.10 -bash</span><br><span class="line"></span><br><span class="line">qianlongxu:~ qianlongxu$ <span class="built_in">echo</span> $$</span><br><span class="line">2771</span><br><span class="line"></span><br><span class="line">qianlongxu:~ qianlongxu$ ps -f</span><br><span class="line">  UID   PID  PPID   C STIME   TTY           TIME CMD</span><br><span class="line">  501  2771  2770   0  8:45上午 ttys000    0:00.07 -bash</span><br><span class="line">  501  2836  2835   0  8:45上午 ttys001    0:00.06 -bash</span><br><span class="line">  501  1398  1397   0  3:55下午 ttys004    0:00.10 -bash</span><br><span class="line"></span><br><span class="line">qianlongxu:~ qianlongxu$ ps -e</span><br><span class="line">  PID TTY           TIME CMD</span><br><span class="line">    1 ??         0:51.90 /sbin/launchd</span><br><span class="line">   51 ??         0:04.78 /usr/libexec/UserEventAgent (System)</span><br><span class="line"> ///此处省略好多行</span><br><span class="line"> 2770 ttys000    0:00.04 login -pf qianlongxu</span><br><span class="line"> 2771 ttys000    0:00.07 -bash</span><br><span class="line"> 2900 ttys000    0:00.00 ps -e</span><br><span class="line"> 2835 ttys001    0:00.01 login -pf qianlongxu</span><br><span class="line"> 2836 ttys001    0:00.06 -bash</span><br><span class="line"> 1397 ttys004    0:00.02 login -pf qianlongxu</span><br><span class="line"> 1398 ttys004    0:00.10 -bash</span><br><span class="line"></span><br><span class="line">///查看进程关系</span><br><span class="line">qianlongxu:~ qianlongxu$ ps -f</span><br><span class="line">  UID   PID  PPID   C STIME   TTY           TIME CMD</span><br><span class="line">  501  2987  2986   0  9:00上午 ttys000    0:00.06 -bash</span><br><span class="line">qianlongxu:~ qianlongxu$ zsh</span><br><span class="line">qianlongxu%  </span><br><span class="line">qianlongxu% ps -f</span><br><span class="line">  UID   PID  PPID   C STIME   TTY           TIME CMD</span><br><span class="line">  501  2987  2986   0  9:00上午 ttys000    0:00.07 -bash</span><br><span class="line">  501  3102  2987   0  9:04上午 ttys000    0:00.03 zsh</span><br></pre></td></tr></table></figure>
+<h1 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h1><p>使用重定向，可以轻松的提供输入，改变输出；</p>
+<ul>
+<li><p>输出重定向：</p>
+<ul>
+<li><p>“&gt;” 覆盖文本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"abc"</span> &gt; <span class="string">"aa.txt"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"abc"</span> &gt; <span class="string">"aa.txt"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"abc"</span> &gt; <span class="string">"aa.txt"</span></span><br><span class="line">//查看 aa.txt 文件，内容是：</span><br><span class="line">abc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>“&gt;&gt;” 追加文本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"abc"</span> &gt;&gt; <span class="string">"aa.txt"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"abc"</span> &gt;&gt; <span class="string">"aa.txt"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"abc"</span> &gt;&gt; <span class="string">"aa.txt"</span></span><br><span class="line">//查看 aa.txt 文件，内容是：</span><br><span class="line">abc</span><br><span class="line">abc</span><br><span class="line">abc</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>输入重定向：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">///读取 aa.txt 文件的第一行，然后打印</span><br><span class="line"><span class="built_in">read</span> line &lt; aa.txt;<span class="built_in">echo</span> <span class="variable">$line</span></span><br><span class="line">///结果是：</span><br><span class="line">abc</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h1><p>这是一个强大的 shell 命令，可将输出结果作为另一个程序的输入，符号 : “|“ ，比如查看当前目录，并且按字母顺序排列：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ls | sort</span><br><span class="line"></span><br><span class="line">Applications</span><br><span class="line">Desktop</span><br><span class="line">Documents</span><br><span class="line">Downloads</span><br><span class="line">GitBook</span><br><span class="line">Library</span><br><span class="line">Movies</span><br><span class="line">Music</span><br><span class="line">Pictures</span><br><span class="line">Public</span><br><span class="line">apache-tomcat-7.0.64</span><br><span class="line">bin</span><br><span class="line">cstudy</span><br><span class="line">cworkspace</span><br></pre></td></tr></table></figure>
+<p>可以看出先排大写字母，后排小写字母，原因是大写字母的 ASCLL 比小写的小了 32，即：A + 32 = a ,A = 65.</p>
+<h1 id="cp"><a href="#cp" class="headerlink" title="cp"></a>cp</h1><ul>
+<li>复制文件，如果目标存在则会覆盖; 将 debugly 目录下的 init.sh 文件拷贝到 d2 目录下，debugly、d2 都在当前执行目录下; d2 文件夹必须存在！否则 cp 之后会生成一个 d2 的可执行文件！其内容是 init.sh 文件的内容。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp debugly/init.sh d2</span><br></pre></td></tr></table></figure>
+<p>复制文件夹，如果目标存在则会覆盖; 将 debugly 目录下的所有文件都拷贝到 d2 目录下；d2 文件夹必须存在！否则 cp 执行失败。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -r debugly/init.sh d2</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>cp 命令不会复制 .开头的文件或者文件夹，除了 “.” 和 “..” 和 “.DS_Store” 这三个之外！一般情况下这是我们想要的结果。</p>
+<h1 id="scp"><a href="#scp" class="headerlink" title="scp"></a>scp</h1><ul>
+<li><p>本机复制到远程服务器</p>
+<ul>
+<li><p><strong>文件</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp /Users/qianlongxu/Downloads/id_rsa.pub crown@10.7.40.176:~/id_rsa.pub</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>文件夹</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//在远程服务器game下创建qr-code，copy qr-code 下的所有文件</span><br><span class="line">scp -r /Users/Shared/Jenkins/Home/xql/qr-code root@10.10.194.16:/opt/www/html/game</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>从远程服务器下载到本地</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">scp jenkins@10.7.40.195:/Users/Shared/Jenkins/Home/workspace/hall-ios/builds/20180317/game56hall-inhouse.ipa ~/Desktop/</span><br><span class="line">game56hall-inhouse.ipa </span><br><span class="line"></span><br><span class="line">scp jenkins@10.7.40.195:/Users/Shared/Jenkins/Home/workspace/hall-android/build/jsb-default/frameworks/runtime-src/proj.android-studio/app/build/outputs/apk/release/app-release.apk ~/Desktop/</span><br><span class="line">app-release.apk</span><br></pre></td></tr></table></figure>
+<p>  下载文件夹加上 -r 即可；可以看出 scp 的第一个参数其实就是源文件，第二个参数是目的地，这样比较好记些。</p>
+</li>
+</ul>
+<p><strong>注:</strong></p>
+<ul>
+<li>使用 scp 复制文件时，如果目标文件已经存在，则会覆盖！</li>
+<li>目标地址是一个文件夹时，复制文件的话，文件名保持不变。</li>
+<li>目标地址是一个文件时，复制文件的话，则会重命名文件。</li>
+</ul>
+<h1 id="ssh"><a href="#ssh" class="headerlink" title="ssh"></a>ssh</h1><ul>
+<li><p>登陆远程服务器:</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh crown@10.7.40.176</span><br><span class="line">///输入密码</span><br><span class="line">sohuxxx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>免密码登录</p>
+<p>  可以把客户机的公钥填充到远程打包机器上的authorized_keys文件中，实现自动验证，无需泄露服务器密码</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">///将公钥追加到这个服务器~/.ssh/authorized_keys文件末尾 </span><br><span class="line">ssh-copy-id -i jenkins@10.7.40.195</span><br><span class="line">///输入密码</span><br><span class="line">sohuxxx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行命令</p>
+<p>  删除掉远程服务器桌面上的 xx 目录：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Remote_dir=<span class="string">'~/Desktop/xx'</span></span><br><span class="line">ssh root@12.11.193.18 <span class="string">"rm -rf <span class="variable">$&#123;Remote_dir&#125;</span>"</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="kill-jekyll-server"><a href="#kill-jekyll-server" class="headerlink" title="kill jekyll server"></a>kill jekyll server</h1><p>我修改 Rakefile 的时候，修改不当导致没能处理INT，后果就是我们按下 <code>ctrl + c</code> 的时候没有将该子线程杀死，然后再次启动服务时就会报错:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jekyll 3.3.0 | Error:  Address already <span class="keyword">in</span> use - <span class="built_in">bind</span>(2) <span class="keyword">for</span> 127.0.0.1:4000</span><br></pre></td></tr></table></figure>
+<p>为了解决这个问题就需要找到当前占用 4000 端口的进程，然后将其杀死；步骤是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先查下占用 4000 端口的进程 id</span></span><br><span class="line">xuqianlong$ lsof -i tcp:4000</span><br><span class="line">COMMAND   PID       USER   FD   TYPE            DEVICE SIZE/OFF NODE NAME</span><br><span class="line">ruby    49753 xuqianlong   10u  IPv4 0xebc4350e453a6ff      0t0  TCP localhost:terabase (LISTEN)</span><br><span class="line"><span class="comment"># 然后杀死该进程</span></span><br><span class="line">xuqianlong$ <span class="built_in">kill</span> 49753</span><br></pre></td></tr></table></figure>
+<h1 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h1><p>功能强大的网络工具，支持的协议众多，包括：<code>DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, POP3, POP3S, RTMP, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET, TFTP</code>。最简单的是 GET 请求：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://debugly.cn/dist/json/test.json</span><br></pre></td></tr></table></figure>
+<p>使用 HEADER 请求，仅返回 http 头部信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">curl -I http://debugly.cn/dist/json/test.json</span><br><span class="line"></span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Server: GitHub.com</span><br><span class="line">Content-Type: application/json; charset=utf-8</span><br><span class="line">Last-Modified: Thu, 03 Aug 2017 15:36:20 GMT</span><br><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Expires: Sat, 05 Aug 2017 08:58:43 GMT</span><br><span class="line">Cache-Control: max-age=600</span><br><span class="line">X-GitHub-Request-Id: C99E:118EE:5EABC0:656C5C:5985866B</span><br><span class="line">Content-Length: 6257</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">Date: Sat, 05 Aug 2017 08:51:00 GMT</span><br><span class="line">Via: 1.1 varnish</span><br><span class="line">Age: 136</span><br><span class="line">Connection: keep-alive</span><br><span class="line">X-Served-By: cache-nrt6126-NRT</span><br><span class="line">X-Cache: HIT</span><br><span class="line">X-Cache-Hits: 1</span><br><span class="line">X-Timer: S1501923060.014934,VS0,VE1</span><br><span class="line">Vary: Accept-Encoding</span><br><span class="line">X-Fastly-Request-ID: 0dc32470ef01fa9b0672d3d38edc904b9836debc</span><br></pre></td></tr></table></figure>
+<p>这个文档有详细的介绍：<a href="https://curl.haxx.se/download.html" target="_blank" rel="noopener">https://curl.haxx.se/download.html</a></p>
+<ul>
+<li>下载文件</li>
+</ul>
+<p>在当前目录下递归创建 themes/hexo-theme-yaris 目录，然后下载zip包，解压到指定文件夹后重命名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p <span class="string">"./themes/hexo-theme-yaris"</span> &amp;&amp; curl -L https://codeload.github.com/debugly/hexo-theme-yaris/zip/master | tar xj -C <span class="string">"./themes/hexo-theme-yaris"</span> --strip-components 1</span><br></pre></td></tr></table></figure>
+<h1 id="chown"><a href="#chown" class="headerlink" title="chown"></a>chown</h1><p>更新软件包的时候可能没有权限，需要修改权限，可使用 chown 给用户添加 ownership 权限；</p>
+<p><code>sudo chown -R $(whoami) /usr/local</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">qianlongxu:myblog qianlongxu$ brew update</span><br><span class="line">Error: /usr/<span class="built_in">local</span> is not writable. You should change the ownership</span><br><span class="line">and permissions of /usr/<span class="built_in">local</span> back to your user account:</span><br><span class="line">	sudo chown -R $(whoami) /usr/<span class="built_in">local</span></span><br></pre></td></tr></table></figure>
+<h1 id="git"><a href="#git" class="headerlink" title="git"></a>git</h1><ul>
+<li><p>git log</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">qianlongxu$ git <span class="built_in">log</span> -3</span><br><span class="line">commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -&gt; <span class="built_in">source</span>, origin/<span class="built_in">source</span>)</span><br><span class="line">Author: qianlongxu &lt;qianlongxu@sohu-inc.com&gt;</span><br><span class="line">Date:   Sat Mar 24 09:49:51 2018 +0800</span><br><span class="line"></span><br><span class="line">    add post</span><br><span class="line"></span><br><span class="line">commit eb3e9419a4a6cc736808ac40b7cf2908b7998c56</span><br><span class="line">Merge: e851655 6755480</span><br><span class="line">Author: qianlongxu &lt;qianlongxu@sohu-inc.com&gt;</span><br><span class="line">Date:   Sat Mar 24 09:49:08 2018 +0800</span><br><span class="line"></span><br><span class="line">    Merge branch <span class="string">'source'</span> of https://github.com/debugly/debugly.github.io into <span class="built_in">source</span></span><br><span class="line"></span><br><span class="line">commit 67554800909e91430231da8c34887933a4160649</span><br><span class="line">Author: qianlongxu &lt;qianglongxu@home.mbp&gt;</span><br><span class="line">Date:   Thu Mar 22 22:17:08 2018 +0800</span><br><span class="line"></span><br><span class="line">    add tag</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>git log –date=format</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">qianlongxu$ git <span class="built_in">log</span> --date=format:<span class="string">'%Y-%m-%d %H:%M:%S'</span> -3</span><br><span class="line">commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -&gt; <span class="built_in">source</span>, origin/<span class="built_in">source</span>)</span><br><span class="line">Author: qianlongxu &lt;qianlongxu@sohu-inc.com&gt;</span><br><span class="line">Date:   2018-03-24 09:49:51</span><br><span class="line"></span><br><span class="line">    add post</span><br><span class="line"></span><br><span class="line">commit eb3e9419a4a6cc736808ac40b7cf2908b7998c56</span><br><span class="line">Merge: e851655 6755480</span><br><span class="line">Author: qianlongxu &lt;qianlongxu@sohu-inc.com&gt;</span><br><span class="line">Date:   2018-03-24 09:49:08</span><br><span class="line"></span><br><span class="line">    Merge branch <span class="string">'source'</span> of https://github.com/debugly/debugly.github.io into <span class="built_in">source</span></span><br><span class="line"></span><br><span class="line">commit 67554800909e91430231da8c34887933a4160649</span><br><span class="line">Author: qianlongxu &lt;qianglongxu@home.mbp&gt;</span><br><span class="line">Date:   2018-03-22 22:17:08</span><br><span class="line"></span><br><span class="line">    add tag</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>git log –date=format</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">qianlongxu$ git <span class="built_in">log</span> --date=format:<span class="string">'%a|%A|%b|%B|%c|%d|%H|%I|%j|%m|%M|%p|%S|%U|%w|%W|%x|%X|%y|%Y|%z'</span> --pretty=format:<span class="string">'%cd'</span> -3</span><br><span class="line">Sat|Saturday|Mar|March|Sat Mar 24 09:49:51 2018|24|09|09|083|03|49|AM|51|11|6|12|03/24/18|09:49:51|18|2018|+0800</span><br><span class="line">Sat|Saturday|Mar|March|Sat Mar 24 09:49:08 2018|24|09|09|083|03|49|AM|08|11|6|12|03/24/18|09:49:08|18|2018|+0800</span><br><span class="line">Thu|Thursday|Mar|March|Thu Mar 22 22:17:08 2018|22|22|10|081|03|17|PM|08|11|4|12|03/22/18|22:17:08|18|2018|+0800</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>git log –after</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> qianlongxu$ git <span class="built_in">log</span> --date=format:<span class="string">'%Y-%m-%d %H:%M:%S'</span> --after=<span class="string">'2018-03-23 20:44:06'</span></span><br><span class="line">commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -&gt; <span class="built_in">source</span>, origin/<span class="built_in">source</span>)</span><br><span class="line">Author: qianlongxu &lt;qianlongxu@sohu-inc.com&gt;</span><br><span class="line">Date:   2018-03-24 09:49:51</span><br><span class="line"></span><br><span class="line">    add post</span><br><span class="line"></span><br><span class="line">commit eb3e9419a4a6cc736808ac40b7cf2908b7998c56</span><br><span class="line">Merge: e851655 6755480</span><br><span class="line">Author: qianlongxu &lt;qianlongxu@sohu-inc.com&gt;</span><br><span class="line">Date:   2018-03-24 09:49:08</span><br><span class="line"></span><br><span class="line">    Merge branch <span class="string">'source'</span> of https://github.com/debugly/debugly.github.io into <span class="built_in">source</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取最后一次提交时间秒数，然后加1</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">last_commit_sec=$(git <span class="built_in">log</span> --date=format:<span class="string">'%S'</span> --pretty=format:<span class="string">'%cd'</span> -1)</span><br><span class="line">last_commit_sec=`expr <span class="variable">$last_commit_sec</span> + 1`</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看此次拉取远程之后，都有哪些提交记录</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">last_commit_datestamp=$(git <span class="built_in">log</span> --date=raw --pretty=format:<span class="string">'%cd'</span> -1)</span><br><span class="line">last_commit_date=<span class="variable">$&#123;last_commit_datestamp% *&#125;</span></span><br><span class="line">last_commit_date=`expr <span class="variable">$last_commit_date</span> + 1`</span><br><span class="line">git pull</span><br><span class="line">git <span class="built_in">log</span> --date=format:<span class="string">'%Y-%m-%d %H:%M:%S'</span> --pretty=format:<span class="string">'&lt;tr&gt;&lt;td&gt;%an&lt;/td&gt;&lt;td&gt;%s&lt;/td&gt;&lt;td&gt;%cd&lt;/td&gt;&lt;/tr&gt;'</span>  --after <span class="string">"'<span class="variable">$last_commit_date</span>'"</span> -n 200</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><a href="https://git-scm.com/book/zh/v1/Git-基础-查看提交历史" target="_blank" rel="noopener">Git-基础-查看提交历史</a></p>
+<ul>
+<li><p>git修改user.name和user.email</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">///查看</span><br><span class="line">git config --list</span><br><span class="line">///修改</span><br><span class="line">git config --global user.name <span class="string">"name"</span></span><br><span class="line">git config --global user.email <span class="string">"email"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>git clone</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> -b <span class="variable">$branch</span> <span class="variable">$repos</span> <span class="variable">$WORKSPACE</span></span><br><span class="line">git branch --<span class="built_in">set</span>-upstream-to=origin/<span class="variable">$branch</span> <span class="variable">$branch</span></span><br><span class="line">git submodule update --init --recursive</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>git -C $path</p>
+<p>  当执行命令的目录和 git 仓库目录不是同一个的话，可以使用 <strong>-C</strong> 指定仓库目录</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">localPath=<span class="string">"../.hexo-theme-yaris"</span></span><br><span class="line"><span class="built_in">alias</span> gitC=<span class="string">'git -C $localPath'</span></span><br><span class="line"></span><br><span class="line">gitC add *</span><br><span class="line">gitC commit -m <span class="string">"your msg"</span></span><br><span class="line">gitC push origin master</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="date"><a href="#date" class="headerlink" title="date"></a>date</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(date +<span class="string">'Theme updated:%Y-%m-%d %H:%M:%S'</span>)</span><br><span class="line">Theme updated:2018-04-16 17:52:24</span><br></pre></td></tr></table></figure>
+<h1 id="du"><a href="#du" class="headerlink" title="du"></a>du</h1><ul>
+<li>获取文件大小 :<br>  <code>IPA_Size=$(du -sm $IPA_Path | awk &#39;{print $1}&#39;)</code></li>
+</ul>
+<h1 id="文件（夹）是否存在"><a href="#文件（夹）是否存在" class="headerlink" title="文件（夹）是否存在"></a>文件（夹）是否存在</h1><ul>
+<li><p>文件是否存在</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ -f <span class="variable">$last_commit_date_txt</span> ];<span class="keyword">then</span></span><br><span class="line">	  last_commit_datestamp=$(cat <span class="variable">$last_commit_date_txt</span>)</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">'xql last_commit_datestamp:'</span><span class="variable">$last_commit_datestamp</span></span><br><span class="line">	  last_commit_date=<span class="variable">$&#123;last_commit_datestamp% *&#125;</span></span><br><span class="line">		last_commit_date=`expr <span class="variable">$last_commit_date</span> + 1`</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>文件夹是否存在</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ -d <span class="variable">$last_commit_folder</span> ];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>文件内容是否为空</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ `cat <span class="variable">$commit_info_txt</span> |wc -m` -eq 0 ];<span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">'file is empty.'</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">'file is not empty!'</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="iOS-build-号自增"><a href="#iOS-build-号自增" class="headerlink" title="iOS build 号自增"></a>iOS build 号自增</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># info.plist路径</span></span><br><span class="line">project_infoplist_path=<span class="string">"/proj.ios_mac/ios/game-inhouse.plist"</span></span><br><span class="line"><span class="comment">#取版本号</span></span><br><span class="line">appVersion=$(/usr/libexec/PlistBuddy -c <span class="string">"print CFBundleShortVersionString"</span> <span class="string">"<span class="variable">$&#123;project_infoplist_path&#125;</span>"</span>)</span><br><span class="line"><span class="comment">#取build号</span></span><br><span class="line"><span class="comment">#buildNO=$(/usr/libexec/PlistBuddy -c "print CFBundleVersion" "$&#123;project_infoplist_path&#125;")</span></span><br><span class="line"><span class="comment">#加1</span></span><br><span class="line">buildNO=$((<span class="variable">$buildNO</span>+1))</span><br><span class="line">/usr/libexec/PlistBuddy -c <span class="string">"Set :CFBundleVersion <span class="variable">$BUILD_NUMBER</span>"</span> <span class="string">"<span class="variable">$project_infoplist_path</span>"</span></span><br></pre></td></tr></table></figure>
+<h1 id="Shell-参数含有空格"><a href="#Shell-参数含有空格" class="headerlink" title="Shell 参数含有空格"></a>Shell 参数含有空格</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ps=<span class="string">"xxx zzz"</span></span><br><span class="line">./build.sh <span class="string">"'<span class="variable">$ps</span>'"</span></span><br></pre></td></tr></table></figure>
+<h1 id="Shell-算术运算"><a href="#Shell-算术运算" class="headerlink" title="Shell 算术运算"></a>Shell 算术运算</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">///使用 expr 外部程式</span><br><span class="line">a=12;</span><br><span class="line">b=19;</span><br><span class="line">result=`expr <span class="variable">$a</span> + <span class="variable">$b</span>`</span><br></pre></td></tr></table></figure>
+<h1 id="Shell-字符串截取"><a href="#Shell-字符串截取" class="headerlink" title="Shell 字符串截取"></a>Shell 字符串截取</h1><ul>
+<li><p>% 截取，以空格举例：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">str=<span class="string">"1234444 +8000 +ddd"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;str% *&#125;</span></span><br><span class="line">///1234444 +8000</span><br></pre></td></tr></table></figure>
+<p>  从右往左截取，遇到第一个空格为止（空格也会截取）；</p>
+</li>
+<li><p>## 截取，以 / 为例：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">str=<span class="string">"/Users/qianlongxu/Documents/build_local.sh"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;str##*/&#125;</span></span><br><span class="line">///build_local.sh</span><br></pre></td></tr></table></figure>
+<p>  从左往右删除，直到删掉最后一个 / 为止；</p>
+</li>
+<li>参考:<a href="https://www.cnblogs.com/zwgblog/p/6031256.html" target="_blank" rel="noopener">https://www.cnblogs.com/zwgblog/p/6031256.html</a></li>
+</ul>
+<h1 id="Shell-函数返回值"><a href="#Shell-函数返回值" class="headerlink" title="Shell 函数返回值"></a>Shell 函数返回值</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">test</span></span>()&#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"a"</span>;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"b"</span>;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"c"</span>;</span><br><span class="line">    <span class="built_in">return</span> 10;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">r=$(<span class="built_in">test</span>);</span><br><span class="line"><span class="built_in">echo</span> $?;</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$r</span>;</span><br><span class="line"><span class="built_in">echo</span> $?;</span><br></pre></td></tr></table></figure>
+<p>运行结果是:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">10</span><br><span class="line">a b c</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+<p>把返回值改成非整数值，会报错:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">test.sh: line 5: <span class="built_in">return</span>: 10.1: numeric argument required</span><br><span class="line">test.sh: line 5: <span class="built_in">return</span>: a: numeric argument required</span><br></pre></td></tr></table></figure>
+<p>把返回值改成非[0~255]的整数值，会因为溢出，而舍弃高位，比如:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">返回 256 ，实际接收到的是 0;</span><br><span class="line">返回 257 ，实际接收到的是 1;</span><br><span class="line">这个也很好理解，因为返回只暂用了一个字节，相当于 c 语言里的 unsigned char !</span><br></pre></td></tr></table></figure>
+<p>正因为这个返回值是个无符号整形，所以很多时候并不是我们想要的，因此这个返回值，都是用来告诉调用者内部是否正常执行的，如果执行出错了就返回一个非 0 值！</p>
+<ul>
+<li>编程时是需要返回值的，怎么办？</li>
+</ul>
+<p>一种方法是像上面的例子一样，使用 echo 打印，其缺点是可能你只需要最后一个 echo 的打印值，中间的调试日志并不是你想要的，我曾经也遇到了这个问题！本来程序执行的没问题，就在中间加了一个函数调用，结果那个函数里有 echo 日志，导致了一个问题。</p>
+<p>如果遇到这种情况，建议不要使用 echo 作为返回值，echo 正常用来写日志，而是使用全局变量！调用者使用全局变量拿到这个值；或者就是封装一个打印日志的方法，将日志重定向到文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">test</span></span>()&#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"a"</span>;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"b"</span>;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"c"</span>;</span><br><span class="line">    DOWNLOAD_URL=<span class="string">'return abc'</span>;</span><br><span class="line">    <span class="built_in">return</span> <span class="string">'2'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">test</span>;</span><br><span class="line"><span class="built_in">echo</span> $?;</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$DOWNLOAD_URL</span>;</span><br><span class="line"></span><br><span class="line">结果:</span><br><span class="line">qianlongxu:Desktop qianlongxu$ sh test.sh</span><br><span class="line">a</span><br><span class="line">b</span><br><span class="line">c</span><br><span class="line">2</span><br><span class="line"><span class="built_in">return</span> abc</span><br></pre></td></tr></table></figure>
+<p>这里有个有趣的问题，如果你还想获取echo打印的返回值，你会发现全局变量的值取不到!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">r=$(<span class="built_in">test</span>);</span><br><span class="line"><span class="built_in">echo</span> $?;</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$r</span>;</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$DOWNLOAD_URL</span>;</span><br><span class="line"></span><br><span class="line">结果:</span><br><span class="line">qianlongxu:Desktop qianlongxu$ sh test.sh</span><br><span class="line">2</span><br><span class="line">a b c</span><br></pre></td></tr></table></figure>
+<p>有兴趣可以看下这个链接: <a href="https://stackoverflow.com/questions/23564995/how-to-modify-a-global-variable-within-a-function-in-bash" target="_blank" rel="noopener">https://stackoverflow.com/questions/23564995/how-to-modify-a-global-variable-within-a-function-in-bash</a></p>
+<h1 id="zip-命令"><a href="#zip-命令" class="headerlink" title="zip 命令"></a>zip 命令</h1><h2 id="不带目录压缩"><a href="#不带目录压缩" class="headerlink" title="不带目录压缩"></a>不带目录压缩</h2><p>举例： 将 ./a 目录下的文件压缩成 zip 包，解压后不包含 a 目录，如果 a 里面有文件夹则保持原有层级；（不要使用 mac 自动的解压工具，否则解压后都会放到 a 目录里！搜索后是否包含目录，可以到 windows 下查看。）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">mr_zip</span></span>()&#123;</span><br><span class="line">    full_path=<span class="variable">$1</span></span><br><span class="line"></span><br><span class="line">    folder_name=<span class="variable">$&#123;full_path##*/&#125;</span></span><br><span class="line">    zip_name=<span class="string">"<span class="variable">$&#123;folder_name&#125;</span>.zip"</span></span><br><span class="line"></span><br><span class="line">    cp=<span class="variable">$PWD</span>    </span><br><span class="line">    <span class="built_in">cd</span> <span class="string">"<span class="variable">$full_path</span>"</span></span><br><span class="line">    zip -rq ../<span class="string">"<span class="variable">$zip_name</span>"</span> ./*</span><br><span class="line">    mr_ckr $? <span class="variable">$LINENO</span></span><br><span class="line">    <span class="built_in">cd</span> ..</span><br><span class="line">    zip_Path=<span class="string">"<span class="variable">$&#123;PWD&#125;</span>/<span class="variable">$&#123;zip_name&#125;</span>"</span></span><br><span class="line">    <span class="built_in">cd</span> <span class="variable">$cp</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$&#123;zip_Path&#125;</span>"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">zip_file=$(mr_zip <span class="string">"<span class="variable">$&#123;path&#125;</span>"</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="sed-命令"><a href="#sed-命令" class="headerlink" title="sed 命令"></a>sed 命令</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">///将 fn 文件里的 <span class="string">'VV'</span> 替换成 <span class="variable">$&#123;version&#125;</span></span><br><span class="line">sed -i <span class="string">''</span> <span class="string">"s/VV/<span class="variable">$&#123;version&#125;</span>/"</span> <span class="string">"<span class="variable">$&#123;fn&#125;</span>"</span></span><br><span class="line"></span><br><span class="line">///将 zip_url 变量里的 / 替换成 \/ ; 管道处理后赋值给 escape_url ; 这里转义了，所以不容易理解;</span><br><span class="line">escape_url=$(<span class="built_in">echo</span> <span class="string">"<span class="variable">$&#123;zip_url&#125;</span>"</span> | sed <span class="string">"s/\//\\\\\//g"</span>)</span><br><span class="line">escape_url=$(<span class="built_in">echo</span> <span class="string">"<span class="variable">$&#123;zip_url&#125;</span>"</span> | sed <span class="string">'s/\//\\\//g'</span>)</span><br><span class="line"></span><br><span class="line">把 sed <span class="string">'s/\//\\\//g'</span> 展开看下：</span><br><span class="line"></span><br><span class="line">sed <span class="string">'s/ \/ / \\\/ /g'</span>; \/ 是 / 的转义， \\ 是 \ 的转义； /g 是全局替换；</span><br><span class="line"></span><br><span class="line">//用 : 分割更加容易理解：</span><br><span class="line">escape_url=$(<span class="built_in">echo</span> <span class="string">"<span class="variable">$&#123;zip_url&#125;</span>"</span> | sed <span class="string">"s:/:\\\/:g"</span>)</span><br><span class="line">escape_url=$(<span class="built_in">echo</span> <span class="string">"<span class="variable">$&#123;zip_url&#125;</span>"</span> | sed <span class="string">'s:/:\\\/:g'</span>)</span><br><span class="line"></span><br><span class="line">https://stackoverflow.com/questions/13971113/how-to-replace-on-path-string-with-using-sed</span><br></pre></td></tr></table></figure>
+<h1 id="AutoJump"><a href="#AutoJump" class="headerlink" title="AutoJump"></a>AutoJump</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># https://github.com/wting/autojump</span><br><span class="line">brew install autojump</span><br><span class="line">vim ~/.zhsrc </span><br><span class="line"># 追加 autojump</span><br><span class="line">plugins=(autojump) </span><br><span class="line"># 最后一行添加</span><br><span class="line"># autojump configure by xql;</span><br><span class="line">[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] &amp;&amp; . $(brew --prefix)/etc/profile.d/autojump.sh</span><br></pre></td></tr></table></figure>
+<p>查看进入过的目录，进入过的就可以通过部分文件名跳转了: ~/Library/autojump/autojump.txt</p>
+<h1 id="zsh-syntax-highlighting"><a href="#zsh-syntax-highlighting" class="headerlink" title="zsh-syntax-highlighting"></a>zsh-syntax-highlighting</h1><p>命令高亮，默认绿色高亮：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># https://github.com/zsh-users/zsh-syntax-highlighting</span><br><span class="line">git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;/plugins/zsh-syntax-highlighting</span><br><span class="line">vim ~/.zhsrc</span><br><span class="line"># 追加 </span><br><span class="line">plugins=(zsh-syntax-highlighting)</span><br><span class="line">source ~/.zshrc</span><br></pre></td></tr></table></figure>
+<h1 id="zsh-autosuggestions"><a href="#zsh-autosuggestions" class="headerlink" title="zsh-autosuggestions"></a>zsh-autosuggestions</h1><p>命令提示，按键盘 → 补全</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># https://github.com/zsh-users/zsh-autosuggestions</span><br><span class="line">git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions</span><br><span class="line">vim ~/.zhsrc</span><br><span class="line"># 追加</span><br><span class="line">plugins=(zsh-autosuggestions)</span><br><span class="line">source ~/.zshrc</span><br></pre></td></tr></table></figure>
+<h1 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h1><ul>
+<li>查看版本</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">bogon:debugly xuqianlong$ node -v </span><br><span class="line">v8.9.3</span><br><span class="line">bogon:debugly xuqianlong$ npm -v</span><br><span class="line">5.5.1</span><br></pre></td></tr></table></figure>
+<p>NPM (node package manager) 是 Nodejs 的包管理器，用于 Node 插件管理（包括安装、卸载、管理依赖等）</p>
+<ul>
+<li>npm init  : 在当前目录下引导创建一个package.json文件，包括名称、版本、作者这些信息等</li>
+<li>npm start :启动模块</li>
+<li>npm ls : 查看安装的模块</li>
+<li>npm uninstall <name> [-g] [–save-dev]  :  卸载插件 </name></li>
+<li>npm update <name> [-g] [–save-dev]  : 更新插件</name></li>
+<li>npm update [–save-dev] : 更新全部插件</li>
+<li>npm help : 查看帮助</li>
+<li>npm list : 查看当前目录已安装插件</li>
+</ul>
+<p>遇到过的问题:</p>
+<pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo d -g</span><br><span class="line">ERROR Deployer not found: git</span><br><span class="line">///解决方法：</span><br><span class="line">npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
+</code></pre><p>express 框架</p>
+<pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#http://www.expressjs.com.cn/starter/generator.html</span></span><br><span class="line">npm install express-generator -g</span><br><span class="line">express myapp</span><br></pre></td></tr></table></figure>
+</code></pre><h1 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h1><ul>
+<li>预览 : <code>hexo server</code>，简写 <code>hexo s</code></li>
+<li>生成 : <code>hexo generate</code>，简写 <code>hexo g</code></li>
+<li>发布 : <code>hexo deploy</code>，简写 <code>hexo d</code></li>
+<li>清理 : <code>hexo clean</code></li>
+</ul>
+<h1 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h1><ul>
+<li><p>临时文件服务器</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="built_in">test</span></span><br><span class="line">python -m SimpleHTTPServer</span><br><span class="line">Serving HTTP on 0.0.0.0 port 8000 ...</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>也可以指定端口号：
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m SimpleHTTPServer 9090</span><br></pre></td></tr></table></figure>
+</code></pre>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Script/" rel="tag"># Script</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/05/21-liquid.html" rel="prev" title="初识 Liquid 模板语言">
+      <i class="fa fa-chevron-left"></i> 初识 Liquid 模板语言
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/06/01-reduce-framework-weight.html" rel="next" title="iOS Framework 瘦身实战">
+      iOS Framework 瘦身实战 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#内置变量"><span class="nav-number">1.</span> <span class="nav-text">内置变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令"><span class="nav-number">2.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ps"><span class="nav-number">3.</span> <span class="nav-text">ps</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重定向"><span class="nav-number">4.</span> <span class="nav-text">重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#管道"><span class="nav-number">5.</span> <span class="nav-text">管道</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cp"><span class="nav-number">6.</span> <span class="nav-text">cp</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scp"><span class="nav-number">7.</span> <span class="nav-text">scp</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ssh"><span class="nav-number">8.</span> <span class="nav-text">ssh</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kill-jekyll-server"><span class="nav-number">9.</span> <span class="nav-text">kill jekyll server</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#curl"><span class="nav-number">10.</span> <span class="nav-text">curl</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#chown"><span class="nav-number">11.</span> <span class="nav-text">chown</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git"><span class="nav-number">12.</span> <span class="nav-text">git</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#date"><span class="nav-number">13.</span> <span class="nav-text">date</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#du"><span class="nav-number">14.</span> <span class="nav-text">du</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件（夹）是否存在"><span class="nav-number">15.</span> <span class="nav-text">文件（夹）是否存在</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iOS-build-号自增"><span class="nav-number">16.</span> <span class="nav-text">iOS build 号自增</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell-参数含有空格"><span class="nav-number">17.</span> <span class="nav-text">Shell 参数含有空格</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell-算术运算"><span class="nav-number">18.</span> <span class="nav-text">Shell 算术运算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell-字符串截取"><span class="nav-number">19.</span> <span class="nav-text">Shell 字符串截取</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell-函数返回值"><span class="nav-number">20.</span> <span class="nav-text">Shell 函数返回值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#zip-命令"><span class="nav-number">21.</span> <span class="nav-text">zip 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不带目录压缩"><span class="nav-number">21.1.</span> <span class="nav-text">不带目录压缩</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sed-命令"><span class="nav-number">22.</span> <span class="nav-text">sed 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AutoJump"><span class="nav-number">23.</span> <span class="nav-text">AutoJump</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#zsh-syntax-highlighting"><span class="nav-number">24.</span> <span class="nav-text">zsh-syntax-highlighting</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#zsh-autosuggestions"><span class="nav-number">25.</span> <span class="nav-text">zsh-autosuggestions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Node"><span class="nav-number">26.</span> <span class="nav-text">Node</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hexo"><span class="nav-number">27.</span> <span class="nav-text">Hexo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Python"><span class="nav-number">28.</span> <span class="nav-text">Python</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

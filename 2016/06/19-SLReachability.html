@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="故事背景Reachability 只能检测网络的变化，包括 WiFi ，WWAN 和 NoReachable 三种状态；她不能细分 WWAN 网络，不能参与用户的设置（某些App在设置里设有允许使用3G的开关），但是实际业务中我们会遇见这些情景，为了更加方便的获取、管理网络的各种状态，SLReachability 就运应而生了，现在她已经在两个项目里投入使用了，感觉还是挺方便的，现在拿来分享下。">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="统一管理网络变化">
+<meta property="og:url" content="http://debugly.cn/2016/06/19-SLReachability.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="故事背景Reachability 只能检测网络的变化，包括 WiFi ，WWAN 和 NoReachable 三种状态；她不能细分 WWAN 网络，不能参与用户的设置（某些App在设置里设有允许使用3G的开关），但是实际业务中我们会遇见这些情景，为了更加方便的获取、管理网络的各种状态，SLReachability 就运应而生了，现在她已经在两个项目里投入使用了，感觉还是挺方便的，现在拿来分享下。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.312Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="统一管理网络变化">
+<meta name="twitter:description" content="故事背景Reachability 只能检测网络的变化，包括 WiFi ，WWAN 和 NoReachable 三种状态；她不能细分 WWAN 网络，不能参与用户的设置（某些App在设置里设有允许使用3G的开关），但是实际业务中我们会遇见这些情景，为了更加方便的获取、管理网络的各种状态，SLReachability 就运应而生了，现在她已经在两个项目里投入使用了，感觉还是挺方便的，现在拿来分享下。">
+
+<link rel="canonical" href="http://debugly.cn/2016/06/19-SLReachability.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>统一管理网络变化 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2016/06/19-SLReachability.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          统一管理网络变化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-06-19 23:26:50" itemprop="dateCreated datePublished" datetime="2016-06-19T23:26:50+08:00">2016-06-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="故事背景"><a href="#故事背景" class="headerlink" title="故事背景"></a>故事背景</h1><p>Reachability 只能检测网络的变化，包括 WiFi ，WWAN 和 NoReachable 三种状态；她不能细分 WWAN 网络，不能参与用户的设置（某些App在设置里设有允许使用3G的开关），但是实际业务中我们会遇见这些情景，为了更加方便的获取、管理网络的各种状态，<strong>SLReachability</strong> 就运应而生了，现在她已经在两个项目里投入使用了，感觉还是挺方便的，现在拿来分享下。</p>
+<h1 id="SLReachability-与-Reachability-的区别"><a href="#SLReachability-与-Reachability-的区别" class="headerlink" title="SLReachability 与 Reachability 的区别"></a>SLReachability 与 Reachability 的区别</h1><p>SLReachability 完全兼容 Reachability ，因为内部关于网络变化的实现是和 Reachability 一样的，老实说就是完全 copy 过来的；在 Reachability 的基础之上，增加了检测 WWAN 变化的功能，并且考虑到了用户可能会增加允许使用 WWAN 的开关；SLReachability 就是把以上几种网络情况最终作了个大统一，更加方便开发者获取网络的状态！</p>
+<p>这是陪伴我好久的 <a href="https://developer.apple.com/library/prerelease/content/samplecode/Reachability/Listings/Reachability_Reachability_h.html" target="_blank" rel="noopener">Reachability</a> 源码地址.</p>
+<h1 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h1><p>清楚了需求后，就是一步步实现了，首要需要的是完全兼容 Reachability ，具备 Reachability 的所有功能，其次还要拥有上面提到的检测 WWAN 变化的需求和允许用户增加开关；先看下如何兼容：</p>
+<ul>
+<li>完全兼容（copy） Reachability 实现 </li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSInteger</span>,SLReachStatus) &#123;</span><br><span class="line">    SLNotReachable = <span class="number">0</span>,</span><br><span class="line">    SLReachableViaWiFi,</span><br><span class="line">    SLReachableViaWWAN</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>, <span class="keyword">readonly</span>) SLReachStatus reachStatus;</span><br></pre></td></tr></table></figure>
+<p>这个没什么难理解的，不再细说了；</p>
+<ul>
+<li>下面是检测 WWAN 变化的实现，这里有以下几种情况，其中 SLNetWorkStatusWWANRefused 表示用户设置开关是关，不允许使用 WWAN 网络，出现的条件是：<strong>没有WiFi，用户不允许使用 WWAN</strong>；</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSUInteger</span>, SLWWANStatus) &#123;</span><br><span class="line">    SLWWANNotReachable = SLNotReachable,</span><br><span class="line">    <span class="comment">///不允许WWAN网络；默认允许</span></span><br><span class="line">    SLNetWorkStatusWWANRefused = <span class="number">3</span>,</span><br><span class="line">    <span class="comment">///使用WWAN；</span></span><br><span class="line">    SLNetWorkStatusWWAN4G = <span class="number">4</span>,</span><br><span class="line">    SLNetWorkStatusWWAN3G = <span class="number">5</span>,</span><br><span class="line">    SLNetWorkStatusWWAN2G = <span class="number">6</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>, <span class="keyword">readonly</span>) SLNetWorkStatus wwanType;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<ul>
+<li>统一所有的网络状况，这是才是今天的主要工作：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSUInteger</span>, SLNetWorkStatusMask) &#123;</span><br><span class="line">    SLNetWorkStatusMaskUnavailable   = <span class="number">1</span> &lt;&lt; SLNotReachable,</span><br><span class="line">    SLNetWorkStatusMaskReachableWiFi = <span class="number">1</span> &lt;&lt; SLReachableViaWiFi,<span class="comment">//这里直接使用这个枚举即可</span></span><br><span class="line">    SLNetWorkStatusMaskWWANRefused   = <span class="number">1</span> &lt;&lt; SLNetWorkStatusWWANRefused,</span><br><span class="line">    </span><br><span class="line">    SLNetWorkStatusMaskReachableWWAN4G = <span class="number">1</span> &lt;&lt; SLNetWorkStatusWWAN4G,</span><br><span class="line">    SLNetWorkStatusMaskReachableWWAN3G = <span class="number">1</span> &lt;&lt; SLNetWorkStatusWWAN3G,</span><br><span class="line">    SLNetWorkStatusMaskReachableWWAN2G = <span class="number">1</span> &lt;&lt; SLNetWorkStatusWWAN2G,</span><br><span class="line">    </span><br><span class="line">    SLNetWorkStatusMaskReachableWWAN = (SLNetWorkStatusMaskReachableWWAN2G | SLNetWorkStatusMaskReachableWWAN3G | SLNetWorkStatusMaskReachableWWAN4G),</span><br><span class="line">    SLNetWorkStatusMaskNotReachable  = (SLNetWorkStatusMaskUnavailable     | SLNetWorkStatusMaskWWANRefused),</span><br><span class="line">    SLNetWorkStatusMaskReachable     = (SLNetWorkStatusMaskReachableWiFi   | SLNetWorkStatusMaskReachableWWAN),</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>根据网络的情况定义了以上枚举，这里简单解释下：</p>
+<table>
+<thead>
+<tr>
+<th>–Mask–</th>
+<th>–含义–</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SLNetWorkStatusMaskReachableWWAN</td>
+<td>只要当前是 2G，3G，4G 网络的一种属于ReachableWWAN</td>
+</tr>
+<tr>
+<td>SLNetWorkStatusMaskNotReachable</td>
+<td>当前没有网络 或者 当前是WWAN网络 (用户不允许)</td>
+</tr>
+<tr>
+<td>SLNetWorkStatusMaskReachable</td>
+<td>当前是WiFi网络 或者 当前是WWAN网络（用户允许）</td>
+</tr>
+</tbody>
+</table>
+<h1 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h1><p>使用 Reachability 检测网络的变化， 使用 iOS7 新增的 API 检测 WWAN 的变化，也正因为如此，所以 SLReachability 从 iOS7 开始支持；每当检测到变化之后就就去更新网络状态 mask ，如果前后不一致就更新，并且发送通知，反之则忽略；这里对于不一致的判断是重写了 setter 方法来实现的，下面简单看下代码：</p>
+<p>这是 Reachability 检测到网络变化后的回调，我的处理是给属性赋值，具体更新的方法在 setter 里去实现！</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///网络状况变化回调；</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> ReachabilityCallback(<span class="built_in">SCNetworkReachabilityRef</span> target, <span class="built_in">SCNetworkReachabilityFlags</span> flags, <span class="keyword">void</span>* info)</span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> unused (target, flags)</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(info == <span class="literal">NULL</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(![(__bridge <span class="built_in">NSObject</span>*) info isKindOfClass: [SLReachability <span class="keyword">class</span>]]) <span class="keyword">return</span>;</span><br><span class="line">    </span><br><span class="line">    SLReachability* noteObject = (__bridge SLReachability *)info;</span><br><span class="line">    <span class="comment">///update</span></span><br><span class="line">    noteObject.reachStatus = [noteObject currentReachabilityStatus];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面看下对 WWAN 的检测，需要创建这样一个对象才能去观察哦：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">_radioAccessInfo =[[<span class="built_in">CTTelephonyNetworkInfo</span> alloc]init];</span><br><span class="line"></span><br><span class="line">[[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span></span><br><span class="line">                                             selector:<span class="keyword">@selector</span>(WWANDidChanged:)</span><br><span class="line">                                                 name:<span class="built_in">CTRadioAccessTechnologyDidChangeNotification</span> object:<span class="literal">nil</span>];</span><br></pre></td></tr></table></figure>
+<p>看下通知回调的处理：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)WWANDidChanged:(<span class="built_in">NSNotification</span> *)notifi</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">        <span class="built_in">NSString</span> *radioAcc = [notifi object];</span><br><span class="line">        SLWWANStatus wwanType = WWANTypeWithRadioAccessTechnology(radioAcc);</span><br><span class="line">        <span class="keyword">self</span>.wwanType = wwanType;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，这个回调不在主线里！处理同样很简单，给属性赋值！因此如果关系 WWAN 的变化，可以直接 Observe 这个属性，需要了解的是当前网络即使是 WiFi ，这个属性也会发生变化，这跟你的移动网络有关系，但是不会影响到 mask ，因为 mask 是 WiFi ！</p>
+<p>下面看下重写 setter 方法吧：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)setWwanType:(SLWWANStatus)wwanType</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (_wwanType != wwanType) &#123;</span><br><span class="line">        _wwanType = wwanType;</span><br><span class="line">        [<span class="keyword">self</span> updateNetworkStatusMask];</span><br><span class="line">        [<span class="keyword">self</span> postNotifi:kSLReachabilityWWANChanged];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//修改了设置里的开关</span></span><br><span class="line">- (<span class="keyword">void</span>)setAllowUseWWAN:(<span class="built_in">BOOL</span>)allowUseWWAN</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(_allowUseWWAN != allowUseWWAN)</span><br><span class="line">    &#123;</span><br><span class="line">        _allowUseWWAN = allowUseWWAN;</span><br><span class="line">        [<span class="keyword">self</span> updateNetworkStatusMask];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)setReachStatus:(SLReachStatus)reachStatus</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(_reachStatus != reachStatus)</span><br><span class="line">    &#123;</span><br><span class="line">        _reachStatus = reachStatus;</span><br><span class="line">        [<span class="keyword">self</span> updateNetworkStatusMask];</span><br><span class="line">        [<span class="keyword">self</span> postNotifi:kSLReachabilityReachStatusChanged];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过重写 setter 的方法去被动发现网络变化了，最终通过 updateNetworkStatusMask 方法去更新 mask :</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)updateNetworkStatusMask</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//update</span></span><br><span class="line">    SLNetWorkStatusMask mask = [<span class="keyword">self</span> netWorkStatusMaskWithNetStatus:_reachStatus WWANType:_wwanType WWANReachable:_allowUseWWAN];</span><br><span class="line">    <span class="keyword">self</span>.netWorkMask = mask;</span><br><span class="line">    <span class="comment">//log it</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> DEBUG</span></span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"net is: [%@]"</span>,SLNetWorkStatusMask2String(mask));</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>updateNetworkStatusMask 方法根据当前的网络和WWAN情况和用户设置的选项综合出来一个最终的 mask ，当 mask 变了之后就会发送通知告知发生了变化！</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)setNetWorkMask:(SLNetWorkStatusMask)netWorkMask</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(_netWorkMask != netWorkMask)</span><br><span class="line">    &#123;</span><br><span class="line">        _netWorkMask = netWorkMask;</span><br><span class="line">        [<span class="keyword">self</span> postNotifi:kSLReachabilityMaskChanged];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上就是实现的原理，关于 allowUseWWAN 这个属性，你可以写个 SLReachability 的子类，子类检测到开关变化后去更改这个属性；不同的业务也许会有多个开关，这是一一创建子类就行了！</p>
+<h1 id="便利方法："><a href="#便利方法：" class="headerlink" title="便利方法："></a>便利方法：</h1><p>判断当前网络是不是 WiFi，当然你也可以扩展更多：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NS_INLINE</span> <span class="built_in">BOOL</span> isWiFiWithMask(SLNetWorkStatusMask mask)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> mask &amp; SLNetWorkStatusMaskReachableWiFi;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">NS_INLINE</span> <span class="built_in">BOOL</span> isWiFiWithStatus(SLReachStatus status)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> mask == SLReachableViaWiFi;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="使用方法1"><a href="#使用方法1" class="headerlink" title="使用方法1"></a>使用方法1</h1><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">_reach = [SLReachability reachabilityForInternetConnection];</span><br><span class="line">   <span class="comment">//添加 observer</span></span><br><span class="line">   [_reach addObserver:<span class="keyword">self</span> forKeyPath:<span class="string">@"netWorkMask"</span> options:<span class="built_in">NSKeyValueObservingOptionNew</span> context:<span class="literal">nil</span>];</span><br><span class="line">   <span class="comment">//获取当前的网络状态；</span></span><br><span class="line">   SLNetWorkStatusMask mask = _reach.netWorkMask;</span><br></pre></td></tr></table></figure>
+<p>处理网络变化：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)observeValueForKeyPath:(<span class="built_in">NSString</span> *)keyPath ofObject:(<span class="keyword">id</span>)object change:(<span class="built_in">NSDictionary</span>&lt;<span class="built_in">NSString</span> *,<span class="keyword">id</span>&gt; *)change context:(<span class="keyword">void</span> *)context</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">NSNumber</span> *statusNum = [change objectForKey:<span class="built_in">NSKeyValueChangeNewKey</span>];</span><br><span class="line">    SLNetWorkStatusMask mask = [statusNum intValue];</span><br><span class="line">    <span class="comment">//根据当前网络做出处理；</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="使用方法2"><a href="#使用方法2" class="headerlink" title="使用方法2"></a>使用方法2</h1><p>除了可以 Observe 属性之外，当然也可以注册通知：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///网络状态变化，同 Reachability</span></span><br><span class="line">FOUNDATION_EXTERN <span class="built_in">NSString</span> *<span class="keyword">const</span> kSLReachabilityReachStatusChanged;</span><br><span class="line"><span class="comment">///WWAN变化；WiFi网络也会变，跟当前网络有关；</span></span><br><span class="line">FOUNDATION_EXTERN <span class="built_in">NSString</span> *<span class="keyword">const</span> kSLReachabilityWWANChanged;</span><br><span class="line"><span class="comment">///统一后的网络变化</span></span><br><span class="line">FOUNDATION_EXTERN <span class="built_in">NSString</span> *<span class="keyword">const</span> kSLReachabilityMaskChanged;</span><br></pre></td></tr></table></figure>
+<p>根据你的需要去注册，你可能要注意下他们 3 个之间的关系！</p>
+<h1 id="IPv6-Support"><a href="#IPv6-Support" class="headerlink" title="IPv6 Support"></a>IPv6 Support</h1><p>SLReachability 完全支持 IPv6 ，具体可参照 Reachability 的解释或者查看源码。</p>
+<h1 id="Demo-工程"><a href="#Demo-工程" class="headerlink" title="Demo 工程"></a>Demo 工程</h1><p>这是 Github 地址: [<a href="https://github.com/debugly/SLReachabilityDemo]" target="_blank" rel="noopener">https://github.com/debugly/SLReachabilityDemo]</a>(<a href="https://github.com/debugly/" target="_blank" rel="noopener">https://github.com/debugly/</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/05/29-bezier-demo.html" rel="prev" title="使用 UIBezierPath 绘制圆角六边形">
+      <i class="fa fa-chevron-left"></i> 使用 UIBezierPath 绘制圆角六边形
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/27-blog-use-jekyll.html" rel="next" title="使用 Jekyll 搭建博客">
+      使用 Jekyll 搭建博客 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#故事背景"><span class="nav-number">1.</span> <span class="nav-text">故事背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SLReachability-与-Reachability-的区别"><span class="nav-number">2.</span> <span class="nav-text">SLReachability 与 Reachability 的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计思路"><span class="nav-number">3.</span> <span class="nav-text">设计思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现原理"><span class="nav-number">4.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#便利方法："><span class="nav-number">5.</span> <span class="nav-text">便利方法：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用方法1"><span class="nav-number">6.</span> <span class="nav-text">使用方法1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用方法2"><span class="nav-number">7.</span> <span class="nav-text">使用方法2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IPv6-Support"><span class="nav-number">8.</span> <span class="nav-text">IPv6 Support</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Demo-工程"><span class="nav-number">9.</span> <span class="nav-text">Demo 工程</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

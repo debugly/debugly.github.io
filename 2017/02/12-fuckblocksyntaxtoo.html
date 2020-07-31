@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Objective-C 语言一直以来由苹果公司维护着，为其增加了不少更加现代化的语法，其中 block （其他语言一般都称闭包）语法就是在 iOS 4 发布的，与此同时还提供了抽象程度极高的GCD 技术，用于简化线程的操作！所以今天说的 block 并不是新的技术，但它恐怕是最难记忆的的语法了，并且使用形式很是灵活，因此总结一下我平时使用的几种类型，供大家参考。  特为此写了个 demo 来帮助">
+<meta name="keywords" content="block,语法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Block 使用方式由浅入深">
+<meta property="og:url" content="http://debugly.cn/2017/02/12-fuckblocksyntaxtoo.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="Objective-C 语言一直以来由苹果公司维护着，为其增加了不少更加现代化的语法，其中 block （其他语言一般都称闭包）语法就是在 iOS 4 发布的，与此同时还提供了抽象程度极高的GCD 技术，用于简化线程的操作！所以今天说的 block 并不是新的技术，但它恐怕是最难记忆的的语法了，并且使用形式很是灵活，因此总结一下我平时使用的几种类型，供大家参考。  特为此写了个 demo 来帮助">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-31T08:23:36.314Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Block 使用方式由浅入深">
+<meta name="twitter:description" content="Objective-C 语言一直以来由苹果公司维护着，为其增加了不少更加现代化的语法，其中 block （其他语言一般都称闭包）语法就是在 iOS 4 发布的，与此同时还提供了抽象程度极高的GCD 技术，用于简化线程的操作！所以今天说的 block 并不是新的技术，但它恐怕是最难记忆的的语法了，并且使用形式很是灵活，因此总结一下我平时使用的几种类型，供大家参考。  特为此写了个 demo 来帮助">
+
+<link rel="canonical" href="http://debugly.cn/2017/02/12-fuckblocksyntaxtoo.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Block 使用方式由浅入深 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/02/12-fuckblocksyntaxtoo.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Block 使用方式由浅入深
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-02-12 21:29:57" itemprop="dateCreated datePublished" datetime="2017-02-12T21:29:57+08:00">2017-02-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>Objective-C 语言一直以来由苹果公司维护着，为其增加了不少更加现代化的语法，其中 block （其他语言一般都称闭包）语法就是在 iOS 4 发布的，与此同时还提供了抽象程度极高的GCD 技术，用于简化线程的操作！所以今天说的 block 并不是新的技术，但它恐怕是最难记忆的的语法了，并且使用形式很是灵活，因此总结一下我平时使用的几种类型，供大家参考。</p>
+</blockquote>
+<p>特为此写了个 <a href="https://github.com/debugly/OC-Block" target="_blank" rel="noopener">demo</a> 来帮助理解。</p>
+<h1 id="1、描述为属性"><a href="#1、描述为属性" class="headerlink" title="1、描述为属性"></a>1、描述为属性</h1><p>这是最为常见的用法了，一般都是先赋值，当触发某个逻辑时进行回调；</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) returnType (^blockName)(parameterTypes);</span><br><span class="line"><span class="keyword">self</span>.blockName = ...;<span class="comment">//赋值一个block</span></span><br><span class="line"><span class="keyword">self</span>.blcokName(parameters);<span class="comment">//调用</span></span><br></pre></td></tr></table></figure>
+<h1 id="2、作为形参-parameter-，做回调"><a href="#2、作为形参-parameter-，做回调" class="headerlink" title="2、作为形参(parameter)，做回调"></a>2、作为形参(parameter)，做回调</h1><p>a.经常和属性配合使用；一般场景是方法内部有异步执行的任务，执行完毕后通过这个block参数回调到调用处；</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)doSomeThingWithCompletion:(retunType (^)(parameterTypes))blockName&#123;</span><br><span class="line">async(...&#123;</span><br><span class="line">    blockName(parameters);</span><br><span class="line">&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>b.相当于写个 setter 方法，给 block 属性赋值，直接给属性赋值的话需要手写实现 block ，不容易记，这其实是为了方便调用者而已。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> - (<span class="keyword">void</span>)registerXXXHandler:(<span class="keyword">void</span> (^)(<span class="keyword">float</span>))handler</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">self</span>.xxxHandler = handler;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="3、作为实参-argument-，实现block"><a href="#3、作为实参-argument-，实现block" class="headerlink" title="3、作为实参(argument)，实现block"></a>3、作为实参(argument)，实现block</h1><p>调用一个带有 block 参数的方法时，就需要实现这个 block 了，其实这个不用手写，IDE 会提示的，直接回车即可；</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="keyword">self</span> doSomeThingWithCompletion: ^retunType(parameters)&#123;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<h1 id="4、-typedef-出”新类型”"><a href="#4、-typedef-出”新类型”" class="headerlink" title="4、 typedef 出”新类型”"></a>4、 typedef 出”新类型”</h1><p>以上使用一点也不友好，所以基本上我们都会使用 typedef 定义一个类型出来；</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> returnType(^ TypeName)(parameterTypes)</span><br><span class="line"><span class="comment">//以上用法可改为：</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) TypeName blockName;</span><br><span class="line">- (<span class="keyword">void</span>)doSomeThingWithCompletion:(TypeName)blockName;</span><br></pre></td></tr></table></figure>
+<h1 id="5、方法内部当局部变量使用"><a href="#5、方法内部当局部变量使用" class="headerlink" title="5、方法内部当局部变量使用"></a>5、方法内部当局部变量使用</h1><p>如果一段代码里有很多个 if else 分支，某些分支的处理完全一样时，可将他们封装到一个block块里面；可以省去写相同代码的麻烦，也不必开辟一个新的方法；</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">returnType (^blcokNmae)(parameterTypes) = ^returnType(parameters)&#123; ... &#125;;</span><br><span class="line"><span class="comment">//调用：</span></span><br><span class="line">returnType result = blcokNmae(parameters);</span><br></pre></td></tr></table></figure>
+<h1 id="6、方法返回值"><a href="#6、方法返回值" class="headerlink" title="6、方法返回值"></a>6、方法返回值</h1><p>这种情况不太多，比如可用于实现链式编程；</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明</span></span><br><span class="line">- (returnType (^) parameterTypes) method;</span><br><span class="line"><span class="comment">//实现</span></span><br><span class="line">- (returnType (^) parameterTypes) method&#123;</span><br><span class="line">	<span class="keyword">return</span> ^ returnType (parameters)&#123;</span><br><span class="line">		<span class="comment">//...</span></span><br><span class="line">		<span class="keyword">return</span> obj;<span class="comment">//obj 是 returnType 类型</span></span><br><span class="line">	&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>举个例子：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///设置url</span></span><br><span class="line">- (SLNetworkRequest *(^)(<span class="built_in">NSString</span> *url))c_URL;</span><br><span class="line"></span><br><span class="line">- (SLNetworkRequest *(^)(<span class="built_in">NSString</span> *url))c_URL</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> ^ SLNetworkRequest * (<span class="built_in">NSString</span> *url)&#123;</span><br><span class="line">        <span class="keyword">self</span>.urlString = url;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="7、高阶-Block-作为另一个Block的参数"><a href="#7、高阶-Block-作为另一个Block的参数" class="headerlink" title="7、高阶 Block : 作为另一个Block的参数"></a>7、高阶 Block : 作为另一个Block的参数</h1><p>这种情况用的不是太多，但是一旦有需要双向交互的场景时，优势就很明显了！具体可看 demo 实现的 3G 网络询问用户是否下载的场景：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> returnType(^ Block1)(parameterTypes)</span><br><span class="line"><span class="keyword">typedef</span> returnType(^ Block2)(parameterTypes, Block1) <span class="comment">//Block1作为Block2的参数部分</span></span><br></pre></td></tr></table></figure>
+<p>可实现双向通信，比如：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)doSomeThingWithCompletion:(Block2)blockName</span><br><span class="line">&#123;</span><br><span class="line">	async(...&#123;</span><br><span class="line">		 Block1 block1 = ^(isOk)&#123;</span><br><span class="line">			 <span class="keyword">if</span>(isOK)&#123;</span><br><span class="line">		    	<span class="comment">//start download...</span></span><br><span class="line">		    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		    	<span class="comment">//cancel something...</span></span><br><span class="line">		    &#125;</span><br><span class="line">		 &#125;;</span><br><span class="line">		 blockName(parameters, block1);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">调用：</span><br><span class="line">[<span class="keyword">self</span> doSomeThingWithCompletion: ^ returnType(parameters, block1)&#123;</span><br><span class="line">	<span class="comment">//内部处理完毕后，回调到此；</span></span><br><span class="line">	<span class="comment">//根据结果（parameters）做相应的逻辑，然后将处理结果再次回调到方法内部</span></span><br><span class="line">	<span class="keyword">if</span>(parameters)&#123;</span><br><span class="line">		block1(<span class="literal">NO</span>);<span class="comment">//通过block1再次回调回去告知可以进行下一步了</span></span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		block1(<span class="literal">YES</span>);<span class="comment">//通过block1再次回调回去告知不能继续</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<p>最近我制定了 H5-Native 的交互方案，编写交互需要注入的 js 脚本，通信 API 也是双向的，其原理就是 block (闭包)的嵌套使用；API 出来后 H5 和 Native 的开发同事们都很 Happy 呢！</p>
+<h1 id="完"><a href="#完" class="headerlink" title="完"></a>完</h1><p>如果你有其他有趣的使用方法，请提供给我吧！</p>
+<p>前五个算是翻译，不过也确实是工作中经常用的，原文地址 : <a href="http://fuckingblocksyntax.com" target="_blank" rel="noopener">http://fuckingblocksyntax.com</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/01/10-household-zhixuan-radio.html" rel="prev" title="致炫收音机改为家用音响">
+      <i class="fa fa-chevron-left"></i> 致炫收音机改为家用音响
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/04/17-apache-vhost.html" rel="next" title="Mac 上配置 Apache 服务器">
+      Mac 上配置 Apache 服务器 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、描述为属性"><span class="nav-number">1.</span> <span class="nav-text">1、描述为属性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、作为形参-parameter-，做回调"><span class="nav-number">2.</span> <span class="nav-text">2、作为形参(parameter)，做回调</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、作为实参-argument-，实现block"><span class="nav-number">3.</span> <span class="nav-text">3、作为实参(argument)，实现block</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4、-typedef-出”新类型”"><span class="nav-number">4.</span> <span class="nav-text">4、 typedef 出”新类型”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5、方法内部当局部变量使用"><span class="nav-number">5.</span> <span class="nav-text">5、方法内部当局部变量使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6、方法返回值"><span class="nav-number">6.</span> <span class="nav-text">6、方法返回值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7、高阶-Block-作为另一个Block的参数"><span class="nav-number">7.</span> <span class="nav-text">7、高阶 Block : 作为另一个Block的参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#完"><span class="nav-number">8.</span> <span class="nav-text">完</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
