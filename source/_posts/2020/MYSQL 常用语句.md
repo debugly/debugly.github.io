@@ -683,6 +683,16 @@ mysql> show grants for test@'localhost' ;
 | DATETIME  |  8   |           1000-01-01 00:00:00/9999-12-31 23:59:59            | YYYY-MM-DD HH:MM:SS |     混合日期和时间值     |
 | TIMESTAMP |  4   | 1970-01-01 00:00:00/2038 结束时间是第 2147483647 秒，北京时间 2038-1-19 11:14:07，格林尼治时间 2038年1月19日 凌晨 03:14:07 |   YYYYMMDD HHMMSS   | 混合日期和时间值，时间戳 |
 
+## SQL 语句注释
+
+```
+#我是单行注释
+-- 我是单行注释，前面有个空格哦
+/*
+我是多行注释哦；
+*/
+```
+
 ## 图像化工具
 
 - http://dev.mysql.com/downloads/tools/workbench/
