@@ -166,6 +166,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/06/01-reduce-framework-weight.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/01-reduce-framework-weight.html" class="post-title-link" itemprop="url">iOS Framework 瘦身实战</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-06-01 13:30:02" itemprop="dateCreated datePublished" datetime="2017-06-01T13:30:02+08:00">2017-06-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="/images/201706/2014WorldCup.gif" alt></p>
+<blockquote>
+<p>近来业务增多，对应的 Framework 也越做越多，提供给搜狐视频的就多达 5个，物理包大小当然也越来越大了，因此查阅了资料，对 framework 进行瘦身！</p>
+</blockquote>
+<h2 id="工程配置"><a href="#工程配置" class="headerlink" title="工程配置"></a>工程配置</h2><ol>
+<li><p>调试符号(Generate Debug Sysmbols)</p>
+<p> 这个是控制是否生成调试符号的，因此 debug 模式下保持使用 YES，release改为 NO；也就说我们平时调试还生成调试信息，但是打包发布时不需要生成，如果 debug下也改为 NO 的话，会导致没有断点，你设置了断点，但是代码走到那之后不会停下来让你调试！经过试验，我从 97M 减到了 61M，减少了 37 %</p>
+</li>
+<li><p>cpu 架构(Architectures)</p>
+<p> 基本上每多支持一种架构，包大小就会翻一倍！目前而言，Architectures 设置为 armv7，arm64 就可以了，下面是架构对应的机型</p>
+<ul>
+<li>armv6 : iPhone,iPhone2,iPhone3G, iPhone3GS</li>
+<li>armv7 : iPhone4,iPhone4S;</li>
+<li>armv7s: iPhone5,iPhone5C;</li>
+<li>arm64 : iPhone5S,iPhoneSE,iPhone6(plus)(S),iPhone7(plus)(S)</li>
+</ul>
+</li>
+<li><p>压缩等级（Optimization Level）</p>
+<p> 使用默认值就行了</p>
+<ul>
+<li>release : Fastest,Smallest[-Os]</li>
+<li>debug : None,[-O0]</li>
+</ul>
+</li>
+<li><p>不可能执行到的代码 (Dead Code Stripping)</p>
+<p> 使用默认值就行了</p>
+<ul>
+<li>设置为 YES</li>
+</ul>
+</li>
+</ol>
+<h2 id="资源图片"><a href="#资源图片" class="headerlink" title="资源图片"></a>资源图片</h2><ol>
+<li><p>必要的资源图片，比如按钮的背景图，Loading 图标等，均可进行无损压缩；可以使用 <a href="/效率/2015/09/27/bo-ke-ti-su-shi-yong-imageiptimya-suo-tu-pian.html#2">ImageOptim</a> 这款开源软件！</p>
+</li>
+<li><p>除了必要的资源图片外，像礼物图片，大动画资源图片等，都可采用动态下载的方式，这样做除了减少包大小外，也能做到及时更新，满足产品需求！</p>
+</li>
+</ol>
+<h2 id="ipa-瘦身"><a href="#ipa-瘦身" class="headerlink" title="ipa 瘦身"></a>ipa 瘦身</h2><p>由于主要精力在 SDK 开发上，所以我暂无实际经验，这是网上找的一篇 <a href="http://blog.csdn.net/a2657222/article/details/45723161" target="_blank" rel="noopener">文章</a> 。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/05/26-my-shell.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -783,115 +885,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/05/16-sharecode-use-framework.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/05/16-sharecode-use-framework.html" class="post-title-link" itemprop="url">使用 Framewrok 管理共享代码</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-05-16 19:43:28" itemprop="dateCreated datePublished" datetime="2017-05-16T19:43:28+08:00">2017-05-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这不是一篇讲解如何使用 Xcode 创建 Framework 的教程，而是代码共享的一个解决方案！</p>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>今年 2 月刚迭代完千帆直播 SDK 之后，我们启动了 <code>夺宝SDK</code> 的开发工作，除了常规的产品需求外，有个特殊的要求：</p>
-<ul>
-<li>作为千帆直播 SDK 的组成部分（集成到搜狐视频）</li>
-<li>单独提供给千帆直播 App</li>
-</ul>
-<h1 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h1><p>听起来挺简单的，仔细考虑后，并不简单，原因如下：</p>
-<ul>
-<li>时间有限，不可能重复造轮子，所以千帆直播SDK里的代码要共享</li>
-<li>为了日后维护方便，相同的代码不能 copy 两份(这是我的原则)</li>
-<li>夺宝 SDK 要具备单独提供的能力</li>
-<li>夺宝 SDK 要具备组件的能力</li>
-</ul>
-<p>为了更加简单的解决这个问题，我是这么思考的，先解决上面列举的前 3 条，先不考虑第 4 条；因此我需要考虑夺宝 SDK 如何共享 <code>千帆直播SDK</code> 的通用代码，我不喜欢 copy 代码，所以没有更好的办法，只能是将通用代码抽取出来了，可以使用静态库（.a），也可以使用框架（.framework），你会怎么选择 ？</p>
-<h1 id="开搞"><a href="#开搞" class="headerlink" title="开搞"></a>开搞</h1><p>我不喜欢静态库，因为使用的时候很不方面，他的可执行文件和头文件是分开的，甚至于使用的时候还要设置下 search path ！因此我毫不犹豫的选择了框架，框架的名字命名为 <strong>SohuLiveFoundation</strong>。</p>
-<p>辛好千帆直播 SDK 工程的代码组织的还不错，所有通用的库均在 libs 文件下，接下来的工作几乎成为了搬运 libs 到 SohuLiveFoundation 工程，由于现在还没开始做，只是准备工作，因此只把网络库，解析库，缓存库，下载图片库等很通用的搬运下，日后用到哪些再具体分析决定是否搬运，如何搬运的问题。</p>
-<p>接下来创建了夺宝 SDK 的工程，命名为 <strong>SohuOneSDK</strong>，为了使用通用库，所以要引用下 SohuLiveFoundation 库，然后随便写了个界面，发了个请求，简单模拟下，只要能用就行，然后再来到我的 Demo （模拟 千帆App），尝试在 Demo 里调用 SohuOneSDK 的功能，这里要注意的是：</p>
-<ul>
-<li>SohuOneSDK 只是引用了 SohuLiveFoundation，并不包含（copy）其可执行文件，这个从大小上可以看出来，SohuOneSDK 刚创建，文件比较少，很小的；而 SohuLiveFoundation 包含了的文件多，要大一些；</li>
-<li>由于 SohuOneSDK 没有包含 SohuLiveFoundation 的可执行文件，那么在执行的时候就要保证能够找到对应的可执行文件！因此要在 demo 里导入 SohuLiveFoundation 和 SohuOneSDK ！</li>
-</ul>
-<blockquote>
-<p>假如 A.framework 使用了 B.framework ，在编译 A 的时候，并不需要找到 B 的可执行文件，只需要 B 库的头文件即可，从而避免编译报错，并且给调用 B 库的地方分配个相对的函数调用地址或者说是占位符，以后再具体填充；所以在集成 A 库的 App 里必须导入 B 库，而在 link 的时候也会把 A 库里的占位符换成 B 库的可执行地址.具体怎么换的我也不清楚，因为 App 里使用了 A 库，也需要把 A 库的占位符替换下，具体按照什么循序来的，我也不确定。</p>
-</blockquote>
-<h1 id="搞定组件化"><a href="#搞定组件化" class="headerlink" title="搞定组件化"></a>搞定组件化</h1><p>到目前为止，已经实现了前 3 条了，我们再回过头来看下第 4 条 — 将夺宝 SDK 作为直播 SDK 的一部分；由上面提到的理论大家很容易想到，可将 SohuOneSDK 引用到 SohuLiveSDK（千帆直播SDK），而 SohuLiveFoundation 为 SohuOneSDK 和 SohuLiveSDK 提供基础支持，集成到视频的时候，将这三个 framework 一并提供集成即可，这里需要说明的是，SohuOneSDK 和 SohuLiveSDK 均不包含 SohuLiveFoundation 的可执行文件，好处就是避免符号重复定义！！！ </p>
-<p>最初的时候感觉不好实现呢，现在看来貌似这倒是成了简单的事情了，O(∩_∩)O哈哈~。接下来的事情，就是在 SohuLiveSDK 里完成对 SohuOneSDK 的调用封装，我们不希望视频 App 去调用 SohuOneSDK 的任何功能，毕竟他只是个组成部分而已，况且入口都在 SohuLiveSDK 里面！</p>
-<p>事实证明，这个方案是可行的，确实满足了单独提供和作为组件的需求！</p>
-<blockquote>
-<p>经过试验，如果 A.framework 里使用了 b.a 的话，你也可以只导入 b 库的头文件，而在 A 集成的 App 里添加下 b 库的可执行文件！道理是一样的，毕竟 framework 可以简单的等同于一个包含了可执行文件和头文件的 bundle(文件夹).</p>
-</blockquote>
-<h1 id="思维导图"><a href="#思维导图" class="headerlink" title="思维导图"></a>思维导图</h1><ul>
-<li>集成到视频</li>
-</ul>
-<p><img src="/images/201705/01.png" alt></p>
-<ul>
-<li>集成到千帆App</li>
-</ul>
-<p><img src="/images/201705/02.png" alt></p>
-<h1 id="SLF-gt-SCF"><a href="#SLF-gt-SCF" class="headerlink" title="SLF -&gt; SCF"></a>SLF -&gt; SCF</h1><p>随着时间的推移，我们做了更多的项目，包括 <code>搜狐课堂</code> 和几款 <code>千帆小游戏</code>，我们在做搜狐课堂的时候发现 SohuLiveFoundation 这个名字不太合理，里面包含有直播字眼，透漏出的是直播相关的内容，课堂是个单独的项目，虽然也要集成到搜狐视频了，但跟千帆直播SDK 没关系，最初共用于夺宝 SDK 还没问题，但是这时我们发现 SohuLiveFoundation 这个名字已经不合时宜了，我们是个最求完美的团队，哪怕是个名字也要完美！</p>
-<p>因此我们在开启搜狐课堂的开发之前，就将 SohuLiveFoundation 重命名为 SohuCoreFoundation 了！并且这也作为我们的新纪元，开始了 Foundation 的 2.0 版本，内部简称 SCF ！</p>
-<p>随后的项目—搜狐课堂，千帆小游戏均是构建在 SCF 的基础之上。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -957,14 +954,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

@@ -166,6 +166,122 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2016/12/03-qfsdk-refactor-chat.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/12/03-qfsdk-refactor-chat.html" class="post-title-link" itemprop="url">千帆 SDK Refactor: 优雅的处理聊天数据源</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-12-03 12:04:20" itemprop="dateCreated datePublished" datetime="2016-12-03T12:04:20+08:00">2016-12-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>以下讨论基于的前提思想是：Cell 和 Model 是绑定的，一一对应的；Cell 是数据源所决定的，Cell 要做的就是展示数据源而已，或者说是先确定的数据源而不是 Cell，因此我们今天以讨论 Model 为主。简单的概括这次重构是为 Cell 建立一个CellModel，他有个实现构建协议的属性，展示前通过协议方法构建 Cell需要的数据并且存储到 CellModel 里，这样的好处是随便一个Model都可以作为数据源使用，只需实现必要的协议，Cell也不必关心数据源到底是谁提供的！</p>
+</blockquote>
+<h1 id="基于协议的CellModel"><a href="#基于协议的CellModel" class="headerlink" title="基于协议的CellModel"></a>基于协议的CellModel</h1><h3 id="现状：Cell-绑定-SLLiveRoomModel"><a href="#现状：Cell-绑定-SLLiveRoomModel" class="headerlink" title="现状：Cell 绑定 SLLiveRoomModel"></a>现状：Cell 绑定 SLLiveRoomModel</h3><p>千帆 SDK 直播间的聊天是通过 UITableview 展示的，今天就来聊一聊如何优雅的处理 UITableview 数据源问题。既然这篇文章属于重构篇，因此我要说出重构的理由哈，这次重构的导火线是聊天区域要展示用户送给主播的千帆盛典票。</p>
+<ul>
+<li>聊天是从 <code>Chat</code> 、<code>BC</code>等通道返回的，特点是数据结构类似，最重要的是每个通道只有一种事件（一种 JOSN 结构，没有类型而言）需要处理，因此抽取了一个父类<code>SLLiveRoomModel</code> 采用了工厂的形式去解析，通过增加一个枚举属性来区分开 Model，每个枚举都对应了一个子类，父类的 modelWithSocketJSON 方法里根据 <code>route</code> 字段选择出一个合适的子类，并且确定一个枚举值;</li>
+<li>盛典票的 JSON 数据是从 <code>RC</code> 通道返回的，这个通道的有个<code>type</code>字段，用于标识类型，盛典票的type是47(以后简称为 RC47)，不同类型对应不同的业务，目前已经处理了三种类型，这三种类型并不牵涉显示到聊天区，目前的做法是抽取一个 <code>RCBaseModel</code> 父类（相当于工场）用于统一解析JSON为Model；</li>
+</ul>
+<p>简单了解了现状和需求之后，我们看下遇到的问题：RC47需要显示到聊天区，而聊天区的数据都是 SLLiveRoomModel 类的子类，RC47 却是 RCBaseModel 的子类，这块无法做到统一！对此我想了两个改动比较小的方案：</p>
+<ul>
+<li>将 RC47 继承 SLLiveRoomModel 类; 带来的问题是需要在 RC 通道根据 type 进行不同的解析，就会出现分支，原本应该是 RCBaseModel 的子类，现在却搞成了 SLLiveRoomModel 的子类，Model 解析时不再是统一！如果以后再出现 RC47 的类似情况，分支更多，时间久了逻辑就会碎片化！</li>
+<li>将 Cell 数据源改为 id ,内部通过判断 class 去解决；带来的问题是 Cell 内部的处理显得不够优雅，久而久之也会碎片化！</li>
+</ul>
+<h3 id="改进：Cell-绑定-SLLiveRoomCellModel"><a href="#改进：Cell-绑定-SLLiveRoomCellModel" class="headerlink" title="改进：Cell 绑定 SLLiveRoomCellModel"></a>改进：Cell 绑定 SLLiveRoomCellModel</h3><p>以上两种方法都是权宜之计，于是我和同事进行了一番讨论了之后，采用我 15 年在创业公司的做法，并且做了个升级(基于协议)，更加优秀了！下面说下 16 版的哈：</p>
+<ul>
+<li>基于协议的，将 Cell 需要的数据协议化，Cell 不依赖于真正的数据源（model），而是拥有一个通用的数据源（cellModel），这样的好处就是 Cell 不会对数据源（model）产生依赖，数据源可以是任意类型；</li>
+<li>数据源的构建很灵活，不同的数据源仍旧可以使用各自的父类的通用解析方式；</li>
+<li>数据源可注册点击事件的 block，不注册意味着不需要点击事件，顶级后无反应；</li>
+</ul>
+<p>从实际出发，我的 Cell 需要的展示一个属性字符串，获取到行高而已，因此制订的协议如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@protocol</span> <span class="title">SLLiveRoomCellModelBuitProtocol</span> &lt;<span class="title">NSObject</span>&gt;</span></span><br><span class="line"><span class="keyword">@required</span>;</span><br><span class="line">- (<span class="keyword">float</span>)heightForCell;</span><br><span class="line">- (<span class="built_in">NSAttributedString</span> *)attributedStringForCell;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>再根据需要制订 CellModel，需要的是存储属性字符串、行高、真正的数据源model，如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">SLLiveRoomCellModel</span> : <span class="title">NSObject</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="keyword">float</span> cellHeight;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSAttributedString</span> * attributedText;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="keyword">id</span>&lt;SLLiveRoomCellModelBuitProtocol&gt;model;<span class="comment">//真正的数据支撑</span></span><br><span class="line"></span><br><span class="line"><span class="comment">///构建cellModel必须的行高和显示的属性字符串</span></span><br><span class="line">- (<span class="keyword">void</span>)buildit;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>因此任意modle如果想要作为 cell 的真正数据源，只要实现必要的方法才行了，别如 RC47Model、SLLiveRoomModel 等。</p>
+<h3 id="整理解析"><a href="#整理解析" class="headerlink" title="整理解析"></a>整理解析</h3><p>Cell 数据源这块已经整理好了，接下来梳理下从 Socket 通道接收到 JSON 数据到构建出 SLLiveRoomCellModel 的过程：</p>
+<ul>
+<li>Parser JOSN-&gt;Model</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (SLCommonRCBaseModel *)parserCommRCJSON:(<span class="keyword">id</span>)json</span><br><span class="line">&#123;</span><br><span class="line">   <span class="keyword">return</span> [SLCommonRCBaseModel modelWithSocketJSON:json];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Build Model-&gt;CellModel</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (SLLiveRoomCellModel *)buildCellModelFromCommRC47Model:(SLComRC47Model *)rcModel</span><br><span class="line">&#123;</span><br><span class="line">    SLLiveRoomCellModel *model = [[SLLiveRoomCellModel alloc] init];</span><br><span class="line">    model.model = rcModel;</span><br><span class="line">    [model buildit];<span class="comment">//前面加过注释的，会调用协议方法用于构建；</span></span><br><span class="line">    <span class="keyword">return</span> model;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Show RC47 JSON-&gt;Cell</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)append2ChatListWithCommRC47Model:(SLComRC47Model *)model</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (model) &#123;</span><br><span class="line">        SLLiveRoomCellModel *cellModel = [<span class="keyword">self</span> buildCellModelFromCommRC47Model:model];</span><br><span class="line">        <span class="keyword">if</span>(cellModel)&#123;</span><br><span class="line">            [<span class="keyword">self</span> append2ChatCellModel:cellModel];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是整个过程，现在合起来看下RC处理的整个过程：</p>
+<ul>
+<li>处理通用组播</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)handleComRCEvent:(<span class="built_in">NSDictionary</span> *)json</span><br><span class="line">&#123;</span><br><span class="line">    SLCommonRCBaseModel *baseModel = [<span class="keyword">self</span> parserCommRCJSON:json];</span><br><span class="line">    <span class="keyword">switch</span> (baseModel.rcType) &#123;</span><br><span class="line">        <span class="keyword">case</span> SLCommonRCType28:</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//不需要显示到聊天区，自有别的处理逻辑...</span></span><br><span class="line">		 &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> SLCommonRCType32:</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//不需要显示到聊天区，自有别的处理逻辑...</span></span><br><span class="line">        &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> SLCommonRCType53:</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//不需要显示到聊天区，自有别的处理逻辑...</span></span><br><span class="line">        &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> SLCommonRCType47:</span><br><span class="line">        &#123;</span><br><span class="line">            SLComRC47Model *rc47 = (SLComRC47Model *)baseModel;</span><br><span class="line">            [<span class="keyword">self</span> append2ChatListWithCommRC47Model:rc47];</span><br><span class="line">        &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，RC的处理流程是统一的，先解析为Model，然后根据 type 做不同的处理，对于之前的聊天通道的数据处理方式比这个更简单，就不再粘贴代码了，因为那些通道没有 type，比较单一，处理起来更简单！</p>
+<h3 id="整理点击处理逻辑"><a href="#整理点击处理逻辑" class="headerlink" title="整理点击处理逻辑"></a>整理点击处理逻辑</h3><p>把点击事件的处理跟构建CellModel的逻辑放在一块！这是我的同事给我提的建议，我觉得很好，于是就为 CellModel 加了如下方法，以便于支持注册 Block 处理点击事件：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">void</span>(^SLLiveRoomCellHandler)(SLLiveRoomCellModel *model);</span><br><span class="line">- (<span class="keyword">void</span>)registerHandler:(SLLiveRoomCellHandler)handler;</span><br><span class="line">- (<span class="keyword">void</span>)invokeHandler;</span><br></pre></td></tr></table></figure>
+<p>配合点击的代理方法实现 block 回调：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)tableView:(<span class="built_in">UITableView</span> *)tableView didSelectRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath</span><br><span class="line">&#123;</span><br><span class="line">    [tableView deselectRowAtIndexPath:indexPath animated:<span class="literal">NO</span>];</span><br><span class="line"></span><br><span class="line">    SLLiveRoomCellModel *cellModel = [<span class="keyword">self</span>.dataSource objectOrNilAtIndex:indexPath.row];</span><br><span class="line">    [cellModel invokeHandler];<span class="comment">//回调block；</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看下使用吧：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- (SLLiveRoomCellModel *)buildCellModelFromChatModel:(SLLiveRoomModel *)cModel</span><br><span class="line">&#123;</span><br><span class="line">    SLLiveRoomCellModel *model = [[SLLiveRoomCellModel alloc]init];</span><br><span class="line">    model.model = cModel;</span><br><span class="line">    [model buildit];</span><br><span class="line">    <span class="comment">///只有这种类型才去注册点击事件；</span></span><br><span class="line">    <span class="keyword">if</span> (cModel &amp;&amp; SLLiveRoomMessageTypeBC == cModel.messageType) &#123;</span><br><span class="line">        [model registerHandler:^(SLLiveRoomCellModel *model) &#123;</span><br><span class="line">	   <span class="comment">///处理点击事件逻辑...</span></span><br><span class="line">        &#125;];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> model;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看起来不错呢，逻辑很紧凑，构建和点击事件的处理都放在一块了，检查代码，或者把这一块逻辑封装为一个方法等都很方便。</p>
+<h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>到此，这次数据源和解析的重构就结束了，确实做到了分离，各有自己的继承体系，没有耦合；这次重构很适合直播间的业务逻辑，对于别的业务还是要具体分析才行，不可死搬硬套哈！</p>
+<p>有个细节我想提下，就是从 Socket 通道接受到数据开始均为异步的，直到构建完 CellModel，展示到 Cell 上时才回到主线程，所以即使直播间火爆，一直刷屏也不会因为聊天解析导致卡顿，这个是经过测试的呢！</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://debugly.cn/2016/12/02-network-support-chain.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -673,112 +789,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2016/11/27-blog-use-jekyll.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/27-blog-use-jekyll.html" class="post-title-link" itemprop="url">使用 Jekyll 搭建博客</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-11-27 16:21:35" itemprop="dateCreated datePublished" datetime="2016-11-27T16:21:35+08:00">2016-11-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="博客大改版"><a href="#博客大改版" class="headerlink" title="博客大改版"></a>博客大改版</h1><p>在此之前使用的是 <a href="http://octopress.org/" target="_blank" rel="noopener">Octopress</a> 博客系统，或许是厌倦了吧，因此改为直接使用 <a href="http://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a> 来搭建,花了几个晚上的时间，一步步摸索着做了个 Jekyll 的主题出来，毕竟 Jekyll 的主题不是一个 Geek 想要的，我前端能力有限，所以目前这个主题只是能用而已，so 就没不做主题包（丢人现眼）了，如果有需要的请联系我，我（厚着脸皮）做一个。</p>
-<h1 id="亲身感受"><a href="#亲身感受" class="headerlink" title="亲身感受"></a>亲身感受</h1><p>如果你看到了我的博客，那么我的建议是去折腾一下自己吧，不要直接使用这些已经做好的系统，如果你有时间和兴趣的话，因为你会从中学到很多东西，你可能要学习这些：</p>
-<ul>
-<li>DIV + CSS （<a href="http://sass-lang.com/" target="_blank" rel="noopener">SASS</a>）</li>
-<li><a href="http://pygments.org/" target="_blank" rel="noopener">Pygments</a></li>
-<li><a href="http://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a></li>
-<li><a href="https://shopify.github.io/liquid/" target="_blank" rel="noopener">Liquid</a></li>
-<li>Ruby ‘s Task</li>
-</ul>
-<p><code>DIV + CSS</code>: 排版很大程度上是个体力活，我更多的是在纠结何时应该使用 id 还是 class !还有一些我们需要知道的小技巧，比如我们知道一个 class 类型的样式，可供多个 HTML 元素使用，但有的时候你想对某一种使用了改class的元素额外加样式应该怎么写？这个其实很简单，但对于非前端工程师而言，你不得不去 Google 度娘了吧：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">///只有使用 highlight 样式的 pre 标签背景设置为 #dedede.</span><br><span class="line"><span class="selector-tag">pre</span><span class="selector-class">.highlight</span>&#123;</span><br><span class="line">	<span class="attribute">background</span>:<span class="number">#dedede</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>Pygments</code> : 是用来做代码高亮使用的，你需要做的很简单，就是选个模板而已，你可以在线选择，这是我创建的一个 OC demo: <a href="http://pygments.org/demo/6324467/" target="_blank" rel="noopener">oc method</a>，使用如下命令生成一个样式，然后你放进你的网站里，在HTML里引入就可以了：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pygmentize -S xcode -f html &gt; pygments.css</span><br></pre></td></tr></table></figure>
-<p><code>Jekyll</code> : 即使你什么都不去了解，这个博客系统也是完整的，可以生成一个网站哦！自有像我一样，想自己写主题，你才需要学习这么多，比如需要了解内置变量，因为你肯定需要获取博客的日期、标题、内容等，这些是有对应的内置变量的去查文档就好了；还有一些命令，我的自动化部署其实也是封装的这些命令和 Git 操作的命令而已。</p>
-<p><code>Liquid</code> : 他的作用是帮助你实现动态化，你就只管写布局好了，生成的时候，会把你写的博客内容替换为对应的模板标签；作为一个模板引擎，我觉得很赞的是他内置的很多 Filters，以及这种编程范式，比如：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line">&#123;&#123; article.published_at | date: "%Y" &#125;&#125;</span><br><span class="line">//2016</span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
-<p><code>Ruby</code>: 这门语言我并没有系统的学习过，都是用到哪去查哪，所以不敢多说，觉得他的 block 也是很赞的， Liquid 的 Filter 跟这个类似，比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(Dir[&quot;#&#123;deploy_dir&#125;/*&quot;]).each &#123; |f| rm_rf(f) &#125;</span><br><span class="line">//each后面的括号就是block体</span><br></pre></td></tr></table></figure>
-<p>一般我们写 Task 都是用于完成一些流程化的工作，从而节省时间和体力，今天下午借鉴了 Octopress 的 Rakefile，借鉴的前提是要理解，所以经过这么一折腾，对于 Octopress 的理解也加深了不少，然后我自己也为我的博客系统写了一个，保持相同的命名，毕竟我已经习惯了使用 <code>rake deploy</code>，<code>rake preview</code> 等命令。下面是一个最简单的 Rake Task ：</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">desc <span class="string">"Task description"</span></span><br><span class="line">task <span class="symbol">:printit</span>, [<span class="symbol">:msg</span>] <span class="keyword">do</span> <span class="params">|t, args|</span></span><br><span class="line">  puts args[<span class="symbol">:msg</span>]</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">/<span class="regexp">/execute</span></span><br><span class="line"><span class="regexp">rake printit['Hello.']</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/result</span></span><br><span class="line"><span class="regexp">Hello.</span></span><br></pre></td></tr></table></figure>
-<p>怎么样？基本了解了自建主题需要的知识后，对你而言有困难吗？是让你更加畏惧了，还是立马有兴趣要开搞了？</p>
-<blockquote>
-<p>这些网站也许对你有些帮助：</p>
-</blockquote>
-<ul>
-<li><a href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2012/06/sass.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2012/06/sass.html</a></li>
-<li><a href="http://havee.me/internet/2013-08/support-pygments-in-jekyll.html" target="_blank" rel="noopener">http://havee.me/internet/2013-08/support-pygments-in-jekyll.html</a></li>
-<li><a href="http://9leg.com/other/2015/01/11/create-jekyll-markdown-by-java.html" target="_blank" rel="noopener">http://9leg.com/other/2015/01/11/create-jekyll-markdown-by-java.html</a></li>
-<li><a href="http://www.sassmeister.com/" target="_blank" rel="noopener">http://www.sassmeister.com/</a></li>
-<li><a href="http://xh.5156edu.com/page/z1015m9220j18754.html" target="_blank" rel="noopener">http://xh.5156edu.com/page/z1015m9220j18754.html</a></li>
-<li><a href="http://cobwwweb.com/4-ways-to-pass-arguments-to-a-rake-task" target="_blank" rel="noopener">http://cobwwweb.com/4-ways-to-pass-arguments-to-a-rake-task</a></li>
-<li><a href="https://docs.ruby-lang.org/en/2.1.0/Rake/FileList.html" target="_blank" rel="noopener">https://docs.ruby-lang.org/en/2.1.0/Rake/FileList.html</a></li>
-<li><a href="http://suanfazu.com/t/copy-a-file-creating-directories-as-necessary-in-ruby/12396" target="_blank" rel="noopener">http://suanfazu.com/t/copy-a-file-creating-directories-as-necessary-in-ruby/12396</a></li>
-<li><a href="http://zhaoyuxiang.cn/bohu-jekyll-theme/index" target="_blank" rel="noopener">http://zhaoyuxiang.cn/bohu-jekyll-theme/index</a></li>
-<li><a href="http://yongyuan.name/blog/collect-jekyll-theme.html" target="_blank" rel="noopener">http://yongyuan.name/blog/collect-jekyll-theme.html</a></li>
-<li><a href="https://liungkejin.github.io/about.html" target="_blank" rel="noopener">https://liungkejin.github.io/about.html</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/13/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/15/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/13/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/15/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -844,14 +858,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

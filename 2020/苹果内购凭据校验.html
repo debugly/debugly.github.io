@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="跟后端联调自动续订订阅商品的过程中，对方有问我相关的验证地址和错误码是啥意思，因此将苹果内购凭据验证相关的知识做了个整理，希望能帮助有需要的人。 苹果提供了两套环境，分别称为线上（生产）环境和沙河（测试）环境，分别对应着不同的地址：  线上环境验证接口：https://buy.itunes.apple.com/verifyReceipt 沙河环境验证接口：https://sandbox.itune">
+<meta name="keywords" content="iOS,IAP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="苹果内购凭据校验">
+<meta property="og:url" content="http://debugly.cn/2020/苹果内购凭据校验.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="跟后端联调自动续订订阅商品的过程中，对方有问我相关的验证地址和错误码是啥意思，因此将苹果内购凭据验证相关的知识做了个整理，希望能帮助有需要的人。 苹果提供了两套环境，分别称为线上（生产）环境和沙河（测试）环境，分别对应着不同的地址：  线上环境验证接口：https://buy.itunes.apple.com/verifyReceipt 沙河环境验证接口：https://sandbox.itune">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-09-16T07:33:30.491Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="苹果内购凭据校验">
+<meta name="twitter:description" content="跟后端联调自动续订订阅商品的过程中，对方有问我相关的验证地址和错误码是啥意思，因此将苹果内购凭据验证相关的知识做了个整理，希望能帮助有需要的人。 苹果提供了两套环境，分别称为线上（生产）环境和沙河（测试）环境，分别对应着不同的地址：  线上环境验证接口：https://buy.itunes.apple.com/verifyReceipt 沙河环境验证接口：https://sandbox.itune">
+
+<link rel="canonical" href="http://debugly.cn/2020/苹果内购凭据校验.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>苹果内购凭据校验 | Matt Reach</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Matt Reach</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">An iOS/macOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tools">
+
+    <a href="/mr-zone/" rel="section"><i class="fa fa-rocket fa-fw"></i>tools</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2020/苹果内购凭据校验.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          苹果内购凭据校验
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-16 14:59:10 / 修改时间：15:33:30" itemprop="dateCreated datePublished" datetime="2020-09-16T14:59:10+08:00">2020-09-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>跟后端联调自动续订订阅商品的过程中，对方有问我相关的验证地址和错误码是啥意思，因此将苹果内购凭据验证相关的知识做了个整理，希望能帮助有需要的人。</p>
+<p>苹果提供了两套环境，分别称为线上（生产）环境和沙河（测试）环境，分别对应着不同的地址：</p>
+<ul>
+<li>线上环境验证接口：<a href="https://buy.itunes.apple.com/verifyReceipt" target="_blank" rel="noopener">https://buy.itunes.apple.com/verifyReceipt</a></li>
+<li>沙河环境验证接口：<a href="https://sandbox.itunes.apple.com/verifyReceipt" target="_blank" rel="noopener">https://sandbox.itunes.apple.com/verifyReceipt</a></li>
+</ul>
+<p><a href="https://developer.apple.com/documentation/appstorereceipts/verifyreceipt" target="_blank" rel="noopener">参考链接</a></p>
+<a id="more"></a>
+<blockquote>
+<p>苹果的建议先使用线上环境验证，当返回 21007 时，再使用沙河环境验证，避免在审核期间和审核通过后切换验证地址！</p>
+</blockquote>
+<p>调用验证接口需要使用 POST 方式请求，把需要验证的凭据以 JSON 的格式放到 body 体里，Content-Type 使用 application/json ，举例说明：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"receipt-data"</span>:<span class="string">"Base64字符串"</span>,</span><br><span class="line"><span class="attr">"password"</span>:<span class="string">"自动续订订阅商品才需要"</span>,</span><br><span class="line"><span class="attr">"exclude-old-transactions"</span>:<span class="string">"对于订阅的商品，不包含旧的交易信息？"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://developer.apple.com/documentation/appstorereceipts/requestbody" target="_blank" rel="noopener">参考链接</a></p>
+<p>苹果服务器的响应数据采用 JSON 格式，其结构如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"receipt"</span>: &#123;</span><br><span class="line">        <span class="attr">"receipt_type"</span>: <span class="string">"ProductionSandbox"</span>,</span><br><span class="line">        <span class="attr">"adam_id"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"app_item_id"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"bundle_id"</span>: <span class="string">"com.debuly.Player"</span>,</span><br><span class="line">        <span class="attr">"application_version"</span>: <span class="string">"3.18"</span>,</span><br><span class="line">        <span class="attr">"download_id"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"version_external_identifier"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"receipt_creation_date"</span>: <span class="string">"2020-06-22 08:05:27 Etc/GMT"</span>,</span><br><span class="line">        <span class="attr">"receipt_creation_date_ms"</span>: <span class="string">"1592813127000"</span>,</span><br><span class="line">        <span class="attr">"receipt_creation_date_pst"</span>: <span class="string">"2020-06-22 01:05:27 America/Los_Angeles"</span>,</span><br><span class="line">        <span class="attr">"request_date"</span>: <span class="string">"2020-09-16 03:38:07 Etc/GMT"</span>,</span><br><span class="line">        <span class="attr">"request_date_ms"</span>: <span class="string">"1600227487083"</span>,</span><br><span class="line">        <span class="attr">"request_date_pst"</span>: <span class="string">"2020-09-15 20:38:07 America/Los_Angeles"</span>,</span><br><span class="line">        <span class="attr">"original_purchase_date"</span>: <span class="string">"2013-08-01 07:00:00 Etc/GMT"</span>,</span><br><span class="line">        <span class="attr">"original_purchase_date_ms"</span>: <span class="string">"1375340400000"</span>,</span><br><span class="line">        <span class="attr">"original_purchase_date_pst"</span>: <span class="string">"2013-08-01 00:00:00 America/Los_Angeles"</span>,</span><br><span class="line">        <span class="attr">"original_application_version"</span>: <span class="string">"1.0"</span>,</span><br><span class="line">        <span class="attr">"in_app"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"quantity"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"product_id"</span>: <span class="string">"5154"</span>,</span><br><span class="line">                <span class="attr">"transaction_id"</span>: <span class="string">"1000000633450491"</span>,</span><br><span class="line">                <span class="attr">"original_transaction_id"</span>: <span class="string">"1000000633450491"</span>,</span><br><span class="line">                <span class="attr">"purchase_date"</span>: <span class="string">"2020-03-02 07:26:22 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_ms"</span>: <span class="string">"1583133982000"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_pst"</span>: <span class="string">"2020-03-01 23:26:22 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date"</span>: <span class="string">"2020-03-02 07:26:22 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_ms"</span>: <span class="string">"1583133982000"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_pst"</span>: <span class="string">"2020-03-01 23:26:22 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"is_trial_period"</span>: <span class="string">"false"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"quantity"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"product_id"</span>: <span class="string">"10413"</span>,</span><br><span class="line">                <span class="attr">"transaction_id"</span>: <span class="string">"1000000633349904"</span>,</span><br><span class="line">                <span class="attr">"original_transaction_id"</span>: <span class="string">"1000000633349904"</span>,</span><br><span class="line">                <span class="attr">"purchase_date"</span>: <span class="string">"2020-03-02 03:22:51 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_ms"</span>: <span class="string">"1583119371000"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_pst"</span>: <span class="string">"2020-03-01 19:22:51 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date"</span>: <span class="string">"2020-03-02 03:22:51 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_ms"</span>: <span class="string">"1583119371000"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_pst"</span>: <span class="string">"2020-03-01 19:22:51 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"is_trial_period"</span>: <span class="string">"false"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"quantity"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"product_id"</span>: <span class="string">"10414"</span>,</span><br><span class="line">                <span class="attr">"transaction_id"</span>: <span class="string">"1000000633339108"</span>,</span><br><span class="line">                <span class="attr">"original_transaction_id"</span>: <span class="string">"1000000633339108"</span>,</span><br><span class="line">                <span class="attr">"purchase_date"</span>: <span class="string">"2020-03-02 02:24:39 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_ms"</span>: <span class="string">"1583115879000"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_pst"</span>: <span class="string">"2020-03-01 18:24:39 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date"</span>: <span class="string">"2020-03-02 02:24:39 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_ms"</span>: <span class="string">"1583115879000"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_pst"</span>: <span class="string">"2020-03-01 18:24:39 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"is_trial_period"</span>: <span class="string">"false"</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"environment"</span>: <span class="string">"Sandbox"</span>,</span><br><span class="line">    <span class="attr">"status"</span>: <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>environment：生成凭据的环境，可能值有 Sandbox 和 Production</p>
+</li>
+<li><p>is-retryable：如果返回 1 意味着临时出错，需要稍后重试；返回 0 意味着出错了，不用重试，具体错误查看 status 字段</p>
+</li>
+<li><p>latest_receipt：最新的额自动续订订阅凭据，Base64编码的</p>
+</li>
+<li><p>latest_receipt_info：所有自动续订订阅交易信息</p>
+</li>
+<li><p>pending_renewal_info：即将更新的自动续订订阅数组</p>
+</li>
+<li><p>receipt：此次发送给苹果验证的凭据信息</p>
+</li>
+<li><p>status：状态码，当为 0 时，表示凭据通过校验，否则表示有错误，具体往下看</p>
+<p><a href="https://developer.apple.com/documentation/appstorereceipts/responsebody" target="_blank" rel="noopener">参考链接</a></p>
+</li>
+</ul>
+<h3 id="错误状态码"><a href="#错误状态码" class="headerlink" title="错误状态码"></a>错误状态码</h3><p>21000</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">The request to the App Store was not made using the HTTP POST request method.</span><br></pre></td></tr></table></figure>
+<p>21001<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">This status code is no longer sent by the App Store.</span><br></pre></td></tr></table></figure></p>
+<p>21002<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">The data in the `receipt-data` property was malformed or the service experienced a temporary issue. Try again.</span><br></pre></td></tr></table></figure></p>
+<p>21003<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">The receipt could not be authenticated.</span><br></pre></td></tr></table></figure></p>
+<p>21004<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">The shared secret you provided does not match the shared secret on file for your account.</span><br></pre></td></tr></table></figure></p>
+<p>21005<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">The receipt server was temporarily unable to provide the receipt. Try again.</span><br></pre></td></tr></table></figure></p>
+<p>21006<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">This receipt is valid but the subscription has expired. When this status code is returned to your server, the receipt data is also decoded and returned as part of the response. Only returned for iOS 6-style transaction receipts for auto-renewable subscriptions.</span><br></pre></td></tr></table></figure></p>
+<p>21007<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">This receipt is from the test environment, but it was sent to the production environment for verification.</span><br></pre></td></tr></table></figure></p>
+<p>21008<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">This receipt is from the production environment, but it was sent to the test environment for verification.</span><br></pre></td></tr></table></figure></p>
+<p>21009<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Internal data access error. Try again later.</span><br></pre></td></tr></table></figure></p>
+<p>21010<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">The user account cannot be found or has been deleted.</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/IAP/" rel="tag"># IAP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/MYSQL 常用语句.html" rel="prev" title="MySQL 常用语句">
+      <i class="fa fa-chevron-left"></i> MySQL 常用语句
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#错误状态码"><span class="nav-number">1.</span> <span class="nav-text">错误状态码</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">许乾隆</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许乾隆</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
