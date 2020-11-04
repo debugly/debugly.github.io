@@ -17,25 +17,25 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="近来业务增多，对应的 Framework 也越做越多，提供给搜狐视频的就多达 5个，物理包大小当然也越来越大了，因此查阅了资料，对 framework 进行瘦身！  工程配置 调试符号(Generate Debug Sysmbols)  这个是控制是否生成调试符号的，因此 debug 模式下保持使用 YES，release改为 NO；也就说我们平时调试还生成调试信息，但是打包发布时不需要生成，">
 <meta name="keywords" content="framework 瘦身,iOS开发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS Framework 瘦身实战">
-<meta property="og:url" content="http://debugly.cn/2017/06/01-reduce-framework-weight.html">
+<meta property="og:url" content="https://debugly.cn/2017/06/01-reduce-framework-weight.html">
 <meta property="og:site_name" content="Matt Reach">
 <meta property="og:description" content="近来业务增多，对应的 Framework 也越做越多，提供给搜狐视频的就多达 5个，物理包大小当然也越来越大了，因此查阅了资料，对 framework 进行瘦身！  工程配置 调试符号(Generate Debug Sysmbols)  这个是控制是否生成调试符号的，因此 debug 模式下保持使用 YES，release改为 NO；也就说我们平时调试还生成调试信息，但是打包发布时不需要生成，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://debugly.cn/images/201706/2014WorldCup.gif">
+<meta property="og:image" content="https://debugly.cn/images/201706/2014WorldCup.gif">
 <meta property="og:updated_time" content="2020-07-31T08:23:36.316Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS Framework 瘦身实战">
 <meta name="twitter:description" content="近来业务增多，对应的 Framework 也越做越多，提供给搜狐视频的就多达 5个，物理包大小当然也越来越大了，因此查阅了资料，对 framework 进行瘦身！  工程配置 调试符号(Generate Debug Sysmbols)  这个是控制是否生成调试符号的，因此 debug 模式下保持使用 YES，release改为 NO；也就说我们平时调试还生成调试信息，但是打包发布时不需要生成，">
-<meta name="twitter:image" content="http://debugly.cn/images/201706/2014WorldCup.gif">
+<meta name="twitter:image" content="https://debugly.cn/images/201706/2014WorldCup.gif">
 
-<link rel="canonical" href="http://debugly.cn/2017/06/01-reduce-framework-weight.html">
+<link rel="canonical" href="https://debugly.cn/2017/06/01-reduce-framework-weight.html">
 
 
 <script id="page-configurations">
@@ -107,6 +107,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -146,11 +147,38 @@
     <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -174,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/06/01-reduce-framework-weight.html">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/06/01-reduce-framework-weight.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -354,14 +382,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -424,6 +452,8 @@
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 

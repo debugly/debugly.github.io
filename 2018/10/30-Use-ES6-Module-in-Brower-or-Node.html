@@ -17,14 +17,14 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="我在编写 RxJS 入门教程的时候，折腾了大半上午都没能跑出一个 demo 来，让我感到沮丧，我知道使用 node.js 分分钟就能出现效果，可我就是想用 node 的 npm 去管理项目依赖，然后在浏览器里执行，因为我感觉使用这种方式才是做前端项目管理依赖的正确方式，而不是拿来源码，拖到 H5 工程里！我坚信我是对的，因为使用 Creator 编写小游戏时就能这么用，它是如何做到的呢？又经过一">
 <meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="搭建同时支持 ES6 Module 和 CommonJS 的开发环境">
-<meta property="og:url" content="http://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html">
+<meta property="og:url" content="https://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html">
 <meta property="og:site_name" content="Matt Reach">
 <meta property="og:description" content="我在编写 RxJS 入门教程的时候，折腾了大半上午都没能跑出一个 demo 来，让我感到沮丧，我知道使用 node.js 分分钟就能出现效果，可我就是想用 node 的 npm 去管理项目依赖，然后在浏览器里执行，因为我感觉使用这种方式才是做前端项目管理依赖的正确方式，而不是拿来源码，拖到 H5 工程里！我坚信我是对的，因为使用 Creator 编写小游戏时就能这么用，它是如何做到的呢？又经过一">
 <meta property="og:locale" content="zh-CN">
@@ -33,7 +33,7 @@
 <meta name="twitter:title" content="搭建同时支持 ES6 Module 和 CommonJS 的开发环境">
 <meta name="twitter:description" content="我在编写 RxJS 入门教程的时候，折腾了大半上午都没能跑出一个 demo 来，让我感到沮丧，我知道使用 node.js 分分钟就能出现效果，可我就是想用 node 的 npm 去管理项目依赖，然后在浏览器里执行，因为我感觉使用这种方式才是做前端项目管理依赖的正确方式，而不是拿来源码，拖到 H5 工程里！我坚信我是对的，因为使用 Creator 编写小游戏时就能这么用，它是如何做到的呢？又经过一">
 
-<link rel="canonical" href="http://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html">
+<link rel="canonical" href="https://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html">
 
 
 <script id="page-configurations">
@@ -105,6 +105,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -144,11 +145,38 @@
     <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -172,7 +200,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -466,14 +494,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -536,6 +564,8 @@
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 

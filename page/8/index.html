@@ -17,18 +17,18 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="Matt Reach">
-<meta property="og:url" content="http://debugly.cn/page/8/index.html">
+<meta property="og:url" content="https://debugly.cn/page/8/index.html">
 <meta property="og:site_name" content="Matt Reach">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Matt Reach">
 
-<link rel="canonical" href="http://debugly.cn/page/8/">
+<link rel="canonical" href="https://debugly.cn/page/8/">
 
 
 <script id="page-configurations">
@@ -100,6 +100,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -139,11 +140,38 @@
     <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -166,7 +194,81 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/09/11-sdk-issues.html">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/09/12-main-thread-checker.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/09/12-main-thread-checker.html" class="post-title-link" itemprop="url">Main Thread Checker</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-09-12 17:36:14" itemprop="dateCreated datePublished" datetime="2017-09-12T17:36:14+08:00">2017-09-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>我的测试机升级到 iOS11 beta10 之后，发现了严重的问题，我的手机直接卡死了，只有强制关机！这是我使用 Xcode 调试抓到的日志:</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">Main Thread Checker: UI API called on a background thread: -[UIApplication applicationState]</span><br><span class="line">PID: 2015, TID: 196235, Thread name: (none), Queue name: com.apple.avfoundation.videodataoutput.bufferqueue, QoS: 0</span><br><span class="line">Backtrace:</span><br><span class="line">4   LittleVideoDemo                     0x0000000104ca9630 -[TECaptureViewController didOutputVideoSampleBuffer:] + 92</span><br><span class="line">5   LittleVideoDemo                     0x0000000104c77fcc -[FUCamera captureOutput:didOutputSampleBuffer:fromConnection:] + 416</span><br><span class="line">6   AVFoundation                        0x000000018bf57f0c &lt;redacted&gt; + 344</span><br><span class="line">7   AVFoundation                        0x000000018bf57d24 &lt;redacted&gt; + 100</span><br><span class="line">8   CoreMedia                           0x000000018983d598 &lt;redacted&gt; + 260</span><br><span class="line">9   CoreMedia                           0x0000000189859b70 &lt;redacted&gt; + 224</span><br><span class="line">10  libdispatch.dylib                   0x000000010750d45c _dispatch_client_callout + 16</span><br><span class="line">11  libdispatch.dylib                   0x000000010751a800 _dispatch_continuation_pop + 592</span><br><span class="line">12  libdispatch.dylib                   0x000000010750f24c _dispatch_source_invoke + 1592</span><br><span class="line">13  libdispatch.dylib                   0x000000010751bf30 _dispatch_queue_serial_drain + 212</span><br><span class="line">14  libdispatch.dylib                   0x00000001075109a4 _dispatch_queue_invoke + 332</span><br><span class="line">15  libdispatch.dylib                   0x000000010751bf30 _dispatch_queue_serial_drain + 212</span><br><span class="line">16  libdispatch.dylib                   0x00000001075109a4 _dispatch_queue_invoke + 332</span><br><span class="line">17  libdispatch.dylib                   0x000000010751d104 _dispatch_root_queue_drain_deferred_wlh + 424</span><br><span class="line">18  libdispatch.dylib                   0x0000000107524100 _dispatch_workloop_worker_thread + 652</span><br><span class="line">19  libsystem_pthread.dylib             0x000000018631efe0 _pthread_wqthread + 932</span><br><span class="line">20  libsystem_pthread.dylib             0x000000018631ec30 start_wqthread + 4</span><br><span class="line">2017-09-12 10:43:02.790898+0800 LittleVideoDemo[2015:196235] [reports] Main Thread Checker: UI API called on a background thread: -[UIApplication applicationState]</span><br><span class="line">PID: 2015, TID: 196235, Thread name: (none), Queue name: com.apple.avfoundation.videodataoutput.bufferqueue, QoS: 0</span><br><span class="line">Backtrace:</span><br><span class="line">4   LittleVideoDemo                     0x0000000104ca9630 -[TECaptureViewController didOutputVideoSampleBuffer:] + 92</span><br><span class="line">5   LittleVideoDemo                     0x0000000104c77fcc -[FUCamera captureOutput:didOutputSampleBuffer:fromConnection:] + 416</span><br><span class="line">6   AVFoundation                        0x000000018bf57f0c &lt;redacted&gt; + 344</span><br><span class="line">7   AVFoundation                        0x000000018bf57d24 &lt;redacted&gt; + 100</span><br><span class="line">8   CoreMedia                           0x000000018983d598 &lt;redacted&gt; + 260</span><br><span class="line">9   CoreMedia                           0x0000000189859b70 &lt;redacted&gt; + 224</span><br><span class="line">10  libdispatch.dylib                   0x000000010750d45c _dispatch_client_callout + 16</span><br><span class="line">11  libdispatch.dylib                   0x000000010751a800 _dispatch_continuation_pop + 592</span><br><span class="line">12  libdispatch.dylib                   0x000000010750f24c _dispatch_source_invoke + 1592</span><br><span class="line">13  libdispatch.dylib                   0x000000010751bf30 _dispatch_queue_serial_drain + 212</span><br><span class="line">14  libdispatch.dylib                   0x00000001075109a4 _dispatch_queue_invoke + 332</span><br><span class="line">15  libdispatch.dylib                   0x000000010751bf30 _dispatch_queue_serial_drain + 212</span><br><span class="line">16  libdispatch.dylib                   0x00000001075109a4 _dispatch_queue_invoke + 332</span><br><span class="line">17  libdispatch.dylib                   0x000000010751d104 _dispatch_root_queue_drain_deferred_wlh + 424</span><br><span class="line">18  libdispatch.dylib                   0x0000000107524100 _dispatch_workloop_worker_thread + 652</span><br><span class="line">19  libsystem_pthread.dylib             0x000000018631efe0 _pthread_wqthread + 932</span><br><span class="line">20  libsystem_pthread.dylib             0x000000018631ec30 start_wqthread + 4</span><br><span class="line">2017-09-12 10:43:03.145023+0800 LittleVideoDemo[2015:196235] current bundle is nil</span><br><span class="line">2017-09-12 10:43:05.278417+0800 LittleVideoDemo[2015:195860] key = 109004    attach =</span><br></pre></td></tr></table></figure>
+<p>可以很直观的看到，问题是在子线程更新了UI导致的，修改很简单，找到对应的代码，在主线程里调用即可。查了下之后才知道，他是继 <a href="https://developer.apple.com/documentation/code_diagnostics/thread_sanitizer" target="_blank" rel="noopener">Thread Sanitizer</a> 之后新出的一种新的代码诊断，用来发现在子线程更新UI的问题。</p>
+<h1 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h1><p>在 App 启动后，这个 Checker 就利用 runtime 将只能在主线程执行的方法给替换掉（这不正是那些年被我们玩坏了的AOP嘛）然后帮你检查调用是否合法，对于本身就是线程安全的方法，则不会替换，不会帮你再次审查。因为是AOP所以不用重新编译代码，持续集成工具注入这个动态库 <code>/Applications/Xcode.app/Contents/Developer/usr/lib/libMainThreadChecker.dylib</code> 就能帮你检查了[^Note]。</p>
+<h1 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h1><p>会额外增加大约 0.1s 的启动时候，和 1–2% 的 CPU 开销。这 0.1s 肯定是利用 runtime 是 swizzle 方法了呗。[^footnote]因为这个开销比较小，所以当连着线，直接使用 xcode 调试时，这货会自动启动，帮你检查，听起来挺省心的[^debugger]。</p>
+<p>参考文章：<a href="https://developer.apple.com/documentation/code_diagnostics/main_thread_checker" target="_blank" rel="noopener">https://developer.apple.com/documentation/code_diagnostics/main_thread_checker </a></p>
+<p>[^Note]:<br>    &gt; Unlike other code diagnostic tools, the Main Thread Checker doesn’t require recompilation, and can be used with existing binaries. You can run it on a macOS app without the Xcode debugger, such as on a continuous integration system, by injecting the dynamic library file located at /Applications/Xcode.app/Contents/Developer/usr/lib/libMainThreadChecker.dylib.</p>
+<p>[^debugger]:<br>    &gt; The Main Thread Checker is automatically enabled when you’re running your app with the Xcode debugger.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/09/11-sdk-issues.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -233,7 +335,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/09/08-install-iOS11-beta10.html">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/09/08-install-iOS11-beta10.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -335,7 +437,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/09/05-unix-crontab.html">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/09/05-unix-crontab.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -451,7 +553,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/08/31-iPhone-types.html">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/08/31-iPhone-types.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -543,76 +645,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/08/19-join-sohu-2year.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/08/19-join-sohu-2year.html" class="post-title-link" itemprop="url">入职搜狐两周年</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-08-19 09:37:04" itemprop="dateCreated datePublished" datetime="2017-08-19T09:37:04+08:00">2017-08-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>时光荏苒，来搜狐已经 2 年整了，最近挺忙的，以至于今天来公司加班，查看邮件后才发现今天是入职两周年的纪念日。</p>
-</blockquote>
-<p>2 年 2 个城市 2 个团队。。。</p>
-<p><img src="/images/201708/2year.png" alt></p>
-<p>不忘初心，勇往直前！</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -682,14 +714,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -752,6 +784,8 @@
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 

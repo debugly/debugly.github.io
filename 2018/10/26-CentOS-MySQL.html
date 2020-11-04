@@ -17,23 +17,23 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="以下命令如有权限问题请自行使用 sudo 或者切换到 root 账户，我的这台主机是公司分配的，通过 ssh 直接登录的 root 账户，所以就没有带 sudo.该笔记可能不适用于 CentOS 7.  查看系统版本 uname   Linux  uname -a   Linux 10.16.89.67 3.10.0-327.el7.x86_64 #1 SMP Thu Oct 29 17:29:">
-<meta name="keywords" content="MySQL">
+<meta name="keywords" content="CentOS,MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS 安装 MySQL">
-<meta property="og:url" content="http://debugly.cn/2018/10/26-CentOS-MySQL.html">
+<meta property="og:url" content="https://debugly.cn/2018/10/26-CentOS-MySQL.html">
 <meta property="og:site_name" content="Matt Reach">
 <meta property="og:description" content="以下命令如有权限问题请自行使用 sudo 或者切换到 root 账户，我的这台主机是公司分配的，通过 ssh 直接登录的 root 账户，所以就没有带 sudo.该笔记可能不适用于 CentOS 7.  查看系统版本 uname   Linux  uname -a   Linux 10.16.89.67 3.10.0-327.el7.x86_64 #1 SMP Thu Oct 29 17:29:">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-07-31T10:03:08.915Z">
+<meta property="og:updated_time" content="2020-11-03T08:37:34.441Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS 安装 MySQL">
 <meta name="twitter:description" content="以下命令如有权限问题请自行使用 sudo 或者切换到 root 账户，我的这台主机是公司分配的，通过 ssh 直接登录的 root 账户，所以就没有带 sudo.该笔记可能不适用于 CentOS 7.  查看系统版本 uname   Linux  uname -a   Linux 10.16.89.67 3.10.0-327.el7.x86_64 #1 SMP Thu Oct 29 17:29:">
 
-<link rel="canonical" href="http://debugly.cn/2018/10/26-CentOS-MySQL.html">
+<link rel="canonical" href="https://debugly.cn/2018/10/26-CentOS-MySQL.html">
 
 
 <script id="page-configurations">
@@ -105,6 +105,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -144,11 +145,38 @@
     <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -172,7 +200,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2018/10/26-CentOS-MySQL.html">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2018/10/26-CentOS-MySQL.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -202,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 18:03:08" itemprop="dateModified" datetime="2020-07-31T18:03:08+08:00">2020-07-31</time>
+                <time title="修改时间：2020-11-03 16:37:34" itemprop="dateModified" datetime="2020-11-03T16:37:34+08:00">2020-11-03</time>
               </span>
 
           
@@ -253,6 +281,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
+              <a href="/tags/CentOS/" rel="tag"># CentOS</a>
               <a href="/tags/MySQL/" rel="tag"># MySQL</a>
           </div>
 
@@ -341,14 +370,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -411,6 +440,8 @@
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 

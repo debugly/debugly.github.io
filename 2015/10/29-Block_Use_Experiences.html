@@ -17,14 +17,14 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="Introduction项目中大量使用了 Block，今天无意间有了新的用法，不同往常的一般使用方法，使得编程又有了新的乐趣！想了一下，第一次写 Block 应该是两年前了，这么长时间并没有总结过，今天顺便总结下使用 Block 的场景 … Block的一般使用场景 以下场景均是个人理解，词汇也是个人命名，理解就好了：  完成事情的回掉；方法一般可以附加一个 completion handler">
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 Block 的一些技巧和心得">
-<meta property="og:url" content="http://debugly.cn/2015/10/29-Block_Use_Experiences.html">
+<meta property="og:url" content="https://debugly.cn/2015/10/29-Block_Use_Experiences.html">
 <meta property="og:site_name" content="Matt Reach">
 <meta property="og:description" content="Introduction项目中大量使用了 Block，今天无意间有了新的用法，不同往常的一般使用方法，使得编程又有了新的乐趣！想了一下，第一次写 Block 应该是两年前了，这么长时间并没有总结过，今天顺便总结下使用 Block 的场景 … Block的一般使用场景 以下场景均是个人理解，词汇也是个人命名，理解就好了：  完成事情的回掉；方法一般可以附加一个 completion handler">
 <meta property="og:locale" content="zh-CN">
@@ -33,7 +33,7 @@
 <meta name="twitter:title" content="使用 Block 的一些技巧和心得">
 <meta name="twitter:description" content="Introduction项目中大量使用了 Block，今天无意间有了新的用法，不同往常的一般使用方法，使得编程又有了新的乐趣！想了一下，第一次写 Block 应该是两年前了，这么长时间并没有总结过，今天顺便总结下使用 Block 的场景 … Block的一般使用场景 以下场景均是个人理解，词汇也是个人命名，理解就好了：  完成事情的回掉；方法一般可以附加一个 completion handler">
 
-<link rel="canonical" href="http://debugly.cn/2015/10/29-Block_Use_Experiences.html">
+<link rel="canonical" href="https://debugly.cn/2015/10/29-Block_Use_Experiences.html">
 
 
 <script id="page-configurations">
@@ -105,6 +105,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -144,11 +145,38 @@
     <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -172,7 +200,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2015/10/29-Block_Use_Experiences.html">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2015/10/29-Block_Use_Experiences.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -342,14 +370,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -412,6 +440,8 @@
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 

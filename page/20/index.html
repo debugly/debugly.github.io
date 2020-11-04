@@ -17,18 +17,18 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="Matt Reach">
-<meta property="og:url" content="http://debugly.cn/page/20/index.html">
+<meta property="og:url" content="https://debugly.cn/page/20/index.html">
 <meta property="og:site_name" content="Matt Reach">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Matt Reach">
 
-<link rel="canonical" href="http://debugly.cn/page/20/">
+<link rel="canonical" href="https://debugly.cn/page/20/">
 
 
 <script id="page-configurations">
@@ -100,6 +100,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -139,11 +140,38 @@
     <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -166,7 +194,99 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2015/07/07-bo-ke-an-jia-la.html">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2015/07/14-jie-jue-nstimeryin-qi-de-nei-cun-xie-lou.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2015/07/14-jie-jue-nstimeryin-qi-de-nei-cun-xie-lou.html" class="post-title-link" itemprop="url">解决 NSTimer 内存泄漏问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-07-14 10:38:52" itemprop="dateCreated datePublished" datetime="2015-07-14T10:38:52+08:00">2015-07-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>NSTimer 是 iOS 很常用的一个类，可以很方便的做延迟任务，也可以做周期性的轮询。不过我在写轮播图的时候却发现 Timer造成了内存泄漏！</p>
+</blockquote>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>我在 ViewController 里使用了 Timer，结果发现 pop 掉该控制器后，他的 dealloc 却没有调用！这是个内存泄露的问题，比较严重，要尽快解决！</p>
+<h2 id="分析原因"><a href="#分析原因" class="headerlink" title="分析原因"></a>分析原因</h2><ol>
+<li><p>在使用 Timer 的时候，我们需要给他指定一个 Target，而 Timer 的内部会持有该 Target，原因可想而知，当 Timer 到时间之后就要触发目标方法，如果不持有 Target 的话，就可能会导致 Target 已经释放，无法达到调用目标方法的效果；在没有ARC的年代，如果用assign势必会造成野指针崩溃的，因此要持有 Target；</p>
+</li>
+<li><p>要知道 Timer 的运行依赖于 Runloop 的驱动，即 fire 之前需要加入到 Runloop 中，但这样一来 Timer 就被 Runloop 持有了，除非调用 invalidate，才会从 Runloop 中移除；</p>
+</li>
+<li><p>实际使用的时候，Target 就是我的 ViewController，我是在 ViewController 的 dealloc 里将 Timer invalidate 掉的；</p>
+</li>
+</ol>
+<p>如上所述，Target 会被 Timer 持有，Timer 会被 Runloop 持有，结果就导致了 ViewController 一直被持有着，所以在 ViewController 的 dealloc 里 invalidate 掉 Timer 是没作用的，压根不会走这个逻辑，所以当导航控制器 pop 之后，页面消失了，但是内存却没释放，这就导致了内存泄漏！</p>
+<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><p>如果能在 pop ViewController 之前将 Timer invalidate 掉，就可以解除 Timer 对 ViewController 的持有，让 ViewController 正常释放；</p>
+<p>简单的做法是在控制器的 viewwilldisappear 中 invalidate，不过一般情况下就要对应的在 viewwillappear 中重新创建 Timer，这么做一般情况都是可以的，但如果 Target 不是 ViewController 就需要多写点代码了；更糟糕的是，我遇到过调用了 viewwillappear 却没调用 viewwilldisappear 就要dealloc 的情况，这时情况就很糟糕了，看来需要一个优雅的解决办法才是完全之策。</p>
+<p>要解决这个问题，就要从打破持有上解决，Runloop 持有 Timer 估计是没办法做文章了，那能不能想办法把 Target 转移下呢? 是的，可以将自身作为 Target，然后通过 block 回调出去？外部调用使用 weak-storng dance ，不让 block<br>持有 target；似乎可行哦，立马行动：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSTimer</span> *)scheduledWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti repeats:(<span class="built_in">BOOL</span>)yesOrNo block:(<span class="keyword">void</span> (^)())block</span><br><span class="line">&#123;</span><br><span class="line">   <span class="keyword">return</span> [<span class="built_in">NSTimer</span> scheduledTimerWithTimeInterval:ti target:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(ql_blockInvoke:) userInfo:[block <span class="keyword">copy</span>] repeats:yesOrNo];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>把传入的block当作userinfo穿过去，userinfo是个id类型的，故而可以传递一个block过去，block是在栈上分配的，所以必须copy到堆上，这样日后回调的时候才能找到它；</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)ql_blockInvoke:(<span class="built_in">NSTimer</span> *)sender</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">void</span> (^block)() = sender.userInfo;</span><br><span class="line">    <span class="keyword">if</span> (block) &#123;</span><br><span class="line">        block();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过类别，我们给timer加上了这些方法；</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">__<span class="keyword">weak</span> __<span class="keyword">typeof</span>(<span class="keyword">self</span>)weakSelf = <span class="keyword">self</span>;</span><br><span class="line"><span class="built_in">NSTimer</span> *timer = [<span class="built_in">NSTimer</span> scheduledWithTimeInterval:animationDuration repeats:<span class="literal">YES</span> block:^&#123;</span><br><span class="line">   __<span class="keyword">strong</span> __<span class="keyword">typeof</span>(weakSelf)strongSelf = weakSelf;</span><br><span class="line">   [strongSelf animationTimerDidFired];</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<p>使用scheduledTimerWithTimeInterval方法创建的timer会自动加入到当前runloop中，并在interval之后fire；如果不想立马开始可以这样做：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[timer setFireDate:[<span class="built_in">NSDate</span> distantFuture]];</span><br></pre></td></tr></table></figure>
+<p>记得在target的dealloc里把这个timer invalidate即可；</p>
+<h3 id="增加了几个方便的方法"><a href="#增加了几个方便的方法" class="headerlink" title="增加了几个方便的方法"></a>增加了几个方便的方法</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)pauseTimer;</span><br><span class="line">- (<span class="keyword">void</span>)resumeTimer;</span><br><span class="line">- (<span class="keyword">void</span>)resumeTimerAfterTimeInterval:(<span class="built_in">NSTimeInterval</span>)interval;</span><br></pre></td></tr></table></figure>
+<h2 id="完"><a href="#完" class="headerlink" title="完"></a>完</h2><ul>
+<li>开源地址：<a href="https://github.com/debugly/QLCodes" target="_blank" rel="noopener">https://github.com/debugly/QLCodes</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2015/07/07-bo-ke-an-jia-la.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -306,14 +426,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -376,6 +496,8 @@
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 

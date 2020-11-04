@@ -17,25 +17,25 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="我的 MBP 重装回 macOS Sierra 之后，博客系统也就需要重新搭建了，因此趁这个机会，顺便整理下在 macOS 上安装 Jekyll 的详细过程。  检查 Ruby 版本因为 Jekyll 是使用 Rake 编写的，所以最 Ruby 版本是有要求的，最新 3.5 则需要 Ruby 2.1.0 以上版本才行！ ruby -v 12///我刚升级的2.2.6ruby 2.2.6p396">
 <meta name="keywords" content="install jekyll on mac os X">
 <meta property="og:type" content="article">
 <meta property="og:title" content="macOS 上安装 Jekyll">
-<meta property="og:url" content="http://debugly.cn/2017/06/21-install-jekyll-macos.html">
+<meta property="og:url" content="https://debugly.cn/2017/06/21-install-jekyll-macos.html">
 <meta property="og:site_name" content="Matt Reach">
 <meta property="og:description" content="我的 MBP 重装回 macOS Sierra 之后，博客系统也就需要重新搭建了，因此趁这个机会，顺便整理下在 macOS 上安装 Jekyll 的详细过程。  检查 Ruby 版本因为 Jekyll 是使用 Rake 编写的，所以最 Ruby 版本是有要求的，最新 3.5 则需要 Ruby 2.1.0 以上版本才行！ ruby -v 12///我刚升级的2.2.6ruby 2.2.6p396">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://debugly.cn/images/201706/Snip20170620_2.png">
+<meta property="og:image" content="https://debugly.cn/images/201706/Snip20170620_2.png">
 <meta property="og:updated_time" content="2020-07-31T08:23:36.317Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="macOS 上安装 Jekyll">
 <meta name="twitter:description" content="我的 MBP 重装回 macOS Sierra 之后，博客系统也就需要重新搭建了，因此趁这个机会，顺便整理下在 macOS 上安装 Jekyll 的详细过程。  检查 Ruby 版本因为 Jekyll 是使用 Rake 编写的，所以最 Ruby 版本是有要求的，最新 3.5 则需要 Ruby 2.1.0 以上版本才行！ ruby -v 12///我刚升级的2.2.6ruby 2.2.6p396">
-<meta name="twitter:image" content="http://debugly.cn/images/201706/Snip20170620_2.png">
+<meta name="twitter:image" content="https://debugly.cn/images/201706/Snip20170620_2.png">
 
-<link rel="canonical" href="http://debugly.cn/2017/06/21-install-jekyll-macos.html">
+<link rel="canonical" href="https://debugly.cn/2017/06/21-install-jekyll-macos.html">
 
 
 <script id="page-configurations">
@@ -107,6 +107,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -146,11 +147,38 @@
     <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -174,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/06/21-install-jekyll-macos.html">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/06/21-install-jekyll-macos.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -350,14 +378,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -420,6 +448,8 @@
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 

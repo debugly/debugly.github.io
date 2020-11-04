@@ -17,14 +17,14 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="要告别 SDK 开发工作了，写篇文章纪念下这段美好的岁月吧！  追求卓越的20个月从 16 年 5 月以来，我就开始从事 SDK 的开发工作，我觉得做 SDK 跟 App 是有很大差别的，因为 SDK 需要考虑很多合理性，既要满足 App 调用方便又要保证其通用性，优雅性，内外兼修，有的放矢，做 App 也许就不会考虑这么多的方面了，我和同事交流最多的就是问 ： “xxx，这样做你觉得合理吗？A">
 <meta name="keywords" content="千帆SDK">
 <meta property="og:type" content="article">
 <meta property="og:title" content="追求卓越的 20 个月">
-<meta property="og:url" content="http://debugly.cn/2017/12/20-awesome-sdk.html">
+<meta property="og:url" content="https://debugly.cn/2017/12/20-awesome-sdk.html">
 <meta property="og:site_name" content="Matt Reach">
 <meta property="og:description" content="要告别 SDK 开发工作了，写篇文章纪念下这段美好的岁月吧！  追求卓越的20个月从 16 年 5 月以来，我就开始从事 SDK 的开发工作，我觉得做 SDK 跟 App 是有很大差别的，因为 SDK 需要考虑很多合理性，既要满足 App 调用方便又要保证其通用性，优雅性，内外兼修，有的放矢，做 App 也许就不会考虑这么多的方面了，我和同事交流最多的就是问 ： “xxx，这样做你觉得合理吗？A">
 <meta property="og:locale" content="zh-CN">
@@ -33,7 +33,7 @@
 <meta name="twitter:title" content="追求卓越的 20 个月">
 <meta name="twitter:description" content="要告别 SDK 开发工作了，写篇文章纪念下这段美好的岁月吧！  追求卓越的20个月从 16 年 5 月以来，我就开始从事 SDK 的开发工作，我觉得做 SDK 跟 App 是有很大差别的，因为 SDK 需要考虑很多合理性，既要满足 App 调用方便又要保证其通用性，优雅性，内外兼修，有的放矢，做 App 也许就不会考虑这么多的方面了，我和同事交流最多的就是问 ： “xxx，这样做你觉得合理吗？A">
 
-<link rel="canonical" href="http://debugly.cn/2017/12/20-awesome-sdk.html">
+<link rel="canonical" href="https://debugly.cn/2017/12/20-awesome-sdk.html">
 
 
 <script id="page-configurations">
@@ -105,6 +105,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -144,11 +145,38 @@
     <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -172,7 +200,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/12/20-awesome-sdk.html">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/12/20-awesome-sdk.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -350,14 +378,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -420,6 +448,8 @@
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 

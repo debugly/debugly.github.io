@@ -17,54 +17,54 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"debugly.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="由于 Mac 无法进入系统，已经分析出了原因 — 磁盘爆满的缘故，因此就想通过进入 PE 的方式，删除掉无用的文件，这样理论上就应该能够顺利进入系统了！ 刻盘进 PE在大学时期曾用 PE 装过 Windows，只不过几年不弄过了，于是就去网上下了 大白菜 PE，然后刻成启动盘，然后开始进入 PE 啦！在 Window 上进 PE 要按下 delete，然后选择从 U 盘启动，而 macOS 则是开">
 <meta name="keywords" content="U盘安装 macOS,Sierra,Mac PE FireWolf">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 U 盘安装 macOS Sierra">
-<meta property="og:url" content="http://debugly.cn/2017/06/19-install-sierra.html">
+<meta property="og:url" content="https://debugly.cn/2017/06/19-install-sierra.html">
 <meta property="og:site_name" content="Matt Reach">
 <meta property="og:description" content="由于 Mac 无法进入系统，已经分析出了原因 — 磁盘爆满的缘故，因此就想通过进入 PE 的方式，删除掉无用的文件，这样理论上就应该能够顺利进入系统了！ 刻盘进 PE在大学时期曾用 PE 装过 Windows，只不过几年不弄过了，于是就去网上下了 大白菜 PE，然后刻成启动盘，然后开始进入 PE 啦！在 Window 上进 PE 要按下 delete，然后选择从 U 盘启动，而 macOS 则是开">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://debugly.cn/images/201706/4.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/5.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/6.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/7.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/8.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/9.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/10.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/11.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/12-0.jpeg">
-<meta property="og:image" content="http://debugly.cn/images/201706/12-1.png">
-<meta property="og:image" content="http://debugly.cn/images/201706/12.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/13.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/14.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/15.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/16.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/17.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/18.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/19.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/20.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/21.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/22.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/23.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/24.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/25.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/26.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/27.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/28.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/29.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/30.JPG">
-<meta property="og:image" content="http://debugly.cn/images/201706/31.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/4.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/5.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/6.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/7.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/8.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/9.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/10.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/11.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/12-0.jpeg">
+<meta property="og:image" content="https://debugly.cn/images/201706/12-1.png">
+<meta property="og:image" content="https://debugly.cn/images/201706/12.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/13.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/14.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/15.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/16.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/17.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/18.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/19.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/20.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/21.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/22.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/23.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/24.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/25.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/26.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/27.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/28.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/29.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/30.JPG">
+<meta property="og:image" content="https://debugly.cn/images/201706/31.JPG">
 <meta property="og:updated_time" content="2020-07-31T08:23:36.317Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 U 盘安装 macOS Sierra">
 <meta name="twitter:description" content="由于 Mac 无法进入系统，已经分析出了原因 — 磁盘爆满的缘故，因此就想通过进入 PE 的方式，删除掉无用的文件，这样理论上就应该能够顺利进入系统了！ 刻盘进 PE在大学时期曾用 PE 装过 Windows，只不过几年不弄过了，于是就去网上下了 大白菜 PE，然后刻成启动盘，然后开始进入 PE 啦！在 Window 上进 PE 要按下 delete，然后选择从 U 盘启动，而 macOS 则是开">
-<meta name="twitter:image" content="http://debugly.cn/images/201706/4.JPG">
+<meta name="twitter:image" content="https://debugly.cn/images/201706/4.JPG">
 
-<link rel="canonical" href="http://debugly.cn/2017/06/19-install-sierra.html">
+<link rel="canonical" href="https://debugly.cn/2017/06/19-install-sierra.html">
 
 
 <script id="page-configurations">
@@ -136,6 +136,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -175,11 +176,38 @@
     <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -203,7 +231,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://debugly.cn/2017/06/19-install-sierra.html">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/06/19-install-sierra.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -416,14 +444,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -486,6 +514,8 @@
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 
