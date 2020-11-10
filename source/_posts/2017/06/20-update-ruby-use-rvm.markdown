@@ -13,7 +13,7 @@ keywords: RVM,update ruby,mac os
 
 简单理解下：RVM 管理 Ruby 版本的工具，具体 Ruby 版本通过 homebrew 去下载获取。接下来安装 RVM：
 
-`\curl -sSL https://get.rvm.io | bash -s stable`
+`curl -sSL https://get.rvm.io | bash -s stable`
 
 安装过程：
 
@@ -41,17 +41,46 @@ Installation of RVM in /Users/xuqianlong/.rvm/ is almost complete:
 In case of problems: https://rvm.io/help and https://twitter.com/rvm_io
 ```
 
+如果遇到如下错误，可以直接在浏览器访问 https://get.rvm.io ，然后把内容复制保存成一个 sh 脚本
+
+```
+curl -L get.rvm.io | bash -s stable
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   194  100   194    0     0    316      0 --:--:-- --:--:-- --:--:--   316
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+curl: (7) Failed to connect to raw.githubusercontent.com port 443: Connection refused
+```
+
+直接执行脚本安装：
+
+```
+chmod +x install.rvm 
+➜  Desktop ./install.rvm           
+Downloading https://github.com/rvm/rvm/archive/master.tar.gz
+Upgrading the RVM installation in /Users/qianlongxu/.rvm/
+    RVM PATH line found in /Users/qianlongxu/.mkshrc /Users/qianlongxu/.profile /Users/qianlongxu/.bashrc.
+    RVM PATH line not found for Zsh, rerun this command with '--auto-dotfiles' flag to fix it.
+    RVM sourcing line found in /Users/qianlongxu/.profile /Users/qianlongxu/.bash_profile /Users/qianlongxu/.zlogin.
+Upgrade of RVM in /Users/qianlongxu/.rvm/ is complete.
+  * RVM 1.30 simplifies behavior of 'rvm wrapper' subcommand
+
+
+Thanks for installing RVM 🙏
+Please consider donating to our open collective to help us maintain RVM.
+
+👉  Donate: https://opencollective.com/rvm/donate
+```
+
 ## 更新 Ruby
 
-安装好 RVM 之后，path 还没有生效，因此直接执行：
+安装好 RVM 之后执行：
 
-`rvm list known`
-
-可能会报错：
+`rvm list known` 如果报错：
 
 `-bash: rvm: command not found`
 
-这时重新开个新的终端窗口即可；这次执行结果如下：
+这时重新开个新的终端窗口执行即可，如果还是这个错，那么手动配置下path路径：
 
 ```shell
 bogon:~ xuqianlong$ rvm list known

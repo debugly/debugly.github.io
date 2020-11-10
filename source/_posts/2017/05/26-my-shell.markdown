@@ -210,35 +210,33 @@ cp -r debugly/init.sh d2
 
 # scp
 
-- 本机复制到远程服务器
+两台主机之间复制文件（夹），第一个参数是源文件，第二个参数是目的地。
 
-	- **文件**
-	
-	```bash
-	scp /Users/qianlongxu/Downloads/id_rsa.pub crown@10.7.40.176:~/id_rsa.pub  
-	```
-	- **文件夹**
-	
-	```bash
-	//在远程服务器game下创建qr-code，copy qr-code 下的所有文件
-	scp -r /Users/Shared/Jenkins/Home/xql/qr-code root@10.10.194.16:/opt/www/html/game
-	```
-- 从远程服务器下载到本地
+- **复制文件**
 
-	```bash
-	scp jenkins@10.7.40.195:/Users/Shared/Jenkins/Home/workspace/hall-ios/builds/20180317/game56hall-inhouse.ipa ~/Desktop/
-	game56hall-inhouse.ipa 
-	
-	scp jenkins@10.7.40.195:/Users/Shared/Jenkins/Home/workspace/hall-android/build/jsb-default/frameworks/runtime-src/proj.android-studio/app/build/outputs/apk/release/app-release.apk ~/Desktop/
-	app-release.apk   
-	```
-	下载文件夹加上 -r 即可；可以看出 scp 的第一个参数其实就是源文件，第二个参数是目的地，这样比较好记些。
+  文件已经存在时会覆盖掉。
 
-**注:**
+```bash
+## scp form to
+scp /Users/qianlongxu/Downloads/id_rsa.pub crown@10.7.40.176:~/id_rsa.pub
+## 不带文件名时，保持原有文件名
+scp /Users/qianlongxu/Downloads/id_rsa.pub crown@10.7.40.176:~/
+## 重命名
+scp /Users/qianlongxu/Downloads/id_rsa.pub crown@10.7.40.176:~/new_rsa.pub
+```
+- **复制文件夹**
 
-- 使用 scp 复制文件时，如果目标文件已经存在，则会覆盖！
-- 目标地址是一个文件夹时，复制文件的话，文件名保持不变。
-- 目标地址是一个文件时，复制文件的话，则会重命名文件。
+```bash
+## scp -r from to
+## 将本机 qr-code 文件夹复制到远程 html 目录下；包括 qr-code 文件夹本身！文件已存在时会覆盖！
+scp -r /Users/qianlongxu/Downloads/qr-code crown@10.7.40.176:/opt/www/html/
+## 将本机 qr-code 文件夹里的内容复制到远程 qr-code 目录下；文件已存在时不会覆盖！
+scp -r /Users/qianlongxu/Downloads/qr-code crown@10.7.40.176:/opt/www/qr-code/
+```
+
+注意：
+
+1、复制文件夹时，scp只能增不能减：比如 qr-code 里删除了某个文件，scp 到远程主机后，远程主机上的文件不会被删除！
 
 # ssh
 
@@ -249,9 +247,10 @@ cp -r debugly/init.sh d2
 	///输入密码
 	sohuxxx
 	```
+	
 - 免密码登录
 
-	可以把客户机的公钥填充到远程打包机器上的authorized_keys文件中，实现自动验证，无需泄露服务器密码
+	可以把客户机的公钥追加到远程打包机器上的authorized_keys文件中，实现自动验证，无需泄露服务器密码
 
 	```bash
 	///将公钥追加到这个服务器~/.ssh/authorized_keys文件末尾 
@@ -259,6 +258,9 @@ cp -r debugly/init.sh d2
 	///输入密码
 	sohuxxx
 	```
+	
+	当主机不支持 ssh-copy-id 命令时，可手动添加到 authorized_keys 文件末尾。
+	
 - 执行命令
 
 	删除掉远程服务器桌面上的 xx 目录：
@@ -268,9 +270,11 @@ cp -r debugly/init.sh d2
 	ssh root@12.11.193.18 "rm -rf ${Remote_dir}"
 	```
 
-# kill jekyll server
+# Address already in use
 
-我修改 Rakefile 的时候，修改不当导致没能处理INT，后果就是我们按下 `ctrl + c` 的时候没有将该子线程杀死，然后再次启动服务时就会报错:
+Address already in use 是经常遇到的问题，只能找到占用该端口的进程然后杀掉！
+
+有一次我修改 Rakefile 的时候，修改不当导致没能处理 INT 信号，后果就是按下 `ctrl + c` 的时候没有将该子线程杀死，然后再次启动服务时就会报错:
 
 ```bash
 jekyll 3.3.0 | Error:  Address already in use - bind(2) for 127.0.0.1:4000
@@ -285,6 +289,66 @@ COMMAND   PID       USER   FD   TYPE            DEVICE SIZE/OFF NODE NAME
 ruby    49753 xuqianlong   10u  IPv4 0xebc4350e453a6ff      0t0  TCP localhost:terabase (LISTEN)
 # 然后杀死该进程
 xuqianlong$ kill 49753
+```
+
+# netstat
+
+```
+[@10.16.89.228 /data/ifox/upgrade]# netstat -tlunp | grep nginx
+tcp        0      0 0.0.0.0:80                  0.0.0.0:*                   LISTEN      13884/nginx         
+[@10.16.89.228 /data/ifox/upgrade]# netstat -tlunp | grep nginx
+tcp        0      0 0.0.0.0:80                  0.0.0.0:*                   LISTEN      13884/nginx         
+[@10.16.89.228 /data/ifox/upgrade]# lsof -i tcp:80
+COMMAND   PID   USER   FD   TYPE     DEVICE SIZE/OFF NODE NAME
+nginx   13884   root    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13950 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13951 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13952 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13953 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13954 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13955 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13956 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13957 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13958 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13959 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13960 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13961 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13962 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13963 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13964 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13965 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13966 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13967 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13968 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13969 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13970 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13971 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13972 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13973 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13974 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13975 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13976 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13977 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13978 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13979 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13980 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13981 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13982 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13983 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13984 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13985 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13986 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13987 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13988 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13989 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13990 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13991 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13992 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13993 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13994 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13995 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13996 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
+nginx   13997 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
 ```
 
 # curl
@@ -333,15 +397,53 @@ mkdir -p "./themes/hexo-theme-yaris" && curl -L https://codeload.github.com/debu
 
 # chown
 
-更新软件包的时候可能没有权限，需要修改权限，可使用 chown 给用户添加 ownership 权限；
+使用 Homebrew 安装、更新软件时提示没有权限：
 
-`sudo chown -R $(whoami) /usr/local`
+```
+==> make frameworkinstallextras PYTHONAPPSDIR=/usr/local/Cellar/python@3.9/3.9.0
+Error: The `brew link` step did not complete successfully
+The formula built, but is not symlinked into /usr/local
+Could not symlink bin/2to3
+Target /usr/local/bin/2to3
+already exists. You may want to remove it:
+  rm '/usr/local/bin/2to3'
+
+To force the link and overwrite all conflicting files:
+  brew link --overwrite python@3.9
+
+To list all files that would be deleted:
+  brew link --overwrite --dry-run python@3.9
+
+Possible conflicting files are:
+/usr/local/bin/2to3 -> /Library/Frameworks/Python.framework/Versions/3.7/bin/2to3
+/usr/local/bin/idle3 -> /Library/Frameworks/Python.framework/Versions/3.7/bin/idle3
+/usr/local/bin/pydoc3 -> /Library/Frameworks/Python.framework/Versions/3.7/bin/pydoc3
+/usr/local/bin/python3 -> /Library/Frameworks/Python.framework/Versions/3.7/bin/python3
+/usr/local/bin/python3-config -> /Library/Frameworks/Python.framework/Versions/3.7/bin/python3-config
+Error: Permission denied @ dir_s_mkdir - /usr/local/Frameworks
+```
+
+之前遇到这个问题都是直接使用管理员权限即可，现在不行了，报错如下：
+
+```
+sudo brew link --overwrite python@3.9              
+Password:
+Error: Running Homebrew as root is extremely dangerous and no longer supported.
+As Homebrew does not drop privileges on installation you would be giving all
+build scripts full access to your system.
+```
+
+这时需要看下具体问题，比如上面遇到的问题是 /usr/local/Frameworks 没有权限，使用 chown 给用户添加 ownership 权限即可；
 
 ```bash
-qianlongxu:myblog qianlongxu$ brew update
-Error: /usr/local is not writable. You should change the ownership
-and permissions of /usr/local back to your user account:
-	sudo chown -R $(whoami) /usr/local
+sudo chown -R $(whoami) /usr/local/Frameworks
+chown: /usr/local/Framework: No such file or directory
+# 原来这个目录不存在，那么创建一个吧：
+mkdir -p /usr/local/Framework
+sudo chown -R $(whoami) /usr/local/Frameworks
+# 再次执行，成功啦
+brew link --overwrite python@3.9 
+Linking /usr/local/Cellar/python@3.9/3.9.0_1... 5 symlinks created
 ```
 
 # git
@@ -456,7 +558,7 @@ and permissions of /usr/local back to your user account:
 	git submodule update --init --recursive
 	```
 - git -C $path
-    
+  
     当执行命令的目录和 git 仓库目录不是同一个的话，可以使用 **-C** 指定仓库目录
     
     ```bash
@@ -476,9 +578,19 @@ Theme updated:2018-04-16 17:52:24
 
 # du
 
-- 获取文件大小 : 
+- 获取文件大小 (单位 MB): 
 	`IPA_Size=$(du -sm $IPA_Path | awk '{print $1}')`
-
+- 查看磁盘情况
+	
+	```
+admin@jenkinsifox temp % df -hl
+Filesystem     Size   Used  Avail Capacity iused       ifree %iused  Mounted on
+/dev/disk2s5  1.0Ti   11Gi  842Gi     2%  488427 10947931493    0%   /
+/dev/disk2s1  1.0Ti  181Gi  842Gi    18% 4012969 10944406951    0%   /System/Volumes/Data
+/dev/disk2s4  1.0Ti  2.0Gi  842Gi     1%       2 10948419918    0%   /private/var/vm
+/dev/disk2s3  1.0Ti  504Mi  842Gi     1%      52 10948419868    0%   /Volumes/Recovery
+	```
+	
 # 文件（夹）是否存在
 
 - 文件是否存在
@@ -509,6 +621,15 @@ Theme updated:2018-04-16 17:52:24
 		echo 'file is not empty!'
 	fi
 	```
+# 统计文件（夹）
+
+- 统计文件夹下文件个数，包括子文件
+
+	`ls -lR | grep "^-"| wc -l`
+
+- 统计文件夹下目录个数，包括子目录
+
+	`ls -lR | grep "^d"| wc -l`
 
 # iOS build 号自增
 
@@ -781,7 +902,7 @@ express 框架
 # Python
 
 - 临时文件服务器
-    
+  
     ```bash
     cd test
     python -m SimpleHTTPServer
@@ -793,3 +914,36 @@ express 框架
     ```bash
     python -m SimpleHTTPServer 9090
     ```
+
+## Vim 编辑器
+
+### 命令模式
+
+- 显示行号：set number
+- 插入：i
+- 插入新行：o
+- 粘贴：p
+- 删除行： dd
+- 删除字符：dw
+- 复制行：yy
+- 复制字符：yw
+- 移动光标： h (左) j（下）k（上）l（右）可以使用数字相乘，比如 10h的意思是向左移动10个字符
+- 移动到行首：^
+- 移动到行尾：$
+- 光标回退一个单词：b
+- 光标前进一个单词：w
+- 跳到文档开始：gg
+- 跳到文档结尾：G
+- 保存：wq
+- 不保存：q!
+- 搜索：/关键词  搜到之后，使用 n/N 切换搜到的关键字
+- 全部替换：%s/old/new 
+- 交互式替换：%s/old/new/gc
+- 撤销：u 
+- 多窗口: split/vsplit 
+- 关闭窗口: close
+- 多窗口跳转：ctrl + ww / ctrl +w(h/j/k/l)
+- 上下窗口调整大小：ctrl + w(-/=)
+
+
+
