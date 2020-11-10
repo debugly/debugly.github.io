@@ -194,6 +194,99 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/05/19-use-workspace-share-code.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/05/19-use-workspace-share-code.html" class="post-title-link" itemprop="url">使用 WorkSpace 管理共享代码</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-05-19 22:47:32" itemprop="dateCreated datePublished" datetime="2017-05-19T22:47:32+08:00">2017-05-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在上篇博客中提到可以把通用代码打成静态库，然后多个项目可使用多个 Framework 包裹这些静态库的方式共享通用代码，详见最后的思维导图！这个方案的确是可行的，但是只用了两天就被干掉了！原因是太不方便了！程序刚好崩溃到打到静态库中的方法了，没法搞断点去一步步 debug ，降低了开发的效率！这种方案也不是完全没有用武之地，比如现在有几和后台商议好的加密算法，一般不需要人人都知道，省得泄漏出去，这时就可以把加密算法打成库，然后需要用的时候把库加到自己的 Framework 里就行了！</p>
+<p>因此需要继续摸索共享代码的方式，既要满足需求，又要方便调试！方便调试的话没办法，只能开放源码了，所以我想到了 Workspace ，其实我早该想到的，不知道为何我先想到的是使用 Framework 包裹 静态库的方式，按道理我应该先想到使用 Workspace 共享才对，因为从一开始我就是使用 Workspace 管理的工程！</p>
+<p>简单说下 Workspace 和 Project 的关系，一般情况下一个项目对应一个工程（Project)，有时候为了方便管理就把几个工程都放在一起，这时就要使用 Workspace 了，因为这是 Project 是平级的关系，不是包含的关系，当然 Project 也可以包含，今天不说包含的事哈，既然是平级的，那总得来个管事的吧，这就是今天的主角— Workspace ！说得直白些就是她管理了 N 个 Project ，实质上就是记录了 Project 的索引而已，最常见的是使用 Pods 的工程，会自动生成一个 Workspace，包含了原来的 Project 和 名为 Pods 的 Project ！</p>
+<p>思考是有局限性的，或者说之前的考虑是陷入了一个胡同里了，觉得搞成静态库后者框架才能共享，其实不用，比如现在的工程目录结构是这样的：</p>
+<ul>
+<li>workspace<ul>
+<li>projectA<ul>
+<li>libCC</li>
+</ul>
+</li>
+<li>projectB</li>
+</ul>
+</li>
+</ul>
+<p>其实 B 工程是可以直接添加 A 工程里的代码的，对于 B 而言就把 projectA 当做一个文件夹就好了，不要考虑太多，加入的时候不要选择 copy 就行了，这样其实就是共享了！为了凸显 libCC 是通用的，因此我们整理下工程目录：</p>
+<ul>
+<li>workspace<ul>
+<li>libCC</li>
+<li>projectA</li>
+<li>projectB</li>
+</ul>
+</li>
+</ul>
+<p>这样从结构上就能一目了然了，接下来 A 、B 都添加下 libCC 到工程，都不要 copy !!! 即只添加引用，文件仍旧在 libCC 目录；由于实体文件仍在 libCC 里面，所以无论 A 、B 谁修改了源码，对方都可以立马更新，如果添加新的文件，则需要再次添加下哦！</p>
+<p>libCC 可以到 Workspace 里和 A、B 同级，也可以不添加，我就没添加，感觉是多余的，因为没其他的用途，不会因为没有在 Workspace 里添加索引就导致 A、B找不到 libCC 了。</p>
+<blockquote>
+<p>其实，共享 libCC 跟 Workspace 没多大关系，只不过 A、B 是 由 Workspace 管理的，如果你不用 Workspace 的话，直接创建个 libCC 的文件夹也能共享，只要不 copy 就行了！这才是重点！！</p>
+</blockquote>
+<p>比起包裹静态库而言，这种方式才是我想要的呢！</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/05/17-sharecode-framework-wrap-static-library.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -602,129 +695,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/01/10-household-zhixuan-radio.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/01/10-household-zhixuan-radio.html" class="post-title-link" itemprop="url">致炫收音机改为家用音响</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-01-10 20:55:16" itemprop="dateCreated datePublished" datetime="2017-01-10T20:55:16+08:00">2017-01-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>最近买了辆小车—丰田-致炫，不是高配的，所以没有导航，雷达，倒车影像等，只有一个收音机，CD 都不带…</p>
-</blockquote>
-<p>上周六去汽配城装了导航和倒车影像，原车的收音机就被毫不客气的抛到后备箱里了，作为一个 Geeker ，不可能把他扔掉或者当破烂卖了，即使卖也是白菜价(论坛里有人出20大洋，呵呵)，这些对于一个电子爱好者来说都是宝贝啊！必须改装，为我所用才是王道…</p>
-<h2 id="先睹为快"><a href="#先睹为快" class="headerlink" title="先睹为快"></a>先睹为快</h2><p>放在客厅的电视柜旁边，貌似违和感不强哈：</p>
-<p><img src="/images/201701/IMG_1468.jpg" width="600" height="800"></p>
-<h2 id="功能简介"><a href="#功能简介" class="headerlink" title="功能简介"></a>功能简介</h2><ul>
-<li>原电脑电源键开关机</li>
-<li>可以听广播</li>
-<li>可以当做音响</li>
-<li>双 USB 5V 输出</li>
-<li>双耳机插孔，可接入更多🔈</li>
-</ul>
-<p>TODO：</p>
-<ul>
-<li>大喇叭周围加上闪灯（大学用三极管做过一个三个灯循环闪烁的，可以拿来用）</li>
-</ul>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
-<li>电脑电源为收音机主机提供稳定的 12V 电源，和 5V 的 USB 电源；</li>
-<li>喇叭装在箱子里才会更响，因此充分利用了空间足够大的机箱；</li>
-<li>电脑电源不是插上就会输出的，这里刚好可以装个开关，具体往下看哈</li>
-</ul>
-<h2 id="改装过程"><a href="#改装过程" class="headerlink" title="改装过程"></a>改装过程</h2><h3 id="准备-12V-电源"><a href="#准备-12V-电源" class="headerlink" title="准备 12V 电源"></a>准备 12V 电源</h3><p>原本收音机使用的是车上 12V 蓄电池的直流电，家用的话就必须找到一个稳定可靠的 12V 直流电源，常见的有台式电脑电源，或者显示器适配器的电源也行；使用台式电脑电源的好处的输出功率大，电压多，可以做些别的事情；适配器的比较容易些，插上就会输出，直接用就好了，电脑电源稍微复杂一些，需要略懂电路。</p>
-<p>这是我在网上找的一个图：</p>
-<p><img src="/images/201701/power.jpg" width="800" height="600"></p>
-<p><strong>要想启动电源必须将绿色线和黑色线短路</strong>，绿色线很好找，全局唯一，就一根！（如果色盲，就麻烦了，绿色老多了）</p>
-<p>可以看到，提供的电压有 -12V,3.3V,5V,12V,挺丰富的。下面这个是具体的从电源输出插在主板上的接线头：</p>
-<p><img src="/images/201701/IMG_1463.jpg" width="800" height="600"></p>
-<p>这台老台式机是老乡送给我的，可以开机，就是慢的不行，我也没啥用，因此就牺牲他吧，我将绿色 和邻近的黑色 GND(其实就是 0V，平时说的 5V是相对于 GND 的) 剪断，可以先试试下电源是否正常，插上电之后，将绿色线和 GND 短路，你会发现电源风扇开始转了，这表明电源应该是正常的！</p>
-<p>接下来说下 12V 电源，你可以按照上图所标识的黄色线，我并没有使用这个，是因为我发现除了这个还有好几根也是黄色的，供硬盘或者 DVD 使用，这个线比较长，更刚才那个插到主板的不是一条，很方便，因此我使用的是硬盘电源线。</p>
-<h3 id="为收音机接输出线"><a href="#为收音机接输出线" class="headerlink" title="为收音机接输出线"></a>为收音机接输出线</h3><p>收音机是个盒子，没有一根线，需要接线，如果怕麻烦可以直接去网上购买，我查了下只需 10 个大洋，还带了天线；由于我等不及了，所以直接拆开用烙铁焊接输出线；这是电源和音频输出：</p>
-<p><img src="/images/201701/IMG_1438.jpg" width="800" height="600"></p>
-<p>我将原来的接线柱一一去掉了，然后焊接线，这里需要注意的是，ACC（12V 正极）需要按照下图所示，将3个接线柱短路，黑色是 GND，其他四个颜色是对应的前后4个喇叭：</p>
-<p><img src="/images/201701/IMG_1439.jpg" width="800" height="600"></p>
-<p>这是天线，需要接个线出来，否则收音机收不到信号📶：<br><img src="/images/201701/IMG_1458.jpg" width="800" height="600"></p>
-<p>连接这两根（一根也行）就行了：<br><img src="/images/201701/IMG_1459.jpg" width="800" height="600"></p>
-<p>最终接线效果：</p>
-<p><img src="/images/201701/IMG_1460.jpg" width="800" height="600"></p>
-<h3 id="准备大喇叭，USB，电源键"><a href="#准备大喇叭，USB，电源键" class="headerlink" title="准备大喇叭，USB，电源键"></a>准备大喇叭，USB，电源键</h3><p>这个喇叭是我大学时在校园里捡到的（坏了的广播），一不小心默默跟随我好几年，今日终于排上了用场！</p>
-<p>刚好这里有几个面板（原本是为DVD预留的）可以拆掉，省去了不少力气呢，出门在外没有更多东西选择，用红绳绑吧：</p>
-<p><img src="/images/201701/IMG_1461.jpg" width="800" height="600"></p>
-<p>原来的 USB 插孔坏了一个，我把路由器上的换过来了，然后线路需要改下，没拍照就不细说了；</p>
-<p><strong>电源这里需要换个开关</strong> ：因为机箱上这个开关是没锁的，意思是只有按下时是连通的，松开手就是断路了!还记得我们前面说过的如何启动电脑电源吧，需要持续短路绿线和GND，短路一下可不行！</p>
-<p>要想找到一个一样的开关可是不容易，我差点就放弃了，好在我又找到了一个大学做的LM386电路（简易小功放），上面刚好有一个这样的开关，甚是高兴，毫不犹豫牺牲他吧，实话说，这个 LM386 效果真是差得很，就是练手试下，基本没用过，可惜忘记拍照了，这个是去掉开关后的： </p>
-<p><img src="/images/201701/IMG_1473.jpg" width="800" height="600"></p>
-<p>ps:红色灯是电源指示灯；黄蓝绿是上面我提到的循环闪烁灯，等有时间了把这个拆掉，装到喇叭周围去；原本用来指示硬盘读取情况的蓝色灯，这里用来指示音量的高低，音量高时会亮，音量一般都是起伏的，所以会闪，不过单纯的依赖喇叭的电源差点亮LED，还是有点挑战的，所以声音小的时候不会亮…</p>
-<h3 id="接线收工"><a href="#接线收工" class="headerlink" title="接线收工"></a>接线收工</h3><ul>
-<li>电脑电源黄色线接收音机红色线，黑色GND相接；</li>
-<li>USB 接 5V 橙色线，注意正负极；</li>
-<li>大喇叭接在耳机插孔那里，耳机插孔其实也是带开关的，不插入耳机时播放大喇叭，插入口断开，没有拍照就不详细介绍了;</li>
-<li>电源指示灯，接 3.3V ，注意需要配个电阻哈；</li>
-<li>音量指示灯，我直接接到大喇叭上了，音量调到40以后才会闪烁，效果不佳，技术有限，也不知道如何改进…</li>
-</ul>
-<h2 id="换导航场景"><a href="#换导航场景" class="headerlink" title="换导航场景"></a>换导航场景</h2><p><img src="/images/201701/IMG_1428.jpg" width="800" height="600"></p>
-<p><img src="/images/201701/IMG_1429.jpg" width="800" height="600"></p>
-<p><img src="/images/201701/IMG_1433.jpg" width="800" height="600"></p>
-<p><img src="/images/201701/IMG_1435.jpg" width="600" height="800"></p>
-<h2 id="After-Word"><a href="#After-Word" class="headerlink" title="After Word"></a>After Word</h2><p>这是一种乐趣，恐怕也只有同为 Geeker 的你才能了解吧，你可能不能理解，工作的时候，几乎都是蹲着，电烙铁烧到手指也无所谓，可能昨晚刚装好，今天又要拆开；等我连续搞了3个晚上完工后，发现还不错，物有所用，之前积攒了几年的东西，终于用武之地！</p>
-<p>每天早晨起来可以听个新闻了，声音清晰够大，整个屋子都可以听到，仿佛回到了老家的生活方式，我能告诉你，老家还有个与之类似的收音机么…</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -794,7 +764,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

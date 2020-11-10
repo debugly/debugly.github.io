@@ -194,6 +194,82 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2019/05/31-macdev-tips.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/05/31-macdev-tips.html" class="post-title-link" itemprop="url">Mac 开发 Tips</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-31 16:23:23" itemprop="dateCreated datePublished" datetime="2019-05-31T16:23:23+08:00">2019-05-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>忙了大概 2 个月了，基本 9116 的节奏，现在临近封板了，赶紧把最近使用的一些小技巧总结下。</p>
+</blockquote>
+<h2 id="监听-ESC-键按下"><a href="#监听-ESC-键按下" class="headerlink" title="监听 ESC 键按下"></a>监听 ESC 键按下</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Carbon/Carbon.h&gt;</span><br><span class="line"></span><br><span class="line">id eventMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSKeyDownMask handler:^NSEvent * _Nullable(NSEvent * _Nonnull theEvent) &#123;</span><br><span class="line">        if ([theEvent keyCode] == kVK_Escape)&#123;</span><br><span class="line">            NSLog(&quot;ESC key down&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        return theEvent;</span><br><span class="line">    &#125;];</span><br><span class="line">///dealloc 里记得移除</span><br><span class="line">[NSEvent removeMonitor:eventMonitor];</span><br></pre></td></tr></table></figure>
+<h2 id="商店屏幕快照和预览图尺寸"><a href="#商店屏幕快照和预览图尺寸" class="headerlink" title="商店屏幕快照和预览图尺寸"></a>商店屏幕快照和预览图尺寸</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">https://help.apple.com/app-store-connect/#/devd274dd925</span><br><span class="line">https://help.apple.com/app-store-connect/#/dev4e413fcb8</span><br><span class="line"></span><br><span class="line">屏幕快照要求：</span><br><span class="line"></span><br><span class="line">最多 10 张屏幕快照，下列分辨率哪个都行</span><br><span class="line"></span><br><span class="line">1280 x 800 像素</span><br><span class="line"></span><br><span class="line">1440 x 900 像素</span><br><span class="line"></span><br><span class="line">2560 x 1600 像素</span><br><span class="line"></span><br><span class="line">2880 x 1800 像素</span><br><span class="line"></span><br><span class="line">预览要求</span><br><span class="line">最多 3 张 App 预览图，尺寸为 1920 x 1080 像素（16:9 宽高比）</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/05/31-macdev-tips.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://debugly.cn/2019/03/27-macdev-supported-fonts.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -506,91 +582,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2018/10/28-JavaScript-Module-Programming.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/10/28-JavaScript-Module-Programming.html" class="post-title-link" itemprop="url">JavaScript 模块化编程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-10-28 10:09:10" itemprop="dateCreated datePublished" datetime="2018-10-28T10:09:10+08:00">2018-10-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>JavaScipt 是一门非常流程的脚本语言，特别是 Node.js 的出现，让这门语言大放异彩！也给前端开发人员转型做后端敞开了大门，同时也对 JavaScript 模块化编程产生了深远影响。<br>一起来看下模块化的发展历程吧！</p>
-</blockquote>
-<h2 id="无模块化"><a href="#无模块化" class="headerlink" title="无模块化"></a>无模块化</h2><p>下面是不使用模块的方式，比如要使用 jquery 库，找到源文件使用 script 标签进行导入，type 指定为 ‘text/javascript’，src 是一个相对或绝对的 js 源码地址。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"libs/jquery.js"</span>/&gt;</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"source/util.js"</span>/&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"source/A.js"</span>/&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"source/B.js"</span>/&gt;</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// ...</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span></span><br><span class="line"><span class="javascript">    <span class="comment">// code...</span></span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这种方式可以工作，不过有些弊端:</p>
-<ol>
-<li>全局变量挂载重复或污染</li>
-<li>依赖关系不明显，但导入顺序还不能错</li>
-<li>更新麻烦，需要手动操作，不知道何时 jquery 库会更新</li>
-<li>版本管理混乱，可能需要通过版本控制工具追踪</li>
-<li>相同功能代码复制严重，共用代码不容易维护</li>
-</ol>
-<p>带着这么多问题上路，长此以往代码会混乱不堪，需要找到一种规范去解决，开源社区为此做出了巨大努力(此处应有掌声)，下面详细看下！</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/28-JavaScript-Module-Programming.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -660,7 +651,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

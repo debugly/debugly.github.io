@@ -194,6 +194,150 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/06/18-my-mbp-adversity.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/18-my-mbp-adversity.html" class="post-title-link" itemprop="url">Fuck，Mac 无法进入系统了</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-06-18 21:46:27" itemprop="dateCreated datePublished" datetime="2017-06-18T21:46:27+08:00">2017-06-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>今天擦桌子的时候顺便擦了下我的 MBP，为了不在擦的时候按下键盘误操作，所以在擦之前我把 Mac 关机了。等到下午没事开机时却遇到了个大大的问题：进度条走到百分之八十左右的时候卡住，卡一会之后就关机了！接着又试了好几次，还是不行，我有点慌了，此本追随我快三年了，可不能有个三长两短啊，于是赶忙开始在网上查找解决方法。</p>
+</blockquote>
+<h1 id="Rest"><a href="#Rest" class="headerlink" title="Rest"></a>Rest</h1><p>查找了好多的文章，总结起来就是以下三种方法</p>
+<ul>
+<li>重置 SMC</li>
+<li>重置 NVRAM</li>
+<li>重装系统</li>
+</ul>
+<p>接下来我给简单介绍下，以及哪些场景适合使用。</p>
+<h1 id="What’s-SMC-？"><a href="#What’s-SMC-？" class="headerlink" title="What’s SMC ？"></a>What’s SMC ？</h1><p>SMC : System Manager Controller 基于 Intel 的 Mac 上的 <strong>系统管理控制器</strong> ，简单理解就是用于管理电源，风扇，键盘灯，屏幕背光等等，以下是官方介绍：</p>
+<p>在基于 Intel 的 Mac 电脑上，SMC 负责管理以下及其他低级功能：</p>
+<ul>
+<li>对按下电源按钮的操作做出响应</li>
+<li>对 Mac 笔记本电脑上显示器屏幕盖的开合做出响应</li>
+<li>电池管理</li>
+<li>热能管理</li>
+<li>SMS（突发移动感应器）</li>
+<li>环境光度感应</li>
+<li>键盘背光</li>
+<li>状态指示灯 (SIL) 管理</li>
+<li>电池状态指示灯</li>
+<li>为某些 iMac 显示器选择外部（而非内部）视频来源</li>
+</ul>
+<h3 id="何时需要重置-SMC"><a href="#何时需要重置-SMC" class="headerlink" title="何时需要重置 SMC"></a>何时需要重置 SMC</h3><p>这个管理系统也会出问题，等出了问题后可以重置下，一切从新开始，那么何时需要重置呢？这是官网罗列的情况：</p>
+<ul>
+<li>尽管电脑工作负荷不重且通风良好，但电脑风扇依然高速旋转。</li>
+<li>键盘背光灯行为有些异常。</li>
+<li>状态指示灯 (SIL) 行为有些异常。</li>
+<li>电池指示灯（如果有的话）行为有些异常（在配有不可拆卸电池的 Mac 笔记本电脑上）。</li>
+<li>显示器背光灯不能对环境光线变化做出正确响应。</li>
+<li>电脑不能在电源按钮按下时做出正确响应。</li>
+<li>Mac 笔记本电脑不能对屏幕盖的开合做出正确响应。</li>
+<li>电脑意外进入睡眠状态或关机。</li>
+<li>电池不能正常充电。</li>
+<li>MagSafe 电源适配器的 LED 指示灯不能正确地指示活动状态。</li>
+<li>尽管电脑的 CPU 利用率并不是非常高，但运行速度异常缓慢。</li>
+<li>应用程序打开时，其图标可能会在 Dock 中“弹跳”较长一段时间。</li>
+<li>应用程序打开后，可能无法正常工作或停止响应。</li>
+<li>支持目标显示器模式的电脑无法正常进入或退出目标显示器模式，或意外地进入或退出目标显示器模式。</li>
+<li>移动电脑时，Mac Pro（2013 年末）上的 I/O 端口周围的背光灯未激活。</li>
+</ul>
+<p>起初我的 MBP 并没有些问题之一，后来一直折腾的时候遇到了两个问题：</p>
+<ul>
+<li>开机之后 CPU 风扇立马疯狂高速旋转</li>
+<li>插上电源后，电源指示灯不亮</li>
+</ul>
+<p>反复按住电源键强制关机几次后，仍然如此，然后我试着重置 SMC，结果确实解决了上面两个问题！</p>
+<h3 id="如何重置-SMC"><a href="#如何重置-SMC" class="headerlink" title="如何重置 SMC"></a>如何重置 SMC</h3><p>带 Touch ID 的 2016 新款 MacBook Pro，则 Touch ID 按钮就是电源按钮。</p>
+<ol>
+<li>将 Mac 关机，不能正常关，就强制关掉</li>
+<li>拔下电源适配器</li>
+<li>同时按下 <code>左侧Shift + Control + Option + 电源键</code> ，按住这些按键和电源按钮 10 秒后松开</li>
+<li>重新连接电源适配器后重启</li>
+</ol>
+<p>点击查看官网对 <a href="https://support.apple.com/zh-cn/HT201295" target="_blank" rel="noopener">SMC </a>的介绍。</p>
+<h1 id="What’s-NVRAM-？"><a href="#What’s-NVRAM-？" class="headerlink" title="What’s NVRAM ？"></a>What’s NVRAM ？</h1><p>NVRAM : Non-Volatile RAM <code>非易失性随机访问存储器</code>,其实就是一小部分特殊的内存，Mac 利用这些部分内存来储存某些设置从而实现更加快速的访问！这些设置可能包括 : 音量、显示屏分辨率、启动磁盘选择、时区，以及最近的内核崩溃信息等。</p>
+<h3 id="何时需要重置-NVRAM"><a href="#何时需要重置-NVRAM" class="headerlink" title="何时需要重置 NVRAM"></a>何时需要重置 NVRAM</h3><p>如果上面说的那些设置出现问题后，就可以考虑重置 NVRAM 了。例如， Mac 并非从“启动磁盘”偏好设置中选定的磁盘启动，或者在 Mac 启动前短暂地显示了一个问号图标，则可能需要重置 NVRAM。</p>
+<h3 id="如何重置-NVRAM"><a href="#如何重置-NVRAM" class="headerlink" title="如何重置 NVRAM"></a>如何重置 NVRAM</h3><ol>
+<li>将 Mac 关机</li>
+<li>重新开机后立即同时按下 <code>Option + Command + P + R</code> 不要松手，电脑会自动重启，至少重启两次后就可以松开了</li>
+<li>松手后进入系统即可</li>
+</ol>
+<p>不过进入系统后，可能之前设置的音量、分辨率、启动磁盘、时区等会被重置，可以在系统偏好设置里修改。</p>
+<h3 id="台式机需要电池供电"><a href="#台式机需要电池供电" class="headerlink" title="台式机需要电池供电"></a>台式机需要电池供电</h3><p>每次断开 Mac 电源后，下次启动后发现音量或时区等设置均会重置时，就需要更换 Mac 中的电池了。这个小电池在主板上卡着，为的是断开电源后帮助 NVRAM 保存设置。读到这你是不是想起了 CMOS 呢？感觉 Mac 上这个 NVRAM 跟 CMOS 很像呢。</p>
+<p>点击查看官网对 <a href="https://support.apple.com/zh-cn/HT204063" target="_blank" rel="noopener">SMC </a>的介绍。</p>
+<h1 id="Commad-R"><a href="#Commad-R" class="headerlink" title="Commad + R"></a>Commad + R</h1><p>我的 MBP 不能开启并非以上问题导致的，我在网上查到一个 <code>实用工具模式</code>，进入方式：</p>
+<ol>
+<li>按下 <code>Commad + R</code>一直不动</li>
+<li>按一下开机键松开</li>
+<li>等个几秒看到进度条后松开 <code>Commad + R</code>即可</li>
+</ol>
+<p>如图：</p>
+<p><img src="/images/201706/1.JPG" alt></p>
+<p>选择 <code>磁盘工具</code></p>
+<p><img src="/images/201706/2.JPG" alt></p>
+<p>Fuck ！<strong>磁盘空间是 0KB</strong> ！！！</p>
+<p><img src="/images/201706/3.JPG" alt></p>
+<p>为何会这样，我记得明明有好几个 G 的可用空间的啊，我怀疑是苹果给我下载了系统更新，重新开机会会解压然后然后，结果解压后导致我的空间没了，所以每次都是卡在百分之八十左右的地方，卡一会之后系统就自动关机了！看到这个就大概知道是怎么回事了，自然也能想到解决的办法 — <strong>进PE，删除无用文件</strong>，腾出来一些空间给系统用！</p>
+<p>接下来的事情更是曲折，还是再写一篇文章来介绍（吐槽）吧！</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/06/04-use-rake.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -505,7 +649,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-04 11:42:53" itemprop="dateModified" datetime="2020-11-04T11:42:53+08:00">2020-11-04</time>
+                <time title="修改时间：2020-11-10 18:11:00" itemprop="dateModified" datetime="2020-11-10T18:11:00+08:00">2020-11-10</time>
               </span>
 
           
@@ -609,6 +753,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jekyll 3.3.0 | Error:  Address already <span class="keyword">in</span> use - <span class="built_in">bind</span>(2) <span class="keyword">for</span> 127.0.0.1:4000</span><br></pre></td></tr></table></figure>
 <p>为了解决这个问题就需要找到当前占用 4000 端口的进程，然后将其杀死；步骤是：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先查下占用 4000 端口的进程 id</span></span><br><span class="line">xuqianlong$ lsof -i tcp:4000</span><br><span class="line">COMMAND   PID       USER   FD   TYPE            DEVICE SIZE/OFF NODE NAME</span><br><span class="line">ruby    49753 xuqianlong   10u  IPv4 0xebc4350e453a6ff      0t0  TCP localhost:terabase (LISTEN)</span><br><span class="line"><span class="comment"># 然后杀死该进程</span></span><br><span class="line">xuqianlong$ <span class="built_in">kill</span> 49753</span><br></pre></td></tr></table></figure>
+<h1 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">[@10.16.89.228 /data/ifox/upgrade]# netstat -tlunp | grep nginx</span><br><span class="line">tcp        0      0 0.0.0.0:80                  0.0.0.0:*                   LISTEN      13884/nginx         </span><br><span class="line">[@10.16.89.228 /data/ifox/upgrade]# netstat -tlunp | grep nginx</span><br><span class="line">tcp        0      0 0.0.0.0:80                  0.0.0.0:*                   LISTEN      13884/nginx         </span><br><span class="line">[@10.16.89.228 /data/ifox/upgrade]# lsof -i tcp:80</span><br><span class="line">COMMAND   PID   USER   FD   TYPE     DEVICE SIZE/OFF NODE NAME</span><br><span class="line">nginx   13884   root    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13950 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13951 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13952 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13953 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13954 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13955 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13956 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13957 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13958 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13959 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13960 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13961 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13962 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13963 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13964 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13965 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13966 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13967 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13968 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13969 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13970 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13971 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13972 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13973 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13974 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13975 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13976 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13977 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13978 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13979 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13980 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13981 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13982 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13983 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13984 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13985 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13986 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13987 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13988 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13989 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13990 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13991 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13992 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13993 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13994 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13995 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13996 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx   13997 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)</span><br></pre></td></tr></table></figure>
 <h1 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h1><p>功能强大的网络工具，支持的协议众多，包括：<code>DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, POP3, POP3S, RTMP, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET, TFTP</code>。最简单的是 GET 请求：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://debugly.cn/dist/json/test.json</span><br></pre></td></tr></table></figure>
 <p>使用 HEADER 请求，仅返回 http 头部信息：</p>
@@ -619,9 +764,12 @@
 </ul>
 <p>在当前目录下递归创建 themes/hexo-theme-yaris 目录，然后下载zip包，解压到指定文件夹后重命名</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p <span class="string">"./themes/hexo-theme-yaris"</span> &amp;&amp; curl -L https://codeload.github.com/debugly/hexo-theme-yaris/zip/master | tar xj -C <span class="string">"./themes/hexo-theme-yaris"</span> --strip-components 1</span><br></pre></td></tr></table></figure>
-<h1 id="chown"><a href="#chown" class="headerlink" title="chown"></a>chown</h1><p>更新软件包的时候可能没有权限，需要修改权限，可使用 chown 给用户添加 ownership 权限；</p>
-<p><code>sudo chown -R $(whoami) /usr/local</code></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">qianlongxu:myblog qianlongxu$ brew update</span><br><span class="line">Error: /usr/<span class="built_in">local</span> is not writable. You should change the ownership</span><br><span class="line">and permissions of /usr/<span class="built_in">local</span> back to your user account:</span><br><span class="line">	sudo chown -R $(whoami) /usr/<span class="built_in">local</span></span><br></pre></td></tr></table></figure>
+<h1 id="chown"><a href="#chown" class="headerlink" title="chown"></a>chown</h1><p>使用 Homebrew 安装、更新软件时提示没有权限：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">==&gt; make frameworkinstallextras PYTHONAPPSDIR=/usr/local/Cellar/python@3.9/3.9.0</span><br><span class="line">Error: The `brew link` step did not complete successfully</span><br><span class="line">The formula built, but is not symlinked into /usr/local</span><br><span class="line">Could not symlink bin/2to3</span><br><span class="line">Target /usr/local/bin/2to3</span><br><span class="line">already exists. You may want to remove it:</span><br><span class="line">  rm &apos;/usr/local/bin/2to3&apos;</span><br><span class="line"></span><br><span class="line">To force the link and overwrite all conflicting files:</span><br><span class="line">  brew link --overwrite python@3.9</span><br><span class="line"></span><br><span class="line">To list all files that would be deleted:</span><br><span class="line">  brew link --overwrite --dry-run python@3.9</span><br><span class="line"></span><br><span class="line">Possible conflicting files are:</span><br><span class="line">/usr/local/bin/2to3 -&gt; /Library/Frameworks/Python.framework/Versions/3.7/bin/2to3</span><br><span class="line">/usr/local/bin/idle3 -&gt; /Library/Frameworks/Python.framework/Versions/3.7/bin/idle3</span><br><span class="line">/usr/local/bin/pydoc3 -&gt; /Library/Frameworks/Python.framework/Versions/3.7/bin/pydoc3</span><br><span class="line">/usr/local/bin/python3 -&gt; /Library/Frameworks/Python.framework/Versions/3.7/bin/python3</span><br><span class="line">/usr/local/bin/python3-config -&gt; /Library/Frameworks/Python.framework/Versions/3.7/bin/python3-config</span><br><span class="line">Error: Permission denied @ dir_s_mkdir - /usr/local/Frameworks</span><br></pre></td></tr></table></figure>
+<p>之前遇到这个问题都是直接使用管理员权限即可，现在不行了，报错如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo brew link --overwrite python@3.9              </span><br><span class="line">Password:</span><br><span class="line">Error: Running Homebrew as root is extremely dangerous and no longer supported.</span><br><span class="line">As Homebrew does not drop privileges on installation you would be giving all</span><br><span class="line">build scripts full access to your system.</span><br></pre></td></tr></table></figure>
+<p>这时需要看下具体问题，比如上面遇到的问题是 /usr/local/Frameworks 没有权限，使用 chown 给用户添加 ownership 权限即可；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo chown -R $(whoami) /usr/<span class="built_in">local</span>/Frameworks</span><br><span class="line">chown: /usr/<span class="built_in">local</span>/Framework: No such file or directory</span><br><span class="line"><span class="comment"># 原来这个目录不存在，那么创建一个吧：</span></span><br><span class="line">mkdir -p /usr/<span class="built_in">local</span>/Framework</span><br><span class="line">sudo chown -R $(whoami) /usr/<span class="built_in">local</span>/Frameworks</span><br><span class="line"><span class="comment"># 再次执行，成功啦</span></span><br><span class="line">brew link --overwrite python@3.9 </span><br><span class="line">Linking /usr/<span class="built_in">local</span>/Cellar/python@3.9/3.9.0_1... 5 symlinks created</span><br></pre></td></tr></table></figure>
 <h1 id="git"><a href="#git" class="headerlink" title="git"></a>git</h1><ul>
 <li><p>git log</p>
   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">qianlongxu$ git <span class="built_in">log</span> -3</span><br><span class="line">commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -&gt; <span class="built_in">source</span>, origin/<span class="built_in">source</span>)</span><br><span class="line">Author: qianlongxu &lt;qianlongxu@sohu-inc.com&gt;</span><br><span class="line">Date:   Sat Mar 24 09:49:51 2018 +0800</span><br><span class="line"></span><br><span class="line">    add post</span><br><span class="line"></span><br><span class="line">commit eb3e9419a4a6cc736808ac40b7cf2908b7998c56</span><br><span class="line">Merge: e851655 6755480</span><br><span class="line">Author: qianlongxu &lt;qianlongxu@sohu-inc.com&gt;</span><br><span class="line">Date:   Sat Mar 24 09:49:08 2018 +0800</span><br><span class="line"></span><br><span class="line">    Merge branch <span class="string">'source'</span> of https://github.com/debugly/debugly.github.io into <span class="built_in">source</span></span><br><span class="line"></span><br><span class="line">commit 67554800909e91430231da8c34887933a4160649</span><br><span class="line">Author: qianlongxu &lt;qianglongxu@home.mbp&gt;</span><br><span class="line">Date:   Thu Mar 22 22:17:08 2018 +0800</span><br><span class="line"></span><br><span class="line">    add tag</span><br></pre></td></tr></table></figure>
@@ -659,7 +807,7 @@
 <h1 id="du"><a href="#du" class="headerlink" title="du"></a>du</h1><ul>
 <li>获取文件大小 (单位 MB):<br>  <code>IPA_Size=$(du -sm $IPA_Path | awk &#39;{print $1}&#39;)</code></li>
 <li><p>查看磁盘情况</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">	admin@jenkinsifox temp % df -hl</span><br><span class="line">Filesystem     Size   Used  Avail Capacity iused       ifree %iused  Mounted on</span><br><span class="line">/dev/disk2s5  1.0Ti   11Gi  842Gi     2%  488427 10947931493    0%   /</span><br><span class="line">/dev/disk2s1  1.0Ti  181Gi  842Gi    18% 4012969 10944406951    0%   /System/Volumes/Data</span><br><span class="line">/dev/disk2s4  1.0Ti  2.0Gi  842Gi     1%       2 10948419918    0%   /private/var/vm</span><br><span class="line">/dev/disk2s3  1.0Ti  504Mi  842Gi     1%      52 10948419868    0%   /Volumes/Recovery</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">admin@jenkinsifox temp % df -hl</span><br><span class="line">Filesystem     Size   Used  Avail Capacity iused       ifree %iused  Mounted on</span><br><span class="line">/dev/disk2s5  1.0Ti   11Gi  842Gi     2%  488427 10947931493    0%   /</span><br><span class="line">/dev/disk2s1  1.0Ti  181Gi  842Gi    18% 4012969 10944406951    0%   /System/Volumes/Data</span><br><span class="line">/dev/disk2s4  1.0Ti  2.0Gi  842Gi     1%       2 10948419918    0%   /private/var/vm</span><br><span class="line">/dev/disk2s3  1.0Ti  504Mi  842Gi     1%      52 10948419868    0%   /Volumes/Recovery</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h1 id="文件（夹）是否存在"><a href="#文件（夹）是否存在" class="headerlink" title="文件（夹）是否存在"></a>文件（夹）是否存在</h1><ul>
@@ -937,99 +1085,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/05/19-use-workspace-share-code.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/05/19-use-workspace-share-code.html" class="post-title-link" itemprop="url">使用 WorkSpace 管理共享代码</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-05-19 22:47:32" itemprop="dateCreated datePublished" datetime="2017-05-19T22:47:32+08:00">2017-05-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在上篇博客中提到可以把通用代码打成静态库，然后多个项目可使用多个 Framework 包裹这些静态库的方式共享通用代码，详见最后的思维导图！这个方案的确是可行的，但是只用了两天就被干掉了！原因是太不方便了！程序刚好崩溃到打到静态库中的方法了，没法搞断点去一步步 debug ，降低了开发的效率！这种方案也不是完全没有用武之地，比如现在有几和后台商议好的加密算法，一般不需要人人都知道，省得泄漏出去，这时就可以把加密算法打成库，然后需要用的时候把库加到自己的 Framework 里就行了！</p>
-<p>因此需要继续摸索共享代码的方式，既要满足需求，又要方便调试！方便调试的话没办法，只能开放源码了，所以我想到了 Workspace ，其实我早该想到的，不知道为何我先想到的是使用 Framework 包裹 静态库的方式，按道理我应该先想到使用 Workspace 共享才对，因为从一开始我就是使用 Workspace 管理的工程！</p>
-<p>简单说下 Workspace 和 Project 的关系，一般情况下一个项目对应一个工程（Project)，有时候为了方便管理就把几个工程都放在一起，这时就要使用 Workspace 了，因为这是 Project 是平级的关系，不是包含的关系，当然 Project 也可以包含，今天不说包含的事哈，既然是平级的，那总得来个管事的吧，这就是今天的主角— Workspace ！说得直白些就是她管理了 N 个 Project ，实质上就是记录了 Project 的索引而已，最常见的是使用 Pods 的工程，会自动生成一个 Workspace，包含了原来的 Project 和 名为 Pods 的 Project ！</p>
-<p>思考是有局限性的，或者说之前的考虑是陷入了一个胡同里了，觉得搞成静态库后者框架才能共享，其实不用，比如现在的工程目录结构是这样的：</p>
-<ul>
-<li>workspace<ul>
-<li>projectA<ul>
-<li>libCC</li>
-</ul>
-</li>
-<li>projectB</li>
-</ul>
-</li>
-</ul>
-<p>其实 B 工程是可以直接添加 A 工程里的代码的，对于 B 而言就把 projectA 当做一个文件夹就好了，不要考虑太多，加入的时候不要选择 copy 就行了，这样其实就是共享了！为了凸显 libCC 是通用的，因此我们整理下工程目录：</p>
-<ul>
-<li>workspace<ul>
-<li>libCC</li>
-<li>projectA</li>
-<li>projectB</li>
-</ul>
-</li>
-</ul>
-<p>这样从结构上就能一目了然了，接下来 A 、B 都添加下 libCC 到工程，都不要 copy !!! 即只添加引用，文件仍旧在 libCC 目录；由于实体文件仍在 libCC 里面，所以无论 A 、B 谁修改了源码，对方都可以立马更新，如果添加新的文件，则需要再次添加下哦！</p>
-<p>libCC 可以到 Workspace 里和 A、B 同级，也可以不添加，我就没添加，感觉是多余的，因为没其他的用途，不会因为没有在 Workspace 里添加索引就导致 A、B找不到 libCC 了。</p>
-<blockquote>
-<p>其实，共享 libCC 跟 Workspace 没多大关系，只不过 A、B 是 由 Workspace 管理的，如果你不用 Workspace 的话，直接创建个 libCC 的文件夹也能共享，只要不 copy 就行了！这才是重点！！</p>
-</blockquote>
-<p>比起包裹静态库而言，这种方式才是我想要的呢！</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1099,7 +1154,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

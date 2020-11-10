@@ -194,6 +194,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/09/14-layerAnimation_frame.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/09/14-layerAnimation_frame.html" class="post-title-link" itemprop="url">Core Animation 与 UIView.frame</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-09-14 17:02:23" itemprop="dateCreated datePublished" datetime="2017-09-14T17:02:23+08:00">2017-09-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><blockquote>
+<p>在做一次关于Core Animation的分享时，老大提出了一个很是尖锐的问题——如果让layer保持动画后的状态，那么layer对应的view的响应区域是否是动画后view展示在屏幕上的区域？带着这个问题，开启Core Animation与view.frame的讨论。</p>
+</blockquote>
+<h1 id="Core-Animation-与-view-frame"><a href="#Core-Animation-与-view-frame" class="headerlink" title="Core Animation 与 view.frame"></a>Core Animation 与 view.frame</h1><p>首先，先来看一下Core Animation对view.frame的影响。对于CALayer，有以下属性会对view的frame产生影响，包括：anchorPoint、position、transform。</p>
+<p>首先，通过以下代码，创建了一个红色button，并且在打印出动画前button和button.layer的frame，为了便于观察动画前后的位置，还创建了一个只有黑色边框的view</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">UIButton *moveButton = [UIButton buttonWithType:UIButtonTypeCustom];</span><br><span class="line">moveButton.backgroundColor = [UIColor redColor];</span><br><span class="line">moveButton.frame = CGRectMake(50, 100, 40, 40);</span><br><span class="line">[moveButton addTarget:self action:@selector(moveButtonClicked) forControlEvents:UIControlEventTouchUpInside];</span><br><span class="line">[self.view addSubview:moveButton];</span><br><span class="line">self.moveButton = moveButton;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;动画之前 frame: %@&quot;,NSStringFromCGRect(self.moveButton.frame));</span><br><span class="line">NSLog(@&quot;动画之前 layer frame: %@&quot;,NSStringFromCGRect(self.moveButton.layer.frame));</span><br><span class="line"></span><br><span class="line">UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(48, 98, 44, 44)];</span><br><span class="line">bgView.backgroundColor = [UIColor clearColor];</span><br><span class="line">bgView.layer.borderColor = [UIColor blackColor].CGColor;</span><br><span class="line">bgView.layer.borderWidth = 1;</span><br><span class="line">[self.view addSubview:bgView];</span><br></pre></td></tr></table></figure>
+<p><img src="http://ww1.sinaimg.cn/large/bccd6cf1ly1fjj9ginrdaj20fg04e748.jpg" alt></p>
+<p>在动画结束之后，再次打印button和button.layer的frame：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag&#123;</span><br><span class="line">    NSLog(@&quot;动画之后 frame: %@&quot;,NSStringFromCGRect(self.moveButton.frame));</span><br><span class="line">&#125;</span><br><span class="line">NSLog(@&quot;动画之后 layer frame: %@&quot;,NSStringFromCGRect(self.moveButton.layer.frame));</span><br></pre></td></tr></table></figure>
+<h2 id="anchorPoint"><a href="#anchorPoint" class="headerlink" title="anchorPoint"></a>anchorPoint</h2><p>看一下使用Core Animation对anchorPoint做动画：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@&quot;anchorPoint.x&quot;];</span><br><span class="line">positionAnimation.fromValue = @0.5;</span><br><span class="line">positionAnimation.toValue = @1;</span><br><span class="line">positionAnimation.duration = 1;</span><br><span class="line">positionAnimation.repeatCount = 1;</span><br><span class="line">positionAnimation.delegate = self;</span><br><span class="line">positionAnimation.fillMode = kCAFillModeForwards;</span><br><span class="line">positionAnimation.removedOnCompletion = NO;</span><br><span class="line">[self.moveButton.layer addAnimation:positionAnimation forKey:@&quot;anchorPoint&quot;];</span><br></pre></td></tr></table></figure>
+<p>动画后如下：</p>
+<p><img src="http://ww1.sinaimg.cn/large/bccd6cf1ly1fjj9pp0ahqj20fk04w749.jpg" alt></p>
+<p>此时，看一下console中的关于frame的输出信息：</p>
+<p><img src="http://ww1.sinaimg.cn/large/bccd6cf1ly1fjjyw83lzqj20r0040gmw.jpg" alt></p>
+<p>使用Core Animation对anchorPoint做动画前后，虽然在屏幕上看起来，button的位置发生了变化，但是从console的输出可以看出，button和button.layer的frame是没有变化的。</p>
+<p>并且，此时点击红色button左半边，是不会触发button的响应事件的，而点击黑框中的区域，即红色button动画前的区域，是可以触发button的响应事件。</p>
+<h2 id="position"><a href="#position" class="headerlink" title="position"></a>position</h2><p>接下来看一下对layer的position做CA动画，frame的变化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@&quot;position.x&quot;];</span><br><span class="line">positionAnimation.fromValue = @70;</span><br><span class="line">positionAnimation.toValue = @250;</span><br><span class="line">positionAnimation.duration = 1;</span><br><span class="line">positionAnimation.repeatCount = 1;</span><br><span class="line">positionAnimation.delegate = self;</span><br><span class="line">positionAnimation.fillMode = kCAFillModeForwards;</span><br><span class="line">positionAnimation.removedOnCompletion = NO;</span><br><span class="line">[self.moveButton.layer addAnimation:positionAnimation forKey:@&quot;Position&quot;];</span><br></pre></td></tr></table></figure>
+<p>动画后如下：</p>
+<p><img src="http://ww1.sinaimg.cn/large/bccd6cf1ly1fjja38drt6j20fc04umx5.jpg" alt></p>
+<p>console中的关于frame的输出信息：</p>
+<p><img src="http://ww1.sinaimg.cn/large/bccd6cf1ly1fjjyw83lzqj20r0040gmw.jpg" alt></p>
+<p>红色button的frame依然没有变化，并且，只有点击黑框中的区域，才能触发button的响应事件。</p>
+<h2 id="transform"><a href="#transform" class="headerlink" title="transform"></a>transform</h2><p>transform可以对layer实现旋转rotation、缩放scale、平移transition等动画。</p>
+<p>对于<strong>rotation</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@&quot;transform.rotation.z&quot;];</span><br><span class="line">rotationAnimation.fromValue = @0;</span><br><span class="line">rotationAnimation.toValue = @(M_PI/4);</span><br><span class="line">rotationAnimation.duration = 1;</span><br><span class="line">rotationAnimation.repeatCount = 1;</span><br><span class="line">rotationAnimation.delegate = self;</span><br><span class="line">rotationAnimation.fillMode = kCAFillModeForwards;</span><br><span class="line">rotationAnimation.removedOnCompletion = NO;</span><br><span class="line">[self.moveButton.layer addAnimation:rotationAnimation forKey:@&quot;Rotation&quot;];</span><br></pre></td></tr></table></figure>
+<p><img src="http://ww1.sinaimg.cn/large/bccd6cf1ly1fjjafk11x3j203s03iglj.jpg" alt></p>
+<p>对于<strong>scale</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@&quot;transform.scale&quot;];</span><br><span class="line">scaleAnimation.fromValue = @0.5;</span><br><span class="line">scaleAnimation.toValue = @3;</span><br><span class="line">scaleAnimation.duration = 1;</span><br><span class="line">scaleAnimation.repeatCount = 1;</span><br><span class="line">scaleAnimation.removedOnCompletion = NO;</span><br><span class="line">scaleAnimation.fillMode = kCAFillModeForwards;</span><br><span class="line">scaleAnimation.delegate = self;</span><br><span class="line">[self.moveButton.layer addAnimation:scaleAnimation forKey:@&quot;Scale&quot;];</span><br></pre></td></tr></table></figure>
+<p><img src="http://ww1.sinaimg.cn/large/bccd6cf1ly1fjjageveotj206c05g749.jpg" alt></p>
+<p>对于<strong>transition</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CABasicAnimation *rotationXAnimation1 = [CABasicAnimation animationWithKeyPath:@&quot;transform.translation.x&quot;];</span><br><span class="line">rotationXAnimation1.fromValue = @(0);</span><br><span class="line">rotationXAnimation1.toValue = @200;</span><br><span class="line">rotationXAnimation1.duration = 1;</span><br><span class="line">rotationXAnimation1.removedOnCompletion = NO;</span><br><span class="line">rotationXAnimation1.fillMode = kCAFillModeForwards;</span><br><span class="line">rotationXAnimation1.repeatCount = 1;</span><br><span class="line">rotationXAnimation1.delegate = self;</span><br><span class="line">[self.moveButton.layer addAnimation:rotationXAnimation1 forKey:@&quot;Translation&quot;]</span><br></pre></td></tr></table></figure>
+<p><img src="http://ww1.sinaimg.cn/large/bccd6cf1ly1fjjahahlfdj20fa04k749.jpg" alt></p>
+<p>并且上述三种动画之后，console中的输出均为下图所示：</p>
+<p><img src="http://ww1.sinaimg.cn/large/bccd6cf1ly1fjjyw83lzqj20r0040gmw.jpg" alt></p>
+<p>红色button的frame依然没有变化，并且，只有点击黑框中的区域，才能触发button的响应事件。</p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>由此得出结论，Core Animation是作用在CALayer上的，不论CALayer在动画结束前后，是否保持动画后的状态，都不会改变view和view.layer的frame以及view的事件响应区域，即<strong>view和view.layer的frame均不会改变，并且view的事件响应区域也没有改变</strong>。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/09/14-use-semaphore.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -485,90 +587,6 @@ minus.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/09/12-anchorPoint_position.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/09/12-anchorPoint_position.html" class="post-title-link" itemprop="url">CALayer 的 anchorPoint 与 position</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-09-12 18:33:42" itemprop="dateCreated datePublished" datetime="2017-09-12T18:33:42+08:00">2017-09-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>在项目中要实现一个动画，想让view从底部展开，经过搜索，知道了CALayer的anchorPoint可以控制动画的固定点，遂直接写了如下代码：</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">self.redView.layer.anchorPoint = CGPointMake(0.5, 1.0);</span><br><span class="line">self.redView.transform = CGAffineTransformMakeScale(1, 0);</span><br><span class="line">[UIView animateWithDuration:2 animations:^&#123;</span><br><span class="line">   self.redView.transform = CGAffineTransformIdentity;</span><br><span class="line">&#125; completion:^(BOOL finished) &#123;</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
-<p>思路很简单，将view的底边终点作为anchorPoint，动画初始状态设置y轴缩放为0，动画结束状态恢复view的y轴缩放比例为1。</p>
-<p><img src="/images/issues/bottomStretch.gif" alt></p>
-<p>效果甚是明显，我想要的是左边绿色view的动画效果，然而红色view虽然也是从底边展开的，但是，红色view的位置却跑偏了，直接向上移动了半个view的高度。这是为什么呢？接下来就是漫长的搜索过程……</p>
-<h2 id="anchorPoint"><a href="#anchorPoint" class="headerlink" title="anchorPoint"></a>anchorPoint</h2><p>首先，认识一下CALayer的重要属性——anchorPoint，即锚点、定位点。</p>
-<p>怎么理解它呢，设想一张纸被一颗钉子钉在墙上，那么纸就可以绕着钉子旋转，这个钉子在纸上的位置，就可以理解为纸的锚点。<br>钉子在纸的左上角，则左上角（0，0）就是纸的锚点；钉子在中心点（0.5，0.5），则中心点就是纸的锚点，以此类推。</p>
-<p>由此，让我们认识一下anchorPoint。它的坐标系是相对于layer自身的，x和y的取值范围是0~1，左上角为0，右下角为1，默认情况下，anchorPoint是（0.5，0.5）。</p>
-<p>左图是初始状态，右图中是设置anchorPoint为不同的值的状态，绿色为(0,0)，蓝色为(0.5,0.5)，灰色为(0.5,1)，红色为(1,0.5)，看一下效果：</p>
-<p><img src="/images/issues/init.png" alt> <img src="/images/issues/after.png" alt></p>
-<p>由此可见，单独设置anchorPoint，会改变view的frame。</p>
-<h2 id="position"><a href="#position" class="headerlink" title="position"></a>position</h2><p>那么，作为CALayer的另一重要属性的position指的又是什么呢？position的坐标系是相对于父图层的，默认点是layer的中心点。在理解了anchorPoint的含义之后，为了做测试，分别将anchorPoint的设置成不同的点，而保持position不变，结果发现anchorPoint总是与position重合，效果如下：</p>
-<p><img src="/images/issues/chonghe.png" alt></p>
-<p>由此，得出结论：<strong>position所指的位置，是anchorPoint在父图层所在的位置，即二者会一直保持重合</strong>。</p>
-<p>并且经过搜索，得到如下计算公式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">frame.origin.x = position.x - anchorPoint.x * bounds.size.width；</span><br><span class="line">frame.origin.y = position.y - anchorPoint.y * bounds.size.height；</span><br></pre></td></tr></table></figure>
-<p>通过公式，可以得到一个结论：<strong>改变anchorPoint或者position，都会对view的frame产生影响</strong>。通过这个公式也可以验证引言中提到的改变红色view的anchorPoint之后，动画向上偏移的原因了。红色view的坐标是确定的，所以在设置anchorPoint的同时，相应的改变下position使之也指向底部中点的位置，就能让view一直处在指定的位置，从而完美实现从底部向上展开的动画：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CGPoint center = self.redView.center;</span><br><span class="line">CGFloat height = self.redView.frame.size.height;</span><br><span class="line">self.redView.layer.anchorPoint = CGPointMake(0.5, 1.0);</span><br><span class="line">self.redView.layer.position = CGPointMake(center.x, center.y+height/2);</span><br><span class="line">self.redView.transform = CGAffineTransformMakeScale(1, 0);</span><br><span class="line">[UIView animateWithDuration:2 animations:^&#123;</span><br><span class="line">   self.redView.transform = CGAffineTransformIdentity;</span><br><span class="line">&#125; completion:^(BOOL finished) &#123;</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -638,7 +656,7 @@ minus.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

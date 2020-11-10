@@ -194,6 +194,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2015/11/05-swift-study-1.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2015/11/05-swift-study-1.html" class="post-title-link" itemprop="url">Swift 学习（一）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-11-05 23:46:42" itemprop="dateCreated datePublished" datetime="2015-11-05T23:46:42+08:00">2015-11-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>Swift 最新已经是 2.1 了，更优美了，日趋成熟了，加上公司项目以后可能支持到 iOS7，就可以使用 Swift 写项目了，所以必须学习下了，先看看官方的文档:<br> <a href="https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/index.html#//apple_ref/doc/uid/TP40014216-CH2-ID0" target="_blank" rel="noopener">Using Swift with Cocoa and Objective-C (Swift 2.1)</a></p>
+<h1 id="Interoperablility-互动性"><a href="#Interoperablility-互动性" class="headerlink" title="Interoperablility : 互动性"></a>Interoperablility : 互动性</h1><ul>
+<li>Initialization</li>
+</ul>
+<p><code>oc 初始化方法，在swift里省去了with，with后面的变成了参数名：</code></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (instancetype)initWithFrame:(<span class="type">CGRect</span>)frame</span><br><span class="line">style:(<span class="type">UITableViewStyle</span>)style;</span><br><span class="line"></span><br><span class="line"><span class="keyword">init</span>(frame: <span class="type">CGRect</span>, style: <span class="type">UITableViewStyle</span>) &#123; <span class="comment">/* ... */</span> &#125;</span><br></pre></td></tr></table></figure>
+<p><code>oc alloc swift不需要调用，alloc和init一气呵成：</code></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">UITableView</span> *myTableView = [[<span class="type">UITableView</span> alloc] initWithFrame:<span class="type">CGRectZero</span> style:<span class="type">UITableViewStyleGrouped</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myTableView: <span class="type">UITableView</span> = <span class="type">UITableView</span>(frame: <span class="type">CGRectZero</span>, style: .<span class="type">Grouped</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Class Factory Methods and Convenience Initializers</li>
+</ul>
+<p><code>oc 工厂方法保留，提供便利性</code></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">UIColor</span> *color = [<span class="type">UIColor</span> colorWithRed:<span class="number">0.5</span> green:<span class="number">0.0</span> blue:<span class="number">0.5</span> alpha:<span class="number">1.0</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> color = <span class="type">UIColor</span>(red: <span class="number">0.5</span>, green: <span class="number">0.0</span>, blue: <span class="number">0.5</span>, alpha: <span class="number">1.0</span>)</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2015/11/05-swift-study-1.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://debugly.cn/2015/10/30-unsigned-type-use.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -620,89 +704,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2015/09/27-bo-ke-ti-su-shi-yong-imageiptimya-suo-tu-pian.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2015/09/27-bo-ke-ti-su-shi-yong-imageiptimya-suo-tu-pian.html" class="post-title-link" itemprop="url">免费图片压缩工具-ImageOptim</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2015-09-27 08:50:27" itemprop="dateCreated datePublished" datetime="2015-09-27T08:50:27+08:00">2015-09-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>昨天发布的博客 <a href="/blog/2015/09/26/gang-ban-ping-guo-chong-dian-qi-diyquan-guo-cheng/">港版苹果充电器DIY全过程</a> 里使用了太多的图片，看了下好几十兆大，这怎么能行呢，作死的节奏啊！所以找了一款 mac 无损图片压缩工具 – <strong>ImageOptim</strong> ，压缩比特别高，支持 PNG/JPEG/GIF 等主流格式，并且是免费的！</p>
-<p><img src="/images/201509/27_5.png" width="270" height="270"></p>
-<ul>
-<li>可以直接拖入文件夹批量处理，也可以直接拖入图片，默认自动开始处理；亲身感受如下, 这是我昨天博客的图片：</li>
-</ul>
-<p><img src="/images/201509/27_3.png" width="800" height="425"><br><img src="/images/201509/27_2.png" width="800" height="425"></p>
-<ul>
-<li>技巧：这里可以调节压缩比，默认的压缩比小些，博客图片质量不用很高，可以压缩定得更小些：</li>
-</ul>
-<p><img src="/images/201509/27_4.png" width="720" height="427"></p>
-<ul>
-<li>这是今天的截图，先压缩吧：</li>
-</ul>
-<p><img src="/images/201509/27_2.png" width="800" height="425"></p>
-<h2 id="完"><a href="#完" class="headerlink" title="完"></a>完</h2><p>有了这个工具就可以大大减小图片的体积了，并且是无损的，图片质量不受影响！</p>
-<ul>
-<li>开源地址：<a href="https://github.com/pornel/ImageOptim" target="_blank" rel="noopener">https://github.com/pornel/ImageOptim</a></li>
-<li>软件下载地址：<a href="https://imageoptim.com" target="_blank" rel="noopener">https://imageoptim.com</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -772,7 +773,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

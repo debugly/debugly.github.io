@@ -194,6 +194,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2018/10/28-JavaScript-Module-Programming.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/10/28-JavaScript-Module-Programming.html" class="post-title-link" itemprop="url">JavaScript 模块化编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-10-28 10:09:10" itemprop="dateCreated datePublished" datetime="2018-10-28T10:09:10+08:00">2018-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>JavaScipt 是一门非常流程的脚本语言，特别是 Node.js 的出现，让这门语言大放异彩！也给前端开发人员转型做后端敞开了大门，同时也对 JavaScript 模块化编程产生了深远影响。<br>一起来看下模块化的发展历程吧！</p>
+</blockquote>
+<h2 id="无模块化"><a href="#无模块化" class="headerlink" title="无模块化"></a>无模块化</h2><p>下面是不使用模块的方式，比如要使用 jquery 库，找到源文件使用 script 标签进行导入，type 指定为 ‘text/javascript’，src 是一个相对或绝对的 js 源码地址。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"libs/jquery.js"</span>/&gt;</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"source/util.js"</span>/&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"source/A.js"</span>/&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"source/B.js"</span>/&gt;</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// ...</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span></span><br><span class="line"><span class="javascript">    <span class="comment">// code...</span></span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这种方式可以工作，不过有些弊端:</p>
+<ol>
+<li>全局变量挂载重复或污染</li>
+<li>依赖关系不明显，但导入顺序还不能错</li>
+<li>更新麻烦，需要手动操作，不知道何时 jquery 库会更新</li>
+<li>版本管理混乱，可能需要通过版本控制工具追踪</li>
+<li>相同功能代码复制严重，共用代码不容易维护</li>
+</ol>
+<p>带着这么多问题上路，长此以往代码会混乱不堪，需要找到一种规范去解决，开源社区为此做出了巨大努力(此处应有掌声)，下面详细看下！</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/28-JavaScript-Module-Programming.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://debugly.cn/2018/10/26-CentOS-MySQL.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -516,80 +601,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2018/04/09-HTTP.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/04/09-HTTP.html" class="post-title-link" itemprop="url">HTTP/1.1 协议简介</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-04-09 14:05:31" itemprop="dateCreated datePublished" datetime="2018-04-09T14:05:31+08:00">2018-04-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>HTTP 是一种传输协议，全称（HyperText Transfer Protocol，超文本传输协议）。<br>HTTP 是一个基于 TCP/IP 通信协议来传递数据（HTML 文件, 图片文件, 查询结果等）的应用层协议，早在 1990 年万维网兴起的时候，就得到了应用，截至目前可谓是使用最为广泛的协议了，因此掌握这个协议是很有必要。</p>
-<p>该协议的具体内容可参考 <a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="noopener">RFC2616</a>.</p>
-<h2 id="请求"><a href="#请求" class="headerlink" title="请求"></a>请求</h2><p>协议里规定的请求方法有: OPTIONS，GET，HEAD，POST，PUT，DELETE，TRACE，CONNECT 这几种，客户端开发以 GET、POST 最为常见。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/04/09-HTTP.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -659,7 +670,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
