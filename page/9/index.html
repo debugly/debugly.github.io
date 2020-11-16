@@ -194,6 +194,122 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/09/05-unix-crontab.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/09/05-unix-crontab.html" class="post-title-link" itemprop="url">macOS 定时任务</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-09-05 13:10:32" itemprop="dateCreated datePublished" datetime="2017-09-05T13:10:32+08:00">2017-09-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>截止目前，SDK的打包，已经代码审查都是通过脚本完成的，利用脚本可以轻松的帮我们搞定那些重复的枯燥工作，可以节省宝贵的时间又能避免修改配置环境引发的错误。虽然有了这些这些脚本了，不过还是得人工去执行，不够省心啊，作为一个追求极致又很懒的人，是不能忍的，于是就搞了个定时任务，每天下班后我们只需要提交下代码，到规定的时间后，打包机器（不关机）就自动去执行打包脚本，为我们打包，代码审查！</p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>在 Linux、Unix、MacOS(类Unix)系统下，crontab 命令可以用来设置周期性执行的任务。系统为每个用户分配一个 “table” 存储这些任务，这些任务通常称为 “cron job”。这些任务是在 cron 守护进程里执行的，因此执行时的环境跟用户登录的环境是不一样的，这也导致了很多新手都会遇到一个问题：直接执行脚本没一点问题，加入到 crontab 之后，就不能正常执行。</p>
+<h1 id="crontab-使用"><a href="#crontab-使用" class="headerlink" title="crontab 使用"></a>crontab 使用</h1><p>1、查看当前用户下的定时任务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">crontab -l</span><br><span class="line">///没有定时任务</span><br><span class="line">crontab: no crontab for qianlongxu</span><br><span class="line">///有定时任务</span><br><span class="line"># 每分钟打印一次当前时间</span><br><span class="line">1 * * * * /Users/qianlongxu/Desktop/logdate.sh</span><br></pre></td></tr></table></figure>
+<p>2、删除当前用户设定的全部任务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -r</span><br></pre></td></tr></table></figure>
+<p>3、添加定时任务</p>
+<ul>
+<li><p>先准备一个任务脚本 ‘logdate.sh’，最终由 cron 守护进程执行，内容如下：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 打印当前日期到文件</span><br><span class="line">echo $(date) &gt;&gt; /Users/qianlongxu/Desktop/log.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>任务写好了，然后添加到 crontab 中，实现周期性的执行有两种方法：</p>
+<ul>
+<li><p>直接编辑</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure>
+<p>   此时应该会打开 vim 编辑器，直接在里面写任务配置就好了；比如每分钟都执行可以这么写：</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 每分钟打印一次当前时间</span><br><span class="line">* * * * * /Users/qianlongxu/Desktop/logdate.sh</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>编写一个名为 <code>job.cron</code> 的shell脚本作为 crontab 的输入，内容如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 每分钟打印一次当前时间</span><br><span class="line">* * * * * /Users/qianlongxu/Desktop/logdate.sh</span><br></pre></td></tr></table></figure>
+<p>  然后执行：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab /Users/qianlongxu/Desktop/job.cron</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>这两种方法都可以添加任务。</p>
+</li>
+</ul>
+<h1 id="任务格式"><a href="#任务格式" class="headerlink" title="任务格式"></a>任务格式</h1><p>编写任务是有格式的，一共6列，前五列是设定周期的，最后一列是要执行的命令或者脚本:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">分　时　日　月　周　命令/脚本</span><br><span class="line">* * * * * cmd</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第1列表示分钟1～59 每分钟用<em>或者 </em>/1表示 </li>
+<li>第2列表示小时1～23（0表示0点） </li>
+<li>第3列表示日期1～31 </li>
+<li>第4列表示月份1～12 </li>
+<li>第5列标识号星期0～6（0表示星期天） </li>
+<li>第6列要运行的命令 </li>
+</ul>
+<h1 id="任务不执行"><a href="#任务不执行" class="headerlink" title="任务不执行"></a>任务不执行</h1><p>添加了任务后可能没有按照预期的周期去执行，可能是以下原因:</p>
+<ol>
+<li>任务脚本没有执行权限，给他一个可执行的权限： <code>sudo chmod 755 /Users/qianlongxu/Desktop/logdate.sh</code></li>
+<li>添加任务是时间设置的有问题，我曾经想当然的把每小时的第一分钟执行理解为了每分钟都执行，我找了半个小时也没找到问题！</li>
+<li><p>网上有人说到 cron 服务，这个在 Mac下比较特殊，不像 Linux，cron 服务我们貌似干预不了，是 launchctl 控制的，比如:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">///在 launchctl 里找下 cron 服务</span><br><span class="line">sudo launchctl list | grep cron</span><br><span class="line">Password:</span><br><span class="line">225	0	com.vix.cron</span><br><span class="line">  /// 尝试停止 cron 服务，结果失败了</span><br><span class="line">sudo /usr/sbin/cron stop</span><br><span class="line">Password:</span><br><span class="line">cron: cron already running, pid: 225</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>你就没法停止这个服务，执行 restart 也是一样的，服务也不会重新开始；
+</code></pre><ol start="4">
+<li>任务脚本里的路径不对，由于任务开始执行的进程没有加载环境变量，所以在脚本里使用的命名需要带上路径，使用的目录也需要是绝对路径。</li>
+<li>中文乱码，这个也是环境问题，可以在脚本的最上面声明下语言：<code>export LANG=&quot;zh_CN.UTF-8&quot;</code></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/08/31-iPhone-types.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -560,111 +676,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/07/25-use-cocoapods-manager-frameworks.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/07/25-use-cocoapods-manager-frameworks.html" class="post-title-link" itemprop="url">使用 CocoaPods 管理 frameworks</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-07-25 15:09:56" itemprop="dateCreated datePublished" datetime="2017-07-25T15:09:56+08:00">2017-07-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>通过前几篇博客的介绍，已经知道了如何去创建自己的 pods 库，前提是公开源码的，但有时候你可能不想或者不能把源码提供出去，那还能继续使用 cocoapods 管理库和依赖吗？答案是肯定的，接下来就来介绍下 cocoapods 如何管理 frameworks ！</p>
-</blockquote>
-<p>无论是源码还是库的形式，对于 pod 而言，区别就是 podspec 文件，比如我做了几个管理源码的 pod 库，现在我只需要修改下就可以了，以 <a href="https://github.com/debugly/SCNetworkKit" target="_blank" rel="noopener">SCNetworkKit</a> 举例说明:</p>
-<p>将</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s.source       = &#123; :git =&gt; &quot;https://github.com/debugly/SCNetworkKit.git&quot;, :tag =&gt; &quot;#&#123;s.version&#125;&quot; &#125;</span><br><span class="line">s.source_files  = &quot;SCNetworkKit/Classes/**/*.&#123;h,m&#125;&quot;</span><br></pre></td></tr></table></figure>
-<p>修改为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s.source       = &#123; :http =&gt; &quot;http://10.7.36.192/Pods_Static/1.0.55/SCNetworkKit.framework.zip&quot; &#125;</span><br><span class="line">s.vendored_frameworks = &quot;SCNetworkKit.framework&quot;</span><br></pre></td></tr></table></figure>
-<p>source 支持四种类型:</p>
-<ul>
-<li>:git =&gt; :tag, :branch, :commit, :submodules</li>
-<li>:svn =&gt; :folder, :tag, :revision</li>
-<li>:hg =&gt; :revision</li>
-<li>:http =&gt; :flatten, :type, :sha256, :sha1, :headers</li>
-</ul>
-<p>这里使用 http 是因为实际项目中更为方便，我们会把库文件放到服务器上，通过不通的文件夹去管理版本，下载也比较快速。</p>
-<p>剩下的验证和发布步骤就和创建管理源码的 pods 库一样了，如果你没有创建过 pods 库的话，出门右转: <a href="/2017/07/24-pod-lib-create.html">使用 pod lib 创建 CocoaPods 库</a>。</p>
-<h2 id="vendored-frameworks-说明"><a href="#vendored-frameworks-说明" class="headerlink" title="vendored_frameworks 说明"></a>vendored_frameworks 说明</h2><p>1、从名字上就可以知道，这个配置支持多个 framework，配置时只需要使用逗号分隔即可；</p>
-<p>2、可以支持路径，比如 s.vendored_frameworks = “Release/SCNetworkKit.framework” 那么 SCNetworkKit.framework 必须位于相对于 spec 文件的 Release 目录下，发布到服务器上的压缩文件，解压后也必须能够解压出 Release 文件夹，否则会验证失败！</p>
-<h2 id="vendored-libraries-说明"><a href="#vendored-libraries-说明" class="headerlink" title="vendored_libraries 说明"></a>vendored_libraries 说明</h2><p>cocoapods 不仅可以管理 frameworks ，还可以管理 .a 静态库，只需要把 <strong>vendored_frameworks</strong> 换成 <strong>vendored_libraries</strong> 即可!</p>
-<h2 id="resources-说明"><a href="#resources-说明" class="headerlink" title="resources 说明"></a>resources 说明</h2><p>前面的博客里没提到 resources 管理，这里顺便提下，假设我的 SohuGameSDK.framework 里包含的有 SohuGame.xcassets 文件夹，podspec 配置如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s.resources = &quot;SohuGameSDK.framework/SohuGame.xcassets&quot;</span><br></pre></td></tr></table></figure>
-<p>我觉得很赞的是，不用将资源手动添加到主工程里去，pods会自动通过脚本帮你完成这件事，这个是新版 pods 才有的功能，最初是不支持的，大概是从 1.0 开始支持的！！</p>
-<h2 id="完"><a href="#完" class="headerlink" title="完"></a>完</h2><p>我在做 SDK 开发工作期间，并没有通过 cocoapods 管理，也没有提供 pods 库，原因大概是:</p>
-<p>我需要去配合集成 SDK 的 App，有的 App 对于 cocoapods 依赖性很大，也经常更新，对于这个 App 来讲，其实可以支持下 pods库，但是有个 App 虽然使用了 cocoapods，但是好久都没更新过了，工程较复杂，他们不愿意使用这种方式集成，避免更新我的库时，搞乱了他们的工程依赖关系！所以都是手动替换的。</p>
-<p>其实使用 cocoapods 实现这一过程也是可以的，举例说明(SDK 发布到内网 CDN服务器):</p>
-<p>SDK 要更新包了，我需要:</p>
-<ol>
-<li>将 SDK（也就是相关的 frameworks）上传到服务器</li>
-<li>升级 podspec 版本号</li>
-<li>将 podspec 推送到私有 cocospods</li>
-</ol>
-<p>这些工作完全可以通过脚本完成，然后通过 jenkins 调用即可；大致的脚本流程如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">build_sdk : 编译SDK工程</span><br><span class="line">zip_frameworks : 压缩生成的 frameworks</span><br><span class="line">scp_frameworks : 将 zip 包推到 cdn 服务器</span><br><span class="line">generate_spec : 通过模板，生成目标 spec 文件，这里推荐使用 json 格式的spec，便于模板替换</span><br><span class="line">push_spec : 将 spec 文件推送到私聊 pod 仓库</span><br><span class="line">send_mail : 发送邮件给开发者</span><br></pre></td></tr></table></figure>
-<p>集成者的工作是:</p>
-<ol>
-<li>升级 Podfile 里 SDK 的版本号</li>
-<li>使用 pod update xx 把指定库更新下来</li>
-<li>提交 pods 变动</li>
-</ol>
-<p>本文更新时，我已经不再做 SDK 开发了，现在做 App 了，但是也不等于这套流程没用了，因为我可以把这套流程修改成 <strong>组件二进制化</strong> 流程。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -734,14 +745,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-count">99</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

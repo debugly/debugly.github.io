@@ -194,6 +194,130 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2015/11/06-Use-ssh-key.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2015/11/06-Use-ssh-key.html" class="post-title-link" itemprop="url">Mac 上如何使用 SSH key</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-11-06 21:35:37" itemprop="dateCreated datePublished" datetime="2015-11-06T21:35:37+08:00">2015-11-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><blockquote>
+<p>SSH key 用来标识某台计算机被信任！一旦被信任，以后在这台计算机上进行的操作就不需要输入你账户的密码，可以理解为令牌，拿着令牌就可以做事，当然权限是可控制的！SSH key 是部分平台的，也就说今天举例的 MAC 系统可以用，经常使用的 Windows 也可以用，Linux等系统均可，因为说白了就是使用了一种加密方法，计算机生成了一对密钥；一个公钥，一个私钥，公钥当然就是公开使用的，一般会用于第三方平台，私钥是保留在计算机里的，因此在操作的时候只需公私钥配对即可，只要配对就认为是信任的计算机所为，就可以继续操作！今天以 SSH key 方式访问 github 举例…</p>
+</blockquote>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><ul>
+<li>免密码登录远程服务器</li>
+<li><p>免密码推送、拉取 git 远程仓库</p>
+<ul>
+<li><p>比如我的博客使用的是 git page，说白了就是一个特殊的 github 仓库而已；本地生成站点之后，就需要 push 到 github，为了不用每次都输入用户名和密码，可以配置 ssh key，然后把远程仓库地址设置为 ssh 格式即可。</p>
+</li>
+<li><p>工作时虽然使用的是内部的 git 托管服务器 git lab，但使用方式跟 github 也没啥不一样的，同样支持配置 ssh key。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="查看本地-ssh-密钥"><a href="#查看本地-ssh-密钥" class="headerlink" title="查看本地 ssh 密钥"></a>查看本地 ssh 密钥</h1><p>ssh 公钥默认存放在 <code>~/.ssh</code> 目录下，因此可以 ls 查看下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ls ~/.ssh</span><br><span class="line"></span><br><span class="line">如果曾经使用过 GitHub 客户端的话，应该是这样的：</span><br><span class="line">-rw-------   1 xuqianlong  staff  1766  3 11  2015 github_rsa</span><br><span class="line">-rw-r--r--@  1 xuqianlong  staff   405 10 18 17:31 github_rsa.pub</span><br><span class="line">-rw-r--r--   1 xuqianlong  staff  1595  7  2 01:33 known_hosts</span><br><span class="line"></span><br><span class="line">也有可能是这样的：</span><br><span class="line">-rw-------  1 xuqianlong  staff  3243  8 20 00:15 id_rsa</span><br><span class="line">-rw-r--r--  1 xuqianlong  staff   742  8 20 00:15 id_rsa.pub</span><br><span class="line">-rw-r--r--  1 xuqianlong  staff   803  8 20 09:38 known_hosts</span><br><span class="line"></span><br><span class="line">只不过是文件名的前缀不同罢了；</span><br></pre></td></tr></table></figure>
+<p>如果 ssh 已经添加到 github 了，那么可以通过 <code>ssh -T git@github.com</code> 验证下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">还没添加：</span><br><span class="line">Permission denied (publickey).</span><br><span class="line">或者：</span><br><span class="line">Hi debugly! You&apos;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+<p>如果本地没有可用的 ssh key，或者你不想用之前的，或者想让之前的实效，那么你可以全部删掉，然后重新生成即可。</p>
+<h1 id="生成新的-SSH-Key"><a href="#生成新的-SSH-Key" class="headerlink" title="生成新的 SSH Key"></a>生成新的 SSH Key</h1><p>使用 <code>ssh-keygen -t rsa -b 4096 -C  &quot;xx@yyyzzz.com&quot;</code> 生成，这里的 “<a href="mailto:xx@yyyzzz.com" target="_blank" rel="noopener">xx@yyyzzz.com</a>“ 替换成你的邮箱或者随便写都行，没限制的，最好起个能分的清楚的名字，有可能你有多个电脑，配置了多个 key。</p>
+<p>输入上面的命令后，接下来连续 3 次回车就好了，具体细节是：</p>
+<ul>
+<li>Enter file in which to save the key (/Users/xuqianlong/.ssh/id_rsa): 文件存放位置，默认(~/.ssh)</li>
+<li>Enter passphrase (empty for no passphrase):我这里无需设置密码，直接回车</li>
+<li>Enter same passphrase again: 再次输入密码回车</li>
+</ul>
+<p>这是我执行的结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">bogon:~ xuqianlong$ ssh-keygen -t rsa -b 4096 -C "qianlongxu@home.mbp"</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/Users/xuqianlong/.ssh/id_rsa): </span><br><span class="line">Created directory '/Users/xuqianlong/.ssh'.</span><br><span class="line">Enter passphrase (empty for no passphrase): </span><br><span class="line">Enter same passphrase again: </span><br><span class="line">Your identification has been saved in /Users/xuqianlong/.ssh/id_rsa.</span><br><span class="line">Your public key has been saved in /Users/xuqianlong/.ssh/id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:GzJ1j3gh0ws/IwF/KMQwoIvHhmnoPPW/v+w+pmDmSFo qianlongxu@home.mbp</span><br><span class="line">The key's randomart image is:</span><br><span class="line">+---[RSA 4096]----+</span><br><span class="line">|  ..ooo          |</span><br><span class="line">| .   o.o o       |</span><br><span class="line">|.     . O =      |</span><br><span class="line">|o=     o X =     |</span><br><span class="line">|*.+.  o S B .    |</span><br><span class="line">|+o. .  o = o     |</span><br><span class="line">| + E =  .        |</span><br><span class="line">|  = = o .o       |</span><br><span class="line">| . . . +B*o      |</span><br><span class="line">+----[SHA256]-----+</span><br></pre></td></tr></table></figure>
+<ul>
+<li>添加到 ssh-agent</li>
+</ul>
+<p><code>ssh-add ~/.ssh/id_rsa</code> : Identity added: /Users/xuqianlong/.ssh/id_rsa (/Users/xuqianlong/.ssh/id_rsa) 即使不操作这一步，一般也没问题的。</p>
+<p>如果英文不错，那么可以直接去看 github 官网提供的文档： <a href="https://help.github.com/articles/generating-ssh-keys/" target="_blank" rel="noopener">Generating-ssh-key</a> .</p>
+<h1 id="Github-账号添加-SSH-key"><a href="#Github-账号添加-SSH-key" class="headerlink" title="Github 账号添加 SSH key"></a>Github 账号添加 SSH key</h1><ul>
+<li>将公钥复制到剪切板</li>
+</ul>
+<p><code>pbcopy &lt; ~/.ssh/id_rsa.pub</code><br>或者<br><code>cat ~/.ssh/id_rsa.pub | pbcopy</code></p>
+<p>登录 Github 账号，点击 Setting:</p>
+<p><img src="/images/201511/userbar-account-settings.png" width="192" height="281"></p>
+<p>点击左侧的 SSH keys:</p>
+<p><img src="/images/201511/settings-sidebar-ssh-keys.png" width="307" height="172"></p>
+<p>点击 Add SSH keys:</p>
+<p><img src="/images/201511/ssh-add-ssh-key.png" width="337" height="66"></p>
+<p>直接将公钥复制到输入框里面，一般 title 会自动生成:</p>
+<p><img src="/images/201511/ssh-key-paste.png" width="337" height="197"></p>
+<p>点击 Add key 即可:</p>
+<p><img src="/images/201511/ssh-add-key.png" width="70" height="49"></p>
+<ul>
+<li>添加到 github 后检查下 ssh key 状态 </li>
+</ul>
+<p><code>ssh -T git@github.com</code></p>
+<p>应该看到如下内容:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">The authenticity of host &apos;github.com (192.30.252.130)&apos; can&apos;t be established.</span><br><span class="line">RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)?</span><br></pre></td></tr></table></figure>
+<p>因为这是第一次使用，没有 IP 记录，因此输入 yes 即可；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Warning: Permanently added &apos;github.com,192.30.252.130&apos; (RSA) to the list of known hosts.</span><br><span class="line">Hi debugly! You&apos;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+<p>看到你 Github 的用户名后就表示成功了！</p>
+<h1 id="体验免密码"><a href="#体验免密码" class="headerlink" title="体验免密码"></a>体验免密码</h1><ul>
+<li>git clone <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:debugly/NeedUpdate.git</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Cloning into 'NeedUpdate'...</span><br><span class="line">remote: Counting objects: 149, done.</span><br><span class="line">remote: Compressing objects: 100% (98/98), done.</span><br><span class="line">remote: Total 149 (delta 42), reused 149 (delta 42), pack-reused 0</span><br><span class="line">Receiving objects: 100% (149/149), 10.30 MiB | 16.00 KiB/s, done.</span><br><span class="line">Resolving deltas: 100% (42/42), done.</span><br><span class="line">Checking connectivity... done.</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://debugly.cn/2015/11/05-swift-study-1.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -573,137 +697,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2015/10/15-RunLoopStudy1.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2015/10/15-RunLoopStudy1.html" class="post-title-link" itemprop="url">RunLoop Study (一)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2015-10-15 22:17:57" itemprop="dateCreated datePublished" datetime="2015-10-15T22:17:57+08:00">2015-10-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很久之前就想写一下 RunLoop — iOS里一个很重要的概念；最近一直很忙，一拖再拖，提到拖延 — 有点像下面要说的定时器了，可以无节操的一直拖，无上限了！O(∩_∩)O~~ 终于轮到定时器了，尽管很累，还是要坚持 run 起来！这是 RunLoop 相关文章的第一篇，认真写，开个好头吧！</p>
-<p>我第一次听到的应该是消息事件循环，因为使用了autorelease,所以就想知道这个被延迟释放的对象到底什么时候<br>会释放，被告知这个消息事件循环结束后，这个真不理解…</p>
-<p>还有，使用了定时器，定时更新一些UI，结果在滑动scrollview的时候定时器停止了，网上<br>搜了下，修改下runloop的mode就行了，这个也不知到为啥…</p>
-<p>还有对一些现象的观察：我们知道depatch一个子线程之后，这个线程执行的任务完成后，<br>就被销毁了，如果不想被销毁，而是周期性的做一些事情，那就得写个while循环或者递归了，<br>然后在加上sleep；就能像timer周期性的循环做一件事；</p>
-<p>反思主线程：怎么感觉主线程就是一直存活的呀，app可以随时响应我们的操作，你可以<br>停一会，也可以持续操作，主线程和分线程怎么就不一样了呢，为什么主线程能一直存活？<br>查看代码之后，也没有发现哪里有while循环啊，甚至于递归，<br>此事必有蹊跷，元芳你怎么看？</p>
-<p>我的假设：假如系统隐式地创建了一个循环，那么主线程就能一直跑了，而不会运行之后就停止了。当初学java的时候，曾经写过一个猜大小的小游戏，程序运行后，会随机生成一个1-1000的整数，然后一直猜，如果猜的不对就输出你猜大了或者猜小了，并且继续等待输入，猜对时提示恭喜猜对了，是否继续玩游戏？编写这个小游戏，主要是用两个while循环（嵌套），外部的while循环一次，表示游戏玩了一局，内部的while循环一次，表示猜了一次；不过玩游戏的时候只能一直等待输入，线程阻塞到这了！所以我们app的主线程不可能是一个简单的while循环就能搞定的，要做到不阻塞就需要一种机制，让app有事要做的时候就干活，没事了就睡觉…</p>
-<h2 id="NSRunLoop-的简单介绍"><a href="#NSRunLoop-的简单介绍" class="headerlink" title="NSRunLoop 的简单介绍"></a>NSRunLoop 的简单介绍</h2><p>这个类在 Foundation framework 里，十分简单，这是他的所有方法了，这个类提供了部分 runloop 的接口，可以方便的获取到她，或者添加定时器或者端口等；</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取所在线程的 runloop</span></span><br><span class="line">+ (<span class="built_in">NSRunLoop</span> *)currentRunLoop;</span><br><span class="line"><span class="comment">//获取主线程的 runloop</span></span><br><span class="line">+ (<span class="built_in">NSRunLoop</span> *)mainRunLoop <span class="built_in">NS_AVAILABLE</span>(<span class="number">10</span>_5, <span class="number">2</span>_0);</span><br><span class="line"><span class="comment">//当前输入类型</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nullable</span>, <span class="keyword">readonly</span>, <span class="keyword">copy</span>) <span class="built_in">NSString</span> *currentMode;</span><br><span class="line"><span class="comment">//获取core foundation 对象，实现更多的功能，比如添加监听；</span></span><br><span class="line">- (<span class="built_in">CFRunLoopRef</span>)getCFRunLoop <span class="built_in">CF_RETURNS_NOT_RETAINED</span>;</span><br><span class="line"><span class="comment">//把定时器加入到runloop</span></span><br><span class="line">- (<span class="keyword">void</span>)addTimer:(<span class="built_in">NSTimer</span> *)timer forMode:(<span class="built_in">NSString</span> *)mode;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)addPort:(<span class="built_in">NSPort</span> *)aPort forMode:(<span class="built_in">NSString</span> *)mode;</span><br><span class="line">- (<span class="keyword">void</span>)removePort:(<span class="built_in">NSPort</span> *)aPort forMode:(<span class="built_in">NSString</span> *)mode;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">nullable</span> <span class="built_in">NSDate</span> *)limitDateForMode:(<span class="built_in">NSString</span> *)mode;</span><br><span class="line">- (<span class="keyword">void</span>)acceptInputForMode:(<span class="built_in">NSString</span> *)mode beforeDate:(<span class="built_in">NSDate</span> *)limitDate;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSRunLoop</span> (<span class="title">NSRunLoopConveniences</span>)</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)run;</span><br><span class="line">- (<span class="keyword">void</span>)runUntilDate:(<span class="built_in">NSDate</span> *)limitDate;</span><br><span class="line">- (<span class="built_in">BOOL</span>)runMode:(<span class="built_in">NSString</span> *)mode beforeDate:(<span class="built_in">NSDate</span> *)limitDate;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSRunLoop</span> (<span class="title">NSOrderedPerform</span>)</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)performSelector:(SEL)aSelector target:(<span class="keyword">id</span>)target argument:(<span class="keyword">nullable</span> <span class="keyword">id</span>)arg order:(<span class="built_in">NSUInteger</span>)order modes:(<span class="built_in">NSArray</span>&lt;<span class="built_in">NSString</span> *&gt; *)modes;</span><br><span class="line">- (<span class="keyword">void</span>)cancelPerformSelector:(SEL)aSelector target:(<span class="keyword">id</span>)target argument:(<span class="keyword">nullable</span> <span class="keyword">id</span>)arg;</span><br><span class="line">- (<span class="keyword">void</span>)cancelPerformSelectorsWithTarget:(<span class="keyword">id</span>)target;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
-<p>WARNING</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The <span class="built_in">NSRunLoop</span> <span class="keyword">class</span> is generally not considered to be thread-safe and its methods should only be called within the context of the current thread. You should never try to call the methods of an <span class="built_in">NSRunLoop</span> object running <span class="keyword">in</span> a different thread, as doing so might cause unexpected results.</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>其中 currentRunLoop ，current 指代的线程！我们可以把 runloop 当做线程的基础组件来对待；因为没有她的话，线程运行就会遇到一些问题，或者要费事些，比如有些线程可以让操作系统唤醒睡眠的线程以管理到来的事情，而 runloop 就是这些线程的基础；</p>
-</li>
-<li><p>runloop 是一种可以在一个周期内调度任务并处理到来的事件的循环；也就是说循环是有周期的（这不是废话么），具备调度和处理事件的能力，这是了不起的；</p>
-</li>
-</ul>
-<h2 id="RunLoop-和线程的关系"><a href="#RunLoop-和线程的关系" class="headerlink" title="RunLoop 和线程的关系"></a>RunLoop 和线程的关系</h2><ul>
-<li><p>每个线程最多只有一个 runloop，创建一个线程时，默认没有；当调用获取方法的时候懒加载创建；主线程系统默认创建了，具体何时创建的不知道，或许系统在某个时候（当然是app启动完毕之前）调用了获取方法，这样就创建好了，换句话说在 applicationDidFinishLaunching 之后你就可以访问了！</p>
-</li>
-<li><p>分线程开始运行 runloop 之前，要添加输入源或者定时器，要不然 runloop 会立刻退出！</p>
-</li>
-<li><p>runloop 为我们提供了与线程交互的能力，视情况而定，也许根本就用不到她；最常用的可能就是牵涉到网络交互的时候，这个最好的教程当然是 matt 大神写的 AFNetWorking 啦；有兴趣的看下源码吧，日后有时间我也会分享下阅读第三方框架的心得；</p>
-</li>
-<li><p>runloop 的作用在于当有事情（事情来自于下文的输入源，与 Mode 也有关系）要做的时侯他就去唤醒当前的线程开始工作，没事情可做就让线程去休眠；</p>
-</li>
-</ul>
-<h2 id="RunLoop-的输入源"><a href="#RunLoop-的输入源" class="headerlink" title="RunLoop 的输入源"></a>RunLoop 的输入源</h2><p>runloop 从输入源和定时器这两类源中接收事件；输入源(通常是基于端口或者自定义的)会异步向应用发送事件，主要差别在于内核会自动发出基于端口的源信号，而自定义源就需要从不同的线程中手动发出。可以通过实现与 CFRunLoopSourceRef 相关的几个回调函数来创建自定义输入源。</p>
-<ul>
-<li><p>定时器，这个是 iOS 开发中经常用到的；你对他了解多少？定时器是基于时间的通知，他为线程提供了一种可以在未来某个时间执行某个任务的机制；他是同步发出的，并且与特定的 mode （就是把定时器添加进 runloop 的那个 mode）有关，如果没有监控特定的 mode ，那么事件就会被会略掉，当然线程也不会收到通知的，直到 runloop 运行在相应的 mode 下为止；</p>
-<p>定时器的触发有必要解释下，我们可能知道定时器的定时间隔不是那么严格的，也就说可能会有偏差！定时器调度是基于设定的开始时间的而不是实际触发时间的！这句话可能不好理解，慢慢讲给你听吧，如果到达定时器触发时间之前有别的任务没有完成，那么就会向后拖延定时器的触发时间，如果一直拖延，加入0.5s应当执行的，拖延到了1.1s的时候可以执行了，那么上次的那个就被忽略了，如果是刷新 UI，那么效果上就是卡顿下；紧接着下一次循环触发时间不是 1.1s + 0.5s， 而是0.5s *3 = 1.5s;这下明白了吧，是基于你设定开始的那个时间的，如果中间拖延了，就会被忽略过去！并且这个延迟是没有上限的！</p>
-</li>
-</ul>
-<blockquote>
-<p>注：使用定时器是否需要手动添加到 runloop 取决于创建的方式，通过阅读 <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSTimer_Class/#//apple_ref/occ/clm/NSTimer/timerWithTimeInterval:invocation:repeats:" target="_blank" rel="noopener">NSTimer Class Reference</a> 得到的结论：</p>
-</blockquote>
-<ul>
-<li>1.使用 initWithFireDate 或者 timerWithTimeInterval 这些方式创建的定时器必须手动加入到runloop ；<blockquote>
-</blockquote>
-</li>
-<li>2.使用 scheduledTimerWithTimeInterval 创建的则是默认加入到当前runloop的；</li>
-</ul>
-<ul>
-<li>也可以为 runloop 添加监听者，可以在 runloop 执行过程中的某个时候收到回掉，比如进入或者退出、睡眠、唤醒、处理输入源或者定时器之前等；这个就需要使用 core Fundation 里的 api 了（CFRunLoopObserverRef 等）；Fundation 提供的 api 是对  core Fundation 的封装，因此你也能找到添加定时器和 source 的方法: CFRunLoopAddTimer / CFRunLoopAddSource ;</li>
-</ul>
-<p>总的来说就是：<strong>如果你有事情想让 runloop 为你管理线程去完成，那么你选取一种输入源添加进 runloop，runloop就回去监测这些输入源有没有事情要做</strong>；</p>
-<h2 id="RunLoop-和-Mode"><a href="#RunLoop-和-Mode" class="headerlink" title="RunLoop 和 Mode"></a>RunLoop 和 Mode</h2><ul>
-<li>mode 有几种？阅读过 <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSRunLoop_Class/index.html#//apple_ref/occ/instm/NSRunLoop/addTimer:forMode:" target="_blank" rel="noopener">NSRunLoop Class Reference</a> 文档之后见到了两种，NSDefaultRunLoopMode，NSRunLoopCommonModes;</li>
-</ul>
-<p>其实不止两种呢，在别的地方也能找到：<a href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIApplication_Class/" target="_blank" rel="noopener">UIApplication Class Reference</a></p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Run Loop Mode <span class="keyword">for</span> Tracking</span><br><span class="line">Mode <span class="keyword">while</span> tracking <span class="keyword">in</span> controls is taking place.</span><br><span class="line"></span><br><span class="line">Declaration</span><br><span class="line">SWIFT</span><br><span class="line">let <span class="built_in">UITrackingRunLoopMode</span>: String</span><br><span class="line">OBJECTIVE-C</span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="built_in">UITrackingRunLoopMode</span>;</span><br><span class="line"></span><br><span class="line">Constants</span><br><span class="line"><span class="built_in">UITrackingRunLoopMode</span></span><br><span class="line"></span><br><span class="line">The mode set <span class="keyword">while</span> tracking <span class="keyword">in</span> controls takes place. You can use <span class="keyword">this</span> mode to add timers that fire during tracking.</span><br><span class="line"></span><br><span class="line">Available <span class="keyword">in</span> iOS <span class="number">2.0</span> and later.</span><br></pre></td></tr></table></figure>
-<p>这种模式发生在 tracking 时，现在学习的 UIKit 中的控件貌似只有 scrollview 有tracking；</p>
-<ul>
-<li><p>mode 有什么用途？我们通过阅读上文已经知道了，runloop 可以调度线程去完成我们要做的事情，先看两个场景吧：</p>
-<ul>
-<li><p>1.微信客户端中的聊天界面而言，当滑动聊天页面的时候，你发的动画就会暂停，手松开后就会动起来，这样做的好处就是使得滑动列表更加流畅；</p>
-</li>
-<li><p>2.还有一些相反的场景，就是在滑动列表的时候我们也想让我们的倒计时在一直跑秒而不是停下来；</p>
-</li>
-</ul>
-<p>这些都是可以通过 mode 来配置的，在不同的场景下 runloop 运行在不同的 mode 下；可以因此添加 timer ，port 时都要指定 这个源的 mode；这样 runloop 才能知道当前所处的 mode 是不是要处理输入源的事情！相当于对输入源分组，这个分组比较特殊，输入源可以同时属于不同的 mode；比如场景1设置为 DefaultRunLoopMode 就行了；对于场景2设置为DefaultRunLoopMode还不行，这会导致在滑动列表的时候停止更新UI，因为 滑动的时候 runloop 处于 UITrackingRunLoopMode ，不同于 DefaultRunLoopMode！因此到了定时器触发的时间了，却没有调用 target 的方法，所以要把 定时器加入到 UITrackingRunLoopMode 才行，这样滑动的时候也能触发定时器了！</p>
-</li>
-</ul>
-<blockquote>
-<p>说了半天还未提及 NSRunLoopCommonModes 这个 mode ；有人把她称之为伪模式，因为他代表了所以模式，可以说不是一种真正的模式！这些模式名称都是字符串，如果你对于 mode 不理解的话，你大可把他们都当做 <strong>枚举</strong> 而 commonModes = (default + uitacking + other…);并且每个 mode 都映射一个数组，数组里放的是添加的输入源，当然可以把输入源放到多个数组里啦；这样 runloop 运行在不同的 mode 下时就去找不同的数组，去完成任务，相信我这样通俗的说你会明白的！</p>
-</blockquote>
-<hr>
-<p>这是 RunLoop 学习的第一篇博客，随着我学习的加深也会继续分享，我本人也很期待自己能耐心写作，毕竟写作的过程是枯燥的😢O(∩_∩)O~~</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -773,14 +766,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-count">99</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

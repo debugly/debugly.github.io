@@ -1,428 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>CentOS 源码安装 Nginx</title>
-    <url>/2020/CentOS-install-nginx.html</url>
-    <content><![CDATA[<h2 id="查看系统版本"><a href="#查看系统版本" class="headerlink" title="查看系统版本"></a>查看系统版本</h2><ul>
-<li><p>uname</p>
-<p>  <code>Linux</code></p>
-</li>
-<li><p>uname -a</p>
-<p>  <code>Linux yz18-10-19.localdomain 2.6.32-754.el6.x86_64 #1 SMP Thu May 24 18:18:25 EDT 2018 x86_64 x86_64 x86_64 GNU/Linux</code></p>
-</li>
-<li><p>cat /etc/*release</p>
-<p><code>LSB_VERSION=base-4.0-amd64:base-4.0-noarch:core-4.0-amd64:core-4.0-noarch:graphics-4.0-amd64:graphics-4.0-noarch:printing-4.0-amd64:printing-4.0-noarch
-Red Hat Enterprise Linux Server release 6.10 (Santiago)
-Red Hat Enterprise Linux Server release 6.10 (Santiago)</code></p>
-</li>
-<li><p>cat /etc/issue<br><code>Red Hat Enterprise Linux Server release 6.10 (Santiago)
-Kernel \r on an \m</code></p>
-</li>
-</ul>
-<h2 id="使用源码安装-Nginx"><a href="#使用源码安装-Nginx" class="headerlink" title="使用源码安装 Nginx"></a>使用源码安装 Nginx</h2><p> 先安装好编译源码的工具：</p>
-<ul>
-<li>yum install gcc-c++</li>
-<li>yum install -y pcre pcre-devel</li>
-<li>yum install -y zlib zlib-devel</li>
-<li>yum install -y openssl openssl-devel</li>
-</ul>
-<a id="more"></a>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#下载源码</span><br><span class="line">mkdir -p /data/soft</span><br><span class="line">cd /data/soft</span><br><span class="line">wget http://nginx.org/download/nginx-1.18.0.tar.gz</span><br><span class="line">tar -zxvf nginx-1.18.0.tar.gz</span><br><span class="line">cd nginx-1.18.0</span><br><span class="line">#自定义配置</span><br><span class="line">./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-compat --with-file-aio --with-threads --with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module --without-http_memcached_module --without-http_fastcgi_module --without-http_map_module --without-http_geo_module --without-http_autoindex_module --with-cc-opt=&apos;-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=generic -fPIC&apos; --with-ld-opt=&apos;-Wl,-z,relro -Wl,-z,now -pie&apos;</span><br><span class="line">mkdir -p /var/cache/nginx/</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
-<h2 id="启动-Nginx-服务"><a href="#启动-Nginx-服务" class="headerlink" title="启动 Nginx 服务"></a>启动 Nginx 服务</h2><p>上面的配置将 nginx 的 bin 放到了 /usr/sbin 目录下了，因此无需配置 PATH，就可以在任意目录调用！</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">echo $PATH</span><br><span class="line">/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin</span><br></pre></td></tr></table></figure>
-<ul>
-<li>启动: sudo nginx 尽量使用 sudo ，不使用时一般也行，避免出现一些莫名的问题</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[@yz18-120-118.localdomain /data/soft/nginx-1.18.0]# sudo nginx</span><br><span class="line">nginx: [emerg] getpwnam(&quot;nginx&quot;) failed</span><br><span class="line">[@yz18-120-118.localdomain /data/soft/nginx-1.18.0]# useradd -s /sbin/nologin -M nginx</span><br><span class="line">[@yz18-120-118.localdomain /data/soft/nginx-1.18.0]# sudo nginx</span><br><span class="line">[@yz18-120-118.localdomain /data/soft/nginx-1.18.0]# netstat -tlunp | grep nginx</span><br><span class="line">tcp        0      0 0.0.0.0:80                  0.0.0.0:*                   LISTEN      6004/nginx</span><br><span class="line">[@yz18-120-118.localdomain /data/soft/nginx-1.18.0]# id nginx</span><br><span class="line">uid=503(nginx) gid=503(nginx) groups=503(nginx)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>停止：nginx -s stop</li>
-<li>重新加载配置文件：nginx -s reload</li>
-<li>查看版本：nginx -v</li>
-<li>查看编译配置：nginx -V</li>
-</ul>
-<p>启动失败时，可以看下错误日志 /var/log/nginx/error.log 帮助排查。</p>
-<p>默认使用 80 端口，如果端口被暂用，启动失败可以查看那个程序占用的，然后 kill 掉那个进程</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">~ lsof -i tcp:80   </span><br><span class="line">COMMAND     PID       USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME</span><br><span class="line">nginx     46838 qianlongxu    6u  IPv4 0x76c2385eb7b3200f      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx     46859 qianlongxu    6u  IPv4 0x76c2385eb7b3200f      0t0  TCP *:http (LISTEN)</span><br></pre></td></tr></table></figure>
-<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>按照上面的自定义安装方式，安装后配置文件是： /etc/nginx/nginx.conf ，查看内容</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cat /etc/nginx/nginx.conf</span><br><span class="line"></span><br><span class="line">user  nginx;</span><br><span class="line">worker_processes  1;</span><br><span class="line"></span><br><span class="line">error_log  /var/log/nginx/error.log warn;</span><br><span class="line">pid        /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       /etc/nginx/mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</span><br><span class="line">                      &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</span><br><span class="line">                      &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;</span><br><span class="line"></span><br><span class="line">    access_log  /var/log/nginx/access.log  main;</span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    #tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    #gzip  on;</span><br><span class="line"></span><br><span class="line">    include /etc/nginx/conf.d/*.conf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这个文件不用改它，除非你知道怎么改！最后一行可以看出加载了 /etc/nginx/conf.d/ 目录下的所有 conf 文件，因此我们修改这个目录下的配置文件。</p>
-<p>default.conf 是默认生成的，监听了 80 端口，可以修改为别的端口；</p>
-<p>多端口都需要 nginx 转发时，可以新增不同的配置文件；</p>
-<p>配置文件示例：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  _;</span><br><span class="line"></span><br><span class="line">    #charset koi8-r;</span><br><span class="line">    #access_log  /var/log/nginx/host.access.log  main;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   /opt/www/html;</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #error_page  404              /404.html;</span><br><span class="line"></span><br><span class="line">    # redirect server error pages to the static page /50x.html</span><br><span class="line">    #</span><br><span class="line">    error_page   500 502 503 504  /50x.html;</span><br><span class="line">    location = /50x.html &#123;</span><br><span class="line">        root   /opt/www/html;</span><br><span class="line">    &#125;</span><br><span class="line">		</span><br><span class="line">		#通过 location 代理到本机 8081 端口的 feedback</span><br><span class="line">    location /feedback &#123;</span><br><span class="line">        proxy_pass http://127.0.0.1:8081/feedback;</span><br><span class="line">        client_max_body_size 500m;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    #开启资源访问，自动生成索引</span><br><span class="line">		location /source/ &#123;</span><br><span class="line">        root /data/aa/;</span><br><span class="line">        autoindex on;</span><br><span class="line">        autoindex_exact_size off;</span><br><span class="line">        autoindex_localtime on;</span><br><span class="line">        charset utf-8;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    location /ffpods/ &#123;</span><br><span class="line">        root /data/xql/;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    #alias : when access mac folder&apos;s file a.txt,use /mac/a.txt</span><br><span class="line">    location /mac/ &#123;</span><br><span class="line">        alias /data/xql/upgrade/mac/;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /H5/ &#123;</span><br><span class="line">        alias /data/xql/upgrade/H5/;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    location /frptest/ &#123;</span><br><span class="line">        proxy_pass http://10.16.89.134:8000/;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /frp/ &#123;</span><br><span class="line">        proxy_pass http://106.120.154.23/;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="使用-root-定位"><a href="#使用-root-定位" class="headerlink" title="使用 root 定位"></a>使用 root 定位</h3><p>下面是 root 的几个测试示例，假定 root 目录下确实有 index.html 文件：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 浏览器请求 localhost/a/index.html</span><br><span class="line">## 请求的资源路径是 /data/xql/Test/a/a/index.html</span><br><span class="line">## 实际上没有这个文件，因此返回 404</span><br><span class="line">location /a/ &#123;</span><br><span class="line">  root /data/xql/Test/a/;</span><br><span class="line">  index  index.html index.htm;	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## 浏览器请求 localhost/b/index.html</span><br><span class="line">## 请求的资源路径是 /data/xql/Test/b/index.html</span><br><span class="line">## 正常返回内容</span><br><span class="line">location /b/ &#123;</span><br><span class="line">  root /data/xql/Test/;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">## 浏览器请求 localhost/c/index.html</span><br><span class="line">## 请求的资源路径是 /data/xql/Test/c/index.html</span><br><span class="line">## 正常返回内容</span><br><span class="line">location /c/ &#123;</span><br><span class="line">  root /data/xql/Test;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## 浏览器请求 localhost/d/index.html</span><br><span class="line">## 请求的资源路径是 /opt/www/html/d/index.html</span><br><span class="line">## 实际上没有这个文件，因此返回 404</span><br><span class="line">location d &#123;</span><br><span class="line">  root /data/xql/Test/d;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>总结下就是 location 后面跟的路径要以 / 开头，实际请求地址将是 root + location 定位，是否以 / 结尾不重要！</p>
-<h3 id="使用-alias-定位"><a href="#使用-alias-定位" class="headerlink" title="使用 alias 定位"></a>使用 alias 定位</h3><p>下面是 alias 的几个使用示例，假定 alias 目录下确实有 index.html 文件：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 浏览器请求 localhost/aa/</span><br><span class="line">## 请求的资源路径是 /data/xql/Test/aa/index.html</span><br><span class="line">## 正常返回内容</span><br><span class="line">location /aa/ &#123;</span><br><span class="line">  alias /data/xql/Test/aa/;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## 浏览器请求 localhost/bb/index.html</span><br><span class="line">## 请求的资源路径是 /data/xql/Test/</span><br><span class="line">## 403</span><br><span class="line">location /bb/ &#123;</span><br><span class="line">  alias /data/xql/Test/;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">## 浏览器请求 localhost/cc/</span><br><span class="line">## 请求的资源路径是 /data/xql/Test/cc/index.html</span><br><span class="line">## 正常返回内容</span><br><span class="line">location /cc &#123;</span><br><span class="line">  alias /data/xql/Test/cc/;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## 浏览器请求 localhost/dd/index.html</span><br><span class="line">## 请求的资源路径是 /opt/www/html/dd/index.html</span><br><span class="line">## 实际上没有这个文件，因此返回 404</span><br><span class="line">location dd &#123;</span><br><span class="line">  alias /data/xql/Test/dd/;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>总结下就是 alias 后面跟的路径要以 / 开头，否则不是你想要的效果，实际请求地址将是 alias 替换 location 进行定位，是否以 / 结尾不重要！</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://www.cnblogs.com/boonya/p/7907999.html" target="_blank" rel="noopener">https://www.cnblogs.com/boonya/p/7907999.html</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>CentOS</tag>
-        <tag>Nginx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS 主机迁移</title>
-    <url>/2020/CentOS-Transfer.html</url>
-    <content><![CDATA[<p>接到运维同学的通知，要做主机迁移，涉及到了 nginx 和资源文件，因此需要查看 nginx 的编译配置和 nginx 的运行配置。运维告诉我xx主机上装有 nginx，域名也是打到这台机器的，我顿时有点懵逼，因为我之前找过，根本找不到 nginx 在哪装的，这次必须得找到它才行啊…</p>
-<a id="more"></a>
-<h2 id="如何找到运行中程序所在目录？"><a href="#如何找到运行中程序所在目录？" class="headerlink" title="如何找到运行中程序所在目录？"></a>如何找到运行中程序所在目录？</h2><h3 id="which"><a href="#which" class="headerlink" title="which"></a>which</h3><p>如果程序的路径在 PATH 里可以找到，这时很好办，可以通过 which 命令来找，如果不在 PATH 改怎么找呢？</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[@10.16.89.228 /data/ifox/upgrade]# nginx</span><br><span class="line">-bash: nginx: command not found</span><br><span class="line">[@10.16.89.228 /]# which nginx</span><br><span class="line">/usr/bin/which: no nginx in (/opt/jdk7/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)</span><br><span class="line">[@10.16.89.228 /data/ifox/upgrade]# id nginx</span><br><span class="line">id: nginx: No such user</span><br></pre></td></tr></table></figure>
-<h3 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h3><p>如果确定这个程序当前正在运行，那么可以通过 <code>ps aux</code> 来找到这个程序</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[@10.16.89.228 /]# ps aux | grep nginx</span><br><span class="line">root      13884  0.0  0.0  22740  1180 ?        Ss    2019   0:00 nginx: master process /opt/nginx/sbin/nginx</span><br><span class="line">nobody    13950  0.0  0.0  23184  1912 ?        S     2019 184:25 nginx: worker process</span><br><span class="line">nobody    13951  0.0  0.0  23184  1916 ?        S     2019 184:31 nginx: worker process</span><br><span class="line">nobody    13952  0.0  0.0  23184  1912 ?        S     2019 184:23 nginx: worker process</span><br><span class="line">nobody    13953  0.0  0.0  23184  1508 ?        S     2019 184:28 nginx: worker process</span><br><span class="line">nobody    13954  0.0  0.0  23184  1912 ?        S     2019 184:40 nginx: worker process</span><br><span class="line">nobody    13955  0.0  0.0  23184  1912 ?        S     2019 184:44 nginx: worker process</span><br><span class="line">nobody    13956  0.0  0.0  23184  1524 ?        S     2019 184:18 nginx: worker process</span><br><span class="line">nobody    13957  0.0  0.0  23184  1916 ?        S     2019 184:03 nginx: worker process</span><br><span class="line">nobody    13958  0.0  0.0  23184  1912 ?        S     2019 184:37 nginx: worker process</span><br><span class="line">nobody    13959  0.0  0.0  23184  1916 ?        S     2019 184:34 nginx: worker process</span><br><span class="line">nobody    13960  0.0  0.0  23184  1912 ?        S     2019 184:02 nginx: worker process</span><br><span class="line">nobody    13961  0.0  0.0  23184  1508 ?        S     2019 184:36 nginx: worker process</span><br><span class="line">nobody    13962  0.0  0.0  23184  1520 ?        S     2019 184:06 nginx: worker process</span><br><span class="line">nobody    13963  0.0  0.0  23184  1516 ?        S     2019 184:23 nginx: worker process</span><br><span class="line">nobody    13964  0.0  0.0  23184  1524 ?        S     2019 184:33 nginx: worker process</span><br><span class="line">nobody    13965  0.0  0.0  23184  1520 ?        S     2019 184:20 nginx: worker process</span><br><span class="line">nobody    13966  0.0  0.0  23184  1520 ?        S     2019 184:33 nginx: worker process</span><br><span class="line">nobody    13967  0.0  0.0  23184  1520 ?        S     2019 184:50 nginx: worker process</span><br><span class="line">nobody    13968  0.0  0.0  23184  1916 ?        S     2019 184:18 nginx: worker process</span><br><span class="line">nobody    13969  0.0  0.0  23184  1524 ?        S     2019 184:21 nginx: worker process</span><br><span class="line">nobody    13970  0.0  0.0  23184  1524 ?        S     2019 184:15 nginx: worker process</span><br><span class="line">nobody    13971  0.0  0.0  23184  1916 ?        S     2019 183:56 nginx: worker process</span><br><span class="line">nobody    13972  0.0  0.0  23184  1524 ?        S     2019 183:57 nginx: worker process</span><br><span class="line">nobody    13973  0.0  0.0  23184  1916 ?        S     2019 184:47 nginx: worker process</span><br><span class="line">nobody    13974  0.0  0.0  23184  1520 ?        S     2019 184:08 nginx: worker process</span><br><span class="line">nobody    13975  0.0  0.0  23184  1520 ?        S     2019 184:25 nginx: worker process</span><br><span class="line">nobody    13976  0.0  0.0  23184  1916 ?        S     2019 184:49 nginx: worker process</span><br><span class="line">nobody    13977  0.0  0.0  23184  1520 ?        S     2019 184:04 nginx: worker process</span><br><span class="line">nobody    13978  0.0  0.0  23184  1916 ?        S     2019 184:15 nginx: worker process</span><br><span class="line">nobody    13979  0.0  0.0  23184  1916 ?        S     2019 183:46 nginx: worker process</span><br><span class="line">nobody    13980  0.0  0.0  23184  1564 ?        S     2019 183:44 nginx: worker process</span><br><span class="line">nobody    13981  0.0  0.0  23184  1920 ?        S     2019 183:54 nginx: worker process</span><br><span class="line">nobody    13982  0.0  0.0  23184  1516 ?        S     2019 183:14 nginx: worker process</span><br><span class="line">nobody    13983  0.0  0.0  23184  1524 ?        S     2019 184:12 nginx: worker process</span><br><span class="line">nobody    13984  0.0  0.0  23184  1920 ?        S     2019 183:52 nginx: worker process</span><br><span class="line">nobody    13985  0.0  0.0  23184  1480 ?        S     2019 184:34 nginx: worker process</span><br><span class="line">nobody    13986  0.0  0.0  23184  1512 ?        S     2019 183:59 nginx: worker process</span><br><span class="line">nobody    13987  0.0  0.0  23184  1920 ?        S     2019 183:55 nginx: worker process</span><br><span class="line">nobody    13988  0.0  0.0  23184  1528 ?        S     2019 183:57 nginx: worker process</span><br><span class="line">nobody    13989  0.0  0.0  23184  1544 ?        S     2019 183:47 nginx: worker process</span><br><span class="line">nobody    13990  0.0  0.0  23184  1920 ?        S     2019 183:47 nginx: worker process</span><br><span class="line">nobody    13991  0.0  0.0  23184  1516 ?        S     2019 183:59 nginx: worker process</span><br><span class="line">nobody    13992  0.0  0.0  23184  1544 ?        S     2019 183:46 nginx: worker process</span><br><span class="line">nobody    13993  0.0  0.0  23184  1920 ?        S     2019 183:54 nginx: worker process</span><br><span class="line">nobody    13994  0.0  0.0  23184  1524 ?        S     2019 183:44 nginx: worker process</span><br><span class="line">nobody    13995  0.0  0.0  23184  1512 ?        S     2019 184:02 nginx: worker process</span><br><span class="line">nobody    13996  0.0  0.0  23184  1920 ?        S     2019 184:09 nginx: worker process</span><br><span class="line">nobody    13997  0.0  0.0  23184  1516 ?        S     2019 183:40 nginx: worker process</span><br><span class="line">root     112730  0.0  0.0   8000   588 pts/0    S+   18:05   0:00 grep nginx</span><br></pre></td></tr></table></figure>
-<p>可以明确的看到，程序目录在这里 master process /opt/nginx/sbin/nginx ; 找到 nginx 之后，查看具体信息:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[@10.16.89.228 /opt/nginx/sbin]#  /opt/nginx/sbin/nginx -V</span><br><span class="line">nginx version: nginx/1.10.2</span><br><span class="line">built by gcc 4.4.7 20120313 (Red Hat 4.4.7-18) (GCC) </span><br><span class="line">built with OpenSSL 1.0.2g  1 Mar 2016</span><br><span class="line">TLS SNI support enabled</span><br><span class="line">configure arguments: --prefix=/opt/nginx --with-http_stub_status_module --with-http_ssl_module --with-http_realip_module --with-http_v2_module --with-openssl=/root/openssl-1.0.2g --without-http_memcached_module --without-http_fastcgi_module --without-http_map_module --without-http_geo_module --without-http_autoindex_module</span><br></pre></td></tr></table></figure>
-<p>然后可以按照 configure arguments 配置在新机器上通过<a href="/2020/CentOS-install-nginx.html">编译 nginx 源码</a>来安装，然后把 /opt/nginx/conf 复制到新主机上，一定记得打开 nginx.conf 看下，因为通常我们都会在最后一行 include 其他的配置文件！！比如我这台主机上是这么写的：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[@10.16.89.228 /opt/nginx/conf]# cat nginx.conf</span><br><span class="line"></span><br><span class="line">#user  nobody;</span><br><span class="line">worker_processes auto;</span><br><span class="line"></span><br><span class="line">#error_log  logs/error.log;</span><br><span class="line">#error_log  logs/error.log  notice;</span><br><span class="line">#error_log  logs/error.log  info;</span><br><span class="line"></span><br><span class="line">#pid        logs/nginx.pid;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    #tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    #keepalive_timeout  0;</span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    #gzip  on;</span><br><span class="line"></span><br><span class="line">    include extra/*.conf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>一定要把 extra 文件夹复制到新主机的 nginx.conf 同级目录。</p>
-<h2 id="数据迁移"><a href="#数据迁移" class="headerlink" title="数据迁移"></a>数据迁移</h2><p>数据的迁移通过 scp 即可，比较简单，保险起见，复制完毕后，检查下目录个数和文件个数，如果都能对上那应该没啥问题！</p>
-<p>scp 的介绍在 <a href="/2017/05/26-my-shell.html">这里</a> ,也包含了统计文件（夹）的脚本。</p>
-]]></content>
-      <tags>
-        <tag>CentOS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>苹果内购凭据校验</title>
-    <url>/2020/%E8%8B%B9%E6%9E%9C%E5%86%85%E8%B4%AD%E5%87%AD%E6%8D%AE%E6%A0%A1%E9%AA%8C.html</url>
-    <content><![CDATA[<p>跟后端联调自动续订订阅商品的过程中，对方有问我相关的验证地址和错误码是啥意思，因此将苹果内购凭据验证相关的知识做了个整理，希望能帮助有需要的人。</p>
-<p>苹果提供了两套环境，分别称为线上（生产）环境和沙河（测试）环境，分别对应着不同的地址：</p>
-<ul>
-<li>线上环境验证接口：<a href="https://buy.itunes.apple.com/verifyReceipt" target="_blank" rel="noopener">https://buy.itunes.apple.com/verifyReceipt</a></li>
-<li>沙河环境验证接口：<a href="https://sandbox.itunes.apple.com/verifyReceipt" target="_blank" rel="noopener">https://sandbox.itunes.apple.com/verifyReceipt</a></li>
-</ul>
-<p><a href="https://developer.apple.com/documentation/appstorereceipts/verifyreceipt" target="_blank" rel="noopener">参考链接</a></p>
-<a id="more"></a>
-<blockquote>
-<p>苹果的建议先使用线上环境验证，当返回 21007 时，再使用沙河环境验证，避免在审核期间和审核通过后切换验证地址！</p>
-</blockquote>
-<p>调用验证接口需要使用 POST 方式请求，把需要验证的凭据以 JSON 的格式放到 body 体里，Content-Type 使用 application/json ，举例说明：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"receipt-data"</span>:<span class="string">"Base64字符串"</span>,</span><br><span class="line"><span class="attr">"password"</span>:<span class="string">"自动续订订阅商品才需要"</span>,</span><br><span class="line"><span class="attr">"exclude-old-transactions"</span>:<span class="string">"对于订阅的商品，不包含旧的交易信息？"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><a href="https://developer.apple.com/documentation/appstorereceipts/requestbody" target="_blank" rel="noopener">参考链接</a></p>
-<p>苹果服务器的响应数据采用 JSON 格式，其结构如下：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"receipt"</span>: &#123;</span><br><span class="line">        <span class="attr">"receipt_type"</span>: <span class="string">"ProductionSandbox"</span>,</span><br><span class="line">        <span class="attr">"adam_id"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"app_item_id"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"bundle_id"</span>: <span class="string">"com.debuly.Player"</span>,</span><br><span class="line">        <span class="attr">"application_version"</span>: <span class="string">"3.18"</span>,</span><br><span class="line">        <span class="attr">"download_id"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"version_external_identifier"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"receipt_creation_date"</span>: <span class="string">"2020-06-22 08:05:27 Etc/GMT"</span>,</span><br><span class="line">        <span class="attr">"receipt_creation_date_ms"</span>: <span class="string">"1592813127000"</span>,</span><br><span class="line">        <span class="attr">"receipt_creation_date_pst"</span>: <span class="string">"2020-06-22 01:05:27 America/Los_Angeles"</span>,</span><br><span class="line">        <span class="attr">"request_date"</span>: <span class="string">"2020-09-16 03:38:07 Etc/GMT"</span>,</span><br><span class="line">        <span class="attr">"request_date_ms"</span>: <span class="string">"1600227487083"</span>,</span><br><span class="line">        <span class="attr">"request_date_pst"</span>: <span class="string">"2020-09-15 20:38:07 America/Los_Angeles"</span>,</span><br><span class="line">        <span class="attr">"original_purchase_date"</span>: <span class="string">"2013-08-01 07:00:00 Etc/GMT"</span>,</span><br><span class="line">        <span class="attr">"original_purchase_date_ms"</span>: <span class="string">"1375340400000"</span>,</span><br><span class="line">        <span class="attr">"original_purchase_date_pst"</span>: <span class="string">"2013-08-01 00:00:00 America/Los_Angeles"</span>,</span><br><span class="line">        <span class="attr">"original_application_version"</span>: <span class="string">"1.0"</span>,</span><br><span class="line">        <span class="attr">"in_app"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"quantity"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"product_id"</span>: <span class="string">"5154"</span>,</span><br><span class="line">                <span class="attr">"transaction_id"</span>: <span class="string">"1000000633450491"</span>,</span><br><span class="line">                <span class="attr">"original_transaction_id"</span>: <span class="string">"1000000633450491"</span>,</span><br><span class="line">                <span class="attr">"purchase_date"</span>: <span class="string">"2020-03-02 07:26:22 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_ms"</span>: <span class="string">"1583133982000"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_pst"</span>: <span class="string">"2020-03-01 23:26:22 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date"</span>: <span class="string">"2020-03-02 07:26:22 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_ms"</span>: <span class="string">"1583133982000"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_pst"</span>: <span class="string">"2020-03-01 23:26:22 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"is_trial_period"</span>: <span class="string">"false"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"quantity"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"product_id"</span>: <span class="string">"10413"</span>,</span><br><span class="line">                <span class="attr">"transaction_id"</span>: <span class="string">"1000000633349904"</span>,</span><br><span class="line">                <span class="attr">"original_transaction_id"</span>: <span class="string">"1000000633349904"</span>,</span><br><span class="line">                <span class="attr">"purchase_date"</span>: <span class="string">"2020-03-02 03:22:51 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_ms"</span>: <span class="string">"1583119371000"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_pst"</span>: <span class="string">"2020-03-01 19:22:51 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date"</span>: <span class="string">"2020-03-02 03:22:51 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_ms"</span>: <span class="string">"1583119371000"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_pst"</span>: <span class="string">"2020-03-01 19:22:51 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"is_trial_period"</span>: <span class="string">"false"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"quantity"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"product_id"</span>: <span class="string">"10414"</span>,</span><br><span class="line">                <span class="attr">"transaction_id"</span>: <span class="string">"1000000633339108"</span>,</span><br><span class="line">                <span class="attr">"original_transaction_id"</span>: <span class="string">"1000000633339108"</span>,</span><br><span class="line">                <span class="attr">"purchase_date"</span>: <span class="string">"2020-03-02 02:24:39 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_ms"</span>: <span class="string">"1583115879000"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_pst"</span>: <span class="string">"2020-03-01 18:24:39 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date"</span>: <span class="string">"2020-03-02 02:24:39 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_ms"</span>: <span class="string">"1583115879000"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_pst"</span>: <span class="string">"2020-03-01 18:24:39 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"is_trial_period"</span>: <span class="string">"false"</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"environment"</span>: <span class="string">"Sandbox"</span>,</span><br><span class="line">    <span class="attr">"status"</span>: <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>environment：生成凭据的环境，可能值有 Sandbox 和 Production</p>
-</li>
-<li><p>is-retryable：如果返回 1 意味着临时出错，需要稍后重试；返回 0 意味着出错了，不用重试，具体错误查看 status 字段</p>
-</li>
-<li><p>latest_receipt：最新的额自动续订订阅凭据，Base64编码的</p>
-</li>
-<li><p>latest_receipt_info：所有自动续订订阅交易信息</p>
-</li>
-<li><p>pending_renewal_info：即将更新的自动续订订阅数组</p>
-</li>
-<li><p>receipt：此次发送给苹果验证的凭据信息</p>
-</li>
-<li><p>status：状态码，当为 0 时，表示凭据通过校验，否则表示有错误，具体往下看</p>
-<p><a href="https://developer.apple.com/documentation/appstorereceipts/responsebody" target="_blank" rel="noopener">参考链接</a></p>
-</li>
-</ul>
-<h3 id="错误状态码"><a href="#错误状态码" class="headerlink" title="错误状态码"></a>错误状态码</h3><p>21000</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The request to the App Store was not made using the HTTP POST request method.</span><br></pre></td></tr></table></figure>
-<p>21001<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">This status code is no longer sent by the App Store.</span><br></pre></td></tr></table></figure></p>
-<p>21002<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The data in the `receipt-data` property was malformed or the service experienced a temporary issue. Try again.</span><br></pre></td></tr></table></figure></p>
-<p>21003<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The receipt could not be authenticated.</span><br></pre></td></tr></table></figure></p>
-<p>21004<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The shared secret you provided does not match the shared secret on file for your account.</span><br></pre></td></tr></table></figure></p>
-<p>21005<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The receipt server was temporarily unable to provide the receipt. Try again.</span><br></pre></td></tr></table></figure></p>
-<p>21006<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">This receipt is valid but the subscription has expired. When this status code is returned to your server, the receipt data is also decoded and returned as part of the response. Only returned for iOS 6-style transaction receipts for auto-renewable subscriptions.</span><br></pre></td></tr></table></figure></p>
-<p>21007<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">This receipt is from the test environment, but it was sent to the production environment for verification.</span><br></pre></td></tr></table></figure></p>
-<p>21008<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">This receipt is from the production environment, but it was sent to the test environment for verification.</span><br></pre></td></tr></table></figure></p>
-<p>21009<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">Internal data access error. Try again later.</span><br></pre></td></tr></table></figure></p>
-<p>21010<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The user account cannot be found or has been deleted.</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <tags>
-        <tag>iOS</tag>
-        <tag>IAP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL 常用语句</title>
-    <url>/2020/MYSQL%20%E5%B8%B8%E7%94%A8%E8%AF%AD%E5%8F%A5.html</url>
-    <content><![CDATA[<h2 id="登录-MySQL"><a href="#登录-MySQL" class="headerlink" title="登录 MySQL"></a>登录 MySQL</h2><ul>
-<li>mysql -u root -h localhost -P 3306 -p password<ul>
-<li>-u 用户名</li>
-<li>-h 主机地址</li>
-<li>-P 端口，默认3306</li>
-<li>-p 密码，可以回车然后输入密码</li>
-</ul>
-</li>
-</ul>
-<a id="more"></a>
-<p>常用命令:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?         (\?) Synonym for `help&apos;.</span><br><span class="line">clear     (\c) Clear the current input statement.</span><br><span class="line">connect   (\r) Reconnect to the server. Optional arguments are db and host.</span><br><span class="line">delimiter (\d) Set statement delimiter.</span><br><span class="line">edit      (\e) Edit command with $EDITOR.</span><br><span class="line">ego       (\G) Send command to mysql server, display result vertically.</span><br><span class="line">exit      (\q) Exit mysql. Same as quit.</span><br><span class="line">go        (\g) Send command to mysql server.</span><br><span class="line">help      (\h) Display this help.</span><br><span class="line">nopager   (\n) Disable pager, print to stdout.</span><br><span class="line">notee     (\t) Don&apos;t write into outfile.</span><br><span class="line">pager     (\P) Set PAGER [to_pager]. Print the query results via PAGER.</span><br><span class="line">print     (\p) Print current command.</span><br><span class="line">prompt    (\R) Change your mysql prompt.</span><br><span class="line">quit      (\q) Quit mysql.</span><br><span class="line">rehash    (\#) Rebuild completion hash.</span><br><span class="line">source    (\.) Execute an SQL script file. Takes a file name as an argument.</span><br><span class="line">status    (\s) Get status information from the server.</span><br><span class="line">system    (\!) Execute a system shell command.</span><br><span class="line">tee       (\T) Set outfile [to_outfile]. Append everything into given outfile.</span><br><span class="line">use       (\u) Use another database. Takes database name as argument.</span><br><span class="line">charset   (\C) Switch to another charset. Might be needed for processing binlog with multi-byte charsets.</span><br><span class="line">warnings  (\W) Show warnings after every statement.</span><br><span class="line">nowarning (\w) Don&apos;t show warnings after every statement.</span><br></pre></td></tr></table></figure>
-<h2 id="数据库相关信息查询"><a href="#数据库相关信息查询" class="headerlink" title="数据库相关信息查询"></a>数据库相关信息查询</h2><p>1、使用 root 账户登录</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; mysql -u root -p</span><br></pre></td></tr></table></figure>
-<p>2、查看版本</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; select version();</span><br><span class="line">+-----------+</span><br><span class="line">| version() |</span><br><span class="line">+-----------+</span><br><span class="line">| 5.1.73    |</span><br><span class="line">+-----------+</span><br></pre></td></tr></table></figure>
-<p>3、查看数据库支持的字符集</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show character set;</span><br><span class="line">+----------+---------------------------------+---------------------+--------+</span><br><span class="line">| Charset  | Description                     | Default collation   | Maxlen |</span><br><span class="line">+----------+---------------------------------+---------------------+--------+</span><br><span class="line">| armscii8 | ARMSCII-8 Armenian              | armscii8_general_ci |      1 |</span><br><span class="line">| ascii    | US ASCII                        | ascii_general_ci    |      1 |</span><br><span class="line">| big5     | Big5 Traditional Chinese        | big5_chinese_ci     |      2 |</span><br><span class="line">| binary   | Binary pseudo charset           | binary              |      1 |</span><br><span class="line">| cp1250   | Windows Central European        | cp1250_general_ci   |      1 |</span><br><span class="line">| cp1251   | Windows Cyrillic                | cp1251_general_ci   |      1 |</span><br><span class="line">| cp1256   | Windows Arabic                  | cp1256_general_ci   |      1 |</span><br><span class="line">| cp1257   | Windows Baltic                  | cp1257_general_ci   |      1 |</span><br><span class="line">| cp850    | DOS West European               | cp850_general_ci    |      1 |</span><br><span class="line">| cp852    | DOS Central European            | cp852_general_ci    |      1 |</span><br><span class="line">| cp866    | DOS Russian                     | cp866_general_ci    |      1 |</span><br><span class="line">| cp932    | SJIS for Windows Japanese       | cp932_japanese_ci   |      2 |</span><br><span class="line">| dec8     | DEC West European               | dec8_swedish_ci     |      1 |</span><br><span class="line">| eucjpms  | UJIS for Windows Japanese       | eucjpms_japanese_ci |      3 |</span><br><span class="line">| euckr    | EUC-KR Korean                   | euckr_korean_ci     |      2 |</span><br><span class="line">| gb18030  | China National Standard GB18030 | gb18030_chinese_ci  |      4 |</span><br><span class="line">| gb2312   | GB2312 Simplified Chinese       | gb2312_chinese_ci   |      2 |</span><br><span class="line">| gbk      | GBK Simplified Chinese          | gbk_chinese_ci      |      2 |</span><br><span class="line">| geostd8  | GEOSTD8 Georgian                | geostd8_general_ci  |      1 |</span><br><span class="line">| greek    | ISO 8859-7 Greek                | greek_general_ci    |      1 |</span><br><span class="line">| hebrew   | ISO 8859-8 Hebrew               | hebrew_general_ci   |      1 |</span><br><span class="line">| hp8      | HP West European                | hp8_english_ci      |      1 |</span><br><span class="line">| keybcs2  | DOS Kamenicky Czech-Slovak      | keybcs2_general_ci  |      1 |</span><br><span class="line">| koi8r    | KOI8-R Relcom Russian           | koi8r_general_ci    |      1 |</span><br><span class="line">| koi8u    | KOI8-U Ukrainian                | koi8u_general_ci    |      1 |</span><br><span class="line">| latin1   | cp1252 West European            | latin1_swedish_ci   |      1 |</span><br><span class="line">| latin2   | ISO 8859-2 Central European     | latin2_general_ci   |      1 |</span><br><span class="line">| latin5   | ISO 8859-9 Turkish              | latin5_turkish_ci   |      1 |</span><br><span class="line">| latin7   | ISO 8859-13 Baltic              | latin7_general_ci   |      1 |</span><br><span class="line">| macce    | Mac Central European            | macce_general_ci    |      1 |</span><br><span class="line">| macroman | Mac West European               | macroman_general_ci |      1 |</span><br><span class="line">| sjis     | Shift-JIS Japanese              | sjis_japanese_ci    |      2 |</span><br><span class="line">| swe7     | 7bit Swedish                    | swe7_swedish_ci     |      1 |</span><br><span class="line">| tis620   | TIS620 Thai                     | tis620_thai_ci      |      1 |</span><br><span class="line">| ucs2     | UCS-2 Unicode                   | ucs2_general_ci     |      2 |</span><br><span class="line">| ujis     | EUC-JP Japanese                 | ujis_japanese_ci    |      3 |</span><br><span class="line">| utf16    | UTF-16 Unicode                  | utf16_general_ci    |      4 |</span><br><span class="line">| utf16le  | UTF-16LE Unicode                | utf16le_general_ci  |      4 |</span><br><span class="line">| utf32    | UTF-32 Unicode                  | utf32_general_ci    |      4 |</span><br><span class="line">| utf8     | UTF-8 Unicode                   | utf8_general_ci     |      3 |</span><br><span class="line">| utf8mb4  | UTF-8 Unicode                   | utf8mb4_0900_ai_ci  |      4 |</span><br><span class="line">+----------+---------------------------------+---------------------+--------+</span><br><span class="line">41 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-<p>、查看数据库字符集</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show variables like &apos;character%&apos;;</span><br><span class="line">+--------------------------+-----------------------------------------------------------+</span><br><span class="line">| Variable_name            | Value                                                     |</span><br><span class="line">+--------------------------+-----------------------------------------------------------+</span><br><span class="line">| character_set_client     | utf8mb4                                                   |</span><br><span class="line">| character_set_connection | utf8mb4                                                   |</span><br><span class="line">| character_set_database   | utf8mb4                                                   |</span><br><span class="line">| character_set_filesystem | binary                                                    |</span><br><span class="line">| character_set_results    | utf8mb4                                                   |</span><br><span class="line">| character_set_server     | utf8mb4                                                   |</span><br><span class="line">| character_set_system     | utf8                                                      |</span><br><span class="line">| character_sets_dir       | /usr/local/mysql-8.0.19-macos10.15-x86_64/share/charsets/ |</span><br><span class="line">+--------------------------+-----------------------------------------------------------+</span><br><span class="line">8 rows in set (0.01 sec)</span><br></pre></td></tr></table></figure>
-<p>5、查看 mysql 状态</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; status</span><br><span class="line">--------------</span><br><span class="line">mysql  Ver 8.0.19 for macos10.15 on x86_64 (MySQL Community Server - GPL)</span><br><span class="line"></span><br><span class="line">Connection id:		13</span><br><span class="line">Current database:	mr_api</span><br><span class="line">Current user:		root@localhost</span><br><span class="line">SSL:			Not in use</span><br><span class="line">Current pager:		less</span><br><span class="line">Using outfile:		&apos;&apos;</span><br><span class="line">Using delimiter:	;</span><br><span class="line">Server version:		8.0.19 MySQL Community Server - GPL</span><br><span class="line">Protocol version:	10</span><br><span class="line">Connection:		Localhost via UNIX socket</span><br><span class="line">Server characterset:	utf8mb4</span><br><span class="line">Db     characterset:	utf8mb4</span><br><span class="line">Client characterset:	utf8mb4</span><br><span class="line">Conn.  characterset:	utf8mb4</span><br><span class="line">UNIX socket:		/tmp/mysql.sock</span><br><span class="line">Binary data as:		Hexadecimal</span><br><span class="line">Uptime:			2 days 29 min 29 sec</span><br><span class="line"></span><br><span class="line">Threads: 2  Questions: 24  Slow queries: 0  Opens: 144  Flush tables: 3  Open tables: 66  Queries per second avg: 0.000</span><br><span class="line">--------------</span><br></pre></td></tr></table></figure>
-<p>6、查询最大连接数</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show variables like &apos;%max_connections%&apos;;</span><br><span class="line">+------------------------+-------+</span><br><span class="line">| Variable_name          | Value |</span><br><span class="line">+------------------------+-------+</span><br><span class="line">| max_connections        | 151   |</span><br><span class="line">| mysqlx_max_connections | 100   |</span><br><span class="line">+------------------------+-------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-<p>7、查询线程数</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show status like &apos;Threads%&apos;;</span><br><span class="line">+-------------------+-------+</span><br><span class="line">| Variable_name     | Value |</span><br><span class="line">+-------------------+-------+</span><br><span class="line">| Threads_cached    | 1     |</span><br><span class="line">| Threads_connected | 1     |</span><br><span class="line">| Threads_created   | 2     |</span><br><span class="line">| Threads_running   | 2     |</span><br><span class="line">+-------------------+-------+</span><br><span class="line">4 rows in set (0.01 sec)</span><br></pre></td></tr></table></figure>
-<p>8、查询 db 存储位置</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show variables like &apos;%datadir%&apos;;</span><br><span class="line">+---------------+------------------------+</span><br><span class="line">| Variable_name | Value                  |</span><br><span class="line">+---------------+------------------------+</span><br><span class="line">| datadir       | /usr/local/mysql/data/ |</span><br><span class="line">+---------------+------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-<p>9、查看所有数据库</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| test               |</span><br><span class="line">+--------------------+</span><br></pre></td></tr></table></figure>
-<p>10、选择数据库</p>
-<p>选择之后，以后的操作就意味着是针对这个库的。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; use mysql;</span><br></pre></td></tr></table></figure>
-<p>11、查看库里包含了哪些表</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show tables;</span><br><span class="line">+---------------------------+</span><br><span class="line">| Tables_in_mysql           |</span><br><span class="line">+---------------------------+</span><br><span class="line">| columns_priv              |</span><br><span class="line">| db                        |</span><br><span class="line">| event                     |</span><br><span class="line">| func                      |</span><br><span class="line">| general_log               |</span><br><span class="line">| help_category             |</span><br><span class="line">| help_keyword              |</span><br><span class="line">| help_relation             |</span><br><span class="line">| help_topic                |</span><br><span class="line">| host                      |</span><br><span class="line">| ndb_binlog_index          |</span><br><span class="line">| plugin                    |</span><br><span class="line">| proc                      |</span><br><span class="line">| procs_priv                |</span><br><span class="line">| servers                   |</span><br><span class="line">| slow_log                  |</span><br><span class="line">| tables_priv               |</span><br><span class="line">| time_zone                 |</span><br><span class="line">| time_zone_leap_second     |</span><br><span class="line">| time_zone_name            |</span><br><span class="line">| time_zone_transition      |</span><br><span class="line">| time_zone_transition_type |</span><br><span class="line">| user                      |</span><br><span class="line">+---------------------------+</span><br></pre></td></tr></table></figure>
-<h2 id="基础演练"><a href="#基础演练" class="headerlink" title="基础演练"></a>基础演练</h2><p>1、创建一个名为 xqlDb 的数据库</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; create database xqlDB;</span><br><span class="line">mysql&gt; use xqlDb;</span><br></pre></td></tr></table></figure>
-<p>2、创建一张名为 car 的表</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; create table car ( id int unsigned not null auto_increment primary key, name char(255) not null, price text not null );</span><br></pre></td></tr></table></figure>
-<p>3、查看表字段信息</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; desc car;</span><br><span class="line">mysql&gt; show columns from car;</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| Field | Type             | Null | Key | Default | Extra          |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| name  | char(255)        | NO   |     | NULL    |                |</span><br><span class="line">| price | text             | NO   |     | NULL    |                |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br></pre></td></tr></table></figure>
-<p>4、查看表 DDL 语句</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show create table mr_build;</span><br><span class="line">+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Table    | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |</span><br><span class="line">+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| mr_build | CREATE TABLE `mr_build` (</span><br><span class="line">  `id` bigint NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `appid` varchar(255) NOT NULL,</span><br><span class="line">  `build_no` varchar(255) NOT NULL,</span><br><span class="line">  `platform` varchar(255) NOT NULL,</span><br><span class="line">  `env` varchar(255) NOT NULL,</span><br><span class="line">  `client_version` varchar(255) DEFAULT NULL,</span><br><span class="line">  `server_version` varchar(255) DEFAULT NULL,</span><br><span class="line">  `real_h5_url` varchar(255) NOT NULL,</span><br><span class="line">  `backup_url` varchar(255) DEFAULT NULL,</span><br><span class="line">  `build_info` varchar(1024) DEFAULT NULL,</span><br><span class="line">  `deleted` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 |</span><br><span class="line">+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-<p>5、向 car 表插入几条数据</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; insert into car (name,price) values (&apos;yaris&apos;,&apos;90000&apos;);</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into car (name,price) values (&apos;camry&apos;,&apos;270000&apos;);</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into car (name,price) values (&apos;levin&apos;,&apos;110000&apos;);</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into car (name,price) values (&apos;highlander&apos;,&apos;240000&apos;);</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into car (name,price) values (&apos;alphard&apos;,&apos;770000&apos;);</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into car (name,price) values (&apos;ix4&apos;,&apos;210000&apos;);</span><br></pre></td></tr></table></figure>
-<p>6、查询 car 表里的数据</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; select * from car;</span><br><span class="line">+----+------------+--------+</span><br><span class="line">| id | name       | price  |</span><br><span class="line">+----+------------+--------+</span><br><span class="line">|  1 | yaris      |  90000 |</span><br><span class="line">|  2 | camry      | 270000 |</span><br><span class="line">|  3 | levin      | 110000 |</span><br><span class="line">|  4 | highlander | 240000 |</span><br><span class="line">|  5 | alphard    | 770000 |</span><br><span class="line">|  6 | ix4        | 210000 |</span><br><span class="line">+----+------------+--------+</span><br></pre></td></tr></table></figure>
-<p>7、按价格排序，注意这里价格是文本格式！</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; select * from car order by price;</span><br><span class="line">+----+------------+--------+</span><br><span class="line">| id | name       | price  |</span><br><span class="line">+----+------------+--------+</span><br><span class="line">|  3 | levin      | 110000 |</span><br><span class="line">|  6 | ix4        | 210000 |</span><br><span class="line">|  4 | highlander | 240000 |</span><br><span class="line">|  2 | camry      | 270000 |</span><br><span class="line">|  5 | alphard    | 770000 |</span><br><span class="line">|  1 | yaris      |  90000 |</span><br><span class="line">+----+------------+--------+</span><br></pre></td></tr></table></figure>
-<p>8、将列类型修改为 double</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter table car modify column price double;</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from car order by price DESC;</span><br><span class="line">+----+------------+--------+</span><br><span class="line">| id | name       | price  |</span><br><span class="line">+----+------------+--------+</span><br><span class="line">|  5 | alphard    | 770000 |</span><br><span class="line">|  2 | camry      | 270000 |</span><br><span class="line">|  4 | highlander | 240000 |</span><br><span class="line">|  6 | ix4        | 210000 |</span><br><span class="line">|  3 | levin      | 110000 |</span><br><span class="line">|  1 | yaris      |  90000 |</span><br><span class="line">+----+------------+--------+</span><br></pre></td></tr></table></figure>
-<p>9、添加 cname，test 字段</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter table car add column cname varchar(1024);</span><br><span class="line">mysql&gt; alter table car add column test text not null;</span><br><span class="line"></span><br><span class="line">mysql&gt; desc car;</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| Field | Type             | Null | Key | Default | Extra          |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| name  | char(255)        | NO   |     | NULL    |                |</span><br><span class="line">| price | double           | YES  |     | NULL    |                |</span><br><span class="line">| cname | varchar(1024)    | YES  |     | NULL    |                |</span><br><span class="line">| test  | text             | NO   |     | NULL    |                |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br></pre></td></tr></table></figure>
-<p>10、更新表，为他们增加中文名字</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; update car set cname=&apos;埃尔法&apos; where id=5;</span><br><span class="line">mysql&gt; update car set cname=&apos;凯美瑞&apos; where id=2;</span><br><span class="line">mysql&gt; update car set cname=&apos;ix4&apos; where id=6;</span><br><span class="line">mysql&gt; update car set cname=&apos;雷凌&apos; where id=3;</span><br><span class="line">mysql&gt; update car set cname=&apos;致炫&apos; where id=1;</span><br><span class="line">mysql&gt; update car set cname=&apos;致炫&apos;, price=87800.5  where id=1;</span><br><span class="line">mysql&gt; select * from car order by price DESC;</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">| id | name       | price   | cname     | test |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">|  5 | alphard    |  770000 | 埃尔法 |      |</span><br><span class="line">|  2 | camry      |  270000 | 凯美瑞 |      |</span><br><span class="line">|  4 | highlander |  240000 | 汉兰达 |      |</span><br><span class="line">|  6 | ix4        |  210000 | ix4   |      |</span><br><span class="line">|  3 | levin      |  110000 | 雷凌   |      |</span><br><span class="line">|  1 | yaris      | 87800.5 | 致炫   |      |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br></pre></td></tr></table></figure>
-<p>11、 删除 test 字段</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter table car drop column test;</span><br><span class="line">mysql&gt; select * from car order by price DESC;</span><br><span class="line">+----+------------+---------+-----------+</span><br><span class="line">| id | name       | price   | cname     |</span><br><span class="line">+----+------------+---------+-----------+</span><br><span class="line">|  5 | alphard    |  770000 | 埃尔法 |</span><br><span class="line">|  2 | camry      |  270000 | 凯美瑞 |</span><br><span class="line">|  4 | highlander |  240000 | 汉兰达 |</span><br><span class="line">|  6 | ix4        |  210000 | ix4       |</span><br><span class="line">|  3 | levin      |  110000 | 雷凌    |</span><br><span class="line">|  1 | yaris      | 87800.5 | 致炫    |</span><br><span class="line">+----+------------+---------+-----------+</span><br></pre></td></tr></table></figure>
-<p>12、修改表名</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter table car rename to Car;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show tables;</span><br><span class="line">+-----------------+</span><br><span class="line">| Tables_in_xqlDB |</span><br><span class="line">+-----------------+</span><br><span class="line">| Car             |</span><br><span class="line">+-----------------+</span><br></pre></td></tr></table></figure>
-<p>13、修改字段和数据类型</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter table Car add column test text;</span><br><span class="line">mysql&gt; alter table Car change test tt int;</span><br><span class="line">Query OK, 6 rows affected (0.01 sec)</span><br><span class="line">Records: 6  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; desc Car;</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| Field | Type             | Null | Key | Default | Extra          |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| name  | char(255)        | NO   |     | NULL    |                |</span><br><span class="line">| price | double           | YES  |     | NULL    |                |</span><br><span class="line">| cname | varchar(1024)    | YES  |     | NULL    |                |</span><br><span class="line">| tt    | int(11)          | YES  |     | NULL    |                |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br></pre></td></tr></table></figure>
-<p>14、仅仅修改字段的数据类型</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter table Car modify tt varchar(20);</span><br><span class="line">mysql&gt; desc Car;</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| Field | Type             | Null | Key | Default | Extra          |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| name  | char(255)        | NO   |     | NULL    |                |</span><br><span class="line">| price | double           | YES  |     | NULL    |                |</span><br><span class="line">| cname | varchar(1024)    | YES  |     | NULL    |                |</span><br><span class="line">| tt    | varchar(20)      | YES  |     | NULL    |                |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br></pre></td></tr></table></figure>
-<p>15、条件删除，删掉 cname 为 Null 的元组</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; insert into Car (name,price,cname) values (&apos;highlander&apos;,&apos;240000&apos;,&apos;&apos;);</span><br><span class="line">mysql&gt; insert into Car (name,price,cname) values (&apos;highlander&apos;,&apos;240000&apos;,&apos;&apos;);</span><br><span class="line">mysql&gt; insert into Car (name,price,cname) values (&apos;highlander&apos;,&apos;240000&apos;,&apos;&apos;);</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from Car;</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">| id | name       | price   | cname     | tt   |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">|  1 | yaris      | 87800.5 | 致炫    | NULL |</span><br><span class="line">|  2 | camry      |  270000 | 凯美瑞 | NULL |</span><br><span class="line">|  3 | levin      |  110000 | 雷凌    | NULL |</span><br><span class="line">|  4 | highlander |  240000 | 汉兰达 | NULL |</span><br><span class="line">|  5 | alphard    |  770000 | 埃尔法 | NULL |</span><br><span class="line">|  6 | ix4        |  210000 | ix4       | NULL |</span><br><span class="line">|  7 | highlander |  240000 | NULL      | NULL |</span><br><span class="line">|  8 | highlander |  240000 | NULL      | NULL |</span><br><span class="line">|  9 | highlander |  240000 | NULL      | NULL |</span><br><span class="line">| 10 | highlander |  240000 |           | NULL |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line"></span><br><span class="line">mysql&gt; delete from Car where name=&apos;highlander&apos; and cname is Null;</span><br><span class="line">Query OK, 3 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from Car;</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">| id | name       | price   | cname     | tt   |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">|  1 | yaris      | 87800.5 | 致炫    | NULL |</span><br><span class="line">|  2 | camry      |  270000 | 凯美瑞 | NULL |</span><br><span class="line">|  3 | levin      |  110000 | 雷凌    | NULL |</span><br><span class="line">|  4 | highlander |  240000 | 汉兰达 | NULL |</span><br><span class="line">|  5 | alphard    |  770000 | 埃尔法 | NULL |</span><br><span class="line">|  6 | ix4        |  210000 | ix4       | NULL |</span><br><span class="line">| 10 | highlander |  240000 |           | NULL |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">7 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; delete from Car where name=&apos;highlander&apos; and cname=&apos;&apos;;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from Car;</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">| id | name       | price   | cname     | tt   |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">|  1 | yaris      | 87800.5 | 致炫    | NULL |</span><br><span class="line">|  2 | camry      |  270000 | 凯美瑞 | NULL |</span><br><span class="line">|  3 | levin      |  110000 | 雷凌    | NULL |</span><br><span class="line">|  4 | highlander |  240000 | 汉兰达 | NULL |</span><br><span class="line">|  5 | alphard    |  770000 | 埃尔法 | NULL |</span><br><span class="line">|  6 | ix4        |  210000 | ix4       | NULL |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br></pre></td></tr></table></figure>
-<p>16、删除表</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; drop table Car;</span><br></pre></td></tr></table></figure>
-<p>17、删除数据库</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; drop database xqlDB;</span><br></pre></td></tr></table></figure>
-<p>18、退出</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; exit</span><br><span class="line">Bye</span><br></pre></td></tr></table></figure>
-<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h2><p>1、查询 mysql 数据库 的 user 表</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; select host,user from mysql.user;</span><br><span class="line">+-----------+------------------+</span><br><span class="line">| host      | user             |</span><br><span class="line">+-----------+------------------+</span><br><span class="line">| localhost | mysql.infoschema |</span><br><span class="line">| localhost | mysql.session    |</span><br><span class="line">| localhost | mysql.sys        |</span><br><span class="line">| localhost | root             |</span><br><span class="line">+-----------+------------------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br><span class="line">//格式化下</span><br><span class="line">mysql&gt; select concat(&apos;user: &apos;&apos;&apos;,user,&apos;&apos;&apos;@&apos;&apos;&apos;,host,&apos;&apos;&apos;;&apos;) as UserInfo from mysql.user;</span><br><span class="line">+---------------------------------------+</span><br><span class="line">| UserInfo                              |</span><br><span class="line">+---------------------------------------+</span><br><span class="line">| user: &apos;mysql.infoschema&apos;@&apos;localhost&apos;; |</span><br><span class="line">| user: &apos;mysql.session&apos;@&apos;localhost&apos;;    |</span><br><span class="line">| user: &apos;mysql.sys&apos;@&apos;localhost&apos;;        |</span><br><span class="line">| user: &apos;root&apos;@&apos;localhost&apos;;             |</span><br><span class="line">+---------------------------------------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-<p>2、添加新账户</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; create user test@localhost identified by &apos;123456&apos;;</span><br><span class="line">mysql&gt; create user any@&apos;%&apos; identified by &apos;123456&apos;;</span><br><span class="line">mysql&gt; create user xql@10.7.36.118 identified by &apos;123456&apos;;</span><br><span class="line">//老版本可以这么操作</span><br><span class="line">mysql&gt; insert into mysql.user(Host,User,Password) </span><br><span class="line">mysql&gt; flush privileges;</span><br><span class="line">##添加用户，或者更改用户权限后，记得刷新下，否者重启前不生效。</span><br></pre></td></tr></table></figure>
-<p>3、退出 root 用户，登录 test@localhost 用户，然后操作 xqlDB</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; \q</span><br><span class="line">[@10.16.89.67 ~]# mysql -u test -h localhost -p</span><br><span class="line">Enter password:</span><br><span class="line">mysql&gt; use xqlDB;</span><br><span class="line">ERROR 1044 (42000): Access denied for user &apos;localhost&apos;@&apos;localhost&apos; to database &apos;xqlDB&apos;</span><br></pre></td></tr></table></figure>
-<p>3、 查看当前用户的授权情况</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; SHOW GRANTS FOR CURRENT_USER;</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Grants for test@localhost                                                                                   |</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| GRANT USAGE ON *.* TO &apos;test&apos;@&apos;localhost&apos; IDENTIFIED BY PASSWORD &apos;*6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9&apos; |</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
-<p>4、切换到 root 用户进行授权</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; mysql -u root</span><br><span class="line">mysql&gt; grant select,insert,update,delete on xqlDB.* to test@localhost;</span><br><span class="line">mysql&gt; show grants for test@&apos;localhost&apos; ;</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Grants for test@localhost                                                                                   |</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| GRANT USAGE ON *.* TO &apos;test&apos;@&apos;localhost&apos; IDENTIFIED BY PASSWORD &apos;*6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9&apos; |</span><br><span class="line">| GRANT SELECT, INSERT, UPDATE, DELETE ON `xqlDB`.* TO &apos;test&apos;@&apos;localhost&apos;                                     |</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
-<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>1、整形</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">类型</th>
-<th style="text-align:center">字节</th>
-<th style="text-align:center">有符号范围</th>
-<th style="text-align:center">无符号范围</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">TINYINT</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">-128 ~ 127</td>
-<td style="text-align:center">0 ~ 255</td>
-</tr>
-<tr>
-<td style="text-align:center">SMALLINT</td>
-<td style="text-align:center">2</td>
-<td style="text-align:center">-32768 ~ 32767</td>
-<td style="text-align:center">0 ~ 65535</td>
-</tr>
-<tr>
-<td style="text-align:center">MEDIUMINT</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">-8388608 ~ 8388607</td>
-<td style="text-align:center">0 ~ 16777215</td>
-</tr>
-<tr>
-<td style="text-align:center">INT</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">-2147483648 ~ 2147483647</td>
-<td style="text-align:center">0 ~ 4294967295</td>
-</tr>
-<tr>
-<td style="text-align:center">BIGINT</td>
-<td style="text-align:center">8</td>
-<td style="text-align:center">-9223372036854775808 ~ 9223372036854775807</td>
-<td style="text-align:center">0 ~ 18446744073709551615</td>
-</tr>
-</tbody>
-</table>
-<p>2、浮点型</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">类型</th>
-<th style="text-align:center">字节</th>
-<th style="text-align:center">有符号范围</th>
-<th style="text-align:center">无符号范围</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">FLOAT</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">-1.175494351E-38 ~  1.175494351E-38</td>
-<td style="text-align:center">0 ~ 3.402823466E+38</td>
-</tr>
-<tr>
-<td style="text-align:center">DOUBLE</td>
-<td style="text-align:center">8</td>
-<td style="text-align:center">-1.7976931348623157E+ 308 ~ -2.2250738585072014E- 308</td>
-<td style="text-align:center">0 ~ 1.7976931348623157E+ 308</td>
-</tr>
-</tbody>
-</table>
-<p>3、字符型</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">类型</th>
-<th style="text-align:center">长度</th>
-<th style="text-align:center">特性</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">CHAR</td>
-<td style="text-align:center">0-255字节</td>
-<td style="text-align:center">定长字符串</td>
-</tr>
-<tr>
-<td style="text-align:center">VARCHAR</td>
-<td style="text-align:center">0-65535 字节</td>
-<td style="text-align:center">变长字符串</td>
-</tr>
-<tr>
-<td style="text-align:center">TINYBLOB</td>
-<td style="text-align:center">0-255字节</td>
-<td style="text-align:center">不超过 255 个字符的二进制字符串</td>
-</tr>
-<tr>
-<td style="text-align:center">TINYTEXT</td>
-<td style="text-align:center">0-255字节</td>
-<td style="text-align:center">短文本字符串</td>
-</tr>
-<tr>
-<td style="text-align:center">BLOB</td>
-<td style="text-align:center">0-65 535字节</td>
-<td style="text-align:center">二进制形式的长文本数据</td>
-</tr>
-<tr>
-<td style="text-align:center">TEXT</td>
-<td style="text-align:center">0-65 535字节</td>
-<td style="text-align:center">长文本数据</td>
-</tr>
-<tr>
-<td style="text-align:center">MEDIUMBLOB</td>
-<td style="text-align:center">0-16777215字节</td>
-<td style="text-align:center">二进制形式的中等长度文本数据</td>
-</tr>
-<tr>
-<td style="text-align:center">MEDIUMTEXT</td>
-<td style="text-align:center">0-16777215字节</td>
-<td style="text-align:center">中等长度文本数据</td>
-</tr>
-<tr>
-<td style="text-align:center">LONGBLOB</td>
-<td style="text-align:center">0-4294967295字节</td>
-<td style="text-align:center">二进制形式的极大文本数据</td>
-</tr>
-<tr>
-<td style="text-align:center">LONGTEXT</td>
-<td style="text-align:center">0-4294967295字节</td>
-<td style="text-align:center">极大文本数据</td>
-</tr>
-</tbody>
-</table>
-<p> 4、日期类型</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">类型</th>
-<th style="text-align:center">字节</th>
-<th style="text-align:center">范围</th>
-<th style="text-align:center">格式</th>
-<th style="text-align:center">特性</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">DATE</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">1000-01-01/9999-12-31</td>
-<td style="text-align:center">YYYY-MM-DD</td>
-<td style="text-align:center">日期值</td>
-</tr>
-<tr>
-<td style="text-align:center">TIME</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">‘-838:59:59’/‘838:59:59’</td>
-<td style="text-align:center">HH:MM:SS</td>
-<td style="text-align:center">时间值或持续时间</td>
-</tr>
-<tr>
-<td style="text-align:center">YEAR</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">1901/2155</td>
-<td style="text-align:center">YYYY</td>
-<td style="text-align:center">年份值</td>
-</tr>
-<tr>
-<td style="text-align:center">DATETIME</td>
-<td style="text-align:center">8</td>
-<td style="text-align:center">1000-01-01 00:00:00/9999-12-31 23:59:59</td>
-<td style="text-align:center">YYYY-MM-DD HH:MM:SS</td>
-<td style="text-align:center">混合日期和时间值</td>
-</tr>
-<tr>
-<td style="text-align:center">TIMESTAMP</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">1970-01-01 00:00:00/2038 结束时间是第 2147483647 秒，北京时间 2038-1-19 11:14:07，格林尼治时间 2038年1月19日 凌晨 03:14:07</td>
-<td style="text-align:center">YYYYMMDD HHMMSS</td>
-<td style="text-align:center">混合日期和时间值，时间戳</td>
-</tr>
-</tbody>
-</table>
-<h2 id="SQL-语句注释"><a href="#SQL-语句注释" class="headerlink" title="SQL 语句注释"></a>SQL 语句注释</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#我是单行注释</span><br><span class="line">-- 我是单行注释，前面有个空格哦</span><br><span class="line">/*</span><br><span class="line">我是多行注释哦；</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
-<h2 id="图像化工具"><a href="#图像化工具" class="headerlink" title="图像化工具"></a>图像化工具</h2><ul>
-<li><a href="http://dev.mysql.com/downloads/tools/workbench/" target="_blank" rel="noopener">http://dev.mysql.com/downloads/tools/workbench/</a></li>
-<li><a href="http://www.sequelpro.com" target="_blank" rel="noopener">http://www.sequelpro.com</a> </li>
-<li><a href="http://dbeaver.jkiss.org/download/#macos" target="_blank" rel="noopener">http://dbeaver.jkiss.org/download/#macos</a> </li>
-<li><a href="http://www.navicat.com/download" target="_blank" rel="noopener">http://www.navicat.com/download</a> </li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://www.w3resource.com/mysql/mysql-data-types.php" target="_blank" rel="noopener">https://www.w3resource.com/mysql/mysql-data-types.php</a></li>
-<li><a href="https://www.tutorialspoint.com/mysql/mysql-data-types.htm" target="_blank" rel="noopener">https://www.tutorialspoint.com/mysql/mysql-data-types.htm</a></li>
-<li><a href="http://www.runoob.com/mysql/mysql-data-types.html" target="_blank" rel="noopener">http://www.runoob.com/mysql/mysql-data-types.html</a></li>
-<li><a href="http://www.cnblogs.com/zbseoag/archive/2013/03/19/2970004.html" target="_blank" rel="noopener">http://www.cnblogs.com/zbseoag/archive/2013/03/19/2970004.html</a></li>
-<li><a href="https://www.cnblogs.com/mr-wid/archive/2013/05/09/3068229.html#d8" target="_blank" rel="noopener">https://www.cnblogs.com/mr-wid/archive/2013/05/09/3068229.html#d8</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello My Blog</title>
     <url>/2015/07/07-bo-ke-an-jia-la.html</url>
     <content><![CDATA[<blockquote>
@@ -5225,6 +4803,476 @@ minus.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
 ]]></content>
       <tags>
         <tag>FFmpeg</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>苹果内购凭据校验</title>
+    <url>/2020/09/16%E8%8B%B9%E6%9E%9C%E5%86%85%E8%B4%AD%E5%87%AD%E6%8D%AE%E6%A0%A1%E9%AA%8C.html</url>
+    <content><![CDATA[<p>跟后端联调自动续订订阅商品的过程中，对方有问我相关的验证地址和错误码是啥意思，因此将苹果内购凭据验证相关的知识做了个整理，希望能帮助有需要的人。</p>
+<p>苹果提供了两套环境，分别称为线上（生产）环境和沙河（测试）环境，分别对应着不同的地址：</p>
+<ul>
+<li>线上环境验证接口：<a href="https://buy.itunes.apple.com/verifyReceipt" target="_blank" rel="noopener">https://buy.itunes.apple.com/verifyReceipt</a></li>
+<li>沙河环境验证接口：<a href="https://sandbox.itunes.apple.com/verifyReceipt" target="_blank" rel="noopener">https://sandbox.itunes.apple.com/verifyReceipt</a></li>
+</ul>
+<p><a href="https://developer.apple.com/documentation/appstorereceipts/verifyreceipt" target="_blank" rel="noopener">参考链接</a></p>
+<a id="more"></a>
+<blockquote>
+<p>苹果的建议先使用线上环境验证，当返回 21007 时，再使用沙河环境验证，避免在审核期间和审核通过后切换验证地址！</p>
+</blockquote>
+<p>调用验证接口需要使用 POST 方式请求，把需要验证的凭据以 JSON 的格式放到 body 体里，Content-Type 使用 application/json ，举例说明：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"receipt-data"</span>:<span class="string">"Base64字符串"</span>,</span><br><span class="line"><span class="attr">"password"</span>:<span class="string">"自动续订订阅商品才需要"</span>,</span><br><span class="line"><span class="attr">"exclude-old-transactions"</span>:<span class="string">"对于订阅的商品，不包含旧的交易信息？"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://developer.apple.com/documentation/appstorereceipts/requestbody" target="_blank" rel="noopener">参考链接</a></p>
+<p>苹果服务器的响应数据采用 JSON 格式，其结构如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"receipt"</span>: &#123;</span><br><span class="line">        <span class="attr">"receipt_type"</span>: <span class="string">"ProductionSandbox"</span>,</span><br><span class="line">        <span class="attr">"adam_id"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"app_item_id"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"bundle_id"</span>: <span class="string">"com.debuly.Player"</span>,</span><br><span class="line">        <span class="attr">"application_version"</span>: <span class="string">"3.18"</span>,</span><br><span class="line">        <span class="attr">"download_id"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"version_external_identifier"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"receipt_creation_date"</span>: <span class="string">"2020-06-22 08:05:27 Etc/GMT"</span>,</span><br><span class="line">        <span class="attr">"receipt_creation_date_ms"</span>: <span class="string">"1592813127000"</span>,</span><br><span class="line">        <span class="attr">"receipt_creation_date_pst"</span>: <span class="string">"2020-06-22 01:05:27 America/Los_Angeles"</span>,</span><br><span class="line">        <span class="attr">"request_date"</span>: <span class="string">"2020-09-16 03:38:07 Etc/GMT"</span>,</span><br><span class="line">        <span class="attr">"request_date_ms"</span>: <span class="string">"1600227487083"</span>,</span><br><span class="line">        <span class="attr">"request_date_pst"</span>: <span class="string">"2020-09-15 20:38:07 America/Los_Angeles"</span>,</span><br><span class="line">        <span class="attr">"original_purchase_date"</span>: <span class="string">"2013-08-01 07:00:00 Etc/GMT"</span>,</span><br><span class="line">        <span class="attr">"original_purchase_date_ms"</span>: <span class="string">"1375340400000"</span>,</span><br><span class="line">        <span class="attr">"original_purchase_date_pst"</span>: <span class="string">"2013-08-01 00:00:00 America/Los_Angeles"</span>,</span><br><span class="line">        <span class="attr">"original_application_version"</span>: <span class="string">"1.0"</span>,</span><br><span class="line">        <span class="attr">"in_app"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"quantity"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"product_id"</span>: <span class="string">"5154"</span>,</span><br><span class="line">                <span class="attr">"transaction_id"</span>: <span class="string">"1000000633450491"</span>,</span><br><span class="line">                <span class="attr">"original_transaction_id"</span>: <span class="string">"1000000633450491"</span>,</span><br><span class="line">                <span class="attr">"purchase_date"</span>: <span class="string">"2020-03-02 07:26:22 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_ms"</span>: <span class="string">"1583133982000"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_pst"</span>: <span class="string">"2020-03-01 23:26:22 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date"</span>: <span class="string">"2020-03-02 07:26:22 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_ms"</span>: <span class="string">"1583133982000"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_pst"</span>: <span class="string">"2020-03-01 23:26:22 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"is_trial_period"</span>: <span class="string">"false"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"quantity"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"product_id"</span>: <span class="string">"10413"</span>,</span><br><span class="line">                <span class="attr">"transaction_id"</span>: <span class="string">"1000000633349904"</span>,</span><br><span class="line">                <span class="attr">"original_transaction_id"</span>: <span class="string">"1000000633349904"</span>,</span><br><span class="line">                <span class="attr">"purchase_date"</span>: <span class="string">"2020-03-02 03:22:51 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_ms"</span>: <span class="string">"1583119371000"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_pst"</span>: <span class="string">"2020-03-01 19:22:51 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date"</span>: <span class="string">"2020-03-02 03:22:51 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_ms"</span>: <span class="string">"1583119371000"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_pst"</span>: <span class="string">"2020-03-01 19:22:51 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"is_trial_period"</span>: <span class="string">"false"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"quantity"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"product_id"</span>: <span class="string">"10414"</span>,</span><br><span class="line">                <span class="attr">"transaction_id"</span>: <span class="string">"1000000633339108"</span>,</span><br><span class="line">                <span class="attr">"original_transaction_id"</span>: <span class="string">"1000000633339108"</span>,</span><br><span class="line">                <span class="attr">"purchase_date"</span>: <span class="string">"2020-03-02 02:24:39 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_ms"</span>: <span class="string">"1583115879000"</span>,</span><br><span class="line">                <span class="attr">"purchase_date_pst"</span>: <span class="string">"2020-03-01 18:24:39 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date"</span>: <span class="string">"2020-03-02 02:24:39 Etc/GMT"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_ms"</span>: <span class="string">"1583115879000"</span>,</span><br><span class="line">                <span class="attr">"original_purchase_date_pst"</span>: <span class="string">"2020-03-01 18:24:39 America/Los_Angeles"</span>,</span><br><span class="line">                <span class="attr">"is_trial_period"</span>: <span class="string">"false"</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"environment"</span>: <span class="string">"Sandbox"</span>,</span><br><span class="line">    <span class="attr">"status"</span>: <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>environment：生成凭据的环境，可能值有 Sandbox 和 Production</p>
+</li>
+<li><p>is-retryable：如果返回 1 意味着临时出错，需要稍后重试；返回 0 意味着出错了，不用重试，具体错误查看 status 字段</p>
+</li>
+<li><p>latest_receipt：最新的额自动续订订阅凭据，Base64编码的</p>
+</li>
+<li><p>latest_receipt_info：所有自动续订订阅交易信息</p>
+</li>
+<li><p>pending_renewal_info：即将更新的自动续订订阅数组</p>
+</li>
+<li><p>receipt：此次发送给苹果验证的凭据信息</p>
+</li>
+<li><p>status：状态码，当为 0 时，表示凭据通过校验，否则表示有错误，具体往下看</p>
+<p><a href="https://developer.apple.com/documentation/appstorereceipts/responsebody" target="_blank" rel="noopener">参考链接</a></p>
+</li>
+</ul>
+<h3 id="错误状态码"><a href="#错误状态码" class="headerlink" title="错误状态码"></a>错误状态码</h3><p>21000</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The request to the App Store was not made using the HTTP POST request method.</span><br></pre></td></tr></table></figure>
+<p>21001<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">This status code is no longer sent by the App Store.</span><br></pre></td></tr></table></figure></p>
+<p>21002<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The data in the `receipt-data` property was malformed or the service experienced a temporary issue. Try again.</span><br></pre></td></tr></table></figure></p>
+<p>21003<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The receipt could not be authenticated.</span><br></pre></td></tr></table></figure></p>
+<p>21004<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The shared secret you provided does not match the shared secret on file for your account.</span><br></pre></td></tr></table></figure></p>
+<p>21005<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The receipt server was temporarily unable to provide the receipt. Try again.</span><br></pre></td></tr></table></figure></p>
+<p>21006<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">This receipt is valid but the subscription has expired. When this status code is returned to your server, the receipt data is also decoded and returned as part of the response. Only returned for iOS 6-style transaction receipts for auto-renewable subscriptions.</span><br></pre></td></tr></table></figure></p>
+<p>21007<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">This receipt is from the test environment, but it was sent to the production environment for verification.</span><br></pre></td></tr></table></figure></p>
+<p>21008<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">This receipt is from the production environment, but it was sent to the test environment for verification.</span><br></pre></td></tr></table></figure></p>
+<p>21009<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">Internal data access error. Try again later.</span><br></pre></td></tr></table></figure></p>
+<p>21010<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The user account cannot be found or has been deleted.</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <tags>
+        <tag>iOS</tag>
+        <tag>IAP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL 常用语句</title>
+    <url>/2020/07/31MYSQL%20%E5%B8%B8%E7%94%A8%E8%AF%AD%E5%8F%A5.html</url>
+    <content><![CDATA[<h2 id="登录-MySQL"><a href="#登录-MySQL" class="headerlink" title="登录 MySQL"></a>登录 MySQL</h2><ul>
+<li>mysql -u root -h localhost -P 3306 -p password<ul>
+<li>-u 用户名</li>
+<li>-h 主机地址</li>
+<li>-P 端口，默认3306</li>
+<li>-p 密码，可以回车然后输入密码</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<p>常用命令:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?         (\?) Synonym for `help&apos;.</span><br><span class="line">clear     (\c) Clear the current input statement.</span><br><span class="line">connect   (\r) Reconnect to the server. Optional arguments are db and host.</span><br><span class="line">delimiter (\d) Set statement delimiter.</span><br><span class="line">edit      (\e) Edit command with $EDITOR.</span><br><span class="line">ego       (\G) Send command to mysql server, display result vertically.</span><br><span class="line">exit      (\q) Exit mysql. Same as quit.</span><br><span class="line">go        (\g) Send command to mysql server.</span><br><span class="line">help      (\h) Display this help.</span><br><span class="line">nopager   (\n) Disable pager, print to stdout.</span><br><span class="line">notee     (\t) Don&apos;t write into outfile.</span><br><span class="line">pager     (\P) Set PAGER [to_pager]. Print the query results via PAGER.</span><br><span class="line">print     (\p) Print current command.</span><br><span class="line">prompt    (\R) Change your mysql prompt.</span><br><span class="line">quit      (\q) Quit mysql.</span><br><span class="line">rehash    (\#) Rebuild completion hash.</span><br><span class="line">source    (\.) Execute an SQL script file. Takes a file name as an argument.</span><br><span class="line">status    (\s) Get status information from the server.</span><br><span class="line">system    (\!) Execute a system shell command.</span><br><span class="line">tee       (\T) Set outfile [to_outfile]. Append everything into given outfile.</span><br><span class="line">use       (\u) Use another database. Takes database name as argument.</span><br><span class="line">charset   (\C) Switch to another charset. Might be needed for processing binlog with multi-byte charsets.</span><br><span class="line">warnings  (\W) Show warnings after every statement.</span><br><span class="line">nowarning (\w) Don&apos;t show warnings after every statement.</span><br></pre></td></tr></table></figure>
+<h2 id="数据库相关信息查询"><a href="#数据库相关信息查询" class="headerlink" title="数据库相关信息查询"></a>数据库相关信息查询</h2><p>1、使用 root 账户登录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; mysql -u root -p</span><br></pre></td></tr></table></figure>
+<p>2、查看版本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; select version();</span><br><span class="line">+-----------+</span><br><span class="line">| version() |</span><br><span class="line">+-----------+</span><br><span class="line">| 5.1.73    |</span><br><span class="line">+-----------+</span><br></pre></td></tr></table></figure>
+<p>3、查看数据库支持的字符集</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show character set;</span><br><span class="line">+----------+---------------------------------+---------------------+--------+</span><br><span class="line">| Charset  | Description                     | Default collation   | Maxlen |</span><br><span class="line">+----------+---------------------------------+---------------------+--------+</span><br><span class="line">| armscii8 | ARMSCII-8 Armenian              | armscii8_general_ci |      1 |</span><br><span class="line">| ascii    | US ASCII                        | ascii_general_ci    |      1 |</span><br><span class="line">| big5     | Big5 Traditional Chinese        | big5_chinese_ci     |      2 |</span><br><span class="line">| binary   | Binary pseudo charset           | binary              |      1 |</span><br><span class="line">| cp1250   | Windows Central European        | cp1250_general_ci   |      1 |</span><br><span class="line">| cp1251   | Windows Cyrillic                | cp1251_general_ci   |      1 |</span><br><span class="line">| cp1256   | Windows Arabic                  | cp1256_general_ci   |      1 |</span><br><span class="line">| cp1257   | Windows Baltic                  | cp1257_general_ci   |      1 |</span><br><span class="line">| cp850    | DOS West European               | cp850_general_ci    |      1 |</span><br><span class="line">| cp852    | DOS Central European            | cp852_general_ci    |      1 |</span><br><span class="line">| cp866    | DOS Russian                     | cp866_general_ci    |      1 |</span><br><span class="line">| cp932    | SJIS for Windows Japanese       | cp932_japanese_ci   |      2 |</span><br><span class="line">| dec8     | DEC West European               | dec8_swedish_ci     |      1 |</span><br><span class="line">| eucjpms  | UJIS for Windows Japanese       | eucjpms_japanese_ci |      3 |</span><br><span class="line">| euckr    | EUC-KR Korean                   | euckr_korean_ci     |      2 |</span><br><span class="line">| gb18030  | China National Standard GB18030 | gb18030_chinese_ci  |      4 |</span><br><span class="line">| gb2312   | GB2312 Simplified Chinese       | gb2312_chinese_ci   |      2 |</span><br><span class="line">| gbk      | GBK Simplified Chinese          | gbk_chinese_ci      |      2 |</span><br><span class="line">| geostd8  | GEOSTD8 Georgian                | geostd8_general_ci  |      1 |</span><br><span class="line">| greek    | ISO 8859-7 Greek                | greek_general_ci    |      1 |</span><br><span class="line">| hebrew   | ISO 8859-8 Hebrew               | hebrew_general_ci   |      1 |</span><br><span class="line">| hp8      | HP West European                | hp8_english_ci      |      1 |</span><br><span class="line">| keybcs2  | DOS Kamenicky Czech-Slovak      | keybcs2_general_ci  |      1 |</span><br><span class="line">| koi8r    | KOI8-R Relcom Russian           | koi8r_general_ci    |      1 |</span><br><span class="line">| koi8u    | KOI8-U Ukrainian                | koi8u_general_ci    |      1 |</span><br><span class="line">| latin1   | cp1252 West European            | latin1_swedish_ci   |      1 |</span><br><span class="line">| latin2   | ISO 8859-2 Central European     | latin2_general_ci   |      1 |</span><br><span class="line">| latin5   | ISO 8859-9 Turkish              | latin5_turkish_ci   |      1 |</span><br><span class="line">| latin7   | ISO 8859-13 Baltic              | latin7_general_ci   |      1 |</span><br><span class="line">| macce    | Mac Central European            | macce_general_ci    |      1 |</span><br><span class="line">| macroman | Mac West European               | macroman_general_ci |      1 |</span><br><span class="line">| sjis     | Shift-JIS Japanese              | sjis_japanese_ci    |      2 |</span><br><span class="line">| swe7     | 7bit Swedish                    | swe7_swedish_ci     |      1 |</span><br><span class="line">| tis620   | TIS620 Thai                     | tis620_thai_ci      |      1 |</span><br><span class="line">| ucs2     | UCS-2 Unicode                   | ucs2_general_ci     |      2 |</span><br><span class="line">| ujis     | EUC-JP Japanese                 | ujis_japanese_ci    |      3 |</span><br><span class="line">| utf16    | UTF-16 Unicode                  | utf16_general_ci    |      4 |</span><br><span class="line">| utf16le  | UTF-16LE Unicode                | utf16le_general_ci  |      4 |</span><br><span class="line">| utf32    | UTF-32 Unicode                  | utf32_general_ci    |      4 |</span><br><span class="line">| utf8     | UTF-8 Unicode                   | utf8_general_ci     |      3 |</span><br><span class="line">| utf8mb4  | UTF-8 Unicode                   | utf8mb4_0900_ai_ci  |      4 |</span><br><span class="line">+----------+---------------------------------+---------------------+--------+</span><br><span class="line">41 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>、查看数据库字符集</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show variables like &apos;character%&apos;;</span><br><span class="line">+--------------------------+-----------------------------------------------------------+</span><br><span class="line">| Variable_name            | Value                                                     |</span><br><span class="line">+--------------------------+-----------------------------------------------------------+</span><br><span class="line">| character_set_client     | utf8mb4                                                   |</span><br><span class="line">| character_set_connection | utf8mb4                                                   |</span><br><span class="line">| character_set_database   | utf8mb4                                                   |</span><br><span class="line">| character_set_filesystem | binary                                                    |</span><br><span class="line">| character_set_results    | utf8mb4                                                   |</span><br><span class="line">| character_set_server     | utf8mb4                                                   |</span><br><span class="line">| character_set_system     | utf8                                                      |</span><br><span class="line">| character_sets_dir       | /usr/local/mysql-8.0.19-macos10.15-x86_64/share/charsets/ |</span><br><span class="line">+--------------------------+-----------------------------------------------------------+</span><br><span class="line">8 rows in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+<p>5、查看 mysql 状态</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; status</span><br><span class="line">--------------</span><br><span class="line">mysql  Ver 8.0.19 for macos10.15 on x86_64 (MySQL Community Server - GPL)</span><br><span class="line"></span><br><span class="line">Connection id:		13</span><br><span class="line">Current database:	mr_api</span><br><span class="line">Current user:		root@localhost</span><br><span class="line">SSL:			Not in use</span><br><span class="line">Current pager:		less</span><br><span class="line">Using outfile:		&apos;&apos;</span><br><span class="line">Using delimiter:	;</span><br><span class="line">Server version:		8.0.19 MySQL Community Server - GPL</span><br><span class="line">Protocol version:	10</span><br><span class="line">Connection:		Localhost via UNIX socket</span><br><span class="line">Server characterset:	utf8mb4</span><br><span class="line">Db     characterset:	utf8mb4</span><br><span class="line">Client characterset:	utf8mb4</span><br><span class="line">Conn.  characterset:	utf8mb4</span><br><span class="line">UNIX socket:		/tmp/mysql.sock</span><br><span class="line">Binary data as:		Hexadecimal</span><br><span class="line">Uptime:			2 days 29 min 29 sec</span><br><span class="line"></span><br><span class="line">Threads: 2  Questions: 24  Slow queries: 0  Opens: 144  Flush tables: 3  Open tables: 66  Queries per second avg: 0.000</span><br><span class="line">--------------</span><br></pre></td></tr></table></figure>
+<p>6、查询最大连接数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show variables like &apos;%max_connections%&apos;;</span><br><span class="line">+------------------------+-------+</span><br><span class="line">| Variable_name          | Value |</span><br><span class="line">+------------------------+-------+</span><br><span class="line">| max_connections        | 151   |</span><br><span class="line">| mysqlx_max_connections | 100   |</span><br><span class="line">+------------------------+-------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>7、查询线程数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show status like &apos;Threads%&apos;;</span><br><span class="line">+-------------------+-------+</span><br><span class="line">| Variable_name     | Value |</span><br><span class="line">+-------------------+-------+</span><br><span class="line">| Threads_cached    | 1     |</span><br><span class="line">| Threads_connected | 1     |</span><br><span class="line">| Threads_created   | 2     |</span><br><span class="line">| Threads_running   | 2     |</span><br><span class="line">+-------------------+-------+</span><br><span class="line">4 rows in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+<p>8、查询 db 存储位置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show variables like &apos;%datadir%&apos;;</span><br><span class="line">+---------------+------------------------+</span><br><span class="line">| Variable_name | Value                  |</span><br><span class="line">+---------------+------------------------+</span><br><span class="line">| datadir       | /usr/local/mysql/data/ |</span><br><span class="line">+---------------+------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>9、查看所有数据库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| test               |</span><br><span class="line">+--------------------+</span><br></pre></td></tr></table></figure>
+<p>10、选择数据库</p>
+<p>选择之后，以后的操作就意味着是针对这个库的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; use mysql;</span><br></pre></td></tr></table></figure>
+<p>11、查看库里包含了哪些表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show tables;</span><br><span class="line">+---------------------------+</span><br><span class="line">| Tables_in_mysql           |</span><br><span class="line">+---------------------------+</span><br><span class="line">| columns_priv              |</span><br><span class="line">| db                        |</span><br><span class="line">| event                     |</span><br><span class="line">| func                      |</span><br><span class="line">| general_log               |</span><br><span class="line">| help_category             |</span><br><span class="line">| help_keyword              |</span><br><span class="line">| help_relation             |</span><br><span class="line">| help_topic                |</span><br><span class="line">| host                      |</span><br><span class="line">| ndb_binlog_index          |</span><br><span class="line">| plugin                    |</span><br><span class="line">| proc                      |</span><br><span class="line">| procs_priv                |</span><br><span class="line">| servers                   |</span><br><span class="line">| slow_log                  |</span><br><span class="line">| tables_priv               |</span><br><span class="line">| time_zone                 |</span><br><span class="line">| time_zone_leap_second     |</span><br><span class="line">| time_zone_name            |</span><br><span class="line">| time_zone_transition      |</span><br><span class="line">| time_zone_transition_type |</span><br><span class="line">| user                      |</span><br><span class="line">+---------------------------+</span><br></pre></td></tr></table></figure>
+<h2 id="基础演练"><a href="#基础演练" class="headerlink" title="基础演练"></a>基础演练</h2><p>1、创建一个名为 xqlDb 的数据库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; create database xqlDB;</span><br><span class="line">mysql&gt; use xqlDb;</span><br></pre></td></tr></table></figure>
+<p>2、创建一张名为 car 的表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; create table car ( id int unsigned not null auto_increment primary key, name char(255) not null, price text not null );</span><br></pre></td></tr></table></figure>
+<p>3、查看表字段信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; desc car;</span><br><span class="line">mysql&gt; show columns from car;</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| Field | Type             | Null | Key | Default | Extra          |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| name  | char(255)        | NO   |     | NULL    |                |</span><br><span class="line">| price | text             | NO   |     | NULL    |                |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br></pre></td></tr></table></figure>
+<p>4、查看表 DDL 语句</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show create table mr_build;</span><br><span class="line">+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Table    | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |</span><br><span class="line">+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| mr_build | CREATE TABLE `mr_build` (</span><br><span class="line">  `id` bigint NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `appid` varchar(255) NOT NULL,</span><br><span class="line">  `build_no` varchar(255) NOT NULL,</span><br><span class="line">  `platform` varchar(255) NOT NULL,</span><br><span class="line">  `env` varchar(255) NOT NULL,</span><br><span class="line">  `client_version` varchar(255) DEFAULT NULL,</span><br><span class="line">  `server_version` varchar(255) DEFAULT NULL,</span><br><span class="line">  `real_h5_url` varchar(255) NOT NULL,</span><br><span class="line">  `backup_url` varchar(255) DEFAULT NULL,</span><br><span class="line">  `build_info` varchar(1024) DEFAULT NULL,</span><br><span class="line">  `deleted` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 |</span><br><span class="line">+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>5、向 car 表插入几条数据</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; insert into car (name,price) values (&apos;yaris&apos;,&apos;90000&apos;);</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into car (name,price) values (&apos;camry&apos;,&apos;270000&apos;);</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into car (name,price) values (&apos;levin&apos;,&apos;110000&apos;);</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into car (name,price) values (&apos;highlander&apos;,&apos;240000&apos;);</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into car (name,price) values (&apos;alphard&apos;,&apos;770000&apos;);</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into car (name,price) values (&apos;ix4&apos;,&apos;210000&apos;);</span><br></pre></td></tr></table></figure>
+<p>6、查询 car 表里的数据</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; select * from car;</span><br><span class="line">+----+------------+--------+</span><br><span class="line">| id | name       | price  |</span><br><span class="line">+----+------------+--------+</span><br><span class="line">|  1 | yaris      |  90000 |</span><br><span class="line">|  2 | camry      | 270000 |</span><br><span class="line">|  3 | levin      | 110000 |</span><br><span class="line">|  4 | highlander | 240000 |</span><br><span class="line">|  5 | alphard    | 770000 |</span><br><span class="line">|  6 | ix4        | 210000 |</span><br><span class="line">+----+------------+--------+</span><br></pre></td></tr></table></figure>
+<p>7、按价格排序，注意这里价格是文本格式！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; select * from car order by price;</span><br><span class="line">+----+------------+--------+</span><br><span class="line">| id | name       | price  |</span><br><span class="line">+----+------------+--------+</span><br><span class="line">|  3 | levin      | 110000 |</span><br><span class="line">|  6 | ix4        | 210000 |</span><br><span class="line">|  4 | highlander | 240000 |</span><br><span class="line">|  2 | camry      | 270000 |</span><br><span class="line">|  5 | alphard    | 770000 |</span><br><span class="line">|  1 | yaris      |  90000 |</span><br><span class="line">+----+------------+--------+</span><br></pre></td></tr></table></figure>
+<p>8、将列类型修改为 double</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter table car modify column price double;</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from car order by price DESC;</span><br><span class="line">+----+------------+--------+</span><br><span class="line">| id | name       | price  |</span><br><span class="line">+----+------------+--------+</span><br><span class="line">|  5 | alphard    | 770000 |</span><br><span class="line">|  2 | camry      | 270000 |</span><br><span class="line">|  4 | highlander | 240000 |</span><br><span class="line">|  6 | ix4        | 210000 |</span><br><span class="line">|  3 | levin      | 110000 |</span><br><span class="line">|  1 | yaris      |  90000 |</span><br><span class="line">+----+------------+--------+</span><br></pre></td></tr></table></figure>
+<p>9、添加 cname，test 字段</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter table car add column cname varchar(1024);</span><br><span class="line">mysql&gt; alter table car add column test text not null;</span><br><span class="line"></span><br><span class="line">mysql&gt; desc car;</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| Field | Type             | Null | Key | Default | Extra          |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| name  | char(255)        | NO   |     | NULL    |                |</span><br><span class="line">| price | double           | YES  |     | NULL    |                |</span><br><span class="line">| cname | varchar(1024)    | YES  |     | NULL    |                |</span><br><span class="line">| test  | text             | NO   |     | NULL    |                |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br></pre></td></tr></table></figure>
+<p>10、更新表，为他们增加中文名字</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; update car set cname=&apos;埃尔法&apos; where id=5;</span><br><span class="line">mysql&gt; update car set cname=&apos;凯美瑞&apos; where id=2;</span><br><span class="line">mysql&gt; update car set cname=&apos;ix4&apos; where id=6;</span><br><span class="line">mysql&gt; update car set cname=&apos;雷凌&apos; where id=3;</span><br><span class="line">mysql&gt; update car set cname=&apos;致炫&apos; where id=1;</span><br><span class="line">mysql&gt; update car set cname=&apos;致炫&apos;, price=87800.5  where id=1;</span><br><span class="line">mysql&gt; select * from car order by price DESC;</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">| id | name       | price   | cname     | test |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">|  5 | alphard    |  770000 | 埃尔法 |      |</span><br><span class="line">|  2 | camry      |  270000 | 凯美瑞 |      |</span><br><span class="line">|  4 | highlander |  240000 | 汉兰达 |      |</span><br><span class="line">|  6 | ix4        |  210000 | ix4   |      |</span><br><span class="line">|  3 | levin      |  110000 | 雷凌   |      |</span><br><span class="line">|  1 | yaris      | 87800.5 | 致炫   |      |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br></pre></td></tr></table></figure>
+<p>11、 删除 test 字段</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter table car drop column test;</span><br><span class="line">mysql&gt; select * from car order by price DESC;</span><br><span class="line">+----+------------+---------+-----------+</span><br><span class="line">| id | name       | price   | cname     |</span><br><span class="line">+----+------------+---------+-----------+</span><br><span class="line">|  5 | alphard    |  770000 | 埃尔法 |</span><br><span class="line">|  2 | camry      |  270000 | 凯美瑞 |</span><br><span class="line">|  4 | highlander |  240000 | 汉兰达 |</span><br><span class="line">|  6 | ix4        |  210000 | ix4       |</span><br><span class="line">|  3 | levin      |  110000 | 雷凌    |</span><br><span class="line">|  1 | yaris      | 87800.5 | 致炫    |</span><br><span class="line">+----+------------+---------+-----------+</span><br></pre></td></tr></table></figure>
+<p>12、修改表名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter table car rename to Car;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show tables;</span><br><span class="line">+-----------------+</span><br><span class="line">| Tables_in_xqlDB |</span><br><span class="line">+-----------------+</span><br><span class="line">| Car             |</span><br><span class="line">+-----------------+</span><br></pre></td></tr></table></figure>
+<p>13、修改字段和数据类型</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter table Car add column test text;</span><br><span class="line">mysql&gt; alter table Car change test tt int;</span><br><span class="line">Query OK, 6 rows affected (0.01 sec)</span><br><span class="line">Records: 6  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; desc Car;</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| Field | Type             | Null | Key | Default | Extra          |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| name  | char(255)        | NO   |     | NULL    |                |</span><br><span class="line">| price | double           | YES  |     | NULL    |                |</span><br><span class="line">| cname | varchar(1024)    | YES  |     | NULL    |                |</span><br><span class="line">| tt    | int(11)          | YES  |     | NULL    |                |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br></pre></td></tr></table></figure>
+<p>14、仅仅修改字段的数据类型</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter table Car modify tt varchar(20);</span><br><span class="line">mysql&gt; desc Car;</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| Field | Type             | Null | Key | Default | Extra          |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| name  | char(255)        | NO   |     | NULL    |                |</span><br><span class="line">| price | double           | YES  |     | NULL    |                |</span><br><span class="line">| cname | varchar(1024)    | YES  |     | NULL    |                |</span><br><span class="line">| tt    | varchar(20)      | YES  |     | NULL    |                |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br></pre></td></tr></table></figure>
+<p>15、条件删除，删掉 cname 为 Null 的元组</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; insert into Car (name,price,cname) values (&apos;highlander&apos;,&apos;240000&apos;,&apos;&apos;);</span><br><span class="line">mysql&gt; insert into Car (name,price,cname) values (&apos;highlander&apos;,&apos;240000&apos;,&apos;&apos;);</span><br><span class="line">mysql&gt; insert into Car (name,price,cname) values (&apos;highlander&apos;,&apos;240000&apos;,&apos;&apos;);</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from Car;</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">| id | name       | price   | cname     | tt   |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">|  1 | yaris      | 87800.5 | 致炫    | NULL |</span><br><span class="line">|  2 | camry      |  270000 | 凯美瑞 | NULL |</span><br><span class="line">|  3 | levin      |  110000 | 雷凌    | NULL |</span><br><span class="line">|  4 | highlander |  240000 | 汉兰达 | NULL |</span><br><span class="line">|  5 | alphard    |  770000 | 埃尔法 | NULL |</span><br><span class="line">|  6 | ix4        |  210000 | ix4       | NULL |</span><br><span class="line">|  7 | highlander |  240000 | NULL      | NULL |</span><br><span class="line">|  8 | highlander |  240000 | NULL      | NULL |</span><br><span class="line">|  9 | highlander |  240000 | NULL      | NULL |</span><br><span class="line">| 10 | highlander |  240000 |           | NULL |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line"></span><br><span class="line">mysql&gt; delete from Car where name=&apos;highlander&apos; and cname is Null;</span><br><span class="line">Query OK, 3 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from Car;</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">| id | name       | price   | cname     | tt   |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">|  1 | yaris      | 87800.5 | 致炫    | NULL |</span><br><span class="line">|  2 | camry      |  270000 | 凯美瑞 | NULL |</span><br><span class="line">|  3 | levin      |  110000 | 雷凌    | NULL |</span><br><span class="line">|  4 | highlander |  240000 | 汉兰达 | NULL |</span><br><span class="line">|  5 | alphard    |  770000 | 埃尔法 | NULL |</span><br><span class="line">|  6 | ix4        |  210000 | ix4       | NULL |</span><br><span class="line">| 10 | highlander |  240000 |           | NULL |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">7 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; delete from Car where name=&apos;highlander&apos; and cname=&apos;&apos;;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from Car;</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">| id | name       | price   | cname     | tt   |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br><span class="line">|  1 | yaris      | 87800.5 | 致炫    | NULL |</span><br><span class="line">|  2 | camry      |  270000 | 凯美瑞 | NULL |</span><br><span class="line">|  3 | levin      |  110000 | 雷凌    | NULL |</span><br><span class="line">|  4 | highlander |  240000 | 汉兰达 | NULL |</span><br><span class="line">|  5 | alphard    |  770000 | 埃尔法 | NULL |</span><br><span class="line">|  6 | ix4        |  210000 | ix4       | NULL |</span><br><span class="line">+----+------------+---------+-----------+------+</span><br></pre></td></tr></table></figure>
+<p>16、删除表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; drop table Car;</span><br></pre></td></tr></table></figure>
+<p>17、删除数据库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; drop database xqlDB;</span><br></pre></td></tr></table></figure>
+<p>18、退出</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; exit</span><br><span class="line">Bye</span><br></pre></td></tr></table></figure>
+<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h2><p>1、查询 mysql 数据库 的 user 表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; select host,user from mysql.user;</span><br><span class="line">+-----------+------------------+</span><br><span class="line">| host      | user             |</span><br><span class="line">+-----------+------------------+</span><br><span class="line">| localhost | mysql.infoschema |</span><br><span class="line">| localhost | mysql.session    |</span><br><span class="line">| localhost | mysql.sys        |</span><br><span class="line">| localhost | root             |</span><br><span class="line">+-----------+------------------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br><span class="line">//格式化下</span><br><span class="line">mysql&gt; select concat(&apos;user: &apos;&apos;&apos;,user,&apos;&apos;&apos;@&apos;&apos;&apos;,host,&apos;&apos;&apos;;&apos;) as UserInfo from mysql.user;</span><br><span class="line">+---------------------------------------+</span><br><span class="line">| UserInfo                              |</span><br><span class="line">+---------------------------------------+</span><br><span class="line">| user: &apos;mysql.infoschema&apos;@&apos;localhost&apos;; |</span><br><span class="line">| user: &apos;mysql.session&apos;@&apos;localhost&apos;;    |</span><br><span class="line">| user: &apos;mysql.sys&apos;@&apos;localhost&apos;;        |</span><br><span class="line">| user: &apos;root&apos;@&apos;localhost&apos;;             |</span><br><span class="line">+---------------------------------------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>2、添加新账户</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; create user test@localhost identified by &apos;123456&apos;;</span><br><span class="line">mysql&gt; create user any@&apos;%&apos; identified by &apos;123456&apos;;</span><br><span class="line">mysql&gt; create user xql@10.7.36.118 identified by &apos;123456&apos;;</span><br><span class="line">//老版本可以这么操作</span><br><span class="line">mysql&gt; insert into mysql.user(Host,User,Password) </span><br><span class="line">mysql&gt; flush privileges;</span><br><span class="line">##添加用户，或者更改用户权限后，记得刷新下，否者重启前不生效。</span><br></pre></td></tr></table></figure>
+<p>3、退出 root 用户，登录 test@localhost 用户，然后操作 xqlDB</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; \q</span><br><span class="line">[@10.16.89.67 ~]# mysql -u test -h localhost -p</span><br><span class="line">Enter password:</span><br><span class="line">mysql&gt; use xqlDB;</span><br><span class="line">ERROR 1044 (42000): Access denied for user &apos;localhost&apos;@&apos;localhost&apos; to database &apos;xqlDB&apos;</span><br></pre></td></tr></table></figure>
+<p>3、 查看当前用户的授权情况</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; SHOW GRANTS FOR CURRENT_USER;</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Grants for test@localhost                                                                                   |</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| GRANT USAGE ON *.* TO &apos;test&apos;@&apos;localhost&apos; IDENTIFIED BY PASSWORD &apos;*6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9&apos; |</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>4、切换到 root 用户进行授权</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; mysql -u root</span><br><span class="line">mysql&gt; grant select,insert,update,delete on xqlDB.* to test@localhost;</span><br><span class="line">mysql&gt; show grants for test@&apos;localhost&apos; ;</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Grants for test@localhost                                                                                   |</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| GRANT USAGE ON *.* TO &apos;test&apos;@&apos;localhost&apos; IDENTIFIED BY PASSWORD &apos;*6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9&apos; |</span><br><span class="line">| GRANT SELECT, INSERT, UPDATE, DELETE ON `xqlDB`.* TO &apos;test&apos;@&apos;localhost&apos;                                     |</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>1、整形</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">字节</th>
+<th style="text-align:center">有符号范围</th>
+<th style="text-align:center">无符号范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">TINYINT</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">-128 ~ 127</td>
+<td style="text-align:center">0 ~ 255</td>
+</tr>
+<tr>
+<td style="text-align:center">SMALLINT</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">-32768 ~ 32767</td>
+<td style="text-align:center">0 ~ 65535</td>
+</tr>
+<tr>
+<td style="text-align:center">MEDIUMINT</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">-8388608 ~ 8388607</td>
+<td style="text-align:center">0 ~ 16777215</td>
+</tr>
+<tr>
+<td style="text-align:center">INT</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">-2147483648 ~ 2147483647</td>
+<td style="text-align:center">0 ~ 4294967295</td>
+</tr>
+<tr>
+<td style="text-align:center">BIGINT</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">-9223372036854775808 ~ 9223372036854775807</td>
+<td style="text-align:center">0 ~ 18446744073709551615</td>
+</tr>
+</tbody>
+</table>
+<p>2、浮点型</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">字节</th>
+<th style="text-align:center">有符号范围</th>
+<th style="text-align:center">无符号范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">FLOAT</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">-1.175494351E-38 ~  1.175494351E-38</td>
+<td style="text-align:center">0 ~ 3.402823466E+38</td>
+</tr>
+<tr>
+<td style="text-align:center">DOUBLE</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">-1.7976931348623157E+ 308 ~ -2.2250738585072014E- 308</td>
+<td style="text-align:center">0 ~ 1.7976931348623157E+ 308</td>
+</tr>
+</tbody>
+</table>
+<p>3、字符型</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">长度</th>
+<th style="text-align:center">特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">CHAR</td>
+<td style="text-align:center">0-255字节</td>
+<td style="text-align:center">定长字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">VARCHAR</td>
+<td style="text-align:center">0-65535 字节</td>
+<td style="text-align:center">变长字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">TINYBLOB</td>
+<td style="text-align:center">0-255字节</td>
+<td style="text-align:center">不超过 255 个字符的二进制字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">TINYTEXT</td>
+<td style="text-align:center">0-255字节</td>
+<td style="text-align:center">短文本字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">BLOB</td>
+<td style="text-align:center">0-65 535字节</td>
+<td style="text-align:center">二进制形式的长文本数据</td>
+</tr>
+<tr>
+<td style="text-align:center">TEXT</td>
+<td style="text-align:center">0-65 535字节</td>
+<td style="text-align:center">长文本数据</td>
+</tr>
+<tr>
+<td style="text-align:center">MEDIUMBLOB</td>
+<td style="text-align:center">0-16777215字节</td>
+<td style="text-align:center">二进制形式的中等长度文本数据</td>
+</tr>
+<tr>
+<td style="text-align:center">MEDIUMTEXT</td>
+<td style="text-align:center">0-16777215字节</td>
+<td style="text-align:center">中等长度文本数据</td>
+</tr>
+<tr>
+<td style="text-align:center">LONGBLOB</td>
+<td style="text-align:center">0-4294967295字节</td>
+<td style="text-align:center">二进制形式的极大文本数据</td>
+</tr>
+<tr>
+<td style="text-align:center">LONGTEXT</td>
+<td style="text-align:center">0-4294967295字节</td>
+<td style="text-align:center">极大文本数据</td>
+</tr>
+</tbody>
+</table>
+<p> 4、日期类型</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">字节</th>
+<th style="text-align:center">范围</th>
+<th style="text-align:center">格式</th>
+<th style="text-align:center">特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">DATE</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">1000-01-01/9999-12-31</td>
+<td style="text-align:center">YYYY-MM-DD</td>
+<td style="text-align:center">日期值</td>
+</tr>
+<tr>
+<td style="text-align:center">TIME</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">‘-838:59:59’/‘838:59:59’</td>
+<td style="text-align:center">HH:MM:SS</td>
+<td style="text-align:center">时间值或持续时间</td>
+</tr>
+<tr>
+<td style="text-align:center">YEAR</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1901/2155</td>
+<td style="text-align:center">YYYY</td>
+<td style="text-align:center">年份值</td>
+</tr>
+<tr>
+<td style="text-align:center">DATETIME</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">1000-01-01 00:00:00/9999-12-31 23:59:59</td>
+<td style="text-align:center">YYYY-MM-DD HH:MM:SS</td>
+<td style="text-align:center">混合日期和时间值</td>
+</tr>
+<tr>
+<td style="text-align:center">TIMESTAMP</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">1970-01-01 00:00:00/2038 结束时间是第 2147483647 秒，北京时间 2038-1-19 11:14:07，格林尼治时间 2038年1月19日 凌晨 03:14:07</td>
+<td style="text-align:center">YYYYMMDD HHMMSS</td>
+<td style="text-align:center">混合日期和时间值，时间戳</td>
+</tr>
+</tbody>
+</table>
+<h2 id="SQL-语句注释"><a href="#SQL-语句注释" class="headerlink" title="SQL 语句注释"></a>SQL 语句注释</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#我是单行注释</span><br><span class="line">-- 我是单行注释，前面有个空格哦</span><br><span class="line">/*</span><br><span class="line">我是多行注释哦；</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<h2 id="图像化工具"><a href="#图像化工具" class="headerlink" title="图像化工具"></a>图像化工具</h2><ul>
+<li><a href="http://dev.mysql.com/downloads/tools/workbench/" target="_blank" rel="noopener">http://dev.mysql.com/downloads/tools/workbench/</a></li>
+<li><a href="http://www.sequelpro.com" target="_blank" rel="noopener">http://www.sequelpro.com</a> </li>
+<li><a href="http://dbeaver.jkiss.org/download/#macos" target="_blank" rel="noopener">http://dbeaver.jkiss.org/download/#macos</a> </li>
+<li><a href="http://www.navicat.com/download" target="_blank" rel="noopener">http://www.navicat.com/download</a> </li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://www.w3resource.com/mysql/mysql-data-types.php" target="_blank" rel="noopener">https://www.w3resource.com/mysql/mysql-data-types.php</a></li>
+<li><a href="https://www.tutorialspoint.com/mysql/mysql-data-types.htm" target="_blank" rel="noopener">https://www.tutorialspoint.com/mysql/mysql-data-types.htm</a></li>
+<li><a href="http://www.runoob.com/mysql/mysql-data-types.html" target="_blank" rel="noopener">http://www.runoob.com/mysql/mysql-data-types.html</a></li>
+<li><a href="http://www.cnblogs.com/zbseoag/archive/2013/03/19/2970004.html" target="_blank" rel="noopener">http://www.cnblogs.com/zbseoag/archive/2013/03/19/2970004.html</a></li>
+<li><a href="https://www.cnblogs.com/mr-wid/archive/2013/05/09/3068229.html#d8" target="_blank" rel="noopener">https://www.cnblogs.com/mr-wid/archive/2013/05/09/3068229.html#d8</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS 源码安装 Nginx</title>
+    <url>/2020/11/03CentOS-install-nginx.html</url>
+    <content><![CDATA[<h2 id="查看系统版本"><a href="#查看系统版本" class="headerlink" title="查看系统版本"></a>查看系统版本</h2><ul>
+<li><p>uname</p>
+<p>  <code>Linux</code></p>
+</li>
+<li><p>uname -a</p>
+<p>  <code>Linux yz18-10-19.localdomain 2.6.32-754.el6.x86_64 #1 SMP Thu May 24 18:18:25 EDT 2018 x86_64 x86_64 x86_64 GNU/Linux</code></p>
+</li>
+<li><p>cat /etc/*release</p>
+<p><code>LSB_VERSION=base-4.0-amd64:base-4.0-noarch:core-4.0-amd64:core-4.0-noarch:graphics-4.0-amd64:graphics-4.0-noarch:printing-4.0-amd64:printing-4.0-noarch
+Red Hat Enterprise Linux Server release 6.10 (Santiago)
+Red Hat Enterprise Linux Server release 6.10 (Santiago)</code></p>
+</li>
+<li><p>cat /etc/issue<br><code>Red Hat Enterprise Linux Server release 6.10 (Santiago)
+Kernel \r on an \m</code></p>
+</li>
+</ul>
+<h2 id="使用源码安装-Nginx"><a href="#使用源码安装-Nginx" class="headerlink" title="使用源码安装 Nginx"></a>使用源码安装 Nginx</h2><p> 先安装好编译源码的工具：</p>
+<ul>
+<li>yum install gcc-c++</li>
+<li>yum install -y pcre pcre-devel</li>
+<li>yum install -y zlib zlib-devel</li>
+<li>yum install -y openssl openssl-devel</li>
+</ul>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#下载源码</span><br><span class="line">mkdir -p /data/soft</span><br><span class="line">cd /data/soft</span><br><span class="line">wget http://nginx.org/download/nginx-1.18.0.tar.gz</span><br><span class="line">tar -zxvf nginx-1.18.0.tar.gz</span><br><span class="line">cd nginx-1.18.0</span><br><span class="line">#自定义配置</span><br><span class="line">./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-compat --with-file-aio --with-threads --with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module --without-http_memcached_module --without-http_fastcgi_module --without-http_map_module --without-http_geo_module --without-http_autoindex_module --with-cc-opt=&apos;-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=generic -fPIC&apos; --with-ld-opt=&apos;-Wl,-z,relro -Wl,-z,now -pie&apos;</span><br><span class="line">mkdir -p /var/cache/nginx/</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<h2 id="启动-Nginx-服务"><a href="#启动-Nginx-服务" class="headerlink" title="启动 Nginx 服务"></a>启动 Nginx 服务</h2><p>上面的配置将 nginx 的 bin 放到了 /usr/sbin 目录下了，因此无需配置 PATH，就可以在任意目录调用！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">echo $PATH</span><br><span class="line">/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动: sudo nginx 尽量使用 sudo ，不使用时一般也行，避免出现一些莫名的问题</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[@yz18-120-118.localdomain /data/soft/nginx-1.18.0]# sudo nginx</span><br><span class="line">nginx: [emerg] getpwnam(&quot;nginx&quot;) failed</span><br><span class="line">[@yz18-120-118.localdomain /data/soft/nginx-1.18.0]# useradd -s /sbin/nologin -M nginx</span><br><span class="line">[@yz18-120-118.localdomain /data/soft/nginx-1.18.0]# sudo nginx</span><br><span class="line">[@yz18-120-118.localdomain /data/soft/nginx-1.18.0]# netstat -tlunp | grep nginx</span><br><span class="line">tcp        0      0 0.0.0.0:80                  0.0.0.0:*                   LISTEN      6004/nginx</span><br><span class="line">[@yz18-120-118.localdomain /data/soft/nginx-1.18.0]# id nginx</span><br><span class="line">uid=503(nginx) gid=503(nginx) groups=503(nginx)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>停止：nginx -s stop</li>
+<li>重新加载配置文件：nginx -s reload</li>
+<li>查看版本：nginx -v</li>
+<li>查看编译配置：nginx -V</li>
+</ul>
+<p>启动失败时，可以看下错误日志 /var/log/nginx/error.log 帮助排查。</p>
+<p>默认使用 80 端口，如果端口被暂用，启动失败可以查看那个程序占用的，然后 kill 掉那个进程</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">~ lsof -i tcp:80   </span><br><span class="line">COMMAND     PID       USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME</span><br><span class="line">nginx     46838 qianlongxu    6u  IPv4 0x76c2385eb7b3200f      0t0  TCP *:http (LISTEN)</span><br><span class="line">nginx     46859 qianlongxu    6u  IPv4 0x76c2385eb7b3200f      0t0  TCP *:http (LISTEN)</span><br></pre></td></tr></table></figure>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>按照上面的自定义安装方式，安装后配置文件是： /etc/nginx/nginx.conf ，查看内容</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cat /etc/nginx/nginx.conf</span><br><span class="line"></span><br><span class="line">user  nginx;</span><br><span class="line">worker_processes  1;</span><br><span class="line"></span><br><span class="line">error_log  /var/log/nginx/error.log warn;</span><br><span class="line">pid        /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       /etc/nginx/mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</span><br><span class="line">                      &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</span><br><span class="line">                      &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;</span><br><span class="line"></span><br><span class="line">    access_log  /var/log/nginx/access.log  main;</span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    #tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    #gzip  on;</span><br><span class="line"></span><br><span class="line">    include /etc/nginx/conf.d/*.conf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个文件不用改它，除非你知道怎么改！最后一行可以看出加载了 /etc/nginx/conf.d/ 目录下的所有 conf 文件，因此我们修改这个目录下的配置文件。</p>
+<p>default.conf 是默认生成的，监听了 80 端口，可以修改为别的端口；</p>
+<p>多端口都需要 nginx 转发时，可以新增不同的配置文件；</p>
+<p>配置文件示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  _;</span><br><span class="line"></span><br><span class="line">    #charset koi8-r;</span><br><span class="line">    #access_log  /var/log/nginx/host.access.log  main;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   /opt/www/html;</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #error_page  404              /404.html;</span><br><span class="line"></span><br><span class="line">    # redirect server error pages to the static page /50x.html</span><br><span class="line">    #</span><br><span class="line">    error_page   500 502 503 504  /50x.html;</span><br><span class="line">    location = /50x.html &#123;</span><br><span class="line">        root   /opt/www/html;</span><br><span class="line">    &#125;</span><br><span class="line">		</span><br><span class="line">		#通过 location 代理到本机 8081 端口的 feedback</span><br><span class="line">    location /feedback &#123;</span><br><span class="line">        proxy_pass http://127.0.0.1:8081/feedback;</span><br><span class="line">        client_max_body_size 500m;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    #开启资源访问，自动生成索引</span><br><span class="line">		location /source/ &#123;</span><br><span class="line">        root /data/aa/;</span><br><span class="line">        autoindex on;</span><br><span class="line">        autoindex_exact_size off;</span><br><span class="line">        autoindex_localtime on;</span><br><span class="line">        charset utf-8;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    location /ffpods/ &#123;</span><br><span class="line">        root /data/xql/;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    #alias : when access mac folder&apos;s file a.txt,use /mac/a.txt</span><br><span class="line">    location /mac/ &#123;</span><br><span class="line">        alias /data/xql/upgrade/mac/;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /H5/ &#123;</span><br><span class="line">        alias /data/xql/upgrade/H5/;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    location /frptest/ &#123;</span><br><span class="line">        proxy_pass http://10.16.89.134:8000/;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /frp/ &#123;</span><br><span class="line">        proxy_pass http://106.120.154.23/;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用-root-定位"><a href="#使用-root-定位" class="headerlink" title="使用 root 定位"></a>使用 root 定位</h3><p>下面是 root 的几个测试示例，假定 root 目录下确实有 index.html 文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 浏览器请求 localhost/a/index.html</span><br><span class="line">## 请求的资源路径是 /data/xql/Test/a/a/index.html</span><br><span class="line">## 实际上没有这个文件，因此返回 404</span><br><span class="line">location /a/ &#123;</span><br><span class="line">  root /data/xql/Test/a/;</span><br><span class="line">  index  index.html index.htm;	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## 浏览器请求 localhost/b/index.html</span><br><span class="line">## 请求的资源路径是 /data/xql/Test/b/index.html</span><br><span class="line">## 正常返回内容</span><br><span class="line">location /b/ &#123;</span><br><span class="line">  root /data/xql/Test/;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">## 浏览器请求 localhost/c/index.html</span><br><span class="line">## 请求的资源路径是 /data/xql/Test/c/index.html</span><br><span class="line">## 正常返回内容</span><br><span class="line">location /c/ &#123;</span><br><span class="line">  root /data/xql/Test;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## 浏览器请求 localhost/d/index.html</span><br><span class="line">## 请求的资源路径是 /opt/www/html/d/index.html</span><br><span class="line">## 实际上没有这个文件，因此返回 404</span><br><span class="line">location d &#123;</span><br><span class="line">  root /data/xql/Test/d;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结下就是 location 后面跟的路径要以 / 开头，实际请求地址将是 root + location 定位，是否以 / 结尾不重要！</p>
+<h3 id="使用-alias-定位"><a href="#使用-alias-定位" class="headerlink" title="使用 alias 定位"></a>使用 alias 定位</h3><p>下面是 alias 的几个使用示例，假定 alias 目录下确实有 index.html 文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 浏览器请求 localhost/aa/</span><br><span class="line">## 请求的资源路径是 /data/xql/Test/aa/index.html</span><br><span class="line">## 正常返回内容</span><br><span class="line">location /aa/ &#123;</span><br><span class="line">  alias /data/xql/Test/aa/;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## 浏览器请求 localhost/bb/index.html</span><br><span class="line">## 请求的资源路径是 /data/xql/Test/</span><br><span class="line">## 403</span><br><span class="line">location /bb/ &#123;</span><br><span class="line">  alias /data/xql/Test/;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">## 浏览器请求 localhost/cc/</span><br><span class="line">## 请求的资源路径是 /data/xql/Test/cc/index.html</span><br><span class="line">## 正常返回内容</span><br><span class="line">location /cc &#123;</span><br><span class="line">  alias /data/xql/Test/cc/;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## 浏览器请求 localhost/dd/index.html</span><br><span class="line">## 请求的资源路径是 /opt/www/html/dd/index.html</span><br><span class="line">## 实际上没有这个文件，因此返回 404</span><br><span class="line">location dd &#123;</span><br><span class="line">  alias /data/xql/Test/dd/;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结下就是 alias 后面跟的路径要以 / 开头，否则不是你想要的效果，实际请求地址将是 alias 替换 location 进行定位，是否以 / 结尾不重要！</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://www.cnblogs.com/boonya/p/7907999.html" target="_blank" rel="noopener">https://www.cnblogs.com/boonya/p/7907999.html</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS 主机迁移</title>
+    <url>/2020/11/10CentOS-Transfer.html</url>
+    <content><![CDATA[<p>接到运维同学的通知，要做主机迁移，涉及到了 nginx 和资源文件，因此需要查看 nginx 的编译配置和 nginx 的运行配置。运维告诉我xx主机上装有 nginx，域名也是打到这台机器的，我顿时有点懵逼，因为我之前找过，根本找不到 nginx 在哪装的，这次必须得找到它才行啊…</p>
+<a id="more"></a>
+<h2 id="如何找到运行中程序所在目录？"><a href="#如何找到运行中程序所在目录？" class="headerlink" title="如何找到运行中程序所在目录？"></a>如何找到运行中程序所在目录？</h2><h3 id="which"><a href="#which" class="headerlink" title="which"></a>which</h3><p>如果程序的路径在 PATH 里可以找到，这时很好办，可以通过 which 命令来找，如果不在 PATH 改怎么找呢？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[@10.16.89.228 /data/ifox/upgrade]# nginx</span><br><span class="line">-bash: nginx: command not found</span><br><span class="line">[@10.16.89.228 /]# which nginx</span><br><span class="line">/usr/bin/which: no nginx in (/opt/jdk7/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)</span><br><span class="line">[@10.16.89.228 /data/ifox/upgrade]# id nginx</span><br><span class="line">id: nginx: No such user</span><br></pre></td></tr></table></figure>
+<h3 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h3><p>如果确定这个程序当前正在运行，那么可以通过 <code>ps aux</code> 来找到这个程序</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[@10.16.89.228 /]# ps aux | grep nginx</span><br><span class="line">root      13884  0.0  0.0  22740  1180 ?        Ss    2019   0:00 nginx: master process /opt/nginx/sbin/nginx</span><br><span class="line">nobody    13950  0.0  0.0  23184  1912 ?        S     2019 184:25 nginx: worker process</span><br><span class="line">nobody    13951  0.0  0.0  23184  1916 ?        S     2019 184:31 nginx: worker process</span><br><span class="line">nobody    13952  0.0  0.0  23184  1912 ?        S     2019 184:23 nginx: worker process</span><br><span class="line">nobody    13953  0.0  0.0  23184  1508 ?        S     2019 184:28 nginx: worker process</span><br><span class="line">nobody    13954  0.0  0.0  23184  1912 ?        S     2019 184:40 nginx: worker process</span><br><span class="line">nobody    13955  0.0  0.0  23184  1912 ?        S     2019 184:44 nginx: worker process</span><br><span class="line">nobody    13956  0.0  0.0  23184  1524 ?        S     2019 184:18 nginx: worker process</span><br><span class="line">nobody    13957  0.0  0.0  23184  1916 ?        S     2019 184:03 nginx: worker process</span><br><span class="line">nobody    13958  0.0  0.0  23184  1912 ?        S     2019 184:37 nginx: worker process</span><br><span class="line">nobody    13959  0.0  0.0  23184  1916 ?        S     2019 184:34 nginx: worker process</span><br><span class="line">nobody    13960  0.0  0.0  23184  1912 ?        S     2019 184:02 nginx: worker process</span><br><span class="line">nobody    13961  0.0  0.0  23184  1508 ?        S     2019 184:36 nginx: worker process</span><br><span class="line">nobody    13962  0.0  0.0  23184  1520 ?        S     2019 184:06 nginx: worker process</span><br><span class="line">nobody    13963  0.0  0.0  23184  1516 ?        S     2019 184:23 nginx: worker process</span><br><span class="line">nobody    13964  0.0  0.0  23184  1524 ?        S     2019 184:33 nginx: worker process</span><br><span class="line">nobody    13965  0.0  0.0  23184  1520 ?        S     2019 184:20 nginx: worker process</span><br><span class="line">nobody    13966  0.0  0.0  23184  1520 ?        S     2019 184:33 nginx: worker process</span><br><span class="line">nobody    13967  0.0  0.0  23184  1520 ?        S     2019 184:50 nginx: worker process</span><br><span class="line">nobody    13968  0.0  0.0  23184  1916 ?        S     2019 184:18 nginx: worker process</span><br><span class="line">nobody    13969  0.0  0.0  23184  1524 ?        S     2019 184:21 nginx: worker process</span><br><span class="line">nobody    13970  0.0  0.0  23184  1524 ?        S     2019 184:15 nginx: worker process</span><br><span class="line">nobody    13971  0.0  0.0  23184  1916 ?        S     2019 183:56 nginx: worker process</span><br><span class="line">nobody    13972  0.0  0.0  23184  1524 ?        S     2019 183:57 nginx: worker process</span><br><span class="line">nobody    13973  0.0  0.0  23184  1916 ?        S     2019 184:47 nginx: worker process</span><br><span class="line">nobody    13974  0.0  0.0  23184  1520 ?        S     2019 184:08 nginx: worker process</span><br><span class="line">nobody    13975  0.0  0.0  23184  1520 ?        S     2019 184:25 nginx: worker process</span><br><span class="line">nobody    13976  0.0  0.0  23184  1916 ?        S     2019 184:49 nginx: worker process</span><br><span class="line">nobody    13977  0.0  0.0  23184  1520 ?        S     2019 184:04 nginx: worker process</span><br><span class="line">nobody    13978  0.0  0.0  23184  1916 ?        S     2019 184:15 nginx: worker process</span><br><span class="line">nobody    13979  0.0  0.0  23184  1916 ?        S     2019 183:46 nginx: worker process</span><br><span class="line">nobody    13980  0.0  0.0  23184  1564 ?        S     2019 183:44 nginx: worker process</span><br><span class="line">nobody    13981  0.0  0.0  23184  1920 ?        S     2019 183:54 nginx: worker process</span><br><span class="line">nobody    13982  0.0  0.0  23184  1516 ?        S     2019 183:14 nginx: worker process</span><br><span class="line">nobody    13983  0.0  0.0  23184  1524 ?        S     2019 184:12 nginx: worker process</span><br><span class="line">nobody    13984  0.0  0.0  23184  1920 ?        S     2019 183:52 nginx: worker process</span><br><span class="line">nobody    13985  0.0  0.0  23184  1480 ?        S     2019 184:34 nginx: worker process</span><br><span class="line">nobody    13986  0.0  0.0  23184  1512 ?        S     2019 183:59 nginx: worker process</span><br><span class="line">nobody    13987  0.0  0.0  23184  1920 ?        S     2019 183:55 nginx: worker process</span><br><span class="line">nobody    13988  0.0  0.0  23184  1528 ?        S     2019 183:57 nginx: worker process</span><br><span class="line">nobody    13989  0.0  0.0  23184  1544 ?        S     2019 183:47 nginx: worker process</span><br><span class="line">nobody    13990  0.0  0.0  23184  1920 ?        S     2019 183:47 nginx: worker process</span><br><span class="line">nobody    13991  0.0  0.0  23184  1516 ?        S     2019 183:59 nginx: worker process</span><br><span class="line">nobody    13992  0.0  0.0  23184  1544 ?        S     2019 183:46 nginx: worker process</span><br><span class="line">nobody    13993  0.0  0.0  23184  1920 ?        S     2019 183:54 nginx: worker process</span><br><span class="line">nobody    13994  0.0  0.0  23184  1524 ?        S     2019 183:44 nginx: worker process</span><br><span class="line">nobody    13995  0.0  0.0  23184  1512 ?        S     2019 184:02 nginx: worker process</span><br><span class="line">nobody    13996  0.0  0.0  23184  1920 ?        S     2019 184:09 nginx: worker process</span><br><span class="line">nobody    13997  0.0  0.0  23184  1516 ?        S     2019 183:40 nginx: worker process</span><br><span class="line">root     112730  0.0  0.0   8000   588 pts/0    S+   18:05   0:00 grep nginx</span><br></pre></td></tr></table></figure>
+<p>可以明确的看到，程序目录在这里 master process /opt/nginx/sbin/nginx ; 找到 nginx 之后，查看具体信息:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[@10.16.89.228 /opt/nginx/sbin]#  /opt/nginx/sbin/nginx -V</span><br><span class="line">nginx version: nginx/1.10.2</span><br><span class="line">built by gcc 4.4.7 20120313 (Red Hat 4.4.7-18) (GCC) </span><br><span class="line">built with OpenSSL 1.0.2g  1 Mar 2016</span><br><span class="line">TLS SNI support enabled</span><br><span class="line">configure arguments: --prefix=/opt/nginx --with-http_stub_status_module --with-http_ssl_module --with-http_realip_module --with-http_v2_module --with-openssl=/root/openssl-1.0.2g --without-http_memcached_module --without-http_fastcgi_module --without-http_map_module --without-http_geo_module --without-http_autoindex_module</span><br></pre></td></tr></table></figure>
+<p>然后可以按照 configure arguments 配置在新机器上通过<a href="/2020/CentOS-install-nginx.html">编译 nginx 源码</a>来安装，然后把 /opt/nginx/conf 复制到新主机上，一定记得打开 nginx.conf 看下，因为通常我们都会在最后一行 include 其他的配置文件！！比如我这台主机上是这么写的：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[@10.16.89.228 /opt/nginx/conf]# cat nginx.conf</span><br><span class="line"></span><br><span class="line">#user  nobody;</span><br><span class="line">worker_processes auto;</span><br><span class="line"></span><br><span class="line">#error_log  logs/error.log;</span><br><span class="line">#error_log  logs/error.log  notice;</span><br><span class="line">#error_log  logs/error.log  info;</span><br><span class="line"></span><br><span class="line">#pid        logs/nginx.pid;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    #tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    #keepalive_timeout  0;</span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    #gzip  on;</span><br><span class="line"></span><br><span class="line">    include extra/*.conf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一定要把 extra 文件夹复制到新主机的 nginx.conf 同级目录。</p>
+<h2 id="数据迁移"><a href="#数据迁移" class="headerlink" title="数据迁移"></a>数据迁移</h2><p>数据的迁移通过 scp 即可，比较简单，保险起见，复制完毕后，检查下目录个数和文件个数，如果都能对上那应该没啥问题！</p>
+<p>scp 的介绍在 <a href="/2017/05/26-my-shell.html">这里</a> ,也包含了统计文件（夹）的脚本。</p>
+]]></content>
+      <tags>
+        <tag>CentOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>影视语录</title>
+    <url>/2020/11/16video-words.html</url>
+    <content><![CDATA[<p>打开电脑，偶然发现之前抄录的影视对白，大多是关于情情爱爱的，把它整理成文章吧…</p>
+<p>1、男人总比女人活得荤一点。那件事，你可以拒绝，但别对他说“亏本的买卖我不干”！如果恋爱只是生意，天天盘算是否划算，没有人会有勇气陪你走到终点。</p>
+<a id="more"></a>
+<p>2、男人总比女人活得荤一点。那件事，你可以拒绝，但别对他说“亏本的买卖我不干”！如果恋爱只是生意，天天盘算是否划算，没有人会有勇气陪你走到终点。</p>
+<p>3、恋爱时，最忌讳计较成本。因为爱，就是要押上我们所有的一切做砝码。一生没有这样一次，才真是亏！</p>
+<p> 4、因为男人对女人，只有深爱，才会尊重。</p>
+<p>5、平凡，但不愿平庸。</p>
+<p>6、别和已婚或有对象的人交往，不管是什么借口，结果都一样，你注定要心碎。别忘了，你只是接受了另一个人用剩的部分。别浪费时间，还有更好的对象在等你。</p>
+<p>7、别太拿自己当回事！没有人会那么在意你，永远记得你！</p>
+<p>8、自信要大于自尊！</p>
+<p>9、当一个男人除了感情，什么都不能给一个女人的时候，那这份感情也是值得怀疑的。</p>
+<p>10、想要那种真实的感觉，真实的生活，真实的感情。</p>
+<p>11、说不在乎那都是骗人的，但不让你去，你以后会恨我的···</p>
+<p>12、我每天不默念你名字一百遍都觉得虚度光阴。</p>
+<p>13、我是一个穷苦人家的孩子，不可能什么都一步到位，生活是一步一步走出来的，她有她的交友圈，我不会干涉，因为我相信她！</p>
+<p> 14、解决冷战最好的方法就是沟通与交流，不要一味的回避，回避解决不了问题，坐下来认认真真的谈一次。</p>
+<p>15、我怎么那么傻啊，就是不能包容雪玲，我宁愿失去你，都不能包容她，真不知道自己怎么想的。</p>
+<p>16、我一直都挺善解人意的，只是到了你这儿，有的时候脑袋不太好使，我不该对我们的感情那么没有信心，但是这一次，我一定会牢牢地抓住你的手，永远都不放开。</p>
+<p>17、把自己照顾好就是对亲人最好的交代了！</p>
+<p> 18、我真的很想跟你一起分享我的成绩，曾经我非常坚定地认为这些成绩真的是你需要的，是我们这个家需要的，即使你没有意思到；但是，我开始怀疑了；</p>
+<p>​    你睡了吗？</p>
+<p>​    你找到你想要的答案了吗？</p>
+<p>​    我真的很希望自己能出现在你的答案里</p>
+<p>​    可是我做了那么多伤害你的事情，</p>
+<p>​    我是不是不应该再有这种奢望了！</p>
+<p>19、不知道怎么照顾别人，还指责别人，这是最要命的了！</p>
+<p>20、夫妻俩在一起时间久了，如果条件太好，反而会感情不牢固，只有在一起经历了一些波折，能共同患难，才能相依相伴一辈子！</p>
+<p>21、爸爸相信你是爱这个家的，你的内心一定是遇到了极大地困惑，才会选择独自去远行。你一个人在外面生活，一定要相信自己，坚强，自尊。爸爸希望你能找到快乐之本，不要用金钱名誉这些外在的成功标准来要求自己，永远记住：精神的富足才能带来真正的幸福感！爸爸妈妈永远在这里等你回家。</p>
+<p>22、你知道青蛙是怎么死的吗？是蜗居在温水里烧死的···      </p>
+<p>23、黑暗和困难笼罩着前行的道路，很快我们就要在正确的和轻松的之间进行选择。</p>
+<p>24、你和布莱克还真是一丘之貉，像两个小屁孩，哼哼唧唧，抱怨生活多不公平；也许他们根本就没有注意到生活本来就不公平；</p>
+<p>25、失去的东西到最后总会回来的。</p>
+<p>26、我是吓大的！</p>
+<p>​    你中得毒越来越深，再不解会死的；</p>
+<p>​    解了又怎么样，不开心，长生不死也没用；开心，就算只能活几天也足够了</p>
+<p>​    我不想让你看着我的时候，心里面却想着另外一个人</p>
+<p>27、周晓白对钟跃民说：“无论你在哪，在做什么，都不会影响咱俩的关系，我要你记住，我是你女朋友。”    “我这辈子都认准你了，别想逃，逃到天涯海角，我都要把你抓回来。”</p>
+<p>28、【血色浪漫】</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">别干，就一口</span><br><span class="line"></span><br><span class="line">杯子里的酒没了，宴会就要结束了，可我不想让她结束</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">随缘吧</span><br><span class="line"></span><br><span class="line">干嘛要随缘，世上的事都是靠努力得来的，而不是靠随缘</span><br><span class="line"></span><br><span class="line">你知道我喜欢你什么吗？就是你身上这种满不在乎的气度</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">为了我爱的人，我什么都愿意</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">男孩子不淘气，长大了没出息</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">在你没有把握的时候就不要做出承诺，因为在时间面前任何承诺都是苍白的；</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">一个没有未来的人，你很难想象他会忠于爱情；</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">生活中过程永远比结果重要；</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">“如果将来有一天，你我的生活都发生了变化，有了更精彩的内容，那么我会祝福你，然后说声再见！我希望你也能像我一样。”</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">感情不是拿来伤害的，而是要你用心呵护的</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">人不能在一棵树上吊死</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">作为一个年轻人，应该有抱负，应该努力学点什么，将来干出一番事业，做一个对社会有用的人</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">没有责任心，对于女人就像狗熊掰棒子一样---掰一个扔一个。</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">谁都有走背字的时候，但是个爷们咬咬牙就过来了；</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">人就怕没有希望，没有盼头</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">如果一个男人给你说他不会跟你结婚的，你很爱他，他爱你但是不告诉你，你还会跟他继续吗？你愿意为了这样的爱，什么都愿意为他付出吗？</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">如果你们恋爱了3年，但是她的父母就是不愿意你们在一起，她是个孝顺女，无奈她不想伤了父母的心就和你说了分手，但是分手前的那天晚上她说她愿意把她的身子给你，如果是你你会怎么做？</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">浪漫中却带着血色，提到血就想到了死亡，是不是注定了他们的爱情就是竹篮打水；一句“钟跃民，等我！”，恐怕这也预示着周晓白就这样和他分别了吧 ···美好的种子刚刚经历了春天短暂的洗礼，然后就要发蔫了吗？钟跃民就这样把她遗忘到角落了吗？那可就枉费了周晓白的一片深情了呀？</span><br><span class="line"></span><br><span class="line">似乎从周晓白入伍那天起，从钟跃民插队那天起，他们的命运就发生了变化，就注定了他们的分手，钟跃民准备扎根黄土地，“长痛永远要比短痛恶毒”，然后钟跃民提出了分手！然后就和秦岭走到一起了，之后钟跃民也入伍了，虽然他们在一起的时间不长，但是钟跃民却爱上了秦岭；</span><br><span class="line"></span><br><span class="line">钟跃民，终究是一个闲不住的人，一直都在路上走着； </span><br><span class="line"></span><br><span class="line">周晓白，来自一个有地位的家庭，但是她那大小姐的脾气对于钟跃民来说没用---他不吃，他是谁啊！特立独行的顽主一个，服过谁啊；是钟跃民先追她的，追上后就不负责任了，但周晓白可是一往情深，等了十多年还是放不下他，结果可想而知，因为他们的开始就有问题，让周晓白伤心了一场，最后成全了张海洋了···</span><br><span class="line"></span><br><span class="line">秦岭，他的第二个女朋友，两个字---理智，理智的有时候让人觉得可怕，根本猜不透她在想什么，可她知道钟跃民是一个什么样的人，知道钟跃民不可能娶她，他闲不住，也因为理智所以选择了其他人，但有一点可以肯定，他们都爱过对方；她也是让钟跃民最牵挂的一个了；</span><br><span class="line"></span><br><span class="line">高玥，没脾气，很乖，又讨老人喜欢的那种，她比钟跃民小了十岁，但是她愿意跟他“合伙”，也不知道钟跃民最后的归宿是不是她，这有点难说，但是她愿意一直等着他。</span><br><span class="line"></span><br><span class="line">在那个年代能够上演这样的爱情，可真够浪漫的，三个女人和一个男人的故事，钟跃民其实从顽主，插队，入伍，复员，除了多了成熟之外，他的个性却一直没怎么改变过，就像他爸说他的煎饼摊似的---不会超过半年！三个女人可就大有不同了，因为她们的出身不同，她们对爱情的追求不同，才有了后来不同的结果！</span><br><span class="line"></span><br><span class="line">真的挺羡慕的，或者说挺嫉妒的，那么一个玩世不恭的人，居然有那么多的人爱他，肯为他做出牺牲!</span><br></pre></td></tr></table></figure>
+<p>29、<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如果你用金钱来帮助我，我会感到自己很廉价；</span><br><span class="line"></span><br><span class="line">表面看起来云淡风清，但是你想要的东西--绝不会松手；</span><br><span class="line"></span><br><span class="line">不管面前有多少阻碍，你绝对不会放弃想要把握的机会；</span><br><span class="line"></span><br><span class="line">我想要的是成功，对我而言，爱情真的不重要，</span><br><span class="line"></span><br><span class="line">今天我喜欢你，就在你身边，如果我喜欢别人了，就在别人身边</span><br><span class="line"></span><br><span class="line">那你现在喜欢的是我吗？</span><br><span class="line"></span><br><span class="line">对，我喜欢你</span><br><span class="line"></span><br><span class="line">这样就够了</span><br><span class="line"></span><br><span class="line">你会永远的爱我</span><br><span class="line"></span><br><span class="line">越来越爱我</span><br><span class="line"></span><br><span class="line">直到我离开人世的那一天，</span><br><span class="line"></span><br><span class="line">仍然的爱我</span><br><span class="line"></span><br><span class="line">有好运出现的话，一定会抓住她</span><br><span class="line"></span><br><span class="line">绝不会让机会溜走，没有什么可以阻挡我成功</span><br><span class="line"></span><br><span class="line">不要让你的不安全感，去毁掉这一段感情，伤害了夏沫，说不定还替别人制造机会，多不值得</span><br><span class="line"></span><br><span class="line">没有人天生就什么都会的，只要有心就一定能做得好</span><br><span class="line"></span><br><span class="line">如果你真的恨这些伤害过你的人，那就请你努力，请你变得强大</span><br><span class="line"></span><br><span class="line">回到我们面前，让我们后悔</span><br><span class="line"></span><br><span class="line">只能让自己变得更强才能去保护我身边的人</span><br><span class="line"></span><br><span class="line">但是让自己变得强大，必须付出很大的努力才行，所以我怎么会有时间去想你</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <tags>
+        <tag>影视语录</tag>
       </tags>
   </entry>
 </search>

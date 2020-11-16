@@ -194,6 +194,111 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/07/25-use-cocoapods-manager-frameworks.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/07/25-use-cocoapods-manager-frameworks.html" class="post-title-link" itemprop="url">使用 CocoaPods 管理 frameworks</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-07-25 15:09:56" itemprop="dateCreated datePublished" datetime="2017-07-25T15:09:56+08:00">2017-07-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>通过前几篇博客的介绍，已经知道了如何去创建自己的 pods 库，前提是公开源码的，但有时候你可能不想或者不能把源码提供出去，那还能继续使用 cocoapods 管理库和依赖吗？答案是肯定的，接下来就来介绍下 cocoapods 如何管理 frameworks ！</p>
+</blockquote>
+<p>无论是源码还是库的形式，对于 pod 而言，区别就是 podspec 文件，比如我做了几个管理源码的 pod 库，现在我只需要修改下就可以了，以 <a href="https://github.com/debugly/SCNetworkKit" target="_blank" rel="noopener">SCNetworkKit</a> 举例说明:</p>
+<p>将</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s.source       = &#123; :git =&gt; &quot;https://github.com/debugly/SCNetworkKit.git&quot;, :tag =&gt; &quot;#&#123;s.version&#125;&quot; &#125;</span><br><span class="line">s.source_files  = &quot;SCNetworkKit/Classes/**/*.&#123;h,m&#125;&quot;</span><br></pre></td></tr></table></figure>
+<p>修改为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s.source       = &#123; :http =&gt; &quot;http://10.7.36.192/Pods_Static/1.0.55/SCNetworkKit.framework.zip&quot; &#125;</span><br><span class="line">s.vendored_frameworks = &quot;SCNetworkKit.framework&quot;</span><br></pre></td></tr></table></figure>
+<p>source 支持四种类型:</p>
+<ul>
+<li>:git =&gt; :tag, :branch, :commit, :submodules</li>
+<li>:svn =&gt; :folder, :tag, :revision</li>
+<li>:hg =&gt; :revision</li>
+<li>:http =&gt; :flatten, :type, :sha256, :sha1, :headers</li>
+</ul>
+<p>这里使用 http 是因为实际项目中更为方便，我们会把库文件放到服务器上，通过不通的文件夹去管理版本，下载也比较快速。</p>
+<p>剩下的验证和发布步骤就和创建管理源码的 pods 库一样了，如果你没有创建过 pods 库的话，出门右转: <a href="/2017/07/24-pod-lib-create.html">使用 pod lib 创建 CocoaPods 库</a>。</p>
+<h2 id="vendored-frameworks-说明"><a href="#vendored-frameworks-说明" class="headerlink" title="vendored_frameworks 说明"></a>vendored_frameworks 说明</h2><p>1、从名字上就可以知道，这个配置支持多个 framework，配置时只需要使用逗号分隔即可；</p>
+<p>2、可以支持路径，比如 s.vendored_frameworks = “Release/SCNetworkKit.framework” 那么 SCNetworkKit.framework 必须位于相对于 spec 文件的 Release 目录下，发布到服务器上的压缩文件，解压后也必须能够解压出 Release 文件夹，否则会验证失败！</p>
+<h2 id="vendored-libraries-说明"><a href="#vendored-libraries-说明" class="headerlink" title="vendored_libraries 说明"></a>vendored_libraries 说明</h2><p>cocoapods 不仅可以管理 frameworks ，还可以管理 .a 静态库，只需要把 <strong>vendored_frameworks</strong> 换成 <strong>vendored_libraries</strong> 即可!</p>
+<h2 id="resources-说明"><a href="#resources-说明" class="headerlink" title="resources 说明"></a>resources 说明</h2><p>前面的博客里没提到 resources 管理，这里顺便提下，假设我的 SohuGameSDK.framework 里包含的有 SohuGame.xcassets 文件夹，podspec 配置如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s.resources = &quot;SohuGameSDK.framework/SohuGame.xcassets&quot;</span><br></pre></td></tr></table></figure>
+<p>我觉得很赞的是，不用将资源手动添加到主工程里去，pods会自动通过脚本帮你完成这件事，这个是新版 pods 才有的功能，最初是不支持的，大概是从 1.0 开始支持的！！</p>
+<h2 id="完"><a href="#完" class="headerlink" title="完"></a>完</h2><p>我在做 SDK 开发工作期间，并没有通过 cocoapods 管理，也没有提供 pods 库，原因大概是:</p>
+<p>我需要去配合集成 SDK 的 App，有的 App 对于 cocoapods 依赖性很大，也经常更新，对于这个 App 来讲，其实可以支持下 pods库，但是有个 App 虽然使用了 cocoapods，但是好久都没更新过了，工程较复杂，他们不愿意使用这种方式集成，避免更新我的库时，搞乱了他们的工程依赖关系！所以都是手动替换的。</p>
+<p>其实使用 cocoapods 实现这一过程也是可以的，举例说明(SDK 发布到内网 CDN服务器):</p>
+<p>SDK 要更新包了，我需要:</p>
+<ol>
+<li>将 SDK（也就是相关的 frameworks）上传到服务器</li>
+<li>升级 podspec 版本号</li>
+<li>将 podspec 推送到私有 cocospods</li>
+</ol>
+<p>这些工作完全可以通过脚本完成，然后通过 jenkins 调用即可；大致的脚本流程如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">build_sdk : 编译SDK工程</span><br><span class="line">zip_frameworks : 压缩生成的 frameworks</span><br><span class="line">scp_frameworks : 将 zip 包推到 cdn 服务器</span><br><span class="line">generate_spec : 通过模板，生成目标 spec 文件，这里推荐使用 json 格式的spec，便于模板替换</span><br><span class="line">push_spec : 将 spec 文件推送到私聊 pod 仓库</span><br><span class="line">send_mail : 发送邮件给开发者</span><br></pre></td></tr></table></figure>
+<p>集成者的工作是:</p>
+<ol>
+<li>升级 Podfile 里 SDK 的版本号</li>
+<li>使用 pod update xx 把指定库更新下来</li>
+<li>提交 pods 变动</li>
+</ol>
+<p>本文更新时，我已经不再做 SDK 开发了，现在做 App 了，但是也不等于这套流程没用了，因为我可以把这套流程修改成 <strong>组件二进制化</strong> 流程。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/07/24-pod-lib-create.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -639,100 +744,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/07/19-install-cocoapods.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/07/19-install-cocoapods.html" class="post-title-link" itemprop="url">macOS 上安装 CocoaPods</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-07-19 10:32:12" itemprop="dateCreated datePublished" datetime="2017-07-19T10:32:12+08:00">2017-07-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>前面的博客里简单的介绍过 Ruby，我们也知道了如何安装 Ruby 写的程序库，今天要安装的是大名鼎鼎的 <strong>CocoaPods</strong> ，他也是使用 Ruby 写的！</p>
-</blockquote>
-<h1 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h1><p>如果没接触过 ruby 的话，最好是先来看下这篇博客里的名词解释 : <a href="/2017/06/04-use-rake.html">使用 Rake 重写打包脚本</a></p>
-<p>使用 gem 命令安装即可 ： <code>sudo gem install cocoapods</code> ；安装过程：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line">Password:</span><br><span class="line">Fetching: i18n-0.8.6.gem (100%)</span><br><span class="line">Successfully installed i18n-0.8.6</span><br><span class="line">Fetching: thread_safe-0.3.6.gem (100%)</span><br><span class="line">Successfully installed thread_safe-0.3.6</span><br><span class="line">Fetching: tzinfo-1.2.3.gem (100%)</span><br><span class="line">Successfully installed tzinfo-1.2.3</span><br><span class="line">Fetching: activesupport-4.2.9.gem (100%)</span><br><span class="line">Successfully installed activesupport-4.2.9</span><br><span class="line">Fetching: nap-1.1.0.gem (100%)</span><br><span class="line">Successfully installed nap-1.1.0</span><br><span class="line">Fetching: fuzzy_match-2.0.4.gem (100%)</span><br><span class="line">Successfully installed fuzzy_match-2.0.4</span><br><span class="line">Fetching: cocoapods-core-1.2.1.gem (100%)</span><br><span class="line">Successfully installed cocoapods-core-1.2.1</span><br><span class="line">Fetching: claide-1.0.2.gem (100%)</span><br><span class="line">Successfully installed claide-1.0.2</span><br><span class="line">Fetching: cocoapods-deintegrate-1.0.1.gem (100%)</span><br><span class="line">Successfully installed cocoapods-deintegrate-1.0.1</span><br><span class="line">Fetching: cocoapods-downloader-1.1.3.gem (100%)</span><br><span class="line">Successfully installed cocoapods-downloader-1.1.3</span><br><span class="line">Fetching: cocoapods-plugins-1.0.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-plugins-1.0.0</span><br><span class="line">Fetching: cocoapods-search-1.0.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-search-1.0.0</span><br><span class="line">Fetching: cocoapods-stats-1.0.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-stats-1.0.0</span><br><span class="line">Fetching: netrc-0.7.8.gem (100%)</span><br><span class="line">Successfully installed netrc-0.7.8</span><br><span class="line">Fetching: cocoapods-trunk-1.2.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-trunk-1.2.0</span><br><span class="line">Fetching: cocoapods-try-1.1.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-try-1.1.0</span><br><span class="line">Fetching: molinillo-0.5.7.gem (100%)</span><br><span class="line">Successfully installed molinillo-0.5.7</span><br><span class="line">Fetching: CFPropertyList-2.3.5.gem (100%)</span><br><span class="line">Successfully installed CFPropertyList-2.3.5</span><br><span class="line">Fetching: colored2-3.1.2.gem (100%)</span><br><span class="line">Successfully installed colored2-3.1.2</span><br><span class="line">Fetching: nanaimo-0.2.3.gem (100%)</span><br><span class="line">Successfully installed nanaimo-0.2.3</span><br><span class="line">Fetching: xcodeproj-1.5.1.gem (100%)</span><br><span class="line">Successfully installed xcodeproj-1.5.1</span><br><span class="line">Fetching: escape-0.0.4.gem (100%)</span><br><span class="line">Successfully installed escape-0.0.4</span><br><span class="line">Fetching: fourflusher-2.0.1.gem (100%)</span><br><span class="line">Successfully installed fourflusher-2.0.1</span><br><span class="line">Fetching: gh_inspector-1.0.3.gem (100%)</span><br><span class="line">Successfully installed gh_inspector-1.0.3</span><br><span class="line">Fetching: ruby-macho-1.1.0.gem (100%)</span><br><span class="line">Successfully installed ruby-macho-1.1.0</span><br><span class="line">Fetching: cocoapods-1.2.1.gem (100%)</span><br><span class="line">Successfully installed cocoapods-1.2.1</span><br><span class="line">Parsing documentation for i18n-0.8.6</span><br><span class="line">Installing ri documentation for i18n-0.8.6</span><br><span class="line">Parsing documentation for thread_safe-0.3.6</span><br><span class="line">Installing ri documentation for thread_safe-0.3.6</span><br><span class="line">Parsing documentation for tzinfo-1.2.3</span><br><span class="line">Installing ri documentation for tzinfo-1.2.3</span><br><span class="line">Parsing documentation for activesupport-4.2.9</span><br><span class="line">Installing ri documentation for activesupport-4.2.9</span><br><span class="line">Parsing documentation for nap-1.1.0</span><br><span class="line">Installing ri documentation for nap-1.1.0</span><br><span class="line">Parsing documentation for fuzzy_match-2.0.4</span><br><span class="line">Installing ri documentation for fuzzy_match-2.0.4</span><br><span class="line">Parsing documentation for cocoapods-core-1.2.1</span><br><span class="line">Installing ri documentation for cocoapods-core-1.2.1</span><br><span class="line">Parsing documentation for claide-1.0.2</span><br><span class="line">Installing ri documentation for claide-1.0.2</span><br><span class="line">Parsing documentation for cocoapods-deintegrate-1.0.1</span><br><span class="line">Installing ri documentation for cocoapods-deintegrate-1.0.1</span><br><span class="line">Parsing documentation for cocoapods-downloader-1.1.3</span><br><span class="line">Installing ri documentation for cocoapods-downloader-1.1.3</span><br><span class="line">Parsing documentation for cocoapods-plugins-1.0.0</span><br><span class="line">Installing ri documentation for cocoapods-plugins-1.0.0</span><br><span class="line">Parsing documentation for cocoapods-search-1.0.0</span><br><span class="line">Installing ri documentation for cocoapods-search-1.0.0</span><br><span class="line">Parsing documentation for cocoapods-stats-1.0.0</span><br><span class="line">Installing ri documentation for cocoapods-stats-1.0.0</span><br><span class="line">Parsing documentation for netrc-0.7.8</span><br><span class="line">Installing ri documentation for netrc-0.7.8</span><br><span class="line">Parsing documentation for cocoapods-trunk-1.2.0</span><br><span class="line">Installing ri documentation for cocoapods-trunk-1.2.0</span><br><span class="line">Parsing documentation for cocoapods-try-1.1.0</span><br><span class="line">Installing ri documentation for cocoapods-try-1.1.0</span><br><span class="line">Parsing documentation for molinillo-0.5.7</span><br><span class="line">Installing ri documentation for molinillo-0.5.7</span><br><span class="line">Parsing documentation for CFPropertyList-2.3.5</span><br><span class="line">Installing ri documentation for CFPropertyList-2.3.5</span><br><span class="line">Parsing documentation for colored2-3.1.2</span><br><span class="line">Installing ri documentation for colored2-3.1.2</span><br><span class="line">Parsing documentation for nanaimo-0.2.3</span><br><span class="line">Installing ri documentation for nanaimo-0.2.3</span><br><span class="line">Parsing documentation for xcodeproj-1.5.1</span><br><span class="line">Installing ri documentation for xcodeproj-1.5.1</span><br><span class="line">Parsing documentation for escape-0.0.4</span><br><span class="line">Installing ri documentation for escape-0.0.4</span><br><span class="line">Parsing documentation for fourflusher-2.0.1</span><br><span class="line">Installing ri documentation for fourflusher-2.0.1</span><br><span class="line">Parsing documentation for gh_inspector-1.0.3</span><br><span class="line">Installing ri documentation for gh_inspector-1.0.3</span><br><span class="line">Parsing documentation for ruby-macho-1.1.0</span><br><span class="line">Installing ri documentation for ruby-macho-1.1.0</span><br><span class="line">Parsing documentation for cocoapods-1.2.1</span><br><span class="line">Installing ri documentation for cocoapods-1.2.1</span><br><span class="line">Done installing documentation for i18n, thread_safe, tzinfo, activesupport, nap, fuzzy_match, cocoapods-core, claide, cocoapods-deintegrate, cocoapods-downloader, cocoapods-plugins, cocoapods-search, cocoapods-stats, netrc, cocoapods-trunk, cocoapods-try, molinillo, CFPropertyList, colored2, nanaimo, xcodeproj, escape, fourflusher, gh_inspector, ruby-macho, cocoapods after 16 seconds</span><br><span class="line">26 gems installed</span><br></pre></td></tr></table></figure>
-<p>如遇到权限问题，可以通过 -n 参数修改安装目录再装:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERROR:  While executing gem ... (Gem::FilePermissionError)</span><br><span class="line">    You don&apos;t have write permissions for the /usr/bin directory.</span><br><span class="line">sudo gem install -n /usr/local/bin cocoapods</span><br></pre></td></tr></table></figure>
-<p>下载过程出问题的话，很可能是源的问题，可以开启 VPN ，或者替换为下面的源地址：</p>
-<ul>
-<li>Ruby 社区的 Gem 托管服务: RubyGems.org</li>
-<li>RubyGems 镜像 gems.ruby-china.org</li>
-<li>RubyGems 镜像 ruby.taobao.org</li>
-</ul>
-<p>查看当前源 ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gem sources -l</span><br><span class="line">*** CURRENT SOURCES ***</span><br><span class="line">https://rubygems.org/</span><br></pre></td></tr></table></figure>
-<p>将官方 rubygems.org 修改为国内的 gems.ruby-china.org 源地址 ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/</span><br></pre></td></tr></table></figure>
-<p>安装完毕后最好是 <strong>pod setup</strong> 下，作用是把 <a href="https://github.com/CocoaPods/Specs.git" target="_blank" rel="noopener">CocoaPods 仓库</a> clone 到本地。</p>
-<h1 id="Try"><a href="#Try" class="headerlink" title="Try"></a>Try</h1><p>可以尝试玩下：</p>
-<ul>
-<li>版本 ： pod --version</li>
-<li>搜索 ： pod search SCNetworkKit</li>
-<li>尝试demo ： pod try SCNetworkKit</li>
-</ul>
-<p>更多命令 ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">+ cache         Manipulate the CocoaPods cache</span><br><span class="line">+ deintegrate   Deintegrate CocoaPods from your project</span><br><span class="line">+ env           Display pod environment</span><br><span class="line">+ init          Generate a Podfile for the current directory</span><br><span class="line">+ install       Install project dependencies according to versions from a</span><br><span class="line">                Podfile.lock</span><br><span class="line">+ ipc           Inter-process communication</span><br><span class="line">+ lib           Develop pods</span><br><span class="line">+ list          List pods</span><br><span class="line">+ outdated      Show outdated project dependencies</span><br><span class="line">+ plugins       Show available CocoaPods plugins</span><br><span class="line">+ repo          Manage spec-repositories</span><br><span class="line">+ search        Search for pods</span><br><span class="line">+ setup         Setup the CocoaPods environment</span><br><span class="line">+ spec          Manage pod specs</span><br><span class="line">+ trunk         Interact with the CocoaPods API (e.g. publishing new specs)</span><br><span class="line">+ try           Try a Pod!</span><br><span class="line">+ update        Update outdated project dependencies and create new</span><br><span class="line">                Podfile.lock</span><br></pre></td></tr></table></figure>
-<p>可选参数 ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--silent        Show nothing</span><br><span class="line">--version       Show the version of the tool</span><br><span class="line">--verbose       Show more debugging information</span><br><span class="line">--no-ansi       Show output without ANSI codes</span><br><span class="line">--help          Show help banner of specified command</span><br></pre></td></tr></table></figure>
-<p>后续博客会对某些命令做更加详细的介绍。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -802,14 +813,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-count">99</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

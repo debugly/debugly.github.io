@@ -194,6 +194,100 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/07/19-install-cocoapods.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="许乾隆">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Matt Reach">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/07/19-install-cocoapods.html" class="post-title-link" itemprop="url">macOS 上安装 CocoaPods</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-07-19 10:32:12" itemprop="dateCreated datePublished" datetime="2017-07-19T10:32:12+08:00">2017-07-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>前面的博客里简单的介绍过 Ruby，我们也知道了如何安装 Ruby 写的程序库，今天要安装的是大名鼎鼎的 <strong>CocoaPods</strong> ，他也是使用 Ruby 写的！</p>
+</blockquote>
+<h1 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h1><p>如果没接触过 ruby 的话，最好是先来看下这篇博客里的名词解释 : <a href="/2017/06/04-use-rake.html">使用 Rake 重写打包脚本</a></p>
+<p>使用 gem 命令安装即可 ： <code>sudo gem install cocoapods</code> ；安装过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line">Password:</span><br><span class="line">Fetching: i18n-0.8.6.gem (100%)</span><br><span class="line">Successfully installed i18n-0.8.6</span><br><span class="line">Fetching: thread_safe-0.3.6.gem (100%)</span><br><span class="line">Successfully installed thread_safe-0.3.6</span><br><span class="line">Fetching: tzinfo-1.2.3.gem (100%)</span><br><span class="line">Successfully installed tzinfo-1.2.3</span><br><span class="line">Fetching: activesupport-4.2.9.gem (100%)</span><br><span class="line">Successfully installed activesupport-4.2.9</span><br><span class="line">Fetching: nap-1.1.0.gem (100%)</span><br><span class="line">Successfully installed nap-1.1.0</span><br><span class="line">Fetching: fuzzy_match-2.0.4.gem (100%)</span><br><span class="line">Successfully installed fuzzy_match-2.0.4</span><br><span class="line">Fetching: cocoapods-core-1.2.1.gem (100%)</span><br><span class="line">Successfully installed cocoapods-core-1.2.1</span><br><span class="line">Fetching: claide-1.0.2.gem (100%)</span><br><span class="line">Successfully installed claide-1.0.2</span><br><span class="line">Fetching: cocoapods-deintegrate-1.0.1.gem (100%)</span><br><span class="line">Successfully installed cocoapods-deintegrate-1.0.1</span><br><span class="line">Fetching: cocoapods-downloader-1.1.3.gem (100%)</span><br><span class="line">Successfully installed cocoapods-downloader-1.1.3</span><br><span class="line">Fetching: cocoapods-plugins-1.0.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-plugins-1.0.0</span><br><span class="line">Fetching: cocoapods-search-1.0.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-search-1.0.0</span><br><span class="line">Fetching: cocoapods-stats-1.0.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-stats-1.0.0</span><br><span class="line">Fetching: netrc-0.7.8.gem (100%)</span><br><span class="line">Successfully installed netrc-0.7.8</span><br><span class="line">Fetching: cocoapods-trunk-1.2.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-trunk-1.2.0</span><br><span class="line">Fetching: cocoapods-try-1.1.0.gem (100%)</span><br><span class="line">Successfully installed cocoapods-try-1.1.0</span><br><span class="line">Fetching: molinillo-0.5.7.gem (100%)</span><br><span class="line">Successfully installed molinillo-0.5.7</span><br><span class="line">Fetching: CFPropertyList-2.3.5.gem (100%)</span><br><span class="line">Successfully installed CFPropertyList-2.3.5</span><br><span class="line">Fetching: colored2-3.1.2.gem (100%)</span><br><span class="line">Successfully installed colored2-3.1.2</span><br><span class="line">Fetching: nanaimo-0.2.3.gem (100%)</span><br><span class="line">Successfully installed nanaimo-0.2.3</span><br><span class="line">Fetching: xcodeproj-1.5.1.gem (100%)</span><br><span class="line">Successfully installed xcodeproj-1.5.1</span><br><span class="line">Fetching: escape-0.0.4.gem (100%)</span><br><span class="line">Successfully installed escape-0.0.4</span><br><span class="line">Fetching: fourflusher-2.0.1.gem (100%)</span><br><span class="line">Successfully installed fourflusher-2.0.1</span><br><span class="line">Fetching: gh_inspector-1.0.3.gem (100%)</span><br><span class="line">Successfully installed gh_inspector-1.0.3</span><br><span class="line">Fetching: ruby-macho-1.1.0.gem (100%)</span><br><span class="line">Successfully installed ruby-macho-1.1.0</span><br><span class="line">Fetching: cocoapods-1.2.1.gem (100%)</span><br><span class="line">Successfully installed cocoapods-1.2.1</span><br><span class="line">Parsing documentation for i18n-0.8.6</span><br><span class="line">Installing ri documentation for i18n-0.8.6</span><br><span class="line">Parsing documentation for thread_safe-0.3.6</span><br><span class="line">Installing ri documentation for thread_safe-0.3.6</span><br><span class="line">Parsing documentation for tzinfo-1.2.3</span><br><span class="line">Installing ri documentation for tzinfo-1.2.3</span><br><span class="line">Parsing documentation for activesupport-4.2.9</span><br><span class="line">Installing ri documentation for activesupport-4.2.9</span><br><span class="line">Parsing documentation for nap-1.1.0</span><br><span class="line">Installing ri documentation for nap-1.1.0</span><br><span class="line">Parsing documentation for fuzzy_match-2.0.4</span><br><span class="line">Installing ri documentation for fuzzy_match-2.0.4</span><br><span class="line">Parsing documentation for cocoapods-core-1.2.1</span><br><span class="line">Installing ri documentation for cocoapods-core-1.2.1</span><br><span class="line">Parsing documentation for claide-1.0.2</span><br><span class="line">Installing ri documentation for claide-1.0.2</span><br><span class="line">Parsing documentation for cocoapods-deintegrate-1.0.1</span><br><span class="line">Installing ri documentation for cocoapods-deintegrate-1.0.1</span><br><span class="line">Parsing documentation for cocoapods-downloader-1.1.3</span><br><span class="line">Installing ri documentation for cocoapods-downloader-1.1.3</span><br><span class="line">Parsing documentation for cocoapods-plugins-1.0.0</span><br><span class="line">Installing ri documentation for cocoapods-plugins-1.0.0</span><br><span class="line">Parsing documentation for cocoapods-search-1.0.0</span><br><span class="line">Installing ri documentation for cocoapods-search-1.0.0</span><br><span class="line">Parsing documentation for cocoapods-stats-1.0.0</span><br><span class="line">Installing ri documentation for cocoapods-stats-1.0.0</span><br><span class="line">Parsing documentation for netrc-0.7.8</span><br><span class="line">Installing ri documentation for netrc-0.7.8</span><br><span class="line">Parsing documentation for cocoapods-trunk-1.2.0</span><br><span class="line">Installing ri documentation for cocoapods-trunk-1.2.0</span><br><span class="line">Parsing documentation for cocoapods-try-1.1.0</span><br><span class="line">Installing ri documentation for cocoapods-try-1.1.0</span><br><span class="line">Parsing documentation for molinillo-0.5.7</span><br><span class="line">Installing ri documentation for molinillo-0.5.7</span><br><span class="line">Parsing documentation for CFPropertyList-2.3.5</span><br><span class="line">Installing ri documentation for CFPropertyList-2.3.5</span><br><span class="line">Parsing documentation for colored2-3.1.2</span><br><span class="line">Installing ri documentation for colored2-3.1.2</span><br><span class="line">Parsing documentation for nanaimo-0.2.3</span><br><span class="line">Installing ri documentation for nanaimo-0.2.3</span><br><span class="line">Parsing documentation for xcodeproj-1.5.1</span><br><span class="line">Installing ri documentation for xcodeproj-1.5.1</span><br><span class="line">Parsing documentation for escape-0.0.4</span><br><span class="line">Installing ri documentation for escape-0.0.4</span><br><span class="line">Parsing documentation for fourflusher-2.0.1</span><br><span class="line">Installing ri documentation for fourflusher-2.0.1</span><br><span class="line">Parsing documentation for gh_inspector-1.0.3</span><br><span class="line">Installing ri documentation for gh_inspector-1.0.3</span><br><span class="line">Parsing documentation for ruby-macho-1.1.0</span><br><span class="line">Installing ri documentation for ruby-macho-1.1.0</span><br><span class="line">Parsing documentation for cocoapods-1.2.1</span><br><span class="line">Installing ri documentation for cocoapods-1.2.1</span><br><span class="line">Done installing documentation for i18n, thread_safe, tzinfo, activesupport, nap, fuzzy_match, cocoapods-core, claide, cocoapods-deintegrate, cocoapods-downloader, cocoapods-plugins, cocoapods-search, cocoapods-stats, netrc, cocoapods-trunk, cocoapods-try, molinillo, CFPropertyList, colored2, nanaimo, xcodeproj, escape, fourflusher, gh_inspector, ruby-macho, cocoapods after 16 seconds</span><br><span class="line">26 gems installed</span><br></pre></td></tr></table></figure>
+<p>如遇到权限问题，可以通过 -n 参数修改安装目录再装:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERROR:  While executing gem ... (Gem::FilePermissionError)</span><br><span class="line">    You don&apos;t have write permissions for the /usr/bin directory.</span><br><span class="line">sudo gem install -n /usr/local/bin cocoapods</span><br></pre></td></tr></table></figure>
+<p>下载过程出问题的话，很可能是源的问题，可以开启 VPN ，或者替换为下面的源地址：</p>
+<ul>
+<li>Ruby 社区的 Gem 托管服务: RubyGems.org</li>
+<li>RubyGems 镜像 gems.ruby-china.org</li>
+<li>RubyGems 镜像 ruby.taobao.org</li>
+</ul>
+<p>查看当前源 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gem sources -l</span><br><span class="line">*** CURRENT SOURCES ***</span><br><span class="line">https://rubygems.org/</span><br></pre></td></tr></table></figure>
+<p>将官方 rubygems.org 修改为国内的 gems.ruby-china.org 源地址 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/</span><br></pre></td></tr></table></figure>
+<p>安装完毕后最好是 <strong>pod setup</strong> 下，作用是把 <a href="https://github.com/CocoaPods/Specs.git" target="_blank" rel="noopener">CocoaPods 仓库</a> clone 到本地。</p>
+<h1 id="Try"><a href="#Try" class="headerlink" title="Try"></a>Try</h1><p>可以尝试玩下：</p>
+<ul>
+<li>版本 ： pod --version</li>
+<li>搜索 ： pod search SCNetworkKit</li>
+<li>尝试demo ： pod try SCNetworkKit</li>
+</ul>
+<p>更多命令 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">+ cache         Manipulate the CocoaPods cache</span><br><span class="line">+ deintegrate   Deintegrate CocoaPods from your project</span><br><span class="line">+ env           Display pod environment</span><br><span class="line">+ init          Generate a Podfile for the current directory</span><br><span class="line">+ install       Install project dependencies according to versions from a</span><br><span class="line">                Podfile.lock</span><br><span class="line">+ ipc           Inter-process communication</span><br><span class="line">+ lib           Develop pods</span><br><span class="line">+ list          List pods</span><br><span class="line">+ outdated      Show outdated project dependencies</span><br><span class="line">+ plugins       Show available CocoaPods plugins</span><br><span class="line">+ repo          Manage spec-repositories</span><br><span class="line">+ search        Search for pods</span><br><span class="line">+ setup         Setup the CocoaPods environment</span><br><span class="line">+ spec          Manage pod specs</span><br><span class="line">+ trunk         Interact with the CocoaPods API (e.g. publishing new specs)</span><br><span class="line">+ try           Try a Pod!</span><br><span class="line">+ update        Update outdated project dependencies and create new</span><br><span class="line">                Podfile.lock</span><br></pre></td></tr></table></figure>
+<p>可选参数 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--silent        Show nothing</span><br><span class="line">--version       Show the version of the tool</span><br><span class="line">--verbose       Show more debugging information</span><br><span class="line">--no-ansi       Show output without ANSI codes</span><br><span class="line">--help          Show help banner of specified command</span><br></pre></td></tr></table></figure>
+<p>后续博客会对某些命令做更加详细的介绍。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/07/17-objc-weak-obj-imp.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -568,142 +662,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://debugly.cn/2017/06/19-install-sierra.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="许乾隆">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Matt Reach">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/06/19-install-sierra.html" class="post-title-link" itemprop="url">使用 U 盘安装 macOS Sierra</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-06-19 16:57:32" itemprop="dateCreated datePublished" datetime="2017-06-19T16:57:32+08:00">2017-06-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 16:23:36" itemprop="dateModified" datetime="2020-07-31T16:23:36+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>由于 Mac 无法进入系统，已经分析出了原因 — 磁盘爆满的缘故，因此就想通过进入 PE 的方式，删除掉无用的文件，这样理论上就应该能够顺利进入系统了！</p>
-<h1 id="刻盘进-PE"><a href="#刻盘进-PE" class="headerlink" title="刻盘进 PE"></a>刻盘进 PE</h1><p>在大学时期曾用 PE 装过 Windows，只不过几年不弄过了，于是就去网上下了 <code>大白菜 PE</code>，然后刻成启动盘，然后开始进入 PE 啦！在 Window 上进 PE 要按下 delete，然后选择从 U 盘启动，而 macOS 则是开机时按下 Option 键，然后就会出现选择启动盘 :</p>
-<p>开机前插上 U 盘</p>
-<p><img src="/images/201706/4.JPG" alt></p>
-<p>按住 Option 开机</p>
-<p><img src="/images/201706/5.JPG" alt></p>
-<p>PE 是 Win8 系统</p>
-<p><img src="/images/201706/6.JPG" alt></p>
-<p>可惜进入后无法识别苹果分区</p>
-<p><img src="/images/201706/7.JPG" alt></p>
-<p>安装识别苹果分区软件</p>
-<p><img src="/images/201706/8.JPG" alt></p>
-<p>然并卵，高版本的系统都是逻辑分区，所以无法识别！！</p>
-<h1 id="Mac-PE"><a href="#Mac-PE" class="headerlink" title="Mac PE"></a>Mac PE</h1><p>网上继续搜寻了一番，发现还有个办法可行，那就是搞个 Mac PE 来识别苹果分区，因为 Mac PE 是使用 macOS 做出来的，所以天然性的就具备识别苹果分区的能力了！啥也不说了，开始装 Mac PE 了:</p>
-<p>首先下载镜像文件，google 才能找到官网，百度根本找不到，唉，不说了，去下载吧:</p>
-<p><a href="https://www.firewolf.science/firewolf-os-x-pe-v7/download-firewolf-os-x-pe-v7/" target="_blank" rel="noopener">FireWolf OS X PE V7.0 Download Center</a></p>
-<p>Mac 上使用磁盘工具恢复到 U 盘就行了！同样的开机按住 Option 选择 FireWolf 盘符就行了，当时没拍照，直接看下进去后的情况吧 :</p>
-<p><img src="/images/201706/9.JPG" alt></p>
-<p>启动后我也傻眼了，妈的磁盘是加密的，虽然识别了，但都是加密的文件，备份了也没啥用。新亏我摸索到了方法，找到磁盘实用工具，选择 <code>从 Time Machine 恢复</code></p>
-<p><img src="/images/201706/10.JPG" alt></p>
-<p>一步步往下走就行了，走着走着会提示输入密码，因为解密磁盘需要权限，解密后会去搜索备份，结果当然搜不出来了，不过这时文件已经全部解密了！看后面的文件夹名字 : <code>xuqianlong</code></p>
-<p><img src="/images/201706/11.JPG" alt></p>
-<p>这下以为总算可以了呢，唉，fuck 了，文件是只读的，不能删除！！！好吧，能解密就谢天谢地了，我用移动硬盘copy下资料吧！资料备份后我就放心了，实现是没别的办法了，我选择了重做系统！</p>
-<h1 id="刻盘装-Mac-系统"><a href="#刻盘装-Mac-系统" class="headerlink" title="刻盘装 Mac 系统"></a>刻盘装 Mac 系统</h1><p>若是刻录一个 Windows 的启动盘很简单，很容易就能下到 ios 镜像文件，可是由于苹果官方现在只提供了 macOS Sierra 的升级程序，而没提供完整的镜像，想要全新安装的话，只能自己去制作一个 macOS Sierra 的 U 盘启动盘/安装盘了。没有别的办法先下载安装器吧，然后再想办法恢复到 U 盘，这是 <a href="https://itunes.apple.com/us/app/macos-sierra/id1127487414?mt=12" target="_blank" rel="noopener">macOS Sierra</a> 下载地址，打开 AppStore 下载即可</p>
-<p><img src="/images/201706/12-0.jpeg" alt></p>
-<p>共 4.96GB，网速慢的话，需要等一阵子了，下载完毕后，你会发现 Launchpad 多出一个 <code>安装 macOS Sierra</code>。</p>
-<p><img src="/images/201706/12-1.png" alt></p>
-<p>然后插上 U 盘，最好是 3.0 的，这样会快些，打开磁盘工具，将其抹掉，格式化为 Mac OS 扩展 （日志式） ，命名为 <code>Sierra</code>，然后打开终端执行以下命令 :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /Applications/Install\ macOS\ Sierra.app/Contents/Resources/createinstallmedia --volume /Volumes/Sierra --application /Applications/Install\ macOS\ Sierra.app --nointeraction</span><br></pre></td></tr></table></figure>
-<p>前面是安装器执行文件路径，通过 volume 参数指定安装路径，这里指定 U 盘 : <code>/Volumes/Sierra</code>，通过 application 参数指定安装程序，在输入以上命令后，执行过程如下 :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Erasing Disk: 0%... 10%... 20%... 30%...100%...</span><br><span class="line">Copying installer files to disk... //这一步会执行好长时间</span><br><span class="line">Copy complete.</span><br><span class="line">Making disk bootable...</span><br><span class="line">Copying boot files...</span><br><span class="line">Copy complete.</span><br><span class="line">Done.</span><br></pre></td></tr></table></figure>
-<p>看到 Done 之后，就可以了，你会发现 U 盘名称变为了 <code>Install macOS Sierra</code>，种种迹象表明 U 盘刻录成功了，可以去装机了，按住 Option 开机吧 :</p>
-<p>哇咔咔，选择从 <code>Install macOS Sierra</code> 启动！</p>
-<p><img src="/images/201706/12.JPG" alt></p>
-<p>等待这个进度条走完</p>
-<p><img src="/images/201706/13.JPG" alt></p>
-<p>好不激动么，选择简体中文</p>
-<p><img src="/images/201706/14.JPG" alt></p>
-<p>选择安装 macOS</p>
-<p><img src="/images/201706/15.JPG" alt></p>
-<p>继续吧</p>
-<p><img src="/images/201706/16.JPG" alt></p>
-<p>选择 MBP 的硬盘<br><img src="/images/201706/17.JPG" alt></p>
-<p>不行，没空间了，所以返回去，找到磁盘工具，格式化硬盘</p>
-<p><img src="/images/201706/18.JPG" alt></p>
-<p>抹掉就行了</p>
-<p><img src="/images/201706/19.JPG" alt></p>
-<p>这些可干净了，啥也没了</p>
-<p><img src="/images/201706/20.JPG" alt></p>
-<p>继续安装</p>
-<p><img src="/images/201706/21.JPG" alt></p>
-<p>说是7分钟，实际要长些，主要是我 U 盘不是 3.0 的，拷贝文件速度慢</p>
-<p><img src="/images/201706/22.JPG" alt></p>
-<p>还有 1 分钟</p>
-<p><img src="/images/201706/23.JPG" alt></p>
-<p>重启是正常的，看来就快好了</p>
-<p><img src="/images/201706/24.JPG" alt></p>
-<p>选择中国</p>
-<p><img src="/images/201706/25.JPG" alt></p>
-<p>选择 WiFi</p>
-<p><img src="/images/201706/26.JPG" alt></p>
-<p>不用传输了</p>
-<p><img src="/images/201706/27.JPG" alt></p>
-<p>设置下 iCloud</p>
-<p><img src="/images/201706/28.JPG" alt></p>
-<p>选择时区</p>
-<p><img src="/images/201706/29.JPG" alt></p>
-<p>哇咔咔，进来了！！！好熟悉的桌面-内华达山脉</p>
-<p><img src="/images/201706/30.JPG" alt></p>
-<p>刚格式化的时候可用空间是 249G，现在是 239G，看来系统占用了 10G。</p>
-<p><img src="/images/201706/31.JPG" alt></p>
-<h1 id="完"><a href="#完" class="headerlink" title="完"></a>完</h1><p>使用 U 盘安装系统或者安装 Mac PE 的前提都是要有个 Mac 才行，这样才能做出启动盘来，这对于很多用户而言是不太容易满足的，所以最好别让我们的 Mac 挂掉，省得如此麻烦，特别建议和我一样使用 256 G 磁盘的用户，多给系统预留一些空间，至少 20G 左右，最好是买个移动做下日常硬盘备份，才不会出现我今天的悲剧! 当磁盘空间小时，Mac 经常弹出来一个提示让我清理，我没有去深度清理，我记得我好像剩下 13G 左右，现在想来还挺后悔的，要不然就不用在这折腾了！</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -773,14 +731,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-count">99</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
