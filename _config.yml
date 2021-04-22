@@ -10,6 +10,10 @@ author: 许乾隆
 language: zh-CN
 timezone:
 
+menu:
+#  Home: /
+#  Archives: /archives
+  
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: https://debugly.cn
@@ -76,7 +80,7 @@ pagination_dir: page
 
 ## Themes: https://github.com/debugly/hexo-theme-yaris  landscape
 ## git clone https://github.com/theme-next/hexo-theme-next.git themes/next
-theme: next
+theme: landscape
 #theme: hexo-theme-yaris
 
 # Deployment
@@ -86,8 +90,22 @@ deploy:
   branch: master
   repo: git@github.com:debugly/debugly.github.io.git
 
-search:
-  path: search.xml
-  field: post
-  format: html
-  limit: 50
+#search:
+#  path: search.xml
+#  field: post
+#  format: html
+#  limit: 50
+
+feed:
+  enable: true
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+  content:
+  content_limit: 140
+  content_limit_delim: ' '
+  order_by: -date
+  icon: icon.png
+  autodiscovery: true
+  template:
