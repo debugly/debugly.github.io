@@ -218,20 +218,20 @@ cp -r debugly/init.sh d2
 
 ```bash
 ## scp form to
-scp /Users/qianlongxu/Downloads/id_rsa.pub crown@10.7.40.176:~/id_rsa.pub
+scp /Users/qianlongxu/Downloads/id_rsa.pub crown@110.117.40.176:~/id_rsa.pub
 ## 不带文件名时，保持原有文件名
-scp /Users/qianlongxu/Downloads/id_rsa.pub crown@10.7.40.176:~/
+scp /Users/qianlongxu/Downloads/id_rsa.pub crown@110.117.40.176:~/
 ## 重命名
-scp /Users/qianlongxu/Downloads/id_rsa.pub crown@10.7.40.176:~/new_rsa.pub
+scp /Users/qianlongxu/Downloads/id_rsa.pub crown@110.117.40.176:~/new_rsa.pub
 ```
 - **复制文件夹**
 
 ```bash
 ## scp -r from to
 ## 将本机 qr-code 文件夹复制到远程 html 目录下；包括 qr-code 文件夹本身！文件已存在时会覆盖！
-scp -r /Users/qianlongxu/Downloads/qr-code crown@10.7.40.176:/opt/www/html/
+scp -r /Users/qianlongxu/Downloads/qr-code crown@110.117.40.176:/opt/www/html/
 ## 将本机 qr-code 文件夹里的内容复制到远程 qr-code 目录下；文件已存在时不会覆盖！
-scp -r /Users/qianlongxu/Downloads/qr-code crown@10.7.40.176:/opt/www/qr-code/
+scp -r /Users/qianlongxu/Downloads/qr-code crown@110.117.40.176:/opt/www/qr-code/
 ```
 
 注意：
@@ -243,7 +243,7 @@ scp -r /Users/qianlongxu/Downloads/qr-code crown@10.7.40.176:/opt/www/qr-code/
 - 登陆远程服务器:
 
 	```bash
-	ssh crown@10.7.40.176
+	ssh crown@110.117.40.176
 	///输入密码
 	sohuxxx
 	```
@@ -254,7 +254,7 @@ scp -r /Users/qianlongxu/Downloads/qr-code crown@10.7.40.176:/opt/www/qr-code/
 
 	```bash
 	///将公钥追加到这个服务器~/.ssh/authorized_keys文件末尾 
-	ssh-copy-id -i jenkins@10.7.40.195
+	ssh-copy-id -i jenkins@110.117.40.195
 	///输入密码
 	sohuxxx
 	```
@@ -294,11 +294,11 @@ xuqianlong$ kill 49753
 # netstat
 
 ```
-[@10.16.89.228 /data/ifox/upgrade]# netstat -tlunp | grep nginx
+[@110.116.189.228 /data/ifox/upgrade]# netstat -tlunp | grep nginx
 tcp        0      0 0.0.0.0:80                  0.0.0.0:*                   LISTEN      13884/nginx         
-[@10.16.89.228 /data/ifox/upgrade]# netstat -tlunp | grep nginx
+[@110.116.189.228 /data/ifox/upgrade]# netstat -tlunp | grep nginx
 tcp        0      0 0.0.0.0:80                  0.0.0.0:*                   LISTEN      13884/nginx         
-[@10.16.89.228 /data/ifox/upgrade]# lsof -i tcp:80
+[@110.116.189.228 /data/ifox/upgrade]# lsof -i tcp:80
 COMMAND   PID   USER   FD   TYPE     DEVICE SIZE/OFF NODE NAME
 nginx   13884   root    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
 nginx   13950 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
@@ -453,14 +453,14 @@ Linking /usr/local/Cellar/python@3.9/3.9.0_1... 5 symlinks created
 	```bash
 	qianlongxu$ git log -3
 	commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -> source, origin/source)
-	Author: qianlongxu <qianlongxu@sohu-inc.com>
+	Author: qianlongxu <qianlongxu@gmail.com>
 	Date:   Sat Mar 24 09:49:51 2018 +0800
 	
 	    add post
 	
 	commit eb3e9419a4a6cc736808ac40b7cf2908b7998c56
 	Merge: e851655 6755480
-	Author: qianlongxu <qianlongxu@sohu-inc.com>
+	Author: qianlongxu <qianlongxu@gmail.com>
 	Date:   Sat Mar 24 09:49:08 2018 +0800
 	
 	    Merge branch 'source' of https://github.com/debugly/debugly.github.io into source
@@ -477,14 +477,14 @@ Linking /usr/local/Cellar/python@3.9/3.9.0_1... 5 symlinks created
 	```bash
 	qianlongxu$ git log --date=format:'%Y-%m-%d %H:%M:%S' -3
 	commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -> source, origin/source)
-	Author: qianlongxu <qianlongxu@sohu-inc.com>
+	Author: qianlongxu <qianlongxu@gmail.com>
 	Date:   2018-03-24 09:49:51
 	
 	    add post
 	
 	commit eb3e9419a4a6cc736808ac40b7cf2908b7998c56
 	Merge: e851655 6755480
-	Author: qianlongxu <qianlongxu@sohu-inc.com>
+	Author: qianlongxu <qianlongxu@gmail.com>
 	Date:   2018-03-24 09:49:08
 	
 	    Merge branch 'source' of https://github.com/debugly/debugly.github.io into source
@@ -509,14 +509,14 @@ Linking /usr/local/Cellar/python@3.9/3.9.0_1... 5 symlinks created
 	```bash
   qianlongxu$ git log --date=format:'%Y-%m-%d %H:%M:%S' --after='2018-03-23 20:44:06'
 	commit 8e8c188d3fc8c3b8937e213d3ae7bd45cdc55c69 (HEAD -> source, origin/source)
-	Author: qianlongxu <qianlongxu@sohu-inc.com>
+	Author: qianlongxu <qianlongxu@gmail.com>
 	Date:   2018-03-24 09:49:51
 	
 	    add post
 	
 	commit eb3e9419a4a6cc736808ac40b7cf2908b7998c56
 	Merge: e851655 6755480
-	Author: qianlongxu <qianlongxu@sohu-inc.com>
+	Author: qianlongxu <qianlongxu@gmail.com>
 	Date:   2018-03-24 09:49:08
 	
 	    Merge branch 'source' of https://github.com/debugly/debugly.github.io into source

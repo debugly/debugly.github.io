@@ -187,7 +187,7 @@ server {
     }
     
     location /frptest/ {
-        proxy_pass http://10.16.89.134:8000/;
+        proxy_pass http://110.116.189.134:8000/;
     }
 
     location /frp/ {

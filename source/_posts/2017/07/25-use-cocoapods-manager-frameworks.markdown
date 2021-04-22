@@ -21,7 +21,7 @@ s.source_files  = "SCNetworkKit/Classes/**/*.{h,m}"
 修改为
 
 ```
-s.source       = { :http => "http://10.7.36.192/Pods_Static/1.0.55/SCNetworkKit.framework.zip" }
+s.source       = { :http => "http://110.117.36.192/Pods_Static/1.0.55/SCNetworkKit.framework.zip" }
 s.vendored_frameworks = "SCNetworkKit.framework"
 ```
 

@@ -46,8 +46,8 @@ Options:
 添加 podspec 仓库，用于搭建私有库
 
 ```
-pod repo add Pods_Specs git@code.sohuno.com:ifox/Pods_Specs.git    
-Cloning spec repo `Pods_Specs` from `git@code.sohuno.com:ifox/Pods_Specs.git
+pod repo add Pods_Specs git@code.debugly.com:ifox/Pods_Specs.git    
+Cloning spec repo `Pods_Specs` from `git@code.debugly.com:ifox/Pods_Specs.git
 ```
 
 Pods_Specs 为私有仓库别名，默认是 master，这个名字在推送 spec 文件时也需要用到，因此需要留意下，别起的太随意了！
@@ -92,7 +92,7 @@ master
 
 Pods_Specs
 - Type: git (master)
-- URL:  git@code.sohuno.com:ifox/Pods_Specs.git
+- URL:  git@code.debugly.com:ifox/Pods_Specs.git
 - Path: /Users/qianlongxu/.cocoapods/repos/Pods_Specs
 
 3 repos
@@ -107,7 +107,7 @@ pod repo push Pods_Specs SCHTTPServer_B.podspec --allow-warnings
 
 Validating spec
  -> SCHTTPServer_B (1.0.56)
-    - WARN  | http: The URL (`http://10.7.36.192/Pods_Static/1.0.56/SCHTTPServer.framework.zip`) doesn't use the encrypted HTTPS protocol. It is crucial for Pods to be transferred over a secure protocol to protect your users from man-in-the-middle attacks. This will be an error in future releases. Please update the URL to use https.
+    - WARN  | http: The URL (`http://110.117.36.192/Pods_Static/1.0.56/SCHTTPServer.framework.zip`) doesn't use the encrypted HTTPS protocol. It is crucial for Pods to be transferred over a secure protocol to protect your users from man-in-the-middle attacks. This will be an error in future releases. Please update the URL to use https.
     - WARN  | [OSX] license: Unable to find a license file
     - NOTE  | xcodebuild:  note: Using new build system
     - NOTE  | [OSX] xcodebuild:  note: Planning build

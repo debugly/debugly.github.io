@@ -15,7 +15,7 @@ tags: [CentOS,MySQL]
 
 - uname -a
 
-	`Linux 10.16.89.67 3.10.0-327.el7.x86_64 #1 SMP Thu Oct 29 17:29:29 EDT 2015 x86_64 x86_64 x86_64 GNU/Linux`
+	`Linux 110.116.189.67 3.10.0-327.el7.x86_64 #1 SMP Thu Oct 29 17:29:29 EDT 2015 x86_64 x86_64 x86_64 GNU/Linux`
 - rpm -q centos-release
 
 	`centos-release-6-10.el6.centos.12.3.x86_64`

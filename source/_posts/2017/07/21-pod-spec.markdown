@@ -193,7 +193,7 @@ pod spec edit SCNetworkKit
   "homepage": "http://debugly.cn/SCNetworkKit/",
   "license": "MIT",
   "authors": {
-    "qianlongxu": "qianlongxu@sohu-inc.com"
+    "qianlongxu": "qianlongxu@gmail.com"
   },
   "platforms": {
     "ios": "7.0",

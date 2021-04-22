@@ -595,7 +595,7 @@ mysql> select concat('user: ''',user,'''@''',host,''';') as UserInfo from mysql.
 ```
 mysql> create user test@localhost identified by '123456';
 mysql> create user any@'%' identified by '123456';
-mysql> create user xql@10.7.36.118 identified by '123456';
+mysql> create user xql@110.117.36.118 identified by '123456';
 //老版本可以这么操作
 mysql> insert into mysql.user(Host,User,Password) 
 mysql> flush privileges;
@@ -606,7 +606,7 @@ mysql> flush privileges;
 
 ```
 mysql> \q
-[@10.16.89.67 ~]# mysql -u test -h localhost -p
+[@110.116.189.67 ~]# mysql -u test -h localhost -p
 Enter password:
 mysql> use xqlDB;
 ERROR 1044 (42000): Access denied for user 'localhost'@'localhost' to database 'xqlDB'

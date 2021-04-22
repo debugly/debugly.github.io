@@ -54,7 +54,7 @@ pod ipc spec SCNetworkKit.podspec
   "homepage": "http://debugly.cn/SCNetworkKit/",
   "license": "MIT",
   "authors": {
-    "qianlongxu": "qianlongxu@sohu-inc.com"
+    "qianlongxu": "qianlongxu@gmail.com"
   },
   "platforms": {
     "ios": "7.0",
@@ -82,7 +82,7 @@ installation_method:
     :generate_multiple_pod_projects: true
 workspace: SHVideoPlayer.xcworkspace
 sources:
-  - "git@code.sohuno.com:ifox/Pods_Specs.git"
+  - "git@code.debugly.com:ifox/Pods_Specs.git"
   - https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git
 target_definitions:
   - abstract: true
@@ -302,7 +302,7 @@ pod ipc podfile-json Podfile
     ],
     "sources": [
         "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git",
-        "git@code.sohuno.com:ifox/Pods_Specs.git"
+        "git@code.debugly.com:ifox/Pods_Specs.git"
     ],
     "workspace": "SHVideoPlayer.xcworkspace",
     "installation_method": {

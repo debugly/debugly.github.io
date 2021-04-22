@@ -16,11 +16,11 @@ tags: [CentOS]
 如果程序的路径在 PATH 里可以找到，这时很好办，可以通过 which 命令来找，如果不在 PATH 改怎么找呢？
 
 ```
-[@10.16.89.228 /data/ifox/upgrade]# nginx
+[@110.116.189.228 /data/ifox/upgrade]# nginx
 -bash: nginx: command not found
-[@10.16.89.228 /]# which nginx
+[@110.116.189.228 /]# which nginx
 /usr/bin/which: no nginx in (/opt/jdk7/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)
-[@10.16.89.228 /data/ifox/upgrade]# id nginx
+[@110.116.189.228 /data/ifox/upgrade]# id nginx
 id: nginx: No such user
 ```
 
@@ -29,7 +29,7 @@ id: nginx: No such user
 如果确定这个程序当前正在运行，那么可以通过 `ps aux` 来找到这个程序
 
 ```
-[@10.16.89.228 /]# ps aux | grep nginx
+[@110.116.189.228 /]# ps aux | grep nginx
 root      13884  0.0  0.0  22740  1180 ?        Ss    2019   0:00 nginx: master process /opt/nginx/sbin/nginx
 nobody    13950  0.0  0.0  23184  1912 ?        S     2019 184:25 nginx: worker process
 nobody    13951  0.0  0.0  23184  1916 ?        S     2019 184:31 nginx: worker process
@@ -84,7 +84,7 @@ root     112730  0.0  0.0   8000   588 pts/0    S+   18:05   0:00 grep nginx
 可以明确的看到，程序目录在这里 master process /opt/nginx/sbin/nginx ; 找到 nginx 之后，查看具体信息:
 
 ```
-[@10.16.89.228 /opt/nginx/sbin]#  /opt/nginx/sbin/nginx -V
+[@110.116.189.228 /opt/nginx/sbin]#  /opt/nginx/sbin/nginx -V
 nginx version: nginx/1.10.2
 built by gcc 4.4.7 20120313 (Red Hat 4.4.7-18) (GCC) 
 built with OpenSSL 1.0.2g  1 Mar 2016
@@ -95,7 +95,7 @@ configure arguments: --prefix=/opt/nginx --with-http_stub_status_module --with-h
 然后可以按照 configure arguments 配置在新机器上通过[编译 nginx 源码](/2020/CentOS-install-nginx.html)来安装，然后把 /opt/nginx/conf 复制到新主机上，一定记得打开 nginx.conf 看下，因为通常我们都会在最后一行 include 其他的配置文件！！比如我这台主机上是这么写的：
 
 ```
-[@10.16.89.228 /opt/nginx/conf]# cat nginx.conf
+[@110.116.189.228 /opt/nginx/conf]# cat nginx.conf
 
 #user  nobody;
 worker_processes auto;
