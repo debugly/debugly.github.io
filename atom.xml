@@ -6,7 +6,7 @@
   <link href="https://debugly.cn/atom.xml" rel="self"/>
   
   <link href="https://debugly.cn/"/>
-  <updated>2021-05-08T08:09:19.302Z</updated>
+  <updated>2021-05-08T08:35:27.730Z</updated>
   <id>https://debugly.cn/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://debugly.cn/2021/05/08-use-bootcamp-install-win10.html"/>
     <id>https://debugly.cn/2021/05/08-use-bootcamp-install-win10.html</id>
     <published>2021-05-08T11:00:06.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;前提条件&quot;&gt;&lt;a href=&quot;#前提条件&quot; class=&quot;headerlink&quot; title=&quot;前提条件&quot;&gt;&lt;/a&gt;前提条件&lt;/h3&gt;&lt;ul&gt;
@@ -44,7 +44,7 @@
     <link href="https://debugly.cn/2020/12/31-my-2020.html"/>
     <id>https://debugly.cn/2020/12/31-my-2020.html</id>
     <published>2020-12-31T21:00:06.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;2020-年回顾&quot;&gt;&lt;a href=&quot;#2020-年回顾&quot; class=&quot;headerlink&quot; title=&quot;2020 年回顾&quot;&gt;&lt;/a&gt;2020 年回顾&lt;/h2&gt;&lt;h3 id=&quot;工作&quot;&gt;&lt;a href=&quot;#工作&quot; class=&quot;headerlink&quot; title=&quot;工作&quot;&gt;&lt;/a&gt;工作&lt;/h3&gt;&lt;p&gt;今年继续搞 macOS 开发，技术上熟练了好多，所负责的产品 - - - 搜狐影音共计迭代了 15 个版本，新增了 DLNA 投屏，App 自动更新，自动续订内购商品，共享云播公网化等功能。&lt;/p&gt;
@@ -62,7 +62,7 @@
     <link href="https://debugly.cn/2020/11/16video-words.html"/>
     <id>https://debugly.cn/2020/11/16video-words.html</id>
     <published>2020-11-16T16:09:10.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;p&gt;打开电脑，偶然发现之前抄录的影视对白，大多是关于情情爱爱的，把它整理成文章吧…&lt;/p&gt;
@@ -80,7 +80,7 @@
     <link href="https://debugly.cn/2020/11/10CentOS-Transfer.html"/>
     <id>https://debugly.cn/2020/11/10CentOS-Transfer.html</id>
     <published>2020-11-10T18:09:10.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;p&gt;接到运维同学的通知，要做主机迁移，涉及到了 nginx 和资源文件，因此需要查看 nginx 的编译配置和 nginx 的运行配置。运维告诉我xx主机上装有 nginx，域名也是打到这台机器的，我顿时有点懵逼，因为我之前找过，根本找不到 nginx 在哪装的，这次必须得找到它才行啊…&lt;/p&gt;</summary>
@@ -97,7 +97,7 @@
     <link href="https://debugly.cn/2020/11/03CentOS-install-nginx.html"/>
     <id>https://debugly.cn/2020/11/03CentOS-install-nginx.html</id>
     <published>2020-11-03T18:09:10.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;查看系统版本&quot;&gt;&lt;a href=&quot;#查看系统版本&quot; class=&quot;headerlink&quot; title=&quot;查看系统版本&quot;&gt;&lt;/a&gt;查看系统版本&lt;/h2&gt;&lt;ul&gt;
@@ -138,7 +138,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2020/09/16%E8%8B%B9%E6%9E%9C%E5%86%85%E8%B4%AD%E5%87%AD%E6%8D%AE%E6%A0%A1%E9%AA%8C.html"/>
     <id>https://debugly.cn/2020/09/16%E8%8B%B9%E6%9E%9C%E5%86%85%E8%B4%AD%E5%87%AD%E6%8D%AE%E6%A0%A1%E9%AA%8C.html</id>
     <published>2020-09-16T14:59:10.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;p&gt;跟后端联调自动续订订阅商品的过程中，对方有问我相关的验证地址和错误码是啥意思，因此将苹果内购凭据验证相关的知识做了个整理，希望能帮助有需要的人。&lt;/p&gt;
@@ -163,7 +163,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2020/07/31MYSQL%20%E5%B8%B8%E7%94%A8%E8%AF%AD%E5%8F%A5.html"/>
     <id>https://debugly.cn/2020/07/31MYSQL%20%E5%B8%B8%E7%94%A8%E8%AF%AD%E5%8F%A5.html</id>
     <published>2020-07-31T17:59:10.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;登录-MySQL&quot;&gt;&lt;a href=&quot;#登录-MySQL&quot; class=&quot;headerlink&quot; title=&quot;登录 MySQL&quot;&gt;&lt;/a&gt;登录 MySQL&lt;/h2&gt;&lt;ul&gt;
@@ -188,7 +188,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2019/12/31-my-2019.html"/>
     <id>https://debugly.cn/2019/12/31-my-2019.html</id>
     <published>2019-12-30T21:45:06.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;2019-年回顾&quot;&gt;&lt;a href=&quot;#2019-年回顾&quot; class=&quot;headerlink&quot; title=&quot;2019 年回顾&quot;&gt;&lt;/a&gt;2019 年回顾&lt;/h2&gt;&lt;h3 id=&quot;工作&quot;&gt;&lt;a href=&quot;#工作&quot; class=&quot;headerlink&quot; title=&quot;工作&quot;&gt;&lt;/a&gt;工作&lt;/h3&gt;&lt;p&gt;今年一直在做 macOS 开发，技术上熟练了好多，所负责的产品 - - - 搜狐影音共计迭代了 10 个版本，相比去年功能上可谓完备。&lt;/p&gt;
@@ -206,7 +206,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2019/05/31-macdev-tips.html"/>
     <id>https://debugly.cn/2019/05/31-macdev-tips.html</id>
     <published>2019-05-31T16:23:23.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -227,7 +227,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2019/03/27-macdev-supported-fonts.html"/>
     <id>https://debugly.cn/2019/03/27-macdev-supported-fonts.html</id>
     <published>2019-03-27T12:59:23.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -249,7 +249,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2019/02/15-integration-ffmpeg-error.html"/>
     <id>https://debugly.cn/2019/02/15-integration-ffmpeg-error.html</id>
     <published>2019-02-15T17:04:23.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;解决集成-FFmpeg-时编译报错问题&quot;&gt;&lt;a href=&quot;#解决集成-FFmpeg-时编译报错问题&quot; class=&quot;headerlink&quot; title=&quot;解决集成 FFmpeg 时编译报错问题&quot;&gt;&lt;/a&gt;解决集成 FFmpeg 时编译报错问题&lt;/h2&gt;&lt;blockquote&gt;
@@ -269,7 +269,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2018/12/31-my-2018.html"/>
     <id>https://debugly.cn/2018/12/31-my-2018.html</id>
     <published>2018-12-29T21:45:06.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;2018-年回顾&quot;&gt;&lt;a href=&quot;#2018-年回顾&quot; class=&quot;headerlink&quot; title=&quot;2018 年回顾&quot;&gt;&lt;/a&gt;2018 年回顾&lt;/h2&gt;&lt;h3 id=&quot;工作&quot;&gt;&lt;a href=&quot;#工作&quot; class=&quot;headerlink&quot; title=&quot;工作&quot;&gt;&lt;/a&gt;工作&lt;/h3&gt;&lt;p&gt;今天是 2018 年的最后一个班了，原本计划 mac 影音 2.16 版发布的，因为公司有规定，所以只能先封板，下周再上线。&lt;/p&gt;
@@ -290,7 +290,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html"/>
     <id>https://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html</id>
     <published>2018-10-30T10:09:10.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -323,7 +323,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2018/10/28-JavaScript-Module-Programming.html"/>
     <id>https://debugly.cn/2018/10/28-JavaScript-Module-Programming.html</id>
     <published>2018-10-28T10:09:10.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -353,7 +353,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2018/10/26-CentOS-MySQL.html"/>
     <id>https://debugly.cn/2018/10/26-CentOS-MySQL.html</id>
     <published>2018-10-26T18:09:10.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
       
@@ -381,7 +381,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2018/08/29-xcodebuild-usages.html"/>
     <id>https://debugly.cn/2018/08/29-xcodebuild-usages.html</id>
     <published>2018-08-29T14:09:10.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;p&gt;回想 17 年自己想搞自动化构建，没有相关环境，只好使用 crontab 去做，真是好费劲，因为很多环境变量没有，本地调试好的脚本可是定时任务执行时就报错。这是之前对 crontab 使用的简单介绍：&lt;a href=&quot;/2017/09/05-unix-crontab.html&quot;&gt;macOS 定时任务&lt;/a&gt;&lt;/p&gt;
@@ -402,7 +402,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2018/04/29-config-my-webstorm.html"/>
     <id>https://debugly.cn/2018/04/29-config-my-webstorm.html</id>
     <published>2018-04-29T21:10:58.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -426,7 +426,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2018/04/10-HTTP-Post.html"/>
     <id>https://debugly.cn/2018/04/10-HTTP-Post.html</id>
     <published>2018-04-10T15:05:31.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -452,7 +452,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2018/04/09-HTTP.html"/>
     <id>https://debugly.cn/2018/04/09-HTTP.html</id>
     <published>2018-04-09T14:05:31.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;HTTP 是一种传输协议，全称（HyperText Transfer Protocol，超文本传输协议）。&lt;br&gt;HTTP 是一个基于 TCP/IP 通信协议来传递数据（HTML 文件, 图片文件, 查询结果等）的应用层协议，早在 1990 年万维网兴起的时候，就得到了应用，截至目前可谓是使用最为广泛的协议了，因此掌握这个协议是很有必要。&lt;/p&gt;
@@ -471,7 +471,7 @@ Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
     <link href="https://debugly.cn/2018/03/22-github-customdomain-support-https.html"/>
     <id>https://debugly.cn/2018/03/22-github-customdomain-support-https.html</id>
     <published>2018-03-22T21:56:06.000Z</published>
-    <updated>2021-05-08T08:09:19.302Z</updated>
+    <updated>2021-05-08T08:35:27.730Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
