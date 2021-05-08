@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Matt Reach</title>
+  <icon>https://debugly.cn/icon.png</icon>
+  <subtitle>An iOS/macOS Developer</subtitle>
+  <link href="https://debugly.cn/atom.xml" rel="self"/>
+  
+  <link href="https://debugly.cn/"/>
+  <updated>2021-05-08T07:02:42.883Z</updated>
+  <id>https://debugly.cn/</id>
+  
+  <author>
+    <name>许乾隆</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mac 电脑安装 Win10 双系统</title>
+    <link href="https://debugly.cn/2021/05/08-use-bootcamp-install-win10.html"/>
+    <id>https://debugly.cn/2021/05/08-use-bootcamp-install-win10.html</id>
+    <published>2021-05-08T03:00:06.000Z</published>
+    <updated>2021-05-08T07:02:42.883Z</updated>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;前提条件&quot;&gt;&lt;a href=&quot;#前提条件&quot; class=&quot;headerlink&quot; title=&quot;前提条件&quot;&gt;&lt;/a&gt;前提条件&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;只有一个 macOS 系统的 Mac 电脑（大部分情况下是只有一个的，但实际上 Mac 电脑也可以装多个 macOS 系统，如果装了多个 macOS 系统则，BootCamp 安装时会提示磁盘分区失败，我怀疑是 BootCamp 的 bug，没有处理磁盘被分成多个区的情况）&lt;/li&gt;
+&lt;li&gt;Win10 安装盘镜像（可从网络上下载）&lt;/li&gt;
+&lt;li&gt;Mac 硬盘最好能大于 512 GB，太小的话后续使用很不方便，两个系统可能都面临磁盘不足的尴尬局面&lt;/li&gt;
+&lt;li&gt;使用 BootCamp 软件安装，我使用的 macOS 系统里都有这个软件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;实际上 BootCamp 不仅可以安装 Win10，之前也有安装过 Win7 等系统，都是一样的操作步骤，只是现在 Win10 比较流行，因此选择安装 Win10 系统。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="macOS" scheme="https://debugly.cn/tags/macOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>我的 2020</title>
+    <link href="https://debugly.cn/2020/12/31-my-2020.html"/>
+    <id>https://debugly.cn/2020/12/31-my-2020.html</id>
+    <published>2020-12-31T13:00:06.000Z</published>
+    <updated>2021-05-08T03:17:50.531Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;2020-年回顾&quot;&gt;&lt;a href=&quot;#2020-年回顾&quot; class=&quot;headerlink&quot; title=&quot;2020 年回顾&quot;&gt;&lt;/a&gt;2020 年回顾&lt;/h2&gt;&lt;h3 id=&quot;工作&quot;&gt;&lt;a href=&quot;#工作&quot; class=&quot;headerlink&quot; title=&quot;工作&quot;&gt;&lt;/a&gt;工作&lt;/h3&gt;&lt;p&gt;今年继续搞 macOS 开发，技术上熟练了好多，所负责的产品 - - - 搜狐影音共计迭代了 15 个版本，新增了 DLNA 投屏，App 自动更新，自动续订内购商品，共享云播公网化等功能。&lt;/p&gt;
+&lt;p&gt;翻看了下 2019 年立的 3 个Flag，第一个成为一个音视频开发工程师，随着 &lt;a href=&quot;https://github.com/debugly/MRVideoToPicture&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;MRVideoToPicture&lt;/a&gt; 的开源，勉强算是实现了，另外 &lt;a href=&quot;https://github.com/debugly/FFmpegTutorial&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;FFmpegTutorial&lt;/a&gt; 截止目前收获了 76 个 star 和 14 个 fork，没能破百o(╯□╰)o；第二个 Flag 是做投屏和自动更新，也出色的完成了；第三个是读书，一直是我的弱项，零散的读了一点点吧…&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="个人总结" scheme="https://debugly.cn/tags/个人总结/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>影视语录</title>
+    <link href="https://debugly.cn/2020/11/16video-words.html"/>
+    <id>https://debugly.cn/2020/11/16video-words.html</id>
+    <published>2020-11-16T08:09:10.000Z</published>
+    <updated>2021-05-08T03:18:31.241Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;打开电脑，偶然发现之前抄录的影视对白，大多是关于情情爱爱的，把它整理成文章吧…&lt;/p&gt;
+&lt;p&gt;1、男人总比女人活得荤一点。那件事，你可以拒绝，但别对他说“亏本的买卖我不干”！如果恋爱只是生意，天天盘算是否划算，没有人会有勇气陪你走到终点。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="影视语录" scheme="https://debugly.cn/tags/影视语录/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS 主机迁移</title>
+    <link href="https://debugly.cn/2020/11/10CentOS-Transfer.html"/>
+    <id>https://debugly.cn/2020/11/10CentOS-Transfer.html</id>
+    <published>2020-11-10T10:09:10.000Z</published>
+    <updated>2021-05-08T03:18:31.248Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;接到运维同学的通知，要做主机迁移，涉及到了 nginx 和资源文件，因此需要查看 nginx 的编译配置和 nginx 的运行配置。运维告诉我xx主机上装有 nginx，域名也是打到这台机器的，我顿时有点懵逼，因为我之前找过，根本找不到 nginx 在哪装的，这次必须得找到它才行啊…&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="CentOS" scheme="https://debugly.cn/tags/CentOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS 源码安装 Nginx</title>
+    <link href="https://debugly.cn/2020/11/03CentOS-install-nginx.html"/>
+    <id>https://debugly.cn/2020/11/03CentOS-install-nginx.html</id>
+    <published>2020-11-03T10:09:10.000Z</published>
+    <updated>2021-05-08T03:18:31.249Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;查看系统版本&quot;&gt;&lt;a href=&quot;#查看系统版本&quot; class=&quot;headerlink&quot; title=&quot;查看系统版本&quot;&gt;&lt;/a&gt;查看系统版本&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;uname&lt;/p&gt;
+&lt;p&gt;  &lt;code&gt;Linux&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;uname -a&lt;/p&gt;
+&lt;p&gt;  &lt;code&gt;Linux yz18-10-19.localdomain 2.6.32-754.el6.x86_64 #1 SMP Thu May 24 18:18:25 EDT 2018 x86_64 x86_64 x86_64 GNU/Linux&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;cat /etc/*release&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;LSB_VERSION=base-4.0-amd64:base-4.0-noarch:core-4.0-amd64:core-4.0-noarch:graphics-4.0-amd64:graphics-4.0-noarch:printing-4.0-amd64:printing-4.0-noarch
+Red Hat Enterprise Linux Server release 6.10 (Santiago)
+Red Hat Enterprise Linux Server release 6.10 (Santiago)&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;cat /etc/issue&lt;br&gt;&lt;code&gt;Red Hat Enterprise Linux Server release 6.10 (Santiago)
+Kernel \r on an \m&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;使用源码安装-Nginx&quot;&gt;&lt;a href=&quot;#使用源码安装-Nginx&quot; class=&quot;headerlink&quot; title=&quot;使用源码安装 Nginx&quot;&gt;&lt;/a&gt;使用源码安装 Nginx&lt;/h2&gt;&lt;p&gt; 先安装好编译源码的工具：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;yum install gcc-c++&lt;/li&gt;
+&lt;li&gt;yum install -y pcre pcre-devel&lt;/li&gt;
+&lt;li&gt;yum install -y zlib zlib-devel&lt;/li&gt;
+&lt;li&gt;yum install -y openssl openssl-devel&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    
+    <category term="CentOS" scheme="https://debugly.cn/tags/CentOS/"/>
+    
+    <category term="Nginx" scheme="https://debugly.cn/tags/Nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>苹果内购凭据校验</title>
+    <link href="https://debugly.cn/2020/09/16%E8%8B%B9%E6%9E%9C%E5%86%85%E8%B4%AD%E5%87%AD%E6%8D%AE%E6%A0%A1%E9%AA%8C.html"/>
+    <id>https://debugly.cn/2020/09/16%E8%8B%B9%E6%9E%9C%E5%86%85%E8%B4%AD%E5%87%AD%E6%8D%AE%E6%A0%A1%E9%AA%8C.html</id>
+    <published>2020-09-16T06:59:10.000Z</published>
+    <updated>2021-05-08T03:18:31.249Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;跟后端联调自动续订订阅商品的过程中，对方有问我相关的验证地址和错误码是啥意思，因此将苹果内购凭据验证相关的知识做了个整理，希望能帮助有需要的人。&lt;/p&gt;
+&lt;p&gt;苹果提供了两套环境，分别称为线上（生产）环境和沙河（测试）环境，分别对应着不同的地址：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;线上环境验证接口：&lt;a href=&quot;https://buy.itunes.apple.com/verifyReceipt&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://buy.itunes.apple.com/verifyReceipt&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;沙河环境验证接口：&lt;a href=&quot;https://sandbox.itunes.apple.com/verifyReceipt&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://sandbox.itunes.apple.com/verifyReceipt&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/appstorereceipts/verifyreceipt&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;参考链接&lt;/a&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="iOS" scheme="https://debugly.cn/tags/iOS/"/>
+    
+    <category term="IAP" scheme="https://debugly.cn/tags/IAP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MySQL 常用语句</title>
+    <link href="https://debugly.cn/2020/07/31MYSQL%20%E5%B8%B8%E7%94%A8%E8%AF%AD%E5%8F%A5.html"/>
+    <id>https://debugly.cn/2020/07/31MYSQL%20%E5%B8%B8%E7%94%A8%E8%AF%AD%E5%8F%A5.html</id>
+    <published>2020-07-31T09:59:10.000Z</published>
+    <updated>2021-05-08T03:18:31.250Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;登录-MySQL&quot;&gt;&lt;a href=&quot;#登录-MySQL&quot; class=&quot;headerlink&quot; title=&quot;登录 MySQL&quot;&gt;&lt;/a&gt;登录 MySQL&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;mysql -u root -h localhost -P 3306 -p password&lt;ul&gt;
+&lt;li&gt;-u 用户名&lt;/li&gt;
+&lt;li&gt;-h 主机地址&lt;/li&gt;
+&lt;li&gt;-P 端口，默认3306&lt;/li&gt;
+&lt;li&gt;-p 密码，可以回车然后输入密码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    
+    <category term="MySQL" scheme="https://debugly.cn/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>我的 2019</title>
+    <link href="https://debugly.cn/2019/12/31-my-2019.html"/>
+    <id>https://debugly.cn/2019/12/31-my-2019.html</id>
+    <published>2019-12-30T13:45:06.000Z</published>
+    <updated>2020-07-31T08:23:36.331Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;2019-年回顾&quot;&gt;&lt;a href=&quot;#2019-年回顾&quot; class=&quot;headerlink&quot; title=&quot;2019 年回顾&quot;&gt;&lt;/a&gt;2019 年回顾&lt;/h2&gt;&lt;h3 id=&quot;工作&quot;&gt;&lt;a href=&quot;#工作&quot; class=&quot;headerlink&quot; title=&quot;工作&quot;&gt;&lt;/a&gt;工作&lt;/h3&gt;&lt;p&gt;今年一直在做 macOS 开发，技术上熟练了好多，所负责的产品 - - - 搜狐影音共计迭代了 10 个版本，相比去年功能上可谓完备。&lt;/p&gt;
+&lt;p&gt;翻看了下 2018 年定下的五个 Flag，除了没有使用 Swift 混编之外，其他的都完成了，虽然没有混编，也不是一点没有看 Swift，抽了点时间使用 Swift 写了个从 .car (xCode Assert 压缩后的一种文件格式)文件里提取图片的工具：&lt;a href=&quot;https://github.com/debugly/CarExtractor&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;CarExtractor&lt;/a&gt;.&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="个人总结" scheme="https://debugly.cn/tags/个人总结/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Mac 开发 Tips</title>
+    <link href="https://debugly.cn/2019/05/31-macdev-tips.html"/>
+    <id>https://debugly.cn/2019/05/31-macdev-tips.html</id>
+    <published>2019-05-31T08:23:23.000Z</published>
+    <updated>2020-07-31T08:23:36.331Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;忙了大概 2 个月了，基本 9116 的节奏，现在临近封板了，赶紧把最近使用的一些小技巧总结下。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;监听-ESC-键按下&quot;&gt;&lt;a href=&quot;#监听-ESC-键按下&quot; class=&quot;headerlink&quot; title=&quot;监听 ESC 键按下&quot;&gt;&lt;/a&gt;监听 ESC 键按下&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;#import &amp;lt;Carbon/Carbon.h&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;id eventMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSKeyDownMask handler:^NSEvent * _Nullable(NSEvent * _Nonnull theEvent) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        if ([theEvent keyCode] == kVK_Escape)&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            NSLog(&amp;quot;ESC key down&amp;quot;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        return theEvent;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;///dealloc 里记得移除&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;[NSEvent removeMonitor:eventMonitor];&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;商店屏幕快照和预览图尺寸&quot;&gt;&lt;a href=&quot;#商店屏幕快照和预览图尺寸&quot; class=&quot;headerlink&quot; title=&quot;商店屏幕快照和预览图尺寸&quot;&gt;&lt;/a&gt;商店屏幕快照和预览图尺寸&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;https://help.apple.com/app-store-connect/#/devd274dd925&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;https://help.apple.com/app-store-connect/#/dev4e413fcb8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;屏幕快照要求：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;最多 10 张屏幕快照，下列分辨率哪个都行&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;1280 x 800 像素&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;1440 x 900 像素&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2560 x 1600 像素&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2880 x 1800 像素&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;预览要求&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;最多 3 张 App 预览图，尺寸为 1920 x 1080 像素（16:9 宽高比）&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    
+    <category term="Mac开发" scheme="https://debugly.cn/tags/Mac开发/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Mac 开发系统字体</title>
+    <link href="https://debugly.cn/2019/03/27-macdev-supported-fonts.html"/>
+    <id>https://debugly.cn/2019/03/27-macdev-supported-fonts.html</id>
+    <published>2019-03-27T04:59:23.000Z</published>
+    <updated>2020-07-31T08:23:36.331Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;负责的项目要大改版，字体使用平方字体。因此调研了系统支持的字体。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;系统默认字体&quot;&gt;&lt;a href=&quot;#系统默认字体&quot; class=&quot;headerlink&quot; title=&quot;系统默认字体&quot;&gt;&lt;/a&gt;系统默认字体&lt;/h2&gt;&lt;p&gt;使用系统默认字体，这个是我们开发时最常用的了，现在打出来字体的 Family 和 FontName 看下吧:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;NSLog(@&amp;quot;%@:%@&amp;quot;,[NSFont systemFontOfSize:14].familyName,[NSFont systemFontOfSize:14].fontName);&lt;/code&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;.AppleSystemUIFont:.AppleSystemUIFont&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    
+    <category term="Mac开发" scheme="https://debugly.cn/tags/Mac开发/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>解决集成 FFmpeg 时编译报错问题</title>
+    <link href="https://debugly.cn/2019/02/15-integration-ffmpeg-error.html"/>
+    <id>https://debugly.cn/2019/02/15-integration-ffmpeg-error.html</id>
+    <published>2019-02-15T09:04:23.000Z</published>
+    <updated>2020-07-31T08:23:36.330Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;解决集成-FFmpeg-时编译报错问题&quot;&gt;&lt;a href=&quot;#解决集成-FFmpeg-时编译报错问题&quot; class=&quot;headerlink&quot; title=&quot;解决集成 FFmpeg 时编译报错问题&quot;&gt;&lt;/a&gt;解决集成 FFmpeg 时编译报错问题&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;由于 FFmpeg 依赖了很多个系统框架，所以在集成过程中很可能会遇到以下问题，只需要加上缺少的库就行了。下面列举的是集成 FFmpeg 3.1.11 版本时可能遇到的。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;1、缺少-Security-framework&quot;&gt;&lt;a href=&quot;#1、缺少-Security-framework&quot; class=&quot;headerlink&quot; title=&quot;1、缺少 Security.framework&quot;&gt;&lt;/a&gt;1、缺少 Security.framework&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;30&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;31&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;32&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;33&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Undefined symbols for architecture x86_64:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SSLClose&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_open in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_close in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SSLCopyPeerTrust&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_open in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SSLCreateContext&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_open in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SSLHandshake&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_open in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SSLRead&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_read in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SSLSetCertificate&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_open in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SSLSetConnection&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_open in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SSLSetIOFuncs&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_open in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SSLSetPeerDomainName&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_open in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SSLSetSessionOption&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_open in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SSLWrite&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_write in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SecIdentityCreate&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_open in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SecItemImport&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _import_pem in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SecTrustEvaluate&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_open in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;_SecTrustSetAnchorCertificates&amp;quot;, referenced from:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      _tls_open in libavformat.a(tls_securetransport.o)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ld: symbol(s) not found for architecture x86_64&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    
+    <category term="FFmpeg" scheme="https://debugly.cn/tags/FFmpeg/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>我的 2018</title>
+    <link href="https://debugly.cn/2018/12/31-my-2018.html"/>
+    <id>https://debugly.cn/2018/12/31-my-2018.html</id>
+    <published>2018-12-29T13:45:06.000Z</published>
+    <updated>2020-07-31T08:23:36.330Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;2018-年回顾&quot;&gt;&lt;a href=&quot;#2018-年回顾&quot; class=&quot;headerlink&quot; title=&quot;2018 年回顾&quot;&gt;&lt;/a&gt;2018 年回顾&lt;/h2&gt;&lt;h3 id=&quot;工作&quot;&gt;&lt;a href=&quot;#工作&quot; class=&quot;headerlink&quot; title=&quot;工作&quot;&gt;&lt;/a&gt;工作&lt;/h3&gt;&lt;p&gt;今天是 2018 年的最后一个班了，原本计划 mac 影音 2.16 版发布的，因为公司有规定，所以只能先封板，下周再上线。&lt;/p&gt;
+&lt;p&gt;哦，是的，我现在是一名 macOS 开发者了，今年 11 月初公司人员优化后转行过来的，边开发边学习到现在基本算是 2 个月了。经过实战，我对于 macOS 开发有了一定的了解，不过还没有 iOS 开发那么熟练，毕竟桌面应用开发跟移动端是有些区别的。&lt;/p&gt;
+&lt;p&gt;再往前说的话，我学习了两个前端框架：Angular 和 React，分别写了两个小应用，部署在公司内网，部署时简单学习了 Nginx 配置。&lt;/p&gt;
+&lt;p&gt;然后就是在做小游戏开发了，去年年底一直做到今年 10 月份左右，很遗憾没有像样的产品拿出来，对于公司而言，又投入没回报；对于本人而言，无非是对微信小游戏开发 API 有些了解，cocos2d 小游戏引擎的简单使用，还有 JavaScript 语言的深入学习，以及前端开发环境搭建，前端代码调试等方面的学习罢了。&lt;/p&gt;
+&lt;p&gt;除此之外，还创建了技术 WIKI 站点，方便使用 Markdown 编写 WIKI。还有很多个Jenkins项目，实现了自动化打包发布，节省了很多时间，避免了很多人为错误。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="个人总结" scheme="https://debugly.cn/tags/个人总结/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>搭建同时支持 ES6 Module 和 CommonJS 的开发环境</title>
+    <link href="https://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html"/>
+    <id>https://debugly.cn/2018/10/30-Use-ES6-Module-in-Brower-or-Node.html</id>
+    <published>2018-10-30T02:09:10.000Z</published>
+    <updated>2021-05-08T03:17:50.531Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;我在编写 RxJS 入门教程的时候，折腾了大半上午都没能跑出一个 demo 来，让我感到沮丧，我知道使用 node.js 分分钟就能出现效果，可我就是想用 node 的 npm 去管理项目依赖，然后在浏览器里执行，因为我感觉使用这种方式才是做前端项目管理依赖的正确方式，而不是拿来源码，拖到 H5 工程里！我坚信我是对的，因为使用 Creator 编写小游戏时就能这么用，它是如何做到的呢？又经过一个下午的折腾，终于搞明白了全部流程，并对 JavaScript 模块化编程有的新的认识。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;本文是一篇基础教程，前端大神可直接忽略；旨在学习:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;浏览器如何加载 ES6 模块(Module)？&lt;/li&gt;
+&lt;li&gt;最新语法如何兼容老版本引擎(浏览器，Node…)？&lt;/li&gt;
+&lt;li&gt;Node.js 如何支持 ES6 模块(Module)?&lt;/li&gt;
+&lt;li&gt;浏览器如何加载 CommonJS 模块？&lt;/li&gt;
+&lt;li&gt;代码修改后如何自动编译并刷新浏览器预览？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;本文不会讲以下概念，但可以通过准备好的连接去补习:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;什么是 npm ？&lt;a href=&quot;https://www.npmjs.com.cn/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.npmjs.com.cn/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;ES6 Module 规范 &lt;a href=&quot;http://es6.ruanyifeng.com/#docs/module&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://es6.ruanyifeng.com/#docs/module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;CommonJS 规范 &lt;a href=&quot;http://javascript.ruanyifeng.com/nodejs/module.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://javascript.ruanyifeng.com/nodejs/module.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    
+    <category term="JavaScript" scheme="https://debugly.cn/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JavaScript 模块化编程</title>
+    <link href="https://debugly.cn/2018/10/28-JavaScript-Module-Programming.html"/>
+    <id>https://debugly.cn/2018/10/28-JavaScript-Module-Programming.html</id>
+    <published>2018-10-28T02:09:10.000Z</published>
+    <updated>2020-07-31T08:23:36.329Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;JavaScipt 是一门非常流程的脚本语言，特别是 Node.js 的出现，让这门语言大放异彩！也给前端开发人员转型做后端敞开了大门，同时也对 JavaScript 模块化编程产生了深远影响。&lt;br&gt;一起来看下模块化的发展历程吧！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;无模块化&quot;&gt;&lt;a href=&quot;#无模块化&quot; class=&quot;headerlink&quot; title=&quot;无模块化&quot;&gt;&lt;/a&gt;无模块化&lt;/h2&gt;&lt;p&gt;下面是不使用模块的方式，比如要使用 jquery 库，找到源文件使用 script 标签进行导入，type 指定为 ‘text/javascript’，src 是一个相对或绝对的 js 源码地址。&lt;/p&gt;
+&lt;figure class=&quot;highlight html&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;libs/jquery.js&quot;&lt;/span&gt;/&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;xml&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;source/util.js&quot;&lt;/span&gt;/&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;xml&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;source/A.js&quot;&lt;/span&gt;/&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;xml&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;source/B.js&quot;&lt;/span&gt;/&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;javascript&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// ...&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;xml&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;script&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;javascript&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;// code...&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;script&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;这种方式可以工作，不过有些弊端:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;全局变量挂载重复或污染&lt;/li&gt;
+&lt;li&gt;依赖关系不明显，但导入顺序还不能错&lt;/li&gt;
+&lt;li&gt;更新麻烦，需要手动操作，不知道何时 jquery 库会更新&lt;/li&gt;
+&lt;li&gt;版本管理混乱，可能需要通过版本控制工具追踪&lt;/li&gt;
+&lt;li&gt;相同功能代码复制严重，共用代码不容易维护&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;带着这么多问题上路，长此以往代码会混乱不堪，需要找到一种规范去解决，开源社区为此做出了巨大努力(此处应有掌声)，下面详细看下！&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="JavaScript" scheme="https://debugly.cn/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS 安装 MySQL</title>
+    <link href="https://debugly.cn/2018/10/26-CentOS-MySQL.html"/>
+    <id>https://debugly.cn/2018/10/26-CentOS-MySQL.html</id>
+    <published>2018-10-26T10:09:10.000Z</published>
+    <updated>2021-05-08T03:17:50.530Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;以下命令如有权限问题请自行使用 sudo 或者切换到 root 账户，我的这台主机是公司分配的，通过 ssh 直接登录的 root 账户，所以就没有带 sudo.该笔记可能不适用于 CentOS 7.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2</summary>
+        
+      
+    
+    
+    
+    
+    <category term="CentOS" scheme="https://debugly.cn/tags/CentOS/"/>
+    
+    <category term="MySQL" scheme="https://debugly.cn/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS 自动化构建（一）</title>
+    <link href="https://debugly.cn/2018/08/29-xcodebuild-usages.html"/>
+    <id>https://debugly.cn/2018/08/29-xcodebuild-usages.html</id>
+    <published>2018-08-29T06:09:10.000Z</published>
+    <updated>2020-07-31T08:23:36.328Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;回想 17 年自己想搞自动化构建，没有相关环境，只好使用 crontab 去做，真是好费劲，因为很多环境变量没有，本地调试好的脚本可是定时任务执行时就报错。这是之前对 crontab 使用的简单介绍：&lt;a href=&quot;/2017/09/05-unix-crontab.html&quot;&gt;macOS 定时任务&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;而现在呢，我们有了自己的打包机，打包机上装了 jenkins，为脚本执行提供了环境，支持参数化构建，定时构建，远程构建等。&lt;/p&gt;
+&lt;p&gt;jenkins 执行的是脚本，他不能操作我们的 xCode，所以我们要把打包命令写成脚本，交给 jenkins 去执行，因此今天来看下如何使用命令打 iOS 的包。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="iOS" scheme="https://debugly.cn/tags/iOS/"/>
+    
+    <category term="Script" scheme="https://debugly.cn/tags/Script/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>提升 Webstorm 开发效率</title>
+    <link href="https://debugly.cn/2018/04/29-config-my-webstorm.html"/>
+    <id>https://debugly.cn/2018/04/29-config-my-webstorm.html</id>
+    <published>2018-04-29T13:10:58.000Z</published>
+    <updated>2020-07-31T08:23:36.328Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;我并不是一个前端开发者，由于今年转到了小游戏开发，游戏逻辑甚至框架都是用 Javascript 写的，因此选择使用 Webstorm 这款编辑器软件。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;优点：前端开发支持的相当不错了，支持变量方法跳转，断点调试，Filewatch，CVS，内置 Termianl，JSLint …&lt;/li&gt;
+&lt;li&gt;缺点：占用内存比较大；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;从命令行打开工程&quot;&gt;&lt;a href=&quot;#从命令行打开工程&quot; class=&quot;headerlink&quot; title=&quot;从命令行打开工程&quot;&gt;&lt;/a&gt;从命令行打开工程&lt;/h1&gt;&lt;p&gt;正常使用流程这里就不多说了，现在聊一聊怎么在命令行里快速打开某个工程（文件夹）？右键然后选择使用 Webstorm 打开 — 可惜并没有这一服务！这显得很不方便，然而就在我家里的电脑安装 2018.1.2 这个版本时我发现一个选项：安装命令行工具，这样就可以在命令行使用 webstorm 打开这个软件或者带上路径打开工程了，使用起来挺方便的，我去公司后想把公司电脑也升级到 2018.1.2 ，然后使用命令行打开，可是从 2017 的某个版本升级时却没有这个选项，卸载重装也没有，偏好设置里也没能找到，花费了好长时间才在 app 包里面的 MacOS 文件里找到一个可执行程序:&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="macOS" scheme="https://debugly.cn/tags/macOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>常见的 POST 请求体编码方式</title>
+    <link href="https://debugly.cn/2018/04/10-HTTP-Post.html"/>
+    <id>https://debugly.cn/2018/04/10-HTTP-Post.html</id>
+    <published>2018-04-10T07:05:31.000Z</published>
+    <updated>2020-07-31T08:23:36.328Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;前面介绍过了 HTTP 请求，现在看下 POST 这种请求方式，根据 HTTP 协议的规定，通过 POST 方式提交的数据必须放在请求体中，但协议没有规定数据采用什么编码方式，所以请求体的消息格式其实可以自动决定，但要让服务器能够解析才有意义。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&quot;请求体编码方式&quot;&gt;&lt;a href=&quot;#请求体编码方式&quot; class=&quot;headerlink&quot; title=&quot;请求体编码方式&quot;&gt;&lt;/a&gt;请求体编码方式&lt;/h1&gt;&lt;p&gt;一般情况下主流的有以下 4 种编码方式，编码方式通过 &lt;strong&gt;Content-Type&lt;/strong&gt; 告知服务器 :&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;application/x-www-form-urlencoded&lt;/p&gt;
+&lt;p&gt;  如果是 HTML 里的 form 表单的话，在不设置 enctype 时，也是采用这种编码格式，key 和 value 都进行了 URL 转码，然后按照 k=v&amp;amp;k1=v1 的形式拼接。&lt;/p&gt;
+  &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ts=1521518926&amp;amp;plat=iPhone&amp;amp;uid=sh-upeadqawgz&amp;amp;signature=3de948ae93767a2382c6a3a4f389ca9b&amp;amp;bundleId=com.sohu.live.demo&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    
+    <category term="HTTP" scheme="https://debugly.cn/tags/HTTP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HTTP/1.1 协议简介</title>
+    <link href="https://debugly.cn/2018/04/09-HTTP.html"/>
+    <id>https://debugly.cn/2018/04/09-HTTP.html</id>
+    <published>2018-04-09T06:05:31.000Z</published>
+    <updated>2020-07-31T08:23:36.327Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;HTTP 是一种传输协议，全称（HyperText Transfer Protocol，超文本传输协议）。&lt;br&gt;HTTP 是一个基于 TCP/IP 通信协议来传递数据（HTML 文件, 图片文件, 查询结果等）的应用层协议，早在 1990 年万维网兴起的时候，就得到了应用，截至目前可谓是使用最为广泛的协议了，因此掌握这个协议是很有必要。&lt;/p&gt;
+&lt;p&gt;该协议的具体内容可参考 &lt;a href=&quot;https://tools.ietf.org/html/rfc2616&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;RFC2616&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;请求&quot;&gt;&lt;a href=&quot;#请求&quot; class=&quot;headerlink&quot; title=&quot;请求&quot;&gt;&lt;/a&gt;请求&lt;/h2&gt;&lt;p&gt;协议里规定的请求方法有: OPTIONS，GET，HEAD，POST，PUT，DELETE，TRACE，CONNECT 这几种，客户端开发以 GET、POST 最为常见。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="HTTP" scheme="https://debugly.cn/tags/HTTP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Github Pages 自定义域名支持 HTTPS</title>
+    <link href="https://debugly.cn/2018/03/22-github-customdomain-support-https.html"/>
+    <id>https://debugly.cn/2018/03/22-github-customdomain-support-https.html</id>
+    <published>2018-03-22T13:56:06.000Z</published>
+    <updated>2020-07-31T08:23:36.327Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;自从有了自己的域名后，我的博客就失去了那把小绿锁，就在刚刚我还在搜索：Github 自定义域名怎么支持https，当我看到这个 &lt;a href=&quot;https://neue.v2ex.com/t/434553&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;帖子&lt;/a&gt; 之后，事情就有了翻转，没想到 Github 支持了，皆大欢喜了！也不用去折腾 Cloudflare 了….&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;看了下，使用的是 &lt;a href=&quot;https://letsencrypt.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Let’s Encrypt&lt;/a&gt; 提供的免费证书，有效期是3个月，到期后可以续，等于永久免费！&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="Other" scheme="https://debugly.cn/tags/Other/"/>
+    
+  </entry>
+  
+</feed>

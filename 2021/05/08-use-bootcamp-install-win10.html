@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  <title>Mac 电脑安装 Win10 双系统 | Matt Reach</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="前提条件 只有一个 macOS 系统的 Mac 电脑（大部分情况下是只有一个的，但实际上 Mac 电脑也可以装多个 macOS 系统，如果装了多个 macOS 系统则，BootCamp 安装时会提示磁盘分区失败，我怀疑是 BootCamp 的 bug，没有处理磁盘被分成多个区的情况） Win10 安装盘镜像（可从网络上下载） Mac 硬盘最好能大于 512 GB，太小的话后续使用很不方便，两个系统">
+<meta name="keywords" content="macOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac 电脑安装 Win10 双系统">
+<meta property="og:url" content="https://debugly.cn/2021/05/08-use-bootcamp-install-win10.html">
+<meta property="og:site_name" content="Matt Reach">
+<meta property="og:description" content="前提条件 只有一个 macOS 系统的 Mac 电脑（大部分情况下是只有一个的，但实际上 Mac 电脑也可以装多个 macOS 系统，如果装了多个 macOS 系统则，BootCamp 安装时会提示磁盘分区失败，我怀疑是 BootCamp 的 bug，没有处理磁盘被分成多个区的情况） Win10 安装盘镜像（可从网络上下载） Mac 硬盘最好能大于 512 GB，太小的话后续使用很不方便，两个系统">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/1.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/2.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/3.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/4.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/5.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/6.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/7.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/8.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/9.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/10.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/11.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/12.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/13.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/14.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/15.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/16.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/17.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/18.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/19.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/20.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/21.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/22.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/23.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/24.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/25.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/26.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/27.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/28.jpg">
+<meta property="og:image" content="https://debugly.cn/images/202105/bootcamp-win10/29.jpg">
+<meta property="og:updated_time" content="2021-05-08T07:02:42.883Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mac 电脑安装 Win10 双系统">
+<meta name="twitter:description" content="前提条件 只有一个 macOS 系统的 Mac 电脑（大部分情况下是只有一个的，但实际上 Mac 电脑也可以装多个 macOS 系统，如果装了多个 macOS 系统则，BootCamp 安装时会提示磁盘分区失败，我怀疑是 BootCamp 的 bug，没有处理磁盘被分成多个区的情况） Win10 安装盘镜像（可从网络上下载） Mac 硬盘最好能大于 512 GB，太小的话后续使用很不方便，两个系统">
+<meta name="twitter:image" content="https://debugly.cn/images/202105/bootcamp-win10/1.jpg">
+  
+    <link rel="alternate" href="/" title="Matt Reach">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+<link rel="alternate" href="/atom.xml" title="Matt Reach" type="application/atom+xml">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Matt Reach</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">An iOS/macOS Developer</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+          <a class="main-nav-link" href="/mr-zone/">Tools</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://debugly.cn"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-2021/05/08-use-bootcamp-install-win10" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/05/08-use-bootcamp-install-win10.html" class="article-date">
+  <time class="dt-published" datetime="2021-05-08T03:00:06.000Z" itemprop="datePublished">2021-05-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Mac 电脑安装 Win10 双系统
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h3><ul>
+<li>只有一个 macOS 系统的 Mac 电脑（大部分情况下是只有一个的，但实际上 Mac 电脑也可以装多个 macOS 系统，如果装了多个 macOS 系统则，BootCamp 安装时会提示磁盘分区失败，我怀疑是 BootCamp 的 bug，没有处理磁盘被分成多个区的情况）</li>
+<li>Win10 安装盘镜像（可从网络上下载）</li>
+<li>Mac 硬盘最好能大于 512 GB，太小的话后续使用很不方便，两个系统可能都面临磁盘不足的尴尬局面</li>
+<li>使用 BootCamp 软件安装，我使用的 macOS 系统里都有这个软件</li>
+</ul>
+<p>实际上 BootCamp 不仅可以安装 Win10，之前也有安装过 Win7 等系统，都是一样的操作步骤，只是现在 Win10 比较流行，因此选择安装 Win10 系统。</p>
+<a id="more"></a>
+<h3 id="详细步骤"><a href="#详细步骤" class="headerlink" title="详细步骤"></a>详细步骤</h3><ul>
+<li>打开仿达(Finder) ，找到应用程序里的实用工具文件夹，然后打开 <strong>启动转换助理(BootCamp)</strong><br><img src="/images/202105/bootcamp-win10/1.jpg" alt></li>
+<li>我把镜像放到桌面了，会自动寻找到镜像文件，默认给 Windows 分配 40GB 空间，我这里调整为 100 GB。<br>点击安装时不能插优盘或者移动硬盘，否则无法继续。<br><img src="/images/202105/bootcamp-win10/2.jpg" alt></li>
+<li>点击安装，则会开始下载 BootCamp 软件以及适合这台机器的 Windows 相关驱动软件<br><img src="/images/202105/bootcamp-win10/3.jpg" alt></li>
+<li>还会对磁盘进行分区，如果 Mac 已经对磁盘分过区，则可能失败；可以先删除掉保留一个分区后再装<br><img src="/images/202105/bootcamp-win10/4.jpg" alt></li>
+<li>下载必要的软件，大约需要 10 分钟左右；准备完毕后，会自动重启，进入 Windows 安装步骤</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/5.jpg" alt></p>
+<ul>
+<li>语言使用默认的简体中文</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/6.jpg" alt></p>
+<ul>
+<li>操作系统，我选择的是企业版，因为公司的 Dell 本装的也都是企业版的，个人安装时选择其他版本也可以</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/7.jpg" alt></p>
+<ul>
+<li>选择好了，下一步即可</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/8.jpg" alt></p>
+<ul>
+<li>正在准备，等待几分钟即可，中间可能会重启</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/9.jpg" alt></p>
+<ul>
+<li>重启完毕，需要进行一些基础设置</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/10.jpg" alt></p>
+<ul>
+<li>网络设置这里，需要选择无网络连接，因为没有网卡驱动，点击继续执行有限设置，先跳过</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/11.jpg" alt></p>
+<ul>
+<li>设置登录用户名</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/12.jpg" alt></p>
+<ul>
+<li>隐私设置，我全都关闭了，不需要这些服务</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/13.jpg" alt></p>
+<ul>
+<li>看到  “嗨，别来无恙啊！” 就表示安装成功了</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/14.jpg" alt></p>
+<ul>
+<li>稍等几分钟就会进入桌面</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/15.jpg" alt></p>
+<p><img src="/images/202105/bootcamp-win10/16.jpg" alt></p>
+<ul>
+<li>此时查看网络连接，会发现不正常，根本没有任何连接，即使你周围有 wifi 信号📶</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/17.jpg" alt></p>
+<ul>
+<li>查看账户信息，则提示需要激活</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/18.jpg" alt></p>
+<ul>
+<li>不要着急，打开计算机 D 盘，是的这个 D 盘是 BootCamp 帮你创建的，后续重启后会自行删掉</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/19.jpg" alt></p>
+<ul>
+<li>不要执行这个 step 程序（如果你想看看也无妨）其实就是上面的安装过程，这是个 Windows 安装引导程序</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/20.jpg" alt></p>
+<ul>
+<li>敲黑板：点击进入 BootCamp 目录</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/21.jpg" alt></p>
+<ul>
+<li>以管理员身份<strong>运行 Setup 程序</strong></li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/22.jpg" alt></p>
+<ul>
+<li>我猜测其过程是安装 Drivers 目录下的驱动程序</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/23.jpg" alt></p>
+<ul>
+<li>点击完成，自动重启 Windows</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/24.jpg" alt></p>
+<ul>
+<li>重启进入后，再次查看计算机，你会发现 D 盘没了，里面的内容其实没用了</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/25.jpg" alt></p>
+<ul>
+<li>再次查看网络连接，你会发现可以搜寻到 WiFi 信号了（其实装上驱动后没重启时就已经有了）</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/26.jpg" alt></p>
+<ul>
+<li>我连上公司的内网，然后查看账号，就不提示激活了，查看关于也都是正常的，非常赞，不用费劲找公司的 MS 人员搞激活了</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/27.jpg" alt></p>
+<h3 id="切换系统"><a href="#切换系统" class="headerlink" title="切换系统"></a>切换系统</h3><p>如需在 macOS 和 Windows 之间切换，只需要按下开机键后按住 option 键即可！</p>
+<p>第一次从 Windows 切到 macOS 你会发现有两个 EFI Boot 的启动盘，你不要管他，选择 macOS 即可。</p>
+<p><img src="/images/202105/bootcamp-win10/28.jpg" alt></p>
+<ul>
+<li>下次启动，你会发现，咦，正常了，EFI Boot 启动盘就剩一个了</li>
+</ul>
+<p><img src="/images/202105/bootcamp-win10/29.jpg" alt></p>
+<p>直接开机，不按 option 键则进入上次进入的那个系统。</p>
+<h3 id="完"><a href="#完" class="headerlink" title="完"></a>完</h3><p>可以看到 Mac 电脑安装 Windows 很简单，只需要准备好一个 Windows 的镜像就可以了，其他的事情 BootCamp 会帮你搞定！</p>
+<p>注意：安装系统有风险，重要资料做好备份先！</p>
+<p>Windows 的系统镜像可以从这里获取 ：<a href="https://msdn.itellyou.cn/" target="_blank" rel="noopener">MSDN, 我告诉你 - 做一个安静的工具站 (itellyou.cn)</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://debugly.cn/2021/05/08-use-bootcamp-install-win10.html" data-id="ckofezemg0065rnvo4ps3mq7c" data-title="Mac 电脑安装 Win10 双系统" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macOS/">macOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/12/31-my-2020.html" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">我的 2020</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/08-use-bootcamp-install-win10.html">Mac 电脑安装 Win10 双系统</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/31-my-2020.html">我的 2020</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/16video-words.html">影视语录</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/10CentOS-Transfer.html">CentOS 主机迁移</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/03CentOS-install-nginx.html">CentOS 源码安装 Nginx</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/CentOS/" style="font-size: 12.22px;">CentOS</a> <a href="/tags/CocoaPods/" style="font-size: 14.44px;">CocoaPods</a> <a href="/tags/FFmpeg/" style="font-size: 10px;">FFmpeg</a> <a href="/tags/HTTP/" style="font-size: 11.11px;">HTTP</a> <a href="/tags/IAP/" style="font-size: 10px;">IAP</a> <a href="/tags/JavaScript/" style="font-size: 11.11px;">JavaScript</a> <a href="/tags/Mac开发/" style="font-size: 11.11px;">Mac开发</a> <a href="/tags/MySQL/" style="font-size: 11.11px;">MySQL</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Other/" style="font-size: 13.33px;">Other</a> <a href="/tags/Script/" style="font-size: 15.56px;">Script</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/issues/" style="font-size: 18.89px;">issues</a> <a href="/tags/macOS/" style="font-size: 17.78px;">macOS</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/个人总结/" style="font-size: 14.44px;">个人总结</a> <a href="/tags/千帆SDK/" style="font-size: 16.67px;">千帆SDK</a> <a href="/tags/影视语录/" style="font-size: 10px;">影视语录</a> <a href="/tags/生活中的欢乐/" style="font-size: 11.11px;">生活中的欢乐</a>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+        All website licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a></br>
+      
+      &copy; 2021 许乾隆<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/mr-zone/" class="mobile-nav-link">Tools</a>
+  
+</nav>
+    
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
