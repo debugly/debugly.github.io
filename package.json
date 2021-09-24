@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "hexo serve",
+    "theme": "./init-theme.sh",
     "build": "hexo clean && hexo generate"
   },
   "hexo": {
