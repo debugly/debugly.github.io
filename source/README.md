@@ -2,7 +2,7 @@
 
 # 版本记录
 
-- 21 年 9 月，修改域名为 [github.debugly.cn](https://github.debugly.cn)
+- 21 年 9 月，修改域名为 [blog.debugly.cn](https://blog.debugly.cn)
 - 21 年 5 月，通过 Github Action 自动部署
 - 21 年 4 月，主题则采用了 [hexo-theme-landscape](https://github.com/debugly/hexo-theme-landscape/)
 - 17 年 12 月换成 hexo，主题则采用了 [hexo-theme-yaris](https://github.com/debugly/hexo-theme-yaris)
