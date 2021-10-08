@@ -356,7 +356,9 @@ Homebrew 是 Mac 上不可或缺的提升效率的工具之一，安装管理三
 
 Formula: brew 是一个通用的工具，理论上可以管理任意包，为了达到通用，brew 就为包安装定义了一套固定流程，所有的包安装步骤都是一样的，把不同的地方，当到包的配置文件里，brew 通过配置文件得知如何安装这个包，这个包依赖了哪些包，从哪里下载这个包，这个包是否提供预编译的二进制等信息，这个配置文件称为 Formula。
 
-tap: 存放 Formula 文件的 Git 仓库称为 tap。
+### tap
+
+存放 Formula 文件的 Git 仓库称为 tap。
 
 - 查看当前 taps
 
@@ -405,6 +407,34 @@ or HOMEBREW_EDITOR to your preferred text editor.
 
 - 对于其他用户，重新安装 tap 就会更新 Formula 文件
 
+### untap
+
+移除使用 tap 安装的仓库。
+
+```bash
+brew untap matt/core                      
+
+Error: Refusing to untap matt/core because it contains the following installed formulae or casks:
+
+mrffmpeg
+```
+
+因为 mrffmpeg 库是通过 matt/core 这个 tap 安装的，因此不能移除这个 tap，需要先卸载 mrffmpeg 这个库才行。
+
+```bash
+brew uninstall mrffmpeg
+
+Uninstalling /usr/local/Cellar/mrffmpeg/4.4_2... (245 files, 234MB)
+
+brew untap matt/core  
+
+Untapping matt/core...
+
+Untapped 1 formula (33 files, 28.4KB).
+```
+
+
+
 ## 小贴士
 
 1、为了提升安装速度，一定要安装镜像 [[homebrew | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror](https://mirrors.tuna.tsinghua.edu.cn/help/homebrew/)](https://mirrors.tuna.tsinghua.edu.cn/help/homebrew/)
@@ -414,6 +444,21 @@ or HOMEBREW_EDITOR to your preferred text editor.
 3、遇到问题可以追加 --verbose 查看详细日志
 
 4、通过 brew 安装的包，如果有 lib 或者 dylib 生成，默认会放到 /usr/local/lib/ 下，头文件放在 /usr/local/include 下（里面都是软连接），实际包放在  /usr/local/Cellar/包名/版本 目录下
+
+5、同一个 tap 不可以使用不同的仓库，否则报错：
+
+```bash
+brew tap matt/core https://code.sohuno.com/ifox-mac/FFmpeg.git
+Updating Homebrew...
+==> Auto-updated Homebrew!
+Updated 1 tap (homebrew/services).
+No changes to formulae.
+
+Error: Tap matt/core remote mismatch.
+https://github.com/debugly/BrewFormula.git != https://code.sohuno.com/ifox-mac/FFmpeg.git
+```
+
+
 
 
 ## 参考
