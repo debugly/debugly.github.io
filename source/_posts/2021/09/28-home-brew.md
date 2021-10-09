@@ -448,14 +448,14 @@ Untapped 1 formula (33 files, 28.4KB).
 5、同一个 tap 不可以使用不同的仓库，否则报错：
 
 ```bash
-brew tap matt/core https://code.sohuno.com/ifox-mac/FFmpeg.git
+brew tap matt/core https://github/debugly/FFmpeg.git
 Updating Homebrew...
 ==> Auto-updated Homebrew!
 Updated 1 tap (homebrew/services).
 No changes to formulae.
 
 Error: Tap matt/core remote mismatch.
-https://github.com/debugly/BrewFormula.git != https://code.sohuno.com/ifox-mac/FFmpeg.git
+https://github.com/debugly/BrewFormula.git != https://github/debugly/FFmpeg.git
 ```
 
 
