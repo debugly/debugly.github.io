@@ -601,7 +601,7 @@ $(date +'Theme updated:%Y-%m-%d %H:%M:%S')
 Theme updated:2018-04-16 17:52:24
 ```
 
-# 文件（夹）是否存在
+# If
 
 - 文件是否存在
 
@@ -631,6 +631,55 @@ Theme updated:2018-04-16 17:52:24
 		echo 'file is not empty!'
 	fi
 	```
+
+- 当做字符串比较
+
+  ```bash
+  if [[ "abc" == $num ]];then
+  	echo 'num is abc'
+  fi
+  ```
+
+- ```bash
+  大于
+  当做数字判断
+  if [[ 0 -eq $num ]];then
+  	echo 'num is 0'
+  fi
+  ```
+
+  
+
+- 当做数字比较
+
+  ```bash
+  if [[ 0 -eq $num ]];then
+  	echo 'num is 0'
+  fi
+  
+  if [[ 0 -ne $num ]];then
+  	echo 'num is not equal 0'
+  fi
+  
+  if [[ $num -gt 0 ]];then
+  	echo 'num is greater than 0'
+  fi
+  
+  if [[ $num -lt 0 ]];then
+  	echo 'num is less than 0'
+  fi
+  
+  if [[ $num -ge 0 ]];then
+  	echo 'num is greater than or equal 0'
+  fi
+  
+  if [[ $num -le 0 ]];then
+  	echo 'num is less than or equal 0'
+  fi
+  ```
+
+  
+
 # 统计文件（夹）
 
 - 统计文件夹下文件个数，包括子文件
