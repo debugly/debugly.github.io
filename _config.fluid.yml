@@ -500,7 +500,7 @@ index:
 #---------------------------
 post:
   banner_img: /img/default.png
-  banner_img_height: 70
+  banner_img_height: 60
   banner_mask_alpha: 0.3
 
   # 文章在首页的默认封面图，当没有指定 index_img 时会使用该图片，若两者都为空则不显示任何图片
@@ -836,9 +836,9 @@ category:
 tag:
   enable: true
   banner_img: /img/default.png
-  banner_img_height: 80
+  banner_img_height: 50
   banner_mask_alpha: 0.3
-  subtitle:
+  subtitle: 所有标签
   tagcloud:
     min_font: 15
     max_font: 30
@@ -856,7 +856,7 @@ about:
   banner_img: /img/default.png
   banner_img_height: 60
   banner_mask_alpha: 0.3
-  subtitle:
+  subtitle: "关于我"
   avatar: /images/theme/next/avatar.jpg
   name: "Matt Reach"
   intro: "代码爱好者"
