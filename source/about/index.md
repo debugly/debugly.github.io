@@ -27,9 +27,3 @@ keywords: 个人简介
 - FFmpeg 相关 Pod 库 [https://github.com/debugly/MRFFToolChainPod](https://github.com/debugly/MRFFToolChainPod)
 - H5-Native交互框架 [https://github.com/debugly/SohuH5-NativeInteraction](https://github.com/debugly/SohuH5-NativeInteraction)
 - JSON 转 Model [https://github.com/debugly/SCJSONUtil](https://github.com/debugly/SCJSONUtil)
-
-# Contact
-
-通过微信联系我：
-
-![](wechaticon.jpg)

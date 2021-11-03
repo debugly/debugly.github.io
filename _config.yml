@@ -80,8 +80,9 @@ pagination_dir: page
 
 ## Themes: https://github.com/debugly/hexo-theme-yaris  landscape
 ## git clone https://github.com/theme-next/hexo-theme-next.git themes/next
-theme: landscape
+#theme: landscape
 #theme: hexo-theme-yaris
+theme: fluid
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
