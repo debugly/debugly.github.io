@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "start": "hexo serve",
-    "theme": "./init-theme.sh",
     "build": "hexo clean && hexo generate"
   },
   "hexo": {
@@ -15,10 +14,12 @@
     "hexo-deployer-git": "^0.3.1",
     "hexo-generator-feed": "^3.0.0",
     "hexo-generator-index": "^0.2.0",
+    "hexo-generator-search": "^2.4.3",
     "hexo-generator-tag": "^0.2.0",
     "hexo-renderer-ejs": "^0.3.0",
     "hexo-renderer-marked": "^0.3.0",
     "hexo-renderer-stylus": "^0.3.1",
-    "hexo-server": "^0.2.0"
+    "hexo-server": "^0.2.0",
+    "hexo-theme-fluid": "^1.8.12"
   }
 }
