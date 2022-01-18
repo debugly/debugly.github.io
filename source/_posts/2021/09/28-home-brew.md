@@ -17,7 +17,7 @@ Homebrew 是 Mac 上不可或缺的提升效率的工具之一，安装管理三
 
 命令行安装 
 
-```
+```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 

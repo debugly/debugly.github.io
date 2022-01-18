@@ -1,6 +1,7 @@
 ---
 title: About
 layout: about
+banner_img: /images/theme/fluid/banner2.jpg
 keywords: 许乾隆的美好一天
 ---
 
