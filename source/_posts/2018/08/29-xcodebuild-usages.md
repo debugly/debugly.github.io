@@ -1,6 +1,6 @@
 ---
 layout: post
-title: iOS 自动化构建（一）
+title: iOS 自动化构建之 xcodebuild（一）
 date: 2018-08-29 14:09:10
 tags: [iOS,Script]
 ---

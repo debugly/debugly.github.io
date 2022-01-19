@@ -2,7 +2,7 @@
 layout: post
 title: 将 Hexo 网站部署到子目录
 date: 2022-01-07 19:00:06
-tags: hexo,nginx
+tags: [hexo,Nginx]
 ---
 
 以下内容不介绍 Hexo 的使用方法，而是提供了一个如何将生成好的博客网站部署到域名子目录下，比如我的周报是通过 hexo 生成的，我需要部署到：http://m.local/weekly/ 路径下。
