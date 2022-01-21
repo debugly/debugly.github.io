@@ -190,8 +190,4 @@ QLActionSheetController *actionsheet = [QLActionSheetController actionSheetWithT
 ```
 ## 效果
 
-<img src="/images/151204/QLCommonAlertController.gif" width="302" height="551">
-
-## 项目地址
-
-已经传到了 [github](https://github.com/debugly/QLCommonAlertController) 上了，欢迎 pull request ，多谢支持！
+<img src="/images/201512/QLCommonAlertController.gif" width="302" height="551">

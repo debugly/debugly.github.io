@@ -9,7 +9,7 @@ toc: false
 
 ## 背景
 
-昨天发布的博客 [港版苹果充电器DIY全过程](/blog/2015/09/26/gang-ban-ping-guo-chong-dian-qi-diyquan-guo-cheng/) 里使用了太多的图片，看了下好几十兆大，这怎么能行呢，作死的节奏啊！所以找了一款 mac 无损图片压缩工具 -- **ImageOptim** ，压缩比特别高，支持 PNG/JPEG/GIF 等主流格式，并且是免费的！
+昨天发布的博客 [港版苹果充电器DIY全过程](/2015/09/27-bo-ke-ti-su-shi-yong-imageiptimya-suo-tu-pian.html) 里使用了太多的图片，看了下好几十兆大，这怎么能行呢，作死的节奏啊！所以找了一款 mac 无损图片压缩工具 -- **ImageOptim** ，压缩比特别高，支持 PNG/JPEG/GIF 等主流格式，并且是免费的！
 
 <img src = "/images/201509/27_5.png" width = '270' height = '270'>
 
