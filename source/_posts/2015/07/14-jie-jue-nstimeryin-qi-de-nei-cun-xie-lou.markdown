@@ -3,7 +3,7 @@ layout: post
 title: "解决 NSTimer 内存泄漏问题"
 date: 2015-07-14 10:38:52 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 ---
 
 > NSTimer 是 iOS 很常用的一个类，可以很方便的做延迟任务，也可以做周期性的轮询。不过我在写轮播图的时候却发现 Timer造成了内存泄漏！

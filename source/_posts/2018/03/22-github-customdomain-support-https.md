@@ -2,7 +2,7 @@
 layout: post
 title: Github Pages 自定义域名支持 HTTPS
 date: 2018-03-22 21:56:06
-tags: Other
+tags: ["Other"]
 ---
 
 > 自从有了自己的域名后，我的博客就失去了那把小绿锁，就在刚刚我还在搜索：Github 自定义域名怎么支持https，当我看到这个 [帖子](https://neue.v2ex.com/t/434553) 之后，事情就有了翻转，没想到 Github 支持了，皆大欢喜了！也不用去折腾 Cloudflare 了....

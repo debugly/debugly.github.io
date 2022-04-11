@@ -2,7 +2,7 @@
 layout: post
 title: 搞定 macOS JRE
 date: 2018-03-06 23:28:58
-tags: macOS
+tags: ["macOS"]
 ---
 
 > macOS 是自带了 JRE 的，但实际上却没那么好用，今天就来聊下我遇到的问题以及解决方案.

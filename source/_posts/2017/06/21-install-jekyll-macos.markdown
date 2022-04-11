@@ -3,7 +3,7 @@ layout: post
 title: "macOS 上安装 Jekyll"
 date: 2017-06-21 21:31:49 +0800
 comments: true
-tags: [Script,macOS]
+tags: ["Script","macOS"]
 keywords: install jekyll on mac os X
 ---
 

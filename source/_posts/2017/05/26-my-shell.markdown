@@ -3,7 +3,7 @@ layout: post
 title: "Shell 编程经验总结"
 date: 2017-05-26 21:03:36 +0800
 comments: true
-tags: Script
+tags: ["Script"]
 keywords: shell,Linux shell
 ---
 

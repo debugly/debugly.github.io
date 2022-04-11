@@ -3,7 +3,7 @@ layout: post
 title: "iOS 获取设备、应用相关信息"
 date: 2017-08-31 09:13:18 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 keywords: iOS,iphone uname,获取当前设备具体型号
 ---
 

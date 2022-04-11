@@ -3,7 +3,7 @@ layout: post
 title: "千帆 SDK Issue: TimeStamp"
 date: 2016-11-30 21:03:04 +0800
 comments: true
-tags: 千帆SDK
+tags: ["千帆SDK"]
 ---
 
 ## 简介

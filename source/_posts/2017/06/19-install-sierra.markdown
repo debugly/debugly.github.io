@@ -3,7 +3,7 @@ layout: post
 title: "使用 U 盘安装 macOS Sierra"
 date: 2017-06-19 16:57:32 +0800
 comments: true
-tags: macOS
+tags: ["macOS"]
 keywords: U盘安装 macOS,Sierra,Mac PE FireWolf
 ---
 

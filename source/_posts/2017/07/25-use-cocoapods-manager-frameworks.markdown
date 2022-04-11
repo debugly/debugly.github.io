@@ -3,7 +3,7 @@ layout: post
 title: "使用 CocoaPods 管理 frameworks"
 date: 2017-07-25 15:09:56 +0800
 comments: true
-tags: [iOS,CocoaPods]
+tags: ["iOS","CocoaPods"]
 keywords: use cocoapods manager frameworks
 ---
 

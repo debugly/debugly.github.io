@@ -2,7 +2,7 @@
 layout: post
 title: MySQL 常用语句
 date: 2020-07-31 17:59:10
-tags: [MySQL]
+tags: ["MySQL"]
 ---
 
 ## 登录 MySQL

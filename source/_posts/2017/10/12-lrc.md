@@ -2,7 +2,7 @@
 layout: post
 date: 2017-10-12 09:49:58 +0800
 comments: true
-tags: issues
+tags: ["iOS","issues"]
 author: 姬艳
 title: "实现随音乐播放滚动歌词的音乐提词器"
 keywords:  歌词解析,歌词随时间滚动

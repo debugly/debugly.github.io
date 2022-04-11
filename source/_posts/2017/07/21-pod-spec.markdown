@@ -3,7 +3,7 @@ layout: post
 title: "pod spec 命令"
 date: 2017-07-21 11:23:12 +0800
 comments: true
-tags: [iOS,CocoaPods]
+tags: ["iOS","CocoaPods"]
 keywords: CocoaPods,podspec,library
 ---
 

@@ -3,7 +3,7 @@ layout: post
 title: "iOS Framework 瘦身实战"
 date: 2017-06-01 13:30:02 +0800
 comments: true
-tags: [千帆SDK,iOS]
+tags: ["千帆SDK","iOS"]
 keywords: framework 瘦身,iOS开发
 ---
 

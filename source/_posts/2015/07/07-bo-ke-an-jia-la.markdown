@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Hello My Blog"
-date: 2015-07-07 13:36:28 +0800
 comments: true
-tags: Script
 toc: false
+date: 2015-07-07 13:36:28
+tags: ["Script"]
 ---
 
 > 出于对前端的兴趣和 markdown 的热衷，于是今天摸索着搭建了一个使用 markdown 写文章，经过 jekyll 解析生成静态站点，发布到 github 的博客，折腾过程中还学习了些前端的知识！

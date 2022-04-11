@@ -2,7 +2,7 @@
 layout: post
 title: Mac 包管理工具 Homebrew
 date: 2021-09-28 15:00:06
-tags: macOS
+tags: ["macOS"]
 ---
 
 

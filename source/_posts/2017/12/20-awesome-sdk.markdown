@@ -3,7 +3,7 @@ layout: post
 title: "追求卓越的 20 个月"
 date: 2017-12-31 23:30:03 +0800
 comments: true
-tags: 千帆SDK
+tags: ["千帆SDK"]
 ---
 
 > 要告别 SDK 开发工作了，写篇文章纪念下这段美好的岁月吧！

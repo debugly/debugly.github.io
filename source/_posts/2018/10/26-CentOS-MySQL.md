@@ -2,7 +2,7 @@
 layout: post
 title: CentOS 安装 MySQL
 date: 2018-10-26 18:09:10
-tags: [CentOS,MySQL]
+tags: ["CentOS","MySQL"]
 ---
 
 > 以下命令如有权限问题请自行使用 sudo 或者切换到 root 账户，我的这台主机是公司分配的，通过 ssh 直接登录的 root 账户，所以就没有带 sudo.该笔记可能不适用于 CentOS 7.

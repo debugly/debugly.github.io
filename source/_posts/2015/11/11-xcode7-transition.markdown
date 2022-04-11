@@ -3,7 +3,7 @@ layout: post
 title: "Xcode7 Transition Guide"
 date: 2015-11-11 21:41:12 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 toc: false
 ---
 

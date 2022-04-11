@@ -3,7 +3,7 @@ layout: post
 title: "入职搜狐两周年"
 date: 2017-08-19 09:37:04 +0800
 comments: true
-tags: Other 
+tags: ["Other"] 
 keywords: 入职纪念日
 ---
 

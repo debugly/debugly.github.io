@@ -3,7 +3,7 @@ layout: post
 title: "使用 RVM 更新 Ruby 版本"
 date: 2017-06-20 22:31:19 +0800
 comments: true
-tags: Script
+tags: ["Script"]
 keywords: RVM,update ruby,mac os
 ---
 

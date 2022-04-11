@@ -3,7 +3,7 @@ layout: post
 title: "什么是千帆直播 SDK"
 date: 2016-11-28 12:11:01 +0800
 comments: true
-tags: 千帆SDK
+tags: ["千帆SDK"]
 ---
 
 # 千帆直播SDK简介

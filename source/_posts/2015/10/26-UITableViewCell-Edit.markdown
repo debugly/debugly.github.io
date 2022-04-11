@@ -3,7 +3,7 @@ layout: post
 title: "UITableViewCell 编辑模式"
 date: 2015-10-26 21:57:49 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 ---
 
 Introduction

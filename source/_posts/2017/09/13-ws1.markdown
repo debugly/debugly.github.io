@@ -2,7 +2,7 @@
 layout: post
 date: 2017-09-13 10:02:54 +0800
 comments: true
-tags: [issues,iOS]
+tags: ["iOS","issues"]
 author: 吴尚
 title: "UIButton 设置图片的 contentMode"
 keywords: UIButton,ContentMode

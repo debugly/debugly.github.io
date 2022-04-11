@@ -3,7 +3,7 @@ layout: post
 title: "我的 2016"
 date: 2016-12-31 19:52:32 +0800
 comments: true
-tags: 个人总结 
+tags: ["YearSummary"] 
 keywords: 个人总结
 ---
 

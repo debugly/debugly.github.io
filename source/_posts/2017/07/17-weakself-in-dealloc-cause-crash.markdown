@@ -3,7 +3,7 @@ layout: post
 title: "在 dealloc 里使用 weak self 引起崩溃？"
 date: 2017-07-17 14:43:15 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 keywords: dealloc,weak self,crash
 ---
 

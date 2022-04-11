@@ -3,7 +3,7 @@ layout: post
 title: "RunLoop Study (一)"
 date: 2015-10-15 22:17:57 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 ---
 
 ## 前言

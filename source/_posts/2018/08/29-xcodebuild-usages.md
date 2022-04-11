@@ -2,7 +2,7 @@
 layout: post
 title: iOS 自动化构建之 xcodebuild（一）
 date: 2018-08-29 14:09:10
-tags: [iOS,Script]
+tags: ["iOS","Script"]
 ---
 
 回想 17 年自己想搞自动化构建，没有相关环境，只好使用 crontab 去做，真是好费劲，因为很多环境变量没有，本地调试好的脚本可是定时任务执行时就报错。这是之前对 crontab 使用的简单介绍：[macOS 定时任务](/2017/09/05-unix-crontab.html)

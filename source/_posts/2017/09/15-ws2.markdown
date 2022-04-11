@@ -2,7 +2,7 @@
 layout: post
 date: 2017-09-15 19:17:23 +0800
 comments: true
-tags: [issues,iOS]
+tags: ["iOS","issues"]
 author: 吴尚
 title: "TableViewCell 点击后背景蒙层变透明的解决方案"
 keywords: TableViewCell,背景透明

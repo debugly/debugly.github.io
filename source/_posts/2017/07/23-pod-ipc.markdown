@@ -3,7 +3,7 @@ layout: post
 title: "pod ipc 命令"
 date: 2017-07-22 16:23:12 +0800
 comments: true
-tags: [iOS,CocoaPods]
+tags: ["iOS","CocoaPods"]
 keywords: CocoaPods,podspec,library
 ---
 

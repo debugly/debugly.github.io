@@ -2,7 +2,7 @@
 layout: post
 date: 2017-09-12 17:36:14 +0800
 comments: true
-tags: [issues,iOS]
+tags: ["iOS","issues"]
 title: "Main Thread Checker"
 keywords: iOS11,Xcode9,Main Thread Checker
 ---

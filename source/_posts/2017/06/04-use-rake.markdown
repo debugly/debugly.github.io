@@ -3,7 +3,7 @@ layout: post
 title: "使用 Rake 重写打包脚本"
 date: 2017-06-04 14:04:59 +0800
 comments: true
-tags: Script
+tags: ["Script"]
 keywords: Rake 入门,Ruby 简介
 ---
 

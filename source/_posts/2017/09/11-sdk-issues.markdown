@@ -3,7 +3,7 @@ layout: post
 title: "SDK-issues 简介"
 date: 2017-09-11 22:50:11 +0800
 comments: true
-tags: issues
+tags: ["issues"]
 keywords: sdk-issues
 noToc: true
 ---

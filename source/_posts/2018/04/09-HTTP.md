@@ -2,7 +2,7 @@
 layout: post
 title: HTTP/1.1 协议简介
 date: 2018-04-09 14:05:31
-tags: HTTP
+tags: ["HTTP"]
 keyworkds: HTTP,HTTP/1.1 协议简介
 ---
 

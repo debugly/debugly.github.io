@@ -3,7 +3,7 @@ layout: post
 title: "致炫收音机改为家用音响"
 date: 2017-01-10 20:55:16 +0800
 comments: true
-tags: 生活中的欢乐
+tags: ["FunnyDiy"]
 keywords: 致炫收音机改成家用
 ---
 

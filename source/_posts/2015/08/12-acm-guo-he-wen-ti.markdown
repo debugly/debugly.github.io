@@ -3,7 +3,7 @@ layout: post
 title: "ACM-过河问题"
 date: 2015-08-12 13:40:04 +0800
 comments: true
-tags: Other
+tags: ["Other"]
 ---
 在我的一个群里，小伙伴发了一道题，考察下算法，自己试着想了想，拿出来一起看下吧，下面是题目：
 

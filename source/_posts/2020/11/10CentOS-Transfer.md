@@ -2,7 +2,7 @@
 layout: post
 title: CentOS 主机迁移
 date: 2020-11-10 18:09:10
-tags: [CentOS]
+tags: ["CentOS"]
 ---
 
 接到运维同学的通知，要做主机迁移，涉及到了 nginx 和资源文件，因此需要查看 nginx 的编译配置和 nginx 的运行配置。运维告诉我xx主机上装有 nginx，域名也是打到这台机器的，我顿时有点懵逼，因为我之前找过，根本找不到 nginx 在哪装的，这次必须得找到它才行啊...

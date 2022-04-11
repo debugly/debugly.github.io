@@ -3,7 +3,7 @@ layout: post
 title: "统一管理网络变化"
 date: 2016-06-19 23:26:50 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 ---
 
 # 故事背景

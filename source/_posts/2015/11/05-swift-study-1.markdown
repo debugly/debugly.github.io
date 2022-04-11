@@ -3,7 +3,7 @@ layout: post
 title: "Swift 学习（一）"
 date: 2015-11-05 23:46:42 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 ---
 
 # Introduction

@@ -3,7 +3,7 @@ layout: post
 title: "糟糕的2017款 MacBook Pro"
 date: 2017-08-18 21:43:29 +0800
 comments: true
-tags: macOS
+tags: ["macOS"]
 keywords: MacBook Pro 2017,Touch Bar
 ---
 

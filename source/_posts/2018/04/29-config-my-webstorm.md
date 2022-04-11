@@ -2,7 +2,7 @@
 layout: post
 title: 提升 Webstorm 开发效率
 date: 2018-04-29 21:10:58
-tags: macOS
+tags: ["macOS"]
 ---
 
 > 我并不是一个前端开发者，由于今年转到了小游戏开发，游戏逻辑甚至框架都是用 Javascript 写的，因此选择使用 Webstorm 这款编辑器软件。

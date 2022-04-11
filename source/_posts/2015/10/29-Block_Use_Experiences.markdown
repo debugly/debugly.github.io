@@ -3,7 +3,7 @@ layout: post
 title: "使用 Block 的一些技巧和心得"
 date: 2015-10-29 21:43:10 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 ---
 
 Introduction

@@ -3,7 +3,7 @@ layout: post
 title: "初识 Liquid 模板语言"
 date: 2017-05-21 16:37:51 +0800
 comments: true
-tags: Script
+tags: ["Script"]
 keywords: Liquid
 ---
 

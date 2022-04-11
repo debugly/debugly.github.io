@@ -3,7 +3,7 @@ layout: post
 title: "安装 iOS 11"
 date: 2017-09-08 08:46:43 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 keywords: 安装 iOS 11
 ---
 

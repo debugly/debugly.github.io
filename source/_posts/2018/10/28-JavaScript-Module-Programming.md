@@ -2,7 +2,7 @@
 layout: post
 title: JavaScript 模块化编程
 date: 2018-10-28 10:09:10
-tags: [JavaScript]
+tags: ["JavaScript"]
 ---
 
 > JavaScipt 是一门非常流程的脚本语言，特别是 Node.js 的出现，让这门语言大放异彩！也给前端开发人员转型做后端敞开了大门，同时也对 JavaScript 模块化编程产生了深远影响。

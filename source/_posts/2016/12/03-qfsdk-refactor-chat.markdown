@@ -3,7 +3,7 @@ layout: post
 title: "千帆 SDK Refactor: 优雅的处理聊天数据源"
 date: 2016-12-03 12:04:20 +0800
 comments: true
-tags: 千帆SDK
+tags: ["千帆SDK"]
 keywords: 千帆,SDK,UITableview数据源
 ---
 

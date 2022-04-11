@@ -3,7 +3,7 @@ layout: post
 title: "使用 WorkSpace 管理共享代码"
 date: 2017-05-19 22:47:32 +0800
 comments: true
-tags: 千帆SDK
+tags: ["千帆SDK"]
 keywords: workspace,share code
 ---
 

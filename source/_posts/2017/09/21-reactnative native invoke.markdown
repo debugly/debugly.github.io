@@ -2,7 +2,7 @@
 layout: post
 date: 2017-09-21 23:24:54 +0800
 comments: true
-tags: [issues,iOS]
+tags: ["iOS","issues"]
 author: 慢慢
 title: "React Native和iOS原生方法交互"
 keywords: ReactNative iOS

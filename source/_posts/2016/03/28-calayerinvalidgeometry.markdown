@@ -3,7 +3,7 @@ layout: post
 title: "解决 CALayerInvalidGeometry 问题"
 date: 2016-03-28 22:08:16 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 ---
 
 今天遇到了很多 calyer 设置坐标的崩溃，原因如下：

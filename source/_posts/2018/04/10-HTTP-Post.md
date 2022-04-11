@@ -2,7 +2,7 @@
 layout: post
 title: 常见的 POST 请求体编码方式
 date: 2018-04-10 15:05:31
-tags: HTTP
+tags: ["HTTP"]
 keywords: HTTP,POST,4 种编码方式
 ---
 

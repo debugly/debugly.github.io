@@ -3,7 +3,7 @@ layout: post
 title: "源码分析 weak 对象自动置空原理"
 date: 2017-07-18 7:40:28 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 keywords: ios weak,dealloc,nil
 ---
 

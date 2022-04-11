@@ -2,7 +2,7 @@
 layout: post
 date: 2017-09-15 16:07:58 +0800
 comments: true
-tags: [issues,iOS]
+tags: ["iOS","issues"]
 author: 姬艳
 title: "实现一个图片 360 度不停旋转"
 keywords: block的方式,CABasicAnimation方式

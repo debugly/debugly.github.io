@@ -3,7 +3,7 @@ layout: post
 title: "深入理解关联引用"
 date: 2016-03-06 09:58:46 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 tocnum: false
 ---
 

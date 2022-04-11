@@ -3,7 +3,7 @@ layout: post
 title: "通过浏览器调试视图和沙河"
 date: 2015-12-27 21:30:26 +0800
 comments: true
-tags: iOS
+tags: ["iOS"]
 ---
 
 Introduction

@@ -3,7 +3,7 @@ layout: post
 title: "SLNetwork 支持链式编程"
 date: 2016-12-02 22:00:59 +0800
 comments: true
-tags: 千帆SDK
+tags: ["千帆SDK"]
 keywords: 链式编程
 ---
 

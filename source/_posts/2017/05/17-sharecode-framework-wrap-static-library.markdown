@@ -3,7 +3,7 @@ layout: post
 title: "使用 Framework 包裹静态库共享代码"
 date: 2017-05-17 22:19:28 +0800
 comments: true
-tags: 千帆SDK
+tags: ["千帆SDK"]
 keywords: framework wrap static library
 ---
 

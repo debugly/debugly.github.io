@@ -2,7 +2,7 @@
 layout: post
 title: 解决集成 FFmpeg 时编译报错问题
 date: 2019-02-15 17:04:23
-tags: FFmpeg
+tags: ["FFmpeg"]
 ---
 
 ## 解决集成 FFmpeg 时编译报错问题

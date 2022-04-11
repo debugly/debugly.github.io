@@ -3,7 +3,7 @@ layout: post
 title: "使用 pod lib 创建 CocoaPods 库"
 date: 2017-07-24 17:23:12 +0800
 comments: true
-tags: [iOS,CocoaPods]
+tags: ["iOS","CocoaPods"]
 keywords: CocoaPods,podspec,library
 ---
 

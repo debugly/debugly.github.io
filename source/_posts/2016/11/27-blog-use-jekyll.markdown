@@ -2,7 +2,7 @@
 layout: post
 title: "使用 Jekyll 搭建博客"
 date: 2016-11-27 16:21:35 +0800
-tags: Script
+tags: ["Script"]
 ---
 
 博客大改版

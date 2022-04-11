@@ -3,7 +3,7 @@ layout: post
 title: "港版苹果充电器 DIY 全过程"
 date: 2015-09-26 23:58:32 +0800
 comments: true
-tags: 生活中的欢乐
+tags: ["FunnyDiy"]
 keywords: 港版苹果充电器
 toc: false
 ---

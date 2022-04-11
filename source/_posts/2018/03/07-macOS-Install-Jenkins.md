@@ -2,7 +2,7 @@
 layout: post
 title: macOS 上安装 Jenkins
 date: 2018-03-07 00:05:31
-tags: macOS
+tags: ["macOS"]
 ---
 
 

@@ -2,7 +2,7 @@
 layout: post
 title: CentOS 源码安装 Nginx
 date: 2020-11-03 18:09:10
-tags: [CentOS,Nginx]
+tags: ["CentOS","Nginx"]
 ---
 
 ## 查看系统版本

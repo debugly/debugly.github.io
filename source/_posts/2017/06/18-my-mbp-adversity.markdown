@@ -3,7 +3,7 @@ layout: post
 title: "Fuck，Mac 无法进入系统了"
 date: 2017-06-18 21:46:27 +0800
 comments: true
-tags: macOS
+tags: ["macOS"]
 keywords: Mac OS 无法启动,进度条卡住
 ---
 
