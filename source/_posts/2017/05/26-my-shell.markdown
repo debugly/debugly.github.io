@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Shell 编程经验总结"
+title: "Shell 编程 Tips"
 date: 2017-05-26 21:03:36 +0800
 comments: true
 tags: ["Script"]
@@ -11,7 +11,7 @@ keywords: shell,Linux shell
 
 # 内置变量
 
-以下结果来自 Mac OS 10.12，提示：这些内置变量是以美元符号开头的哈，内置变量也是变量，在 Shell 脚本里面取变量的值需要以美元符号开头。
+以下结果来自 Mac OS 10.12，提示：这些内置变量是以美元符号开头的，内置变量也是变量，在 Shell 脚本里面取变量的值均需以美元符号开头。
 
 - $SHELL : 查看当前终端使用是哪种 shell: `/bin/bash`
 - $HOME : 登陆用户主目录: `/Users/xuqianlong`
@@ -294,6 +294,39 @@ scp -r /Users/qianlongxu/Downloads/qr-code crown@110.117.40.176:/opt/www/qr-code
 	ssh root@12.11.193.18 "rm -rf ${Remote_dir}"
 	```
 
+- Here Document 
+
+	需要执行大量的脚本时，可通过 Here Document 的形式，将命令写成多行：
+
+	```
+ssh -tt "root@$ip" <<EOF            
+	cd "$SERVER_DIR/$name"
+	./upgrade.sh
+	exit      
+EOF
+	```
+
+	注意实际执行过程是，先执行 EOF 之间的内容，如果使用到了变量会被替换，然后再执行。
+
+	如果要关闭变量替换功能，可将 <<EOF 改为 <<'EOF' 。
+
+- 执行需要交互的命令
+
+	当远程登录主机A后，然后通过 ssh 远程其他机器执行时，默认情况下不会创建 TTY，也就无法进行交互，当执行到需要交互的命令时就会断开，
+	导致命令执行中断，报错如下：
+	
+	Pseudo-terminal will not be allocated because stdin is not a terminal.
+	
+	Here Document 形式的命令是交互式的，此时需要加上 -tt 参数，强制开启 TTY：
+
+	```
+ssh -tt "root@$ip" <<EOF            
+	cd "$SERVER_DIR/$name"
+	./upgrade.sh
+	exit      
+EOF
+	```
+
 # Address already in use
 
 Address already in use 是经常遇到的问题，只能找到占用该端口的进程然后杀掉！
@@ -417,6 +450,37 @@ X-Fastly-Request-ID: 0dc32470ef01fa9b0672d3d38edc904b9836debc
 
 ```bash
 mkdir -p "./themes/hexo-theme-yaris" && curl -L https://codeload.github.com/debugly/hexo-theme-yaris/zip/master | tar xj -C "./themes/hexo-theme-yaris" --strip-components 1
+```
+
+# 路径处理
+
+- 获取脚本所在目录
+
+```bash
+	dir=$(
+    cd $(dirname $0)
+    pwd
+	)
+```
+
+- 获取文件名(按/分割后的最后一部分)
+
+```bash
+	name=$(basename "/Users/matt/_posts/ijk.tar")
+	# name is ijk.tar
+	name=$(basename "/Users/matt/_posts/")
+	# name is _posts
+	name=$(basename "/Users/matt/_posts")
+	# name is _posts
+```
+
+- 获取文件名且不包括后缀名
+
+```bash
+	name=$(basename "/Users/matt/_posts/ijk.tar" .tar)
+	# name is ijk
+	name=$(basename -s .tar "/Users/matt/_posts/ijk.tar")
+	# name is ijk
 ```
 
 # chown
@@ -599,86 +663,12 @@ Linking /usr/local/Cellar/python@3.9/3.9.0_1... 5 symlinks created
 ```bash
 $(date +'Theme updated:%Y-%m-%d %H:%M:%S')
 Theme updated:2018-04-16 17:52:24
+
+# 后台执行
+
+```bash
+nohup /path/to/yourProgram &
 ```
-
-# If
-
-- 文件是否存在
-
-	```bash
-	if [ -f $last_commit_date_txt ];then
-		  last_commit_datestamp=$(cat $last_commit_date_txt)
-			echo 'xql last_commit_datestamp:'$last_commit_datestamp
-		  last_commit_date=${last_commit_datestamp% *}
-			last_commit_date=`expr $last_commit_date + 1`
-	fi
-	```
-
-- 文件夹是否存在
-
-	```bash
-	if [ -d $last_commit_folder ];then
-	
-	fi
-	```
-
-- 文件内容是否为空
-
-	```bash
-	if [ `cat $commit_info_txt |wc -m` -eq 0 ];then
-		echo 'file is empty.'
-	else
-		echo 'file is not empty!'
-	fi
-	```
-
-- 当做字符串比较
-
-  ```bash
-  if [[ "abc" == $num ]];then
-  	echo 'num is abc'
-  fi
-  ```
-
-- ```bash
-  大于
-  当做数字判断
-  if [[ 0 -eq $num ]];then
-  	echo 'num is 0'
-  fi
-  ```
-
-  
-
-- 当做数字比较
-
-  ```bash
-  if [[ 0 -eq $num ]];then
-  	echo 'num is 0'
-  fi
-  
-  if [[ 0 -ne $num ]];then
-  	echo 'num is not equal 0'
-  fi
-  
-  if [[ $num -gt 0 ]];then
-  	echo 'num is greater than 0'
-  fi
-  
-  if [[ $num -lt 0 ]];then
-  	echo 'num is less than 0'
-  fi
-  
-  if [[ $num -ge 0 ]];then
-  	echo 'num is greater than or equal 0'
-  fi
-  
-  if [[ $num -le 0 ]];then
-  	echo 'num is less than or equal 0'
-  fi
-  ```
-
-  
 
 # 统计文件（夹）
 
@@ -1066,38 +1056,118 @@ kMDItemUsedDates                       = (
 )
 ```
 
-
-
 # Shell 基础语法
 
-for 循环
+### if
+
+- 文件是否存在
+
+	```bash
+	if [ -f $last_commit_date_txt ];then
+		  last_commit_datestamp=$(cat $last_commit_date_txt)
+			echo 'xql last_commit_datestamp:'$last_commit_datestamp
+		  last_commit_date=${last_commit_datestamp% *}
+			last_commit_date=`expr $last_commit_date + 1`
+	fi
+	```
+
+- 文件夹是否存在
+
+	```bash
+	if [ -d $last_commit_folder ];then
+	else
+	fi
+	```
+
+- 文件内容是否为空
+
+	```bash
+	if [ `cat $commit_info_txt |wc -m` -eq 0 ];then
+		echo 'file is empty.'
+	else
+		echo 'file is not empty!'
+	fi
+	```
+
+- 当做字符串比较
+
+	```bash
+	if [[ "abc" == $num ]];then
+	echo 'num is abc'
+	fi
+	```
+
+- 参数是否为空
+
+	```bash
+	if [[ -z "$num" ]];then
+	echo 'num is nil'
+	fi
+	```
+
+- 当做数字比较
+
+	```bash
+	if [[ 0 -eq $num ]];then
+	echo 'num is 0'
+	fi
+
+	if [[ 0 -ne $num ]];then
+	echo 'num is not equal 0'
+	fi
+
+	if [[ $num -gt 0 ]];then
+	echo 'num is greater than 0'
+	fi
+
+	if [[ $num -lt 0 ]];then
+	echo 'num is less than 0'
+	fi
+
+	if [[ $num -ge 0 ]];then
+	echo 'num is greater than or equal 0'
+	fi
+
+	if [[ $num -le 0 ]];then
+	echo 'num is less than or equal 0'
+	fi
+	```
+
+### case
+
+```bash
+case $e in
+
+abc)
+	echo "abc"
+	;;
+
+d | e)
+	echo "$e"
+	;;
+*)
+	echo "not abc and d and e"
+	;;
+esac
+```
+
+### for 循环
 
 ```bash
 LIBS="A B C"
-for lib in $LIBS
-do
+for lib in $LIBS; do
 	echo "$lib"
 done
 ```
 
-if-else 条件判断
-
-```bash
-if [[ $var -eq 0 ]];then
-	echo 'var equal to zero'
-else
-	echo 'var not equal to zero'
-fi
-```
-
-传递含有空格的参数
+## 传递含有空格的参数
 
 ```bash
 ps="xxx zzz"
 ./build.sh "'$ps'"
 ```
 
-算术运算
+### 算术运算
 
 ```bash
 ///使用 expr 外部程式
@@ -1106,7 +1176,7 @@ b=19;
 result=`expr $a + $b`
 ```
 
-字符串截取
+### 字符串截取
 
 - % 截取，以空格举例：
 
@@ -1130,14 +1200,14 @@ result=`expr $a + $b`
 
 - 参考:[https://www.cnblogs.com/zwgblog/p/6031256.html](https://www.cnblogs.com/zwgblog/p/6031256.html)
 
-函数返回值
+### 函数返回值
 
 ```bash
 function test(){
-    echo "a";
-    echo "b";
-    echo "c";
-    return 10;
+	echo "a";
+	echo "b";
+	echo "c";
+	return 10;
 }
 
 r=$(test);
@@ -1179,11 +1249,11 @@ test.sh: line 5: return: a: numeric argument required
 
 ```bash
 function test(){
-    echo "a";
-    echo "b";
-    echo "c";
-    DOWNLOAD_URL='return abc';
-    return '2';
+	echo "a";
+	echo "b";
+	echo "c";
+	DOWNLOAD_URL='return abc';
+	return '2';
 }
 
 test;
@@ -1214,6 +1284,17 @@ a b c
 ```
 
 有兴趣可以看下这个链接: [https://stackoverflow.com/questions/23564995/how-to-modify-a-global-variable-within-a-function-in-bash](https://stackoverflow.com/questions/23564995/how-to-modify-a-global-variable-within-a-function-in-bash)
+
+# export
+
+可将变量暴露到子 shell 环境，正常情况下声明的变量只作用于当前文件，在当前shell文件里调用其他文件或者命令时，想要使其访问到某个变量时，
+可使用 export 命令。
+
+export XC_PLAT="$PLAT"
+
+export 一个方法使用 -f 参数即可：
+
+export -f init_env
 
 # alias
 
