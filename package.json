@@ -7,7 +7,7 @@
     "build": "hexo clean && hexo generate"
   },
   "hexo": {
-    "version": "5.4.0"
+    "version": "5.4.2"
   },
   "dependencies": {
     "hexo": "^5.0.0",
@@ -20,6 +20,6 @@
     "hexo-renderer-marked": "^0.3.0",
     "hexo-renderer-stylus": "^0.3.1",
     "hexo-server": "^0.2.0",
-    "hexo-theme-fluid": "^1.8.12"
+    "hexo-theme-fluid": "^1.9.4"
   }
 }
