@@ -23,12 +23,12 @@ jobs:
             ${{ runner.OS }}-npm-cache
       - name: Install Dependencies
         run: |
-        cd /var/lib
-        sudo chmod -R a+w gems/
-        gem install bundler
-        bundle install
-        npm install
-        npm run build
+          cd /var/lib
+          sudo chmod -R a+w gems/
+          gem install bundler
+          bundle install
+          npm install
+          npm run build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
