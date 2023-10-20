@@ -5,3 +5,4 @@ package-lock.json
 themes
 .deploy_git
 .idea
+_site
