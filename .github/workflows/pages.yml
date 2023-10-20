@@ -21,13 +21,17 @@ jobs:
           key: ${{ runner.OS }}-npm-cache
           restore-keys: |
             ${{ runner.OS }}-npm-cache
-      - name: Install Dependencies
+      - name: Grant Write Permissions
         run: |
           cd /var/lib
-          sudo chmod -R a+w gems/
+          sudo chmod -R a+w gems/      
+      - name: Install Dependencies
+        run: |
           gem install bundler
           bundle install
           npm install
+      - name: Build
+        run: |
           npm run build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
