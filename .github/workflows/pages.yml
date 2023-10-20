@@ -24,10 +24,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Build
-        run: npm run build
+        run: bundle exec jekyll build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.AUTO_DEPLOY }}
-          publish_dir: ./public
+          publish_dir: ./_site
           publish_branch: master  # deploying branch
