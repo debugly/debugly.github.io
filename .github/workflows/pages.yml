@@ -24,7 +24,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Build
-        run: gem install bundler && bundle exec jekyll build
+        run: gem install bundler && npm build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
