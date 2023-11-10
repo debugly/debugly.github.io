@@ -839,18 +839,21 @@ express myapp
 
 # Python
 
-- 临时文件服务器
+- python 2 部署临时 Web 服务器
   
   ```bash
-  cd test
+  # 默认8000端口
   python -m SimpleHTTPServer
-  Serving HTTP on 0.0.0.0 port 8000 ...
+  # 使用 9000 端口
+  python -m SimpleHTTPServer 9000
   ```
-  
-    也可以指定端口号：
+- python 3 部署临时 Web 服务器
   
   ```bash
-  python -m SimpleHTTPServer 9090
+  # 默认8000端口
+  python -m http.server
+  # 使用 9000 端口
+  python -m http.server 9000
   ```
 
 # Vim 编辑器
