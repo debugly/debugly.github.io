@@ -63,27 +63,232 @@ _system_name=OSX
 _=/usr/bin/env
 ```
 
-查看机器上安装了几种 shell
+# 基础语法
 
-- cat /etc/shells
+### if
+
+- 文件是否存在
+  
+  ```bash
+  if [ -f $last_commit_date_txt ];then
+        last_commit_datestamp=$(cat $last_commit_date_txt)
+        echo 'xql last_commit_datestamp:'$last_commit_datestamp
+        last_commit_date=${last_commit_datestamp% *}
+        last_commit_date=`expr $last_commit_date + 1`
+  fi
+  ```
+
+- 文件夹是否存在
+  
+  ```bash
+  if [ -d $last_commit_folder ];then
+  fi
+  ```
+
+- 文件内容是否为空
+  
+  ```bash
+  if [ `cat $commit_info_txt | wc -m` -eq 0 ];then
+      echo 'file is empty.'
+  else
+      echo 'file is not empty!'
+  fi
+  ```
+
+- 当做字符串比较
+  
+  ```bash
+  if [[ "abc" == $num ]];then
+    echo 'num is abc'
+  fi
+  ```
+
+- 参数是否为空
+  
+  ```bash
+  if [[ -z "$num" ]];then
+    echo 'num is nil'
+  fi
+  ```
+
+- 当做数字比较
+  
+  ```bash
+  if [[ 0 -eq $num ]];then
+    echo 'num is 0'
+  fi
+  
+  if [[ 0 -ne $num ]];then
+    echo 'num is not equal 0'
+  fi
+  
+  if [[ $num -gt 0 ]];then
+    echo 'num is greater than 0'
+  fi
+  
+  if [[ $num -lt 0 ]];then
+    echo 'num is less than 0'
+  fi
+  
+  if [[ $num -ge 0 ]];then
+    echo 'num is greater than or equal 0'
+  fi
+  
+  if [[ $num -le 0 ]];then
+    echo 'num is less than or equal 0'
+  fi
+  ```
+
+### case
 
 ```bash
-# List of acceptable shells for chpass(1).
-# Ftpd will not allow users to connect who are not using
-# one of these shells.
-
-/bin/bash
-/bin/csh
-/bin/ksh
-/bin/sh
-/bin/tcsh
-/bin/zsh
+case $e in
+  abc)
+      echo "abc"
+      ;;
+  d | e)
+      echo "$e"
+      ;;
+  *)
+      echo "not abc and d and e"
+      ;;
+esac
 ```
 
-- ls /bin/*sh ，结果跟上面是一样的
-- chsh -s /bin/zsh 修改用户 shell，重启终端生效
+### for 循环
 
-# uname
+```bash
+LIBS="A B C"
+for lib in $LIBS; do
+    echo "$lib"
+done
+```
+
+### 传递含有空格的参数
+
+```bash
+ps="xxx zzz"
+./build.sh "'$ps'"
+```
+
+### 算术运算
+
+```bash
+///使用 expr 外部程式
+a=12;
+b=19;
+result=`expr $a + $b`
+result=$(($a + $b))
+```
+
+### 字符串截取
+
+- % 截取，以空格举例：
+  
+  ```bash
+  str="1234444 +8000 +ddd"
+  echo ${str% *}
+  ///1234444 +8000
+  ```
+  
+  从右往左截取，遇到第一个空格为止（空格也会截取）；
+
+- \## 截取，以 / 为例：
+  
+  ```bash
+  str="/Users/qianlongxu/Documents/build_local.sh"
+  echo ${str##*/}
+  ///build_local.sh
+  ```
+  
+  从左往右删除，直到删掉最后一个 / 为止；
+
+- 参考:[https://www.cnblogs.com/zwgblog/p/6031256.html](https://www.cnblogs.com/zwgblog/p/6031256.html)
+
+### 函数返回值
+
+```bash
+function test(){
+    echo "a";
+    echo "b";
+    echo "c";
+    return 10;
+}
+
+r=$(test);
+echo $?;
+echo $r;
+```
+
+运行结果是:
+
+```bash
+10
+a b c
+```
+
+把返回值改成非整数值，会报错:
+
+```bash
+test.sh: line 5: return: 10.1: numeric argument required
+test.sh: line 5: return: a: numeric argument required
+```
+
+把返回值改成非[0~255]的整数值，会因为溢出，而舍弃高位，比如:
+
+```bash
+返回 256 ，实际接收到的是 0;
+返回 257 ，实际接收到的是 1;
+这个也很好理解，因为返回只暂用了一个字节，相当于 c 语言里的 unsigned char !
+```
+
+正因为这个返回值是个无符号整形，所以很多时候并不是我们想要的，因此这个返回值，都是用来告诉调用者内部是否正常执行的，如果执行出错了就返回一个非 0 值！
+
+- 编程时是需要返回值的，怎么办？
+
+一种方法是像上面的例子一样，使用 echo 打印，其缺点是可能你只需要最后一个 echo 的打印值，中间的调试日志并不是你想要的，我曾经也遇到了这个问题！本来程序执行的没问题，就在中间加了一个函数调用，结果那个函数里有 echo 日志，导致了一个问题。
+
+如果遇到这种情况，建议不要使用 echo 作为返回值，echo 正常用来写日志，而是使用全局变量！调用者使用全局变量拿到这个值；或者就是封装一个打印日志的方法，将日志重定向到文件。
+
+```bash
+function test(){
+    echo "a";
+    echo "b";
+    echo "c";
+    DOWNLOAD_URL='return abc';
+    return '2';
+}
+
+test;
+echo $?;
+echo $DOWNLOAD_URL;
+
+结果:
+qianlongxu:Desktop qianlongxu$ sh test.sh
+a
+b
+c
+2
+return abc
+```
+
+这里有个有趣的问题，如果你还想获取echo打印的返回值，你会发现全局变量的值取不到!
+
+```bash
+r=$(test);
+echo $?;
+echo $r;
+echo $DOWNLOAD_URL;
+
+结果:
+qianlongxu:Desktop qianlongxu$ sh test.sh
+2
+a b c
+```
+
+# 常见命令
+
+### uname
 
 ```
 ➜  ~ uname -m
@@ -102,7 +307,7 @@ Darwin Kernel Version 20.6.0: Wed Jun 23 00:26:31 PDT 2021; root:xnu-7195.141.2~
 Darwin qianlongxu 20.6.0 Darwin Kernel Version 20.6.0: Wed Jun 23 00:26:31 PDT 2021; root:xnu-7195.141.2~5/RELEASE_X86_64 x86_64
 ```
 
-# ps
+### ps
 
 用 ps 命令可以查看进程相关信息，哪些进程正在运行和运行状态、进程是否结束、进程有没有僵死、哪些进程占用了过多地资源等等。
 
@@ -147,7 +352,7 @@ qianlongxu% ps -f
   501  3102  2987   0  9:04上午 ttys000    0:00.03 zsh
 ```
 
-# 重定向
+### 重定向
 
 使用重定向，可以轻松的提供输入，改变输出；
 
@@ -161,6 +366,9 @@ qianlongxu% ps -f
     echo "abc" > "aa.txt"
     //查看 aa.txt 文件，内容是：
     abc
+    
+    不想再执行命令时打印日志到控制台时，可以将日志重定向到 >/dev/null
+    有的时候连错误日志也想屏蔽，那么可以这么写：/dev/null 2>&1
     ```
   
   - ">>" 追加文本
@@ -184,6 +392,8 @@ qianlongxu% ps -f
   abc
   ```
 
+### col
+
 保存 man 命令查看的帮助信息
 
 ```
@@ -191,7 +401,29 @@ qianlongxu% ps -f
 man codesign | col -b  > ~/Desktop/codesign.txt
 ```
 
-# 管道
+### bash 种类
+
+查看机器上安装了几种 shell
+
+- cat /etc/shells
+
+```bash
+# List of acceptable shells for chpass(1).
+# Ftpd will not allow users to connect who are not using
+# one of these shells.
+
+/bin/bash
+/bin/csh
+/bin/ksh
+/bin/sh
+/bin/tcsh
+/bin/zsh
+```
+
+- ls /bin/*sh ，结果跟上面是一样的
+- chsh -s /bin/zsh 修改用户 shell，重启终端生效
+
+### 管道
 
 这是一个强大的 shell 命令，可将输出结果作为另一个程序的输入，符号 : "\|" ，比如查看当前目录，并且按字母顺序排列：
 
@@ -216,7 +448,7 @@ cworkspace
 
 可以看出先排大写字母，后排小写字母，原因是大写字母的 ASCLL 比小写的小了 32，即：A + 32 = a ,A = 65.
 
-# cp
+### cp
 
 - 复制文件，如果目标存在则会覆盖; 将 debugly 目录下的 init.sh 文件拷贝到 d2 目录下，debugly、d2 都在当前执行目录下; d2 文件夹必须存在！否则 cp 之后会生成一个 d2 的可执行文件！其内容是 init.sh 文件的内容。
 
@@ -232,7 +464,7 @@ cp -r debugly/init.sh d2
 
 **注：**cp 命令不会复制 .开头的文件或者文件夹，除了 "." 和 ".." 和 ".DS_Store" 这三个之外！一般情况下这是我们想要的结果。
 
-# scp
+### scp
 
 两台主机之间复制文件（夹），第一个参数是源文件，第二个参数是目的地。
 
@@ -263,7 +495,7 @@ scp -r /Users/qianlongxu/Downloads/qr-code crown@110.117.40.176:/opt/www/qr-code
 
 1、复制文件夹时，scp只能增不能减：比如 qr-code 里删除了某个文件，scp 到远程主机后，远程主机上的文件不会被删除！
 
-# ssh
+### ssh
 
 - 登陆远程服务器:
   
@@ -328,7 +560,7 @@ scp -r /Users/qianlongxu/Downloads/qr-code crown@110.117.40.176:/opt/www/qr-code
   EOF
   ```
 
-# Address already in use
+### kill
 
 Address already in use 是经常遇到的问题，只能找到占用该端口的进程然后杀掉！
 
@@ -349,7 +581,7 @@ ruby    49753 xuqianlong   10u  IPv4 0xebc4350e453a6ff      0t0  TCP localhost:t
 xuqianlong$ kill 49753
 ```
 
-# netstat
+### netstat
 
 ```
 [@110.116.189.228 /data/ifox/upgrade]# netstat -tlunp | grep nginx
@@ -409,7 +641,7 @@ nginx   13996 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
 nginx   13997 nobody    7u  IPv4 2169262441      0t0  TCP *:http (LISTEN)
 ```
 
-# curl
+### curl
 
 功能强大的网络工具，支持的协议众多，包括：`DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, POP3, POP3S, RTMP, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET, TFTP`。最简单的是 GET 请求：
 
@@ -454,7 +686,7 @@ X-Fastly-Request-ID: 0dc32470ef01fa9b0672d3d38edc904b9836debc
 mkdir -p "./themes/hexo-theme-yaris" && curl -L https://codeload.github.com/debugly/hexo-theme-yaris/zip/master | tar xj -C "./themes/hexo-theme-yaris" --strip-components 1
 ```
 
-# 路径处理
+### 路径处理
 
 - 获取脚本所在目录
 
@@ -485,7 +717,7 @@ mkdir -p "./themes/hexo-theme-yaris" && curl -L https://codeload.github.com/debu
     # name is ijk
 ```
 
-# chown
+### chown
 
 使用 Homebrew 安装、更新软件时提示没有权限：
 
@@ -536,7 +768,7 @@ brew link --overwrite python@3.9
 Linking /usr/local/Cellar/python@3.9/3.9.0_1... 5 symlinks created
 ```
 
-# git
+### git
 
 - git log
   
@@ -663,7 +895,17 @@ Linking /usr/local/Cellar/python@3.9/3.9.0_1... 5 symlinks created
 
 [Git-基础-查看提交历史](https://git-scm.com/book/zh/v1/Git-基础-查看提交历史)
 
-# date
+### eval
+
+```bash
+enc=xbm
+xbm='monow'
+eval fmts='$'$enc
+echo "fmts:$fmts"
+# fmts:monow
+```
+
+### date
 
 ```bash
 $(date +'Theme updated:%Y-%m-%d %H:%M:%S')
@@ -675,7 +917,7 @@ Theme updated:2018-04-16 17:52:24
 nohup /path/to/yourProgram &
 ```
 
-# 统计文件（夹）
+### 统计文件（夹）
 
 - 统计文件夹下文件个数，包括子文件
   
@@ -685,21 +927,7 @@ nohup /path/to/yourProgram &
   
     `ls -lR | grep "^d"| wc -l`
 
-# iOS build 号自增
-
-```bash
-# info.plist路径
-project_infoplist_path="/proj.ios_mac/ios/game-inhouse.plist"
-#取版本号
-appVersion=$(/usr/libexec/PlistBuddy -c "print CFBundleShortVersionString" "${project_infoplist_path}")
-#取build号
-#buildNO=$(/usr/libexec/PlistBuddy -c "print CFBundleVersion" "${project_infoplist_path}")
-#加1
-buildNO=$(($buildNO+1))
-/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$project_infoplist_path"
-```
-
-# zip & tar
+### zip & tar
 
 不带目录压缩，举例： 将 ./a 目录下的文件压缩成 zip 包，解压后不包含 a 目录，如果 a 里面有文件夹则保持原有层级；（不要使用 mac 自动的解压工具，否则解压后都会放到 a 目录里！搜索后是否包含目录，可以到 windows 下查看。）
 
@@ -727,7 +955,7 @@ zip_file=$(mr_zip "${path}")
 
 tar -czf sdk.tar.gz *.framework
 
-# sed
+### sed
 
 ```bash
 ///将 fn 文件里的 'VV' 替换成 ${version}
@@ -748,210 +976,7 @@ escape_url=$(echo "${zip_url}" | sed 's:/:\\\/:g')
 https://stackoverflow.com/questions/13971113/how-to-replace-on-path-string-with-using-sed
 ```
 
-# zsh 相关
-
-1、AutoJump
-
-```
-# https://github.com/wting/autojump
-brew install autojump
-vim ~/.zhsrc 
-# 追加 autojump
-plugins=(autojump) 
-# 最后一行添加
-# autojump configure by xql;
-[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
-```
-
-查看进入过的目录，进入过的就可以通过部分文件名跳转了: ~/Library/autojump/autojump.txt
-
-2、zsh-syntax-highlighting
-
-命令高亮，默认绿色高亮：
-
-```
-# https://github.com/zsh-users/zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-vim ~/.zhsrc
-# 追加 
-plugins=(zsh-syntax-highlighting)
-source ~/.zshrc
-```
-
-3、zsh-autosuggestions
-
-命令提示，按键盘 → 补全
-
-```
-# https://github.com/zsh-users/zsh-autosuggestions
-git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
-vim ~/.zhsrc
-# 追加
-plugins=(zsh-autosuggestions)
-source ~/.zshrc
-```
-
-# NodeJS
-
-- 查看版本
-
-```bash
-bogon:debugly xuqianlong$ node -v 
-v8.9.3
-bogon:debugly xuqianlong$ npm -v
-5.5.1
-```
-
-NPM (node package manager) 是 Nodejs 的包管理器，用于 Node 插件管理（包括安装、卸载、管理依赖等）
-
-- npm init  : 在当前目录下引导创建一个package.json文件，包括名称、版本、作者这些信息等
-- npm start :启动模块
-- npm ls : 查看安装的模块
-- npm uninstall <name> [-g] [--save-dev]  :  卸载插件 
-- npm update <name> [-g] [--save-dev]  : 更新插件
-- npm update [--save-dev] : 更新全部插件
-- npm help : 查看帮助
-- npm list : 查看当前目录已安装插件
-
-遇到过的问题:
-
-```bash
-hexo d -g
-ERROR Deployer not found: git
-///解决方法：
-npm install --save hexo-deployer-git
-```
-
-express 框架
-
-```bash
-#http://www.expressjs.com.cn/starter/generator.html
-npm install express-generator -g
-express myapp
-```
-
-# Hexo
-
-- 预览 : `hexo server`，简写 `hexo s`
-- 生成 : `hexo generate`，简写 `hexo g`
-- 发布 : `hexo deploy`，简写 `hexo d`
-- 清理 : `hexo clean`
-
-# Python
-
-- python 2 部署临时 Web 服务器
-  
-  ```bash
-  # 默认8000端口
-  python -m SimpleHTTPServer
-  # 使用 9000 端口
-  python -m SimpleHTTPServer 9000
-  ```
-- python 3 部署临时 Web 服务器
-  
-  ```bash
-  # 默认8000端口
-  python -m http.server
-  # 使用 9000 端口
-  python -m http.server 9000
-  ```
-
-# Vim 编辑器
-
-### 命令模式
-
-- 显示行号：set number
-- 插入：i
-- 插入新行：o
-- 粘贴：p
-- 删除行： dd
-- 删除字符：dw
-- 复制行：yy
-- 复制字符：yw
-- 移动光标： h (左) j（下）k（上）l（右）可以使用数字相乘，比如 10h的意思是向左移动10个字符
-- 移动到行首：^
-- 移动到行尾：$
-- 光标回退一个单词：b
-- 光标前进一个单词：w
-- 跳到文档开始：gg
-- 跳到文档结尾：G
-- 保存：wq
-- 不保存：q!
-- 搜索：/关键词  搜到之后，使用 n/N 切换搜到的关键字
-- 全部替换：%s/old/new 
-- 交互式替换：%s/old/new/gc
-- 撤销：u 
-- 多窗口: split/vsplit 
-- 关闭窗口: close
-- 多窗口跳转：ctrl + ww / ctrl +w(h/j/k/l)
-- 上下窗口调整大小：ctrl + w(-/=)
-
-# 运维相关
-
-1、查询服务器当前连接数
-
-```
-[@bx_140_25 ~]# netstat -ant | grep -c ESTABLISHED
-45
-```
-
-2、查询服务器某个端口当前连接数
-
-```
-[@bx_140_25 ~]# netstat -ant | grep ':443' | grep -c ESTABLISHED
-15
-```
-
-3、查看磁盘空间
-
-```
-[@yz18-120-118.localdomain /]# df -h 
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/vda1        12G   12G   16M 100% /
-tmpfs           7.8G  4.0K  7.8G   1% /dev/shm
-/dev/vdb1       296G  191G   90G  69% /data
-```
-
-4、查看文件夹占用空间
-
-```bash
-#递归列出所有子目录大小
-du -h
-#深度为1，意味着只列出一级子目录大小
-du -h --max-depth=1
-#深度为0，意味着只列当前目录大小；等同于 du -sh
-du -h --max-depth=0
-获取文件大小 (单位 MB): 
-IPA_Size=$(du -sm $IPA_Path | awk '{print $1}')
-```
-
-5、根据端口号查询程序
-
-```
-lsof -i tcp:30446
-COMMAND     PID USER   FD   TYPE    DEVICE SIZE/OFF NODE NAME
-statserve 16965 root   50u  IPv4 493378354      0t0  TCP 101.1.7.21:30446->16.9.14.14:mysql (ESTABLISHED)
-```
-
-6、监控程序
-
-```
-#!/bin/bash
-
-# every 3 secs
-step=3
-
-for (( i = 0; i < 60; i = (i+step) )); do
-    PROCESS=`ps -e | grep -v 'grep' | grep dispatch`
-    if [ -z "$PROCESS" ]; then
-        echo "start dispatch"
-        /opt/feihu/dispatch/start.sh
-    fi
-    sleep $step
-done
-```
-
-# mdls 查看文件信息
+### mdls 查看文件信息
 
 ```bash
 ➜  ~ mdls /Users/qianlongxu/Desktop/SOHO-logo.685e6e1f.png 
@@ -1062,236 +1087,9 @@ kMDItemUsedDates                       = (
 )
 ```
 
-# Shell 基础语法
-
-### if
-
-- 文件是否存在
-  
-  ```bash
-  if [ -f $last_commit_date_txt ];then
-        last_commit_datestamp=$(cat $last_commit_date_txt)
-          echo 'xql last_commit_datestamp:'$last_commit_datestamp
-        last_commit_date=${last_commit_datestamp% *}
-          last_commit_date=`expr $last_commit_date + 1`
-  fi
-  ```
-
-- 文件夹是否存在
-  
-  ```bash
-  if [ -d $last_commit_folder ];then
-  else
-  fi
-  ```
-
-- 文件内容是否为空
-  
-  ```bash
-  if [ `cat $commit_info_txt |wc -m` -eq 0 ];then
-      echo 'file is empty.'
-  else
-      echo 'file is not empty!'
-  fi
-  ```
-
-- 当做字符串比较
-  
-  ```bash
-  if [[ "abc" == $num ]];then
-  echo 'num is abc'
-  fi
-  ```
-
-- 参数是否为空
-  
-  ```bash
-  if [[ -z "$num" ]];then
-  echo 'num is nil'
-  fi
-  ```
-
-- 当做数字比较
-  
-  ```bash
-  if [[ 0 -eq $num ]];then
-  echo 'num is 0'
-  fi
-  
-  if [[ 0 -ne $num ]];then
-  echo 'num is not equal 0'
-  fi
-  
-  if [[ $num -gt 0 ]];then
-  echo 'num is greater than 0'
-  fi
-  
-  if [[ $num -lt 0 ]];then
-  echo 'num is less than 0'
-  fi
-  
-  if [[ $num -ge 0 ]];then
-  echo 'num is greater than or equal 0'
-  fi
-  
-  if [[ $num -le 0 ]];then
-  echo 'num is less than or equal 0'
-  fi
-  ```
-
-### case
-
-```bash
-case $e in
-
-abc)
-    echo "abc"
-    ;;
-
-d | e)
-    echo "$e"
-    ;;
-*)
-    echo "not abc and d and e"
-    ;;
-esac
-```
-
-### for 循环
-
-```bash
-LIBS="A B C"
-for lib in $LIBS; do
-    echo "$lib"
-done
-```
-
-## 传递含有空格的参数
-
-```bash
-ps="xxx zzz"
-./build.sh "'$ps'"
-```
-
-### 算术运算
-
-```bash
-///使用 expr 外部程式
-a=12;
-b=19;
-result=`expr $a + $b`
-```
-
-### 字符串截取
-
-- % 截取，以空格举例：
-  
-  ```bash
-  str="1234444 +8000 +ddd"
-  echo ${str% *}
-  ///1234444 +8000
-  ```
-  
-  从右往左截取，遇到第一个空格为止（空格也会截取）；
-
-- \## 截取，以 / 为例：
-  
-  ```bash
-  str="/Users/qianlongxu/Documents/build_local.sh"
-  echo ${str##*/}
-  ///build_local.sh
-  ```
-  
-  从左往右删除，直到删掉最后一个 / 为止；
-
-- 参考:[https://www.cnblogs.com/zwgblog/p/6031256.html](https://www.cnblogs.com/zwgblog/p/6031256.html)
-
-### 函数返回值
-
-```bash
-function test(){
-    echo "a";
-    echo "b";
-    echo "c";
-    return 10;
-}
-
-r=$(test);
-echo $?;
-echo $r;
-echo $?;
-```
-
-运行结果是:
-
-```bash
-10
-a b c
-0
-```
-
-把返回值改成非整数值，会报错:
-
-```bash
-test.sh: line 5: return: 10.1: numeric argument required
-test.sh: line 5: return: a: numeric argument required
-```
-
-把返回值改成非[0~255]的整数值，会因为溢出，而舍弃高位，比如:
-
-```bash
-返回 256 ，实际接收到的是 0;
-返回 257 ，实际接收到的是 1;
-这个也很好理解，因为返回只暂用了一个字节，相当于 c 语言里的 unsigned char !
-```
-
-正因为这个返回值是个无符号整形，所以很多时候并不是我们想要的，因此这个返回值，都是用来告诉调用者内部是否正常执行的，如果执行出错了就返回一个非 0 值！
-
-- 编程时是需要返回值的，怎么办？
-
-一种方法是像上面的例子一样，使用 echo 打印，其缺点是可能你只需要最后一个 echo 的打印值，中间的调试日志并不是你想要的，我曾经也遇到了这个问题！本来程序执行的没问题，就在中间加了一个函数调用，结果那个函数里有 echo 日志，导致了一个问题。
-
-如果遇到这种情况，建议不要使用 echo 作为返回值，echo 正常用来写日志，而是使用全局变量！调用者使用全局变量拿到这个值；或者就是封装一个打印日志的方法，将日志重定向到文件。
-
-```bash
-function test(){
-    echo "a";
-    echo "b";
-    echo "c";
-    DOWNLOAD_URL='return abc';
-    return '2';
-}
-
-test;
-echo $?;
-echo $DOWNLOAD_URL;
-
-结果:
-qianlongxu:Desktop qianlongxu$ sh test.sh
-a
-b
-c
-2
-return abc
-```
-
-这里有个有趣的问题，如果你还想获取echo打印的返回值，你会发现全局变量的值取不到!
-
-```bash
-r=$(test);
-echo $?;
-echo $r;
-echo $DOWNLOAD_URL;
-
-结果:
-qianlongxu:Desktop qianlongxu$ sh test.sh
-2
-a b c
-```
-
 有兴趣可以看下这个链接: [https://stackoverflow.com/questions/23564995/how-to-modify-a-global-variable-within-a-function-in-bash](https://stackoverflow.com/questions/23564995/how-to-modify-a-global-variable-within-a-function-in-bash)
 
-# export
+### export
 
 可将变量暴露到子 shell 环境，正常情况下声明的变量只作用于当前文件，在当前shell文件里调用其他文件或者命令时，想要使其访问到某个变量时，
 可使用 export 命令。
@@ -1302,7 +1100,7 @@ export 一个方法使用 -f 参数即可：
 
 export -f init_env
 
-# alias
+### alias
 
 善于利用别名，可以提升效率！
 
@@ -1319,3 +1117,237 @@ alias unproxy='unset all_proxy'
 保存 rc 文件后，重新打开一个终端窗口后者 source ~/.bashrc 也行；
 
 后续想要执行 /Users/qianlongxu/Documents/auto-ssh/login.sh 不用输入这么长的命令了，直接输入 autossh 即可。
+
+# zsh 相关
+
+1、AutoJump
+
+```
+# https://github.com/wting/autojump
+brew install autojump
+vim ~/.zhsrc 
+# 追加 autojump
+plugins=(autojump) 
+# 最后一行添加
+# autojump configure by xql;
+[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
+```
+
+查看进入过的目录，进入过的就可以通过部分文件名跳转了: ~/Library/autojump/autojump.txt
+
+2、zsh-syntax-highlighting
+
+命令高亮，默认绿色高亮：
+
+```
+# https://github.com/zsh-users/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+vim ~/.zhsrc
+# 追加 
+plugins=(zsh-syntax-highlighting)
+source ~/.zshrc
+```
+
+3、zsh-autosuggestions
+
+命令提示，按键盘 → 补全
+
+```
+# https://github.com/zsh-users/zsh-autosuggestions
+git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+vim ~/.zhsrc
+# 追加
+plugins=(zsh-autosuggestions)
+source ~/.zshrc
+```
+
+# NodeJS
+
+- 查看版本
+
+```bash
+bogon:debugly xuqianlong$ node -v 
+v8.9.3
+bogon:debugly xuqianlong$ npm -v
+5.5.1
+```
+
+NPM (node package manager) 是 Nodejs 的包管理器，用于 Node 插件管理（包括安装、卸载、管理依赖等）
+
+- npm init  : 在当前目录下引导创建一个package.json文件，包括名称、版本、作者这些信息等
+- npm start :启动模块
+- npm ls : 查看安装的模块
+- npm uninstall <name> [-g] [--save-dev]  :  卸载插件 
+- npm update <name> [-g] [--save-dev]  : 更新插件
+- npm update [--save-dev] : 更新全部插件
+- npm help : 查看帮助
+- npm list : 查看当前目录已安装插件
+
+遇到过的问题:
+
+```bash
+hexo d -g
+ERROR Deployer not found: git
+///解决方法：
+npm install --save hexo-deployer-git
+```
+
+express 框架
+
+```bash
+#http://www.expressjs.com.cn/starter/generator.html
+npm install express-generator -g
+express myapp
+```
+
+# Hexo
+
+- 预览 : `hexo server`，简写 `hexo s`
+- 生成 : `hexo generate`，简写 `hexo g`
+- 发布 : `hexo deploy`，简写 `hexo d`
+- 清理 : `hexo clean`
+
+# Python
+
+- python 2 部署临时 Web 服务器
+  
+  ```bash
+  # 默认8000端口
+  python -m SimpleHTTPServer
+  # 使用 9000 端口
+  python -m SimpleHTTPServer 9000
+  ```
+
+- python 3 部署临时 Web 服务器
+  
+  ```bash
+  # 默认8000端口
+  python -m http.server
+  # 使用 9000 端口
+  python -m http.server 9000
+  ```
+
+# Vim 编辑器
+
+### 命令模式
+
+- 显示行号：set number
+- 插入：i
+- 插入新行：o
+- 粘贴：p
+- 删除行： dd
+- 删除字符：dw
+- 复制行：yy
+- 复制字符：yw
+- 移动光标： h (左) j（下）k（上）l（右）可以使用数字相乘，比如 10h的意思是向左移动10个字符
+- 移动到行首：^
+- 移动到行尾：$
+- 光标回退一个单词：b
+- 光标前进一个单词：w
+- 跳到文档开始：gg
+- 跳到文档结尾：G
+- 保存：wq
+- 不保存：q!
+- 搜索：/关键词  搜到之后，使用 n/N 切换搜到的关键字
+- 全部替换：%s/old/new 
+- 交互式替换：%s/old/new/gc
+- 撤销：u 
+- 多窗口: split/vsplit 
+- 关闭窗口: close
+- 多窗口跳转：ctrl + ww / ctrl +w(h/j/k/l)
+- 上下窗口调整大小：ctrl + w(-/=)
+
+# 运维相关
+
+1、查询服务器当前连接数
+
+```
+[@bx_140_25 ~]# netstat -ant | grep -c ESTABLISHED
+45
+```
+
+2、查询服务器某个端口当前连接数
+
+```
+[@bx_140_25 ~]# netstat -ant | grep ':443' | grep -c ESTABLISHED
+15
+```
+
+3、查看磁盘空间
+
+```
+[@yz18-120-118.localdomain /]# df -h 
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/vda1        12G   12G   16M 100% /
+tmpfs           7.8G  4.0K  7.8G   1% /dev/shm
+/dev/vdb1       296G  191G   90G  69% /data
+```
+
+4、查看文件夹占用空间
+
+```bash
+#递归列出所有子目录大小
+du -h
+#深度为1，意味着只列出一级子目录大小
+du -h --max-depth=1
+#深度为0，意味着只列当前目录大小；等同于 du -sh
+du -h --max-depth=0
+获取文件大小 (单位 MB): 
+IPA_Size=$(du -sm $IPA_Path | awk '{print $1}')
+```
+
+5、根据端口号查询程序
+
+```
+lsof -i tcp:30446
+COMMAND     PID USER   FD   TYPE    DEVICE SIZE/OFF NODE NAME
+statserve 16965 root   50u  IPv4 493378354      0t0  TCP 101.1.7.21:30446->16.9.14.14:mysql (ESTABLISHED)
+```
+
+6、监控程序
+
+```
+#!/bin/bash
+
+# every 3 secs
+step=3
+
+for (( i = 0; i < 60; i = (i+step) )); do
+    PROCESS=`ps -e | grep -v 'grep' | grep dispatch`
+    if [ -z "$PROCESS" ]; then
+        echo "start dispatch"
+        /opt/feihu/dispatch/start.sh
+    fi
+    sleep $step
+done
+```
+
+# 案例
+
+```bash
+#进入到bash脚本所在目录
+THIS_DIR=$(DIRNAME=$(dirname "$0"); cd "$DIRNAME"; pwd)
+cd "$THIS_DIR"
+
+#md5加密，然后取前16
+pwd=(echo -n {version}sh#Pk@ | md5 | cut -d" " -f 1 | cut -c 1-16)
+
+#判断目录下是否存在某种文件
+
+if ls ${ARCH_PC_DIR}/*.pc >/dev/null 2>&1;then
+fi
+```
+
+iOS build 号自增
+
+```bash
+# info.plist路径
+project_infoplist_path="/proj.ios_mac/ios/game-inhouse.plist"
+#取版本号
+appVersion=$(/usr/libexec/PlistBuddy -c "print CFBundleShortVersionString" "${project_infoplist_path}")
+#取build号
+#buildNO=$(/usr/libexec/PlistBuddy -c "print CFBundleVersion" "${project_infoplist_path}")
+#加1
+buildNO=$(($buildNO+1))
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$project_infoplist_path"
+```
