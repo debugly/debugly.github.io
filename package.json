@@ -19,9 +19,7 @@
     "scripts": {
         "start": "bundle exec jekyll serve",
         "m1start": "arch -x86_64 bundle exec jekyll serve",
-        "build": "bundle exec jekyll build",
-        "dev": "grunt watch & npm run start",
-        "boil": "git push boilerplate boilerplate:master",
-        "push": "git push origin master --tag"
+        "dev": "grunt watch & npm run m1start",
+        "boil": "git push boilerplate boilerplate:master"
     }
 }
