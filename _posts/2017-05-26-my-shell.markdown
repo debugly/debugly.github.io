@@ -1118,6 +1118,27 @@ alias unproxy='unset all_proxy'
 
 后续想要执行 /Users/qianlongxu/Documents/auto-ssh/login.sh 不用输入这么长的命令了，直接输入 autossh 即可。
 
+
+
+### sips
+
+Mac带的一个命令行工具，缩放图片超级简单：
+
+```bash
+# 导出jpeg格式，支持 jpeg | tiff | png | gif | jp2 | pict | bmp | qtif | psd | sgi | tga 共11种格式
+sips -s format jpeg ./201512/img201512272145-0.png -o ./201512/img201512272145-0.jpg
+# 宽高最大不超过 1200像素
+sips -Z 1200 *.jpg
+# 将 png 后缀的图片文件，生成后缀为 jpg 的图片文件
+find . -name "*.png" | awk -F / '{b=$0;sub(/png/,"jpg");printf "sips -s format jpeg %s -o %s\n",b,$0}' | bash
+# 删除 png 后缀的文件
+find . -name "*.png" | xargs rm -f
+# 将 JPG 后缀的文件改为 jpg
+find . -name "*.JPG" | awk -F / '{b=$0;sub(/JPG/,"jpg");printf "mv %s %s\n",b,$0}' | bash
+```
+
+
+
 # zsh 相关
 
 1、AutoJump
