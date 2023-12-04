@@ -1118,8 +1118,6 @@ alias unproxy='unset all_proxy'
 
 后续想要执行 /Users/qianlongxu/Documents/auto-ssh/login.sh 不用输入这么长的命令了，直接输入 autossh 即可。
 
-
-
 ### sips
 
 Mac带的一个命令行工具，缩放图片超级简单：
@@ -1136,8 +1134,6 @@ find . -name "*.png" | xargs rm -f
 # 将 JPG 后缀的文件改为 jpg
 find . -name "*.JPG" | awk -F / '{b=$0;sub(/JPG/,"jpg");printf "mv %s %s\n",b,$0}' | bash
 ```
-
-
 
 # zsh 相关
 
@@ -1343,7 +1339,7 @@ for (( i = 0; i < 60; i = (i+step) )); do
 done
 ```
 
-# 案例
+# 小案例
 
 ```bash
 #进入到bash脚本所在目录
@@ -1357,6 +1353,9 @@ pwd=(echo -n {version}sh#Pk@ | md5 | cut -d" " -f 1 | cut -c 1-16)
 
 if ls ${ARCH_PC_DIR}/*.pc >/dev/null 2>&1;then
 fi
+
+#删除空文件（大小为0）
+find . -type f -size 0 | xargs -n 1 rm -f
 ```
 
 iOS build 号自增
