@@ -1371,3 +1371,16 @@ appVersion=$(/usr/libexec/PlistBuddy -c "print CFBundleShortVersionString" "${pr
 buildNO=$(($buildNO+1))
 /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$project_infoplist_path"
 ```
+
+字符串和枚举对应关系
+
+```
+LENS="English Chinese German Spanish Russian Korean French Japanese Portuguese Turkish Polish Catalan Dutch Arabic Swedish Italian"
+for len in $LENS; do
+echo "        case MRAudioTranslateLanuage_"${len}": "
+echo "        {"
+echo "            return @\"${len}\";"
+echo "        }"
+echo "            break;"
+done
+```
