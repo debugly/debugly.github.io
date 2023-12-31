@@ -862,7 +862,7 @@ function mr_zip(){
 
     cp=$PWD    
     cd "$full_path"
-    zip -rq ../"$zip_name" ./*
+    zip -ryq ../"$zip_name" ./*
     mr_ckr $? $LINENO
     cd ..
     zip_Path="${PWD}/${zip_name}"
@@ -876,6 +876,11 @@ zip_file=$(mr_zip "${path}")
 先将目录里所有后缀名为 framework 的文件打包成 sdk.tar，然后用 gzip 压缩，生成 sdk.tar.gz 压缩的压缩包:
 
 tar -czf sdk.tar.gz *.framework
+
+abc 作为密码加密压缩：
+```
+zip -P abc your.zip yourpath
+```
 
 ### sed
 
@@ -1268,8 +1273,8 @@ done
 THIS_DIR=$(DIRNAME=$(dirname "$0"); cd "$DIRNAME"; pwd)
 cd "$THIS_DIR"
 
-#md5加密，然后取前16
-pwd=(echo -n {version}sh#Pk@ | md5 | cut -d" " -f 1 | cut -c 1-16)
+#md5加密，然后取前20
+pwd=(echo -n {version} | md5 | cut -d" " -f 1 | cut -c 1-20)
 
 #判断目录下是否存在某种文件
 
