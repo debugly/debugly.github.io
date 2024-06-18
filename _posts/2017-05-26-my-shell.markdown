@@ -790,7 +790,7 @@ Linking /usr/local/Cellar/python@3.9/3.9.0_1... 5 symlinks created
   git log --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'<tr><td>%an</td><td>%s</td><td>%cd</td></tr>'  --after "'$last_commit_date'" -n 200
   ```
 
-- git修改user.name和user.email
+- git 修改全局 user.name 和 user.email
   
   ```bash
   //查看
@@ -813,6 +813,21 @@ Linking /usr/local/Cellar/python@3.9/3.9.0_1... 5 symlinks created
   gitC add *
   gitC commit -m "your msg"
   gitC push origin master
+  ```
+- 删除分支
+
+  ```bash
+  git branch -d <branchname>
+  git branch -D <branchname>
+  #delete remote
+  git push -d <remote_name> <branchname>
+  ```
+
+- 合并分支
+
+  ```bash
+  # merge branchname to current branchname
+  git merge <branchname>
   ```
 
 [Git-基础-查看提交历史](https://git-scm.com/book/zh/v1/Git-基础-查看提交历史)
