@@ -1,25 +1,24 @@
 {
-    "name": "hux-blog",
-    "title": "Hux Blog",
-    "author": "Hux <huxpro@gmail.com>",
+    "name": "matt-blog",
+    "title": "Matt Blog",
+    "author": "Matt <qianlongxu@gmail.com>",
     "version": "1.8.2",
-    "homepage": "http://huxpro.github.io",
+    "homepage": "http://debugly.github.io",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Huxpro/huxpro.github.io"
+        "url": "https://github.com/debugly/huxpro.github.io"
     },
-    "bugs": "https://github.com/Huxpro/huxpro.github.io/issues",
+    "bugs": "https://github.com/debugly/huxpro.github.io/issues",
     "devDependencies": {
-        "grunt": "^1.6.0",
+        "grunt": "^1.6.1",
         "grunt-banner": "~0.6.0",
         "grunt-contrib-less": "^2.0.0",
         "grunt-contrib-uglify": "^4.0.1",
         "grunt-contrib-watch": "^1.1.0"
     },
     "scripts": {
-        "start": "bundle exec jekyll serve",
-        "m1start": "arch -x86_64 bundle exec jekyll serve",
-        "dev": "grunt watch & npm run m1start",
+        "start": "bundle exec jekyll serve -P 8001 --trace",
+        "dev": "grunt watch & npm run start",
         "boil": "git push boilerplate boilerplate:master"
     }
 }
