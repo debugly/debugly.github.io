@@ -47,7 +47,7 @@ let color = UIColor(red: 0.5, green: 0.0, blue: 0.5, alpha: 1.0)
 `oc 初始化失败返回 nil, swift 把这处理成了一种语言特性，称之为 failable initialization.`
 
 ```swift
-if let image = UIImage(contentsOfFile: "MyImage.png") {
+if let image = UIImage(contentsOfFile: "MyImage.jpg") {
 // loaded the image successfully
 } else {
 // could not load the image

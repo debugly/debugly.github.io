@@ -133,7 +133,7 @@ Parsing documentation for bundler-1.15.1
 
 在终端执行 `xcode-select --install` 后会弹出界面：
 
-![](/images/201706/Snip20170620_2.png)
+![](/images/201706/Snip20170620_2.jpg)
 
 我选择了获取 Xcode，然后就自动打开了 AppStore ，然后点击下载安装就行了，只不过需要等上二十分钟了就 OK 了，Xcode安装成功后，记得启动下，因为启动后还会加载一些东西，确保万无一失，最好启动下，然后到 `Xcdoe -> Perferences -> Locations` 查看下 ...
 

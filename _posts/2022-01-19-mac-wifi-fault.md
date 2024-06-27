@@ -11,11 +11,11 @@ tags: macOS
 
 查看 Wifi 连接状态如下：
 
-![icon.png](/images/202201/wifi/icon.png)
+![icon.jpg](/images/202201/wifi/icon.jpg)
 
 点开wifi列表后可以到显示了一个安全性低的提示，打开详情如下：
 
-![icon.png](/images/202201/wifi/info.png)
+![icon.jpg](/images/202201/wifi/info.jpg)
 
 常规性的尝试都解决不了：重启路由，修改 DHCP 固定的 IP 地址，删除 Wifi 连接重新连，修改 Wifi 加密方法为 WAP2 或者 WAP2/WAP3 混合都不行。
 

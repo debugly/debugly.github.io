@@ -10,8 +10,8 @@ keywords: UIButton,Highlighted,Selected
 
 在写发射彩蛋红包页面时，需要实现这样一个功能，即有两只蛋，一只彩蛋，一只金蛋，点击其中一个会变大，另外一个会变小，具体效果如下图所示：
 
-![](/images/issues/redegg.png) 
-![](/images/issues/redegg2.png)
+![](/images/issues/redegg.jpg) 
+![](/images/issues/redegg2.jpg)
 
 具体的实现思路是设置两只蛋的Normal状态和Selected状态下的图片，一开始将彩蛋设为选中态，将金蛋设为正常态，然后在各自的点击事件中将两个按钮的状态都取反，这样就可以实现大小的切换了。具体代码如下：
 

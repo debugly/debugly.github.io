@@ -104,23 +104,23 @@ The key's randomart image is:
 
 登录 Github 账号，点击 Setting:
 
-<img src="/images/201511/userbar-account-settings.png" width="192" height="281">
+<img src="/images/201511/userbar-account-settings.jpg" width="192" height="281">
 
 点击左侧的 SSH keys:
 
-<img src="/images/201511/settings-sidebar-ssh-keys.png" width="307" height="172">
+<img src="/images/201511/settings-sidebar-ssh-keys.jpg" width="307" height="172">
 
 点击 Add SSH keys:
 
-<img src="/images/201511/ssh-add-ssh-key.png" width="337" height="66">
+<img src="/images/201511/ssh-add-ssh-key.jpg" width="337" height="66">
 
 直接将公钥复制到输入框里面，一般 title 会自动生成:
 
-<img src="/images/201511/ssh-key-paste.png" width="337" height="197">
+<img src="/images/201511/ssh-key-paste.jpg" width="337" height="197">
 
 点击 Add key 即可:
 
-<img src="/images/201511/ssh-add-key.png" width="70" height="49">
+<img src="/images/201511/ssh-add-key.jpg" width="70" height="49">
 
 - 添加到 github 后检查下 ssh key 状态 
 

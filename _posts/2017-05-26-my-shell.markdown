@@ -921,17 +921,17 @@ https://stackoverflow.com/questions/13971113/how-to-replace-on-path-string-with-
 ### mdls 查看文件信息
 
 ```bash
-➜  ~ mdls /Users/qianlongxu/Desktop/SOHO-logo.685e6e1f.png 
-_kMDItemDisplayNameWithExtensions      = "SOHO-logo.685e6e1f.png"
+➜  ~ mdls /Users/qianlongxu/Desktop/SOHO-logo.685e6e1f.jpg 
+_kMDItemDisplayNameWithExtensions      = "SOHO-logo.685e6e1f.jpg"
 kMDItemBitsPerSample                   = 32
 kMDItemColorSpace                      = "RGB"
 kMDItemContentCreationDate             = 2020-06-18 02:02:08 +0000
 kMDItemContentCreationDate_Ranking     = 2020-06-18 00:00:00 +0000
 kMDItemContentModificationDate         = 2020-06-18 02:02:08 +0000
 kMDItemContentModificationDate_Ranking = 2020-06-18 00:00:00 +0000
-kMDItemContentType                     = "public.png"
+kMDItemContentType                     = "public.jpg"
 kMDItemContentTypeTree                 = (
-    "public.png",
+    "public.jpg",
     "public.image",
     "public.data",
     "public.item",
@@ -939,7 +939,7 @@ kMDItemContentTypeTree                 = (
 )
 kMDItemDateAdded                       = 2020-06-18 02:02:08 +0000
 kMDItemDateAdded_Ranking               = 2020-06-18 00:00:00 +0000
-kMDItemDisplayName                     = "SOHO-logo.685e6e1f.png"
+kMDItemDisplayName                     = "SOHO-logo.685e6e1f.jpg"
 kMDItemDocumentIdentifier              = 0
 kMDItemFSContentChangeDate             = 2020-06-18 02:02:08 +0000
 kMDItemFSCreationDate                  = 2020-06-18 02:02:08 +0000
@@ -950,7 +950,7 @@ kMDItemFSInvisible                     = 0
 kMDItemFSIsExtensionHidden             = 0
 kMDItemFSIsStationery                  = (null)
 kMDItemFSLabel                         = 0
-kMDItemFSName                          = "SOHO-logo.685e6e1f.png"
+kMDItemFSName                          = "SOHO-logo.685e6e1f.jpg"
 kMDItemFSNodeCount                     = (null)
 kMDItemFSOwnerGroupID                  = 20
 kMDItemFSOwnerUserID                   = 501
@@ -1066,13 +1066,13 @@ Mac带的一个命令行工具，缩放图片超级简单：
 
 ```bash
 # 导出jpeg格式，支持 jpeg | tiff | png | gif | jp2 | pict | bmp | qtif | psd | sgi | tga 共11种格式
-sips -s format jpeg ./201512/img201512272145-0.png -o ./201512/img201512272145-0.jpg
+sips -s format jpeg ./201512/img201512272145-0.jpg -o ./201512/img201512272145-0.jpg
 # 宽高最大不超过 1200像素
 sips -Z 1200 *.jpg
 # 将 png 后缀的图片文件，生成后缀为 jpg 的图片文件
-find . -name "*.png" | awk -F / '{b=$0;sub(/png/,"jpg");printf "sips -s format jpeg %s -o %s\n",b,$0}' | bash
+find . -name "*.jpg" | awk -F / '{b=$0;sub(/png/,"jpg");printf "sips -s format jpeg %s -o %s\n",b,$0}' | bash
 # 删除 png 后缀的文件
-find . -name "*.png" | xargs rm -f
+find . -name "*.jpg" | xargs rm -f
 # 将 JPG 后缀的文件改为 jpg
 find . -name "*.JPG" | awk -F / '{b=$0;sub(/JPG/,"jpg");printf "mv %s %s\n",b,$0}' | bash
 ```

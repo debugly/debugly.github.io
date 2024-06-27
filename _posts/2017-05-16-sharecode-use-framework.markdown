@@ -54,11 +54,11 @@ keywords: framework,static library
 
 - 集成到视频
 
-![](/images/201705/01.png)
+![](/images/201705/01.jpg)
 
 - 集成到千帆App
 
-![](/images/201705/02.png)
+![](/images/201705/02.jpg)
 
 # SLF -> SCF
 

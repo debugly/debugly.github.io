@@ -75,6 +75,6 @@ self.c_Method 的作用是获取了一个block，其实就是回调 block(@"POST
 
 于是我干了一会的体力活，最后的结果给大家看下：
 
-![](/images/201612/Snip20161202_20.png)
+![](/images/201612/Snip20161202_20.jpg)
 
 有木有很赞？当然也有缺点，block 后面的参数 Xcode 不会自动提示！

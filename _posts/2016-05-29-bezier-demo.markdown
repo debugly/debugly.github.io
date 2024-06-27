@@ -13,17 +13,17 @@ UIBezierPath 能绘制各种图形，项目里总是用到，这里写个 demo �
 
 实现效果：
 
-<img src="/images/201605/29/2016052917201.png" width="629" height="652">
+<img src="/images/201605/29/2016052917201.jpg" width="629" height="652">
 
-<img src="/images/201605/29/2016052917202.png" width="629" height="652">
+<img src="/images/201605/29/2016052917202.jpg" width="629" height="652">
 
-<img src="/images/201605/29/2016052917203.png" width="629" height="652">
+<img src="/images/201605/29/2016052917203.jpg" width="629" height="652">
 
-<img src="/images/201605/29/2016052917204.png" width="629" height="652">
+<img src="/images/201605/29/2016052917204.jpg" width="629" height="652">
 
 分析过程：
 
-<img src="/images/201605/29/六边形圆角头像实现.png" width="629" height="652">
+<img src="/images/201605/29/六边形圆角头像实现.jpg" width="629" height="652">
 
 - 圆弧
 
@@ -31,11 +31,11 @@ UIBezierPath 能绘制各种图形，项目里总是用到，这里写个 demo �
 
 需求：
 
-<img src="/images/201605/29/201608312251.png" width="614" height="472">
+<img src="/images/201605/29/201608312251.jpg" width="614" height="472">
 
 实现效果：
 
-<img src="/images/201605/29/201608312254.png" width="750" height="1334">
+<img src="/images/201605/29/201608312254.jpg" width="750" height="1334">
 
 ## 完
 

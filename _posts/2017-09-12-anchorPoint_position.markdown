@@ -35,7 +35,7 @@ self.redView.transform = CGAffineTransformMakeScale(1, 0);
 
 左图是初始状态，右图中是设置anchorPoint为不同的值的状态，绿色为(0,0)，蓝色为(0.5,0.5)，灰色为(0.5,1)，红色为(1,0.5)，看一下效果：
 
-![](/images/issues/init.png) ![](/images/issues/after.png)
+![](/images/issues/init.jpg) ![](/images/issues/after.jpg)
 
 由此可见，单独设置anchorPoint，会改变view的frame。
 
@@ -43,7 +43,7 @@ self.redView.transform = CGAffineTransformMakeScale(1, 0);
 
 那么，作为CALayer的另一重要属性的position指的又是什么呢？position的坐标系是相对于父图层的，默认点是layer的中心点。在理解了anchorPoint的含义之后，为了做测试，分别将anchorPoint的设置成不同的点，而保持position不变，结果发现anchorPoint总是与position重合，效果如下：
 
-![](/images/issues/chonghe.png)
+![](/images/issues/chonghe.jpg)
 
 由此，得出结论：**position所指的位置，是anchorPoint在父图层所在的位置，即二者会一直保持重合**。
 

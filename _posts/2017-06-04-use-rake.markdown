@@ -12,7 +12,7 @@ keywords: Rake 入门,Ruby 简介
 
 Ruby 语言的图标:
 
-![](/images/201706/ruby.png)
+![](/images/201706/ruby.jpg)
 
 ## 名词解释
 

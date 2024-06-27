@@ -15,56 +15,56 @@ tags: ["macOS"]
 
 # Charles
 
-<img src="/images/201605/06/Snip20160506_2.png" width="120" height="120">
+<img src="/images/201605/06/Snip20160506_2.jpg" width="120" height="120">
 
 [https://www.charlesproxy.com/latest-release/download.do](https://www.charlesproxy.com/latest-release/download.do)
 
 # Chrome
 
-<img src="/images/201605/06/Snip20160506_12.png" width="120" height="120">
+<img src="/images/201605/06/Snip20160506_12.jpg" width="120" height="120">
 
 [https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg](https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg)
 
 # ImageOptim
 
-<img src="/images/201605/06/Snip20160506_5.png" width="120" height="120">
+<img src="/images/201605/06/Snip20160506_5.jpg" width="120" height="120">
 
 [https://imageoptim.com](https://imageoptim.com)
 
 # Lantern
 
-<img src="/images/201605/06/Snip20160506_3.png" width="120" height="120">
+<img src="/images/201605/06/Snip20160506_3.jpg" width="120" height="120">
 
 [https://github.com/getlantern/lantern](https://github.com/getlantern/lantern)
 
 
 # Snip
 
-<img src="/images/201605/06/Snip20160506_4.png" width="120" height="120">
+<img src="/images/201605/06/Snip20160506_4.jpg" width="120" height="120">
 
 [http://www.snip.qq.com/download](http://www.snip.qq.com/download)
 
 # MacDown
 
-<img src="/images/201605/06/Snip20160506_10.png" width="120" height="120">
+<img src="/images/201605/06/Snip20160506_10.jpg" width="120" height="120">
 
 [http://macdown.uranusjr.com](http://macdown.uranusjr.com)
 
 # Xcode
 
-<img src="/images/201605/06/Snip20160506_7.png" width="120" height="120">
+<img src="/images/201605/06/Snip20160506_7.jpg" width="120" height="120">
 
 [https://developer.apple.com/xcode/download/](https://developer.apple.com/xcode/download/)
 
 # SourceTree
 
-<img src="/images/201605/06/Snip20160506_8.png" width="120" height="120">
+<img src="/images/201605/06/Snip20160506_8.jpg" width="120" height="120">
 
 [https://www.atlassian.com/software/sourcetree](https://www.atlassian.com/software/sourcetree)
 
 # Webstorm
 
-<img src="/images/201605/06/Snip20180430_21.png" width="120" height="120">
+<img src="/images/201605/06/Snip20180430_21.jpg" width="120" height="120">
 
 [http://www.jetbrains.com/webstorm/](http://www.jetbrains.com/webstorm/)
 [提升 Webstorm 开发效率](/2018/04/29-config-my-webstorm.html)

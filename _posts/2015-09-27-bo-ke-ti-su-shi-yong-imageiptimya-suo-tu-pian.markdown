@@ -11,20 +11,20 @@ toc: false
 
 昨天发布的博客 [港版苹果充电器DIY全过程](/2015/09/27-bo-ke-ti-su-shi-yong-imageiptimya-suo-tu-pian.html) 里使用了太多的图片，看了下好几十兆大，这怎么能行呢，作死的节奏啊！所以找了一款 mac 无损图片压缩工具 -- **ImageOptim** ，压缩比特别高，支持 PNG/JPEG/GIF 等主流格式，并且是免费的！
 
-<img src = "/images/201509/27_5.png" width = '270' height = '270'>
+<img src = "/images/201509/27_5.jpg" width = '270' height = '270'>
 
 * 可以直接拖入文件夹批量处理，也可以直接拖入图片，默认自动开始处理；亲身感受如下, 这是我昨天博客的图片：
 
-<img src = "/images/201509/27_3.png" width = '800' height = '425'>
-<img src = "/images/201509/27_2.png" width = '800' height = '425'>
+<img src = "/images/201509/27_3.jpg" width = '800' height = '425'>
+<img src = "/images/201509/27_2.jpg" width = '800' height = '425'>
 
 * 技巧：这里可以调节压缩比，默认的压缩比小些，博客图片质量不用很高，可以压缩定得更小些：
 
-<img src = "/images/201509/27_4.png" width = '720' height = '427'>
+<img src = "/images/201509/27_4.jpg" width = '720' height = '427'>
 
 * 这是今天的截图，先压缩吧：
 
-<img src = "/images/201509/27_2.png" width = '800' height = '425'>
+<img src = "/images/201509/27_2.jpg" width = '800' height = '425'>
 
 
 ## 完

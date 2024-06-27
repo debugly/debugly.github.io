@@ -11,6 +11,6 @@ keywords: 入职纪念日
 
 2 年 2 个城市 2 个团队。。。
 
-![](/images/201708/2year.png)
+![](/images/201708/2year.jpg)
 
 不忘初心，勇往直前！

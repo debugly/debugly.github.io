@@ -39,7 +39,7 @@ keywords: framework wrap static library
 
 这是调整后的工程框架结构图：
 
-![](/images/201705/03.png)
+![](/images/201705/03.jpg)
 
 解释：
 

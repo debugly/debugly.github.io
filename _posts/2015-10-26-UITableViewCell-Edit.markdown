@@ -67,15 +67,15 @@ typedef NS_ENUM(NSInteger, UITableViewCellEditingStyle) {
 ```
 - UITableViewCellEditingStyleDelete 对应的效果是:
 
-<img src="/images/201510/1026-1051-2.png" width="375" height="667">
+<img src="/images/201510/1026-1051-2.jpg" width="375" height="667">
 
 - UITableViewCellEditingStyleInsert 对应的效果是:
 
-<img src="/images/201510/1026-1051-0.png" width="375" height="667">
+<img src="/images/201510/1026-1051-0.jpg" width="375" height="667">
 
 - UITableViewCellEditingStyleNone 对应的效果是:
 
-<img src="/images/201510/1026-1051-1.png" width="375" height="667">
+<img src="/images/201510/1026-1051-1.jpg" width="375" height="667">
 
 - 前两个都比较熟悉了，对于最后这个有些同学可能不是很熟悉了，这个是系统为我们提供的空白的，所以我们就利用这个进行自定义；
 

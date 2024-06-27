@@ -11,7 +11,7 @@ tags: ["macOS"]
 
 ## 查看 Java 环境
 
-![](/images/201803/0.png)
+![](/images/201803/0.jpg)
 
 如果看到需要安装的话，择说明没有 Java 环境，需要配置 JRE 了。
 
@@ -23,15 +23,15 @@ tags: ["macOS"]
 
 - 点击 **系统偏好设置** 里的 Java 图标
 
-![](/images/201803/1.png)
+![](/images/201803/1.jpg)
 
 如果没有这个图标或者点击后没有出来 **Java 控制面板**
 
-![](/images/201803/2.png)
+![](/images/201803/2.jpg)
 
 那就需要去 oracle 下载安装 JRE [http://www.oracle.com/technetwork/java/javase/downloads/jre9-downloads-3848532.html](http://www.oracle.com/technetwork/java/javase/downloads/jre9-downloads-3848532.html)；下载 dmg 包就行，需要选中 Accept License Agreement !
 
-![](/images/201803/3.png)
+![](/images/201803/3.jpg)
 
 下载完成，双击一路安装即可！
 
@@ -52,19 +52,19 @@ lrwxr-xr-x  1 root  wheel  74 11 28 23:06 /usr/bin/java -> /System/Library/Frame
 
 如下图:
 
-![](/images/201803/4.png)
+![](/images/201803/4.jpg)
 
 原身 JavaVM.framework:
 
-![](/images/201803/6.png)
+![](/images/201803/6.jpg)
 
 这个 JavaVM.framework 不是我们安装的，好像是苹果自带的！！再回过头检查了下，**发现 Desktop 这里的路径跟苹果自带的 JRE 路径不一样**，这个路径是安装过 Oracle JRE 的路径！！
 
-![](/images/201803/7.png)
+![](/images/201803/7.jpg)
 
 目录结构如下图:
 
-![](/images/201803/5.png)
+![](/images/201803/5.jpg)
 
 因此解决方案就是将苹果自带的 JRE 修改为 Oracle 的 JRE，原本想着将这个替身直接改为我们安装的这个JRE里的java，可是很遗憾，对于高版本的 macOS 而言 /usr/bin 目录没有修改权限，想拥有权限有些麻烦，这里不再介绍。所以换个思路去解决。
 

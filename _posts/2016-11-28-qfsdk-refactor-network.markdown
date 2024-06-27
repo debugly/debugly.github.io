@@ -163,11 +163,11 @@ typedef void(^SLNetWorkHandler)(SLNetworkRequest *request,id result,NSError *err
 
 - SLNetworkService 提供了太多的发送请求的便利方法，特别是支持 JSON 转 Model 之后，可能就是一个参数之差就需要增加一个方法，不方便之处也显而易见，Xcode 自动提示的时候，都他妈不能完全显示了，被省略了，这样反而降低了开发的效率呢！
 
-![](/images/201611/Snip20161129_8.png)
+![](/images/201611/Snip20161129_8.jpg)
 
 - 响应解析处理不够好，糅合在底层的上层之间，没有扩展性，比如我想把图片的请求也统一过来，目前来看很难做到！
 
-![](/images/201611/Snip20161129_9.png)
+![](/images/201611/Snip20161129_9.jpg)
 
 因此，接下来主要针对与调用方式和响应解析进行重构！
 
@@ -177,19 +177,19 @@ typedef void(^SLNetWorkHandler)(SLNetworkRequest *request,id result,NSError *err
 
 `Model 继承自 JSON，JSON 继承自 HTTP；`
 
-![](/images/201611/Snip20161129_10.png)
+![](/images/201611/Snip20161129_10.jpg)
 
 这块完全模仿自 AFNetworking ，但还是多少有些创建之处，因为目前服务响应里都有个状态码，比如上面我举例接口中的 status 字段，当 status 等于 200 时，就是接口正常返回了数据，才能进行 Model 解析：
 
-![](/images/201611/Snip20161129_15.png)
+![](/images/201611/Snip20161129_15.jpg)
 
 这个子类来处理 Model 解析的，为了方便，提供了 keypath 的概念：
 
-![](/images/201611/Snip20161129_11.png)
+![](/images/201611/Snip20161129_11.jpg)
 
 这是处理逻辑，这个使用的是我之前写的 JOSN 转 Model 的小框架，使用方式可参考我的[开源项目](https://github.com/debugly/JSONUtil)：
 
-![](/images/201611/Snip20161129_12.png)
+![](/images/201611/Snip20161129_12.jpg)
 
 这里选择这个小框架是因为他是我自己写的，非常小众化，加上目前也没什么问题，`最大的好处是 SDK 不会造成依赖`！假如使用开源的 Mantle 的话就很容易和嵌入的 App造成冲突，不凑巧的是 App 修改了里面的逻辑，这就更糟糕了。
 
@@ -230,11 +230,11 @@ NSDictionary *paramDic = MakeHttpParam(^(NSMutableDictionary *const make) {
 
 思路有了，剩下的都是体力活了，把之前的 Simple，JOSN 类别都删了，然后创建一个 Maker 的类别，同样为了方便使用额外提供了 GET 和 POST:
 
-![](/images/201611/Snip20161129_13.png)
+![](/images/201611/Snip20161129_13.jpg)
 
 因此 Service 层的调用方式就改成了这样：
 
-![](/images/201611/Snip20161129_14.png)
+![](/images/201611/Snip20161129_14.jpg)
 
 这样一来，就算是再多的参数，不管哪个参数有或者没有，都可以在这个 block 里完成，使用这中方式写了几个请求之后发现这统统这不都是对网络请求的配置么！不知道你有这个感觉没？
 
